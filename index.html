@@ -43,35 +43,39 @@
 
 <script>
 /* ============ THAY API_URL BẰNG LINK WEB APP =========== */
-const API_URL = "https://script.google.com/macros/s/AKfycbxAkRP7aWQZ0xdXTtv9leVf0WrZZJx-I1fqpwT7i0KNcc4ffqljlLDQcdFKB_KZ-5ql/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbw46PKyGrB-nEDjU5MZ8SEVk4kfxR0aifwvQ6nRN0MtRkupRFuwNbSYvlUJqN8oFrtp/exec";
 
 /* JSONP helper */
-function jsonpRequest(url, onSuccess, onError, timeout = 12000) {
-  var cbName = 'cb_' + Date.now() + '_' + Math.floor(Math.random()*10000);
+function jsonpRequest(url, onSuccess, onError, timeout = 10000) {
+  const cbName = 'cb_' + Date.now() + '_' + Math.floor(Math.random()*10000);
+  const script = document.createElement('script');
+
   window[cbName] = function(data) {
     clearTimeout(timer);
     cleanup();
     onSuccess && onSuccess(data);
   };
+
   function cleanup() {
     try { delete window[cbName]; } catch(e) { window[cbName] = undefined; }
     if (script.parentNode) script.parentNode.removeChild(script);
   }
-  var script = document.createElement('script');
-  script.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + cbName;
+
+  script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
   script.onerror = function() {
     clearTimeout(timer);
     cleanup();
     onError && onError(new Error('Network/script error'));
   };
   document.head.appendChild(script);
-  var timer = setTimeout(function() {
+
+  const timer = setTimeout(function() {
     cleanup();
     onError && onError(new Error('Timeout'));
   }, timeout);
-  return { cancel: cleanup };
 }
 
+/* Alert */
 function showAlert(msg) { alert(msg); }
 
 /* Auto set today */
@@ -149,8 +153,7 @@ function getRecords() {
 
 /* Escape HTML */
 function escapeHtml(str) {
-  if (!str) return '';
-  return String(str)
+  return String(str||'')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
