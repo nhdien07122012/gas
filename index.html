@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Quản lý giao gas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      max-width: 720px;
+      margin: auto;
+      padding: 20px;
+      background: #f4f6f9;
+      color: #2c3e50;
+    }
+    h2 {
+      text-align: center;
+      color: #34495e;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 15px 0;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+    .card h3 {
+      margin-top: 0;
+      color: #2980b9;
+    }
+    input, button {
+      padding: 10px;
+      margin: 6px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .btn-secondary {
+      background: #95a5a6;
+    }
+    .btn-secondary:hover {
+      background: #7f8c8d;
+    }
+    .record {
+      border-bottom: 1px solid #eee;
+      padding: 6px 0;
+    }
+    strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 16px;
+      color: #e74c3c;
+    }
+    .empty {
+      color: #7f8c8d;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h2>📒 Quản lý giao gas</h2>
+
+  <div class="card">
+    <h3>➕ Thêm giao dịch</h3>
+    <label>Ngày:</label>
+    <input type="date" id="dateInput">
+    <label>Địa điểm:</label>
+    <input type="text" id="locationInput" placeholder="Ví dụ: Cafe Kim Phượng">
+    <label>Số tiền (VNĐ):</label>
+    <input type="number" id="amountInput" placeholder="Ví dụ: 327000">
+    <button onclick="addRecord()">💾 Lưu</button>
+  </div>
+
+  <div class="card">
+    <h3>📊 Xem dữ liệu theo ngày</h3>
+    <label>Chọn ngày:</label>
+    <input type="date" id="viewDate">
+    <button onclick="getRecords()">🔍 Xem</button>
+    <button class="btn-secondary" onclick="getYesterday()">📅 Hôm qua</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    // 🔗 Thay bằng link Web App của bạn sau khi deploy
+    const API_URL = "https://script.google.com/macros/s/AKfycbxlwGrgZz9olEy8XIXV7U20tnhTiAEToJG10R2YZizXmyWES0aRXB2xLon8cz7u8dld/exec";
+
+    // Khi load trang, tự động set ngày hôm nay
+    window.onload = () => {
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("dateInput").value = today;
+      document.getElementById("viewDate").value = today;
+    };
+
+    // ➕ Thêm giao dịch
+    async function addRecord() {
+      const date = document.getElementById("dateInput").value;
+      const location = document.getElementById("locationInput").value.trim();
+      const amount = document.getElementById("amountInput").value;
+
+      if (!date || !location || !amount) {
+        alert("⚠️ Vui lòng nhập đủ dữ liệu!");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_URL}?action=add&date=${encodeURIComponent(date)}&location=${encodeURIComponent(location)}&amount=${encodeURIComponent(amount)}`);
+        const data = await res.json();
+        if (data.status === "success") {
+          alert("✅ Lưu thành công!");
+          document.getElementById("locationInput").value = "";
+          document.getElementById("amountInput").value = "";
+        } else {
+          alert("❌ Lỗi khi lưu!");
+        }
+      } catch (err) {
+        alert("❌ Không thể kết nối API");
+        console.error(err);
+      }
+    }
+
+    // 📊 Lấy dữ liệu theo ngày
+    async function getRecords() {
+      const date = document.getElementById("viewDate").value;
+      if (!date) {
+        alert("⚠️ Chọn ngày trước!");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_URL}?action=get&date=${encodeURIComponent(date)}`);
+        const data = await res.json();
+
+        let html = `<h4>Kết quả ngày ${date}</h4>`;
+        if (data.records.length === 0) {
+          html += `<p class="empty">❌ Không có dữ liệu</p>`;
+        } else {
+          data.records.forEach(r => {
+            const location = r[1];
+            const amount = Number(r[2]) || 0;
+            html += `<div class="record">📍 ${location} - 💰 ${amount.toLocaleString()} VNĐ</div>`;
+          });
+          html += `<strong>Tổng: ${data.total.toLocaleString()} VNĐ</strong>`;
+        }
+        document.getElementById("result").innerHTML = html;
+      } catch (err) {
+        alert("❌ Không thể kết nối API");
+        console.error(err);
+      }
+    }
+
+    // 📅 Xem dữ liệu hôm qua
+    function getYesterday() {
+      const today = new Date();
+      today.setDate(today.getDate() - 1);
+      const yDate = today.toISOString().split("T")[0];
+      document.getElementById("viewDate").value = yDate;
+      getRecords();
+    }
+  </script>
+</body>
+</html>
