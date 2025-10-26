@@ -1,165 +1,768 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <title>Quản lý giao gas</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    body { font-family: 'Segoe UI', Tahoma, sans-serif; max-width: 760px; margin: 18px auto; padding: 18px; background:#f4f6f9; color:#2c3e50; }
-    h2 { text-align:center; color:#34495e; }
-    .card { background:#fff; border-radius:10px; padding:18px; margin:14px 0; box-shadow:0 3px 8px rgba(0,0,0,0.08); }
-    label { display:block; margin-top:8px; color:#444; }
-    input, button { padding:10px; margin-top:6px; border:1px solid #ccc; border-radius:6px; font-size:14px; width:100%; box-sizing:border-box; }
-    button { background:#3498db; color:#fff; cursor:pointer; font-weight:600; border:none; }
-    button:hover { background:#2980b9; }
-    .btn-secondary { background:#95a5a6; color:#fff; }
-    .record { border-bottom:1px solid #eee; padding:8px 0; }
-    strong.total { display:block; margin-top:10px; font-size:16px; color:#e74c3c; }
-    .empty { color:#7f8c8d; font-style:italic; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý tiền thu điểm gas theo ca</title>
+<style>
+  :root {
+    --primary: #2c80ff;
+    --primary-dark: #1a6de0;
+    --secondary: #34c759;
+    --warning: #ff9500;
+    --light: #f8f9fa;
+    --dark: #333;
+    --gray: #6c757d;
+    --border: #dee2e6;
+    --shadow: 0 2px 10px rgba(0,0,0,0.08);
+    --radius: 10px;
+    --night-shift: #4a5568;
+    --day-shift: #f7fafc;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: var(--dark);
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  
+  header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 25px 30px;
+    text-align: center;
+  }
+  
+  header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  header p {
+    opacity: 0.9;
+    font-size: 1rem;
+  }
+  
+  .shift-info {
+    background: var(--night-shift);
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .shift-info .current-shift {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  
+  .shift-info .shift-time {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+  
+  .card {
+    padding: 25px 30px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .card:last-child {
+    border-bottom: none;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+  }
+  
+  button {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .btn-primary {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 128, 255, 0.3);
+  }
+  
+  .btn-secondary {
+    background-color: #f1f3f5;
+    color: var(--dark);
+  }
+  
+  .btn-secondary:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+  }
+  
+  .btn-warning {
+    background-color: var(--warning);
+    color: white;
+  }
+  
+  .btn-warning:hover {
+    background-color: #e08900;
+    transform: translateY(-2px);
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    margin-top: 10px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+  }
+  
+  th {
+    background-color: #f8f9fa;
+    padding: 16px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--dark);
+    border-bottom: 2px solid var(--border);
+  }
+  
+  td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  tr:hover {
+    background-color: #f8fafc;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gray);
+  }
+  
+  .empty-state p {
+    margin-top: 10px;
+  }
+  
+  .stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .stat-card {
+    flex: 1;
+    min-width: 150px;
+    background: #f8f9fa;
+    border-radius: var(--radius);
+    padding: 15px;
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin-top: 5px;
+  }
+  
+  .filter-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .filter-group select {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    body {
+      padding: 15px;
+    }
+    
+    header {
+      padding: 20px;
+    }
+    
+    header h1 {
+      font-size: 1.5rem;
+    }
+    
+    .shift-info {
+      padding: 15px 20px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+    
+    .card {
+      padding: 20px;
+    }
+    
+    .button-group {
+      flex-direction: column;
+    }
+    
+    .stats-container {
+      flex-direction: column;
+    }
+    
+    .filter-group {
+      flex-direction: column;
+    }
+    
+    .filter-group select {
+      min-width: 100%;
+    }
+    
+    th, td {
+      padding: 12px 8px;
+      font-size: 0.9rem;
+    }
+    
+    table {
+      min-width: 600px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    body {
+      padding: 10px;
+    }
+    
+    header {
+      padding: 18px 15px;
+    }
+    
+    header h1 {
+      font-size: 1.3rem;
+    }
+    
+    .card {
+      padding: 18px 15px;
+    }
+    
+    input, select {
+      padding: 12px 14px;
+    }
+    
+    button {
+      padding: 14px;
+    }
+  }
+  
+  /* Animation */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+  
+  .badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  
+  .badge-primary {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .badge-secondary {
+    background-color: var(--secondary);
+    color: white;
+  }
+</style>
 </head>
 <body>
-  <h2>📒 Quản lý giao gas</h2>
-
-  <div class="card">
-    <h3>➕ Thêm giao dịch</h3>
-    <label>Ngày</label>
-    <input type="date" id="dateInput">
-    <label>Địa điểm</label>
-    <input type="text" id="locationInput" placeholder="Ví dụ: Cafe Kim Phượng">
-    <label>Số tiền (VNĐ)</label>
-    <input type="number" id="amountInput" placeholder="Ví dụ: 327000">
-    <button id="saveBtn">💾 Lưu</button>
-  </div>
-
-  <div class="card">
-    <h3>📊 Xem dữ liệu theo ngày</h3>
-    <label>Chọn ngày</label>
-    <input type="date" id="viewDate">
-    <button id="viewBtn">🔍 Xem</button>
-    <button id="yesterdayBtn" class="btn-secondary">📅 Hôm qua</button>
-    <div id="result" style="margin-top:12px"></div>
+  <div class="container">
+    <header>
+      <h1>📋 Quản lý tiền thu điểm gas theo ca</h1>
+      <p>Theo dõi và quản lý thu chi tại các điểm gas theo ca làm việc</p>
+    </header>
+    
+    <div class="shift-info">
+      <div class="current-shift" id="current-shift">Đang tải thông tin ca...</div>
+      <div class="shift-time" id="shift-time"></div>
+    </div>
+    
+    <div class="card">
+      <div class="stats-container" id="stats-container">
+        <!-- Thống kê sẽ được thêm bằng JavaScript -->
+      </div>
+      
+      <div class="filter-group">
+        <select id="filter-shift" onchange="filterByShift()">
+          <option value="all">Tất cả các ca</option>
+          <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
+        </select>
+        <select id="filter-diem" onchange="filterByDiem()">
+          <option value="all">Tất cả điểm gas</option>
+          <!-- Các tùy chọn điểm sẽ được thêm bằng JavaScript -->
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="chon_diem">Chọn điểm:</label>
+        <select id="chon_diem" onchange="chonDiem()">
+          <option value="">-- Chọn điểm --</option>
+          <option value="new">➕ Thêm điểm mới...</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="ten_diem">Tên điểm:</label>
+        <input id="ten_diem" placeholder="Nhập tên điểm (nếu thêm mới)">
+      </div>
+      
+      <div class="form-group">
+        <label for="so_tien">Số tiền:</label>
+        <input id="so_tien" type="number" placeholder="Nhập số tiền">
+      </div>
+      
+      <div class="form-group">
+        <label for="dia_chi">Địa chỉ:</label>
+        <input id="dia_chi" placeholder="Nhập địa chỉ">
+      </div>
+      
+      <div class="button-group">
+        <button class="btn-primary" onclick="guiDuLieu()">
+          💾 Lưu thông tin
+        </button>
+        <button class="btn-secondary" onclick="taiDuLieu()">
+          🔄 Tải lại
+        </button>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2 style="margin-bottom: 15px;">📊 Danh sách điểm gas theo ca</h2>
+      <div class="table-container">
+        <table id="bang">
+          <thead>
+            <tr>
+              <th>Tên điểm</th>
+              <th>Số tiền</th>
+              <th>Địa chỉ</th>
+              <th>Ca</th>
+              <th>Thời gian</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+          </tbody>
+        </table>
+        <div id="empty-state" class="empty-state" style="display: none;">
+          <h3>📭 Chưa có dữ liệu</h3>
+          <p>Hãy thêm điểm gas đầu tiên để bắt đầu quản lý</p>
+        </div>
+      </div>
+    </div>
   </div>
 
 <script>
-/* ============ THAY API_URL BẰNG LINK WEB APP =========== */
-const API_URL = "https://script.google.com/macros/s/AKfycbw46PKyGrB-nEDjU5MZ8SEVk4kfxR0aifwvQ6nRN0MtRkupRFuwNbSYvlUJqN8oFrtp/exec";
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzzkQSCvpHb4aUIJyAgRCKoBFgFCM-NW66_kZep7sAyTha_SurAowJSEL0qKBOvgjaN/exec';
+let cacheDiem = {};
+let allData = [];
+let currentShift = '';
 
-/* JSONP helper */
-function jsonpRequest(url, onSuccess, onError, timeout = 10000) {
-  const cbName = 'cb_' + Date.now() + '_' + Math.floor(Math.random()*10000);
-  const script = document.createElement('script');
-
-  window[cbName] = function(data) {
-    clearTimeout(timer);
-    cleanup();
-    onSuccess && onSuccess(data);
+// Hàm xác định ca hiện tại (18h30 hôm nay đến 6h30 sáng hôm sau)
+function getCurrentShift() {
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinutes = now.getMinutes();
+  
+  // Tính toán thời gian bắt đầu và kết thúc ca
+  let shiftStart = new Date(now);
+  let shiftEnd = new Date(now);
+  
+  // Nếu trước 6h30, ca thuộc về ngày hôm trước
+  if (currentHour < 6 || (currentHour === 6 && currentMinutes < 30)) {
+    shiftStart.setDate(shiftStart.getDate() - 1);
+    shiftStart.setHours(18, 30, 0, 0);
+    shiftEnd.setHours(6, 30, 0, 0);
+  } 
+  // Nếu sau 18h30, ca thuộc về ngày hôm nay
+  else if (currentHour > 18 || (currentHour === 18 && currentMinutes >= 30)) {
+    shiftStart.setHours(18, 30, 0, 0);
+    shiftEnd.setDate(shiftEnd.getDate() + 1);
+    shiftEnd.setHours(6, 30, 0, 0);
+  }
+  // Nếu trong khoảng 6h30 đến 18h30, không thuộc ca nào
+  else {
+    return {
+      shift: 'Ngoài ca làm việc',
+      start: null,
+      end: null
+    };
+  }
+  
+  // Định dạng ngày tháng
+  const formatDate = (date) => {
+    return date.toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
+  
+  const shiftKey = shiftStart.toISOString().split('T')[0];
+  
+  return {
+    shift: `Ca ${formatDate(shiftStart).split(' ')[0]}`,
+    shiftKey: shiftKey,
+    start: formatDate(shiftStart),
+    end: formatDate(shiftEnd)
+  };
+}
 
-  function cleanup() {
-    try { delete window[cbName]; } catch(e) { window[cbName] = undefined; }
-    if (script.parentNode) script.parentNode.removeChild(script);
+// Cập nhật thông tin ca hiện tại
+function updateShiftInfo() {
+  const shiftInfo = getCurrentShift();
+  currentShift = shiftInfo.shiftKey;
+  
+  document.getElementById('current-shift').textContent = shiftInfo.shift;
+  
+  if (shiftInfo.start && shiftInfo.end) {
+    document.getElementById('shift-time').textContent = 
+      `⏰ ${shiftInfo.start} - ${shiftInfo.end}`;
+  } else {
+    document.getElementById('shift-time').textContent = 
+      '⏰ Hiện tại không trong ca làm việc';
+  }
+}
+
+// Định dạng tiền tệ
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  }).format(amount);
+}
+
+// Tính toán thống kê
+function calculateStats(data) {
+  const stats = {
+    total: 0,
+    count: data.length,
+    shifts: new Set(),
+    diem: new Set()
+  };
+  
+  data.forEach(item => {
+    stats.total += parseInt(item.so_tien) || 0;
+    if (item.ca) stats.shifts.add(item.ca);
+    if (item.ten_diem) stats.diem.add(item.ten_diem);
+  });
+  
+  return stats;
+}
+
+// Hiển thị thống kê
+function displayStats(stats) {
+  const container = document.getElementById('stats-container');
+  
+  container.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-value">${stats.count}</div>
+      <div class="stat-label">Số giao dịch</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${formatCurrency(stats.total)}</div>
+      <div class="stat-label">Tổng tiền</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${stats.shifts.size}</div>
+      <div class="stat-label">Số ca</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${stats.diem.size}</div>
+      <div class="stat-label">Số điểm gas</div>
+    </div>
+  `;
+}
+
+// Lọc dữ liệu theo ca
+function filterByShift() {
+  const filterValue = document.getElementById('filter-shift').value;
+  filterData();
+}
+
+// Lọc dữ liệu theo điểm
+function filterByDiem() {
+  const filterValue = document.getElementById('filter-diem').value;
+  filterData();
+}
+
+// Lọc và hiển thị dữ liệu
+function filterData() {
+  const shiftFilter = document.getElementById('filter-shift').value;
+  const diemFilter = document.getElementById('filter-diem').value;
+  
+  let filteredData = allData;
+  
+  if (shiftFilter !== 'all') {
+    filteredData = filteredData.filter(item => item.ca === shiftFilter);
+  }
+  
+  if (diemFilter !== 'all') {
+    filteredData = filteredData.filter(item => item.ten_diem === diemFilter);
+  }
+  
+  displayData(filteredData);
+  displayStats(calculateStats(filteredData));
+}
+
+// Hiển thị dữ liệu trong bảng
+function displayData(data) {
+  const tbody = document.querySelector('#bang tbody');
+  tbody.innerHTML = '';
+  
+  // Hiển thị thông báo nếu không có dữ liệu
+  const emptyState = document.getElementById('empty-state');
+  if (data.length === 0) {
+    emptyState.style.display = 'block';
+  } else {
+    emptyState.style.display = 'none';
+  }
+  
+  data.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.className = 'fade-in';
+    tr.innerHTML = `
+      <td data-label="Tên điểm">${row.ten_diem}</td>
+      <td data-label="Số tiền">${formatCurrency(row.so_tien)}</td>
+      <td data-label="Địa chỉ">${row.dia_chi}</td>
+      <td data-label="Ca"><span class="badge badge-primary">${row.ca || 'Không xác định'}</span></td>
+      <td data-label="Thời gian">${row.timestamp ? new Date(row.timestamp).toLocaleString('vi-VN') : 'Không xác định'}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Cập nhật bộ lọc
+function updateFilters(data) {
+  const shifts = new Set();
+  const diems = new Set();
+  
+  data.forEach(item => {
+    if (item.ca) shifts.add(item.ca);
+    if (item.ten_diem) diems.add(item.ten_diem);
+  });
+  
+  // Cập nhật bộ lọc ca
+  const shiftFilter = document.getElementById('filter-shift');
+  shiftFilter.innerHTML = '<option value="all">Tất cả các ca</option>';
+  
+  Array.from(shifts).sort().reverse().forEach(shift => {
+    const option = document.createElement('option');
+    option.value = shift;
+    option.textContent = `Ca ${shift}`;
+    shiftFilter.appendChild(option);
+  });
+  
+  // Cập nhật bộ lọc điểm
+  const diemFilter = document.getElementById('filter-diem');
+  diemFilter.innerHTML = '<option value="all">Tất cả điểm gas</option>';
+  
+  Array.from(diems).sort().forEach(diem => {
+    const option = document.createElement('option');
+    option.value = diem;
+    option.textContent = diem;
+    diemFilter.appendChild(option);
+  });
+}
+
+async function guiDuLieu() {
+  const ten_diem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
+  const so_tien = document.getElementById('so_tien').value;
+  const dia_chi = document.getElementById('dia_chi').value;
+
+  if (!ten_diem || !so_tien || !dia_chi) {
+    alert('⚠️ Vui lòng nhập đầy đủ thông tin!');
+    return;
   }
 
-  script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
-  script.onerror = function() {
-    clearTimeout(timer);
-    cleanup();
-    onError && onError(new Error('Network/script error'));
+  // Kiểm tra xem có đang trong ca làm việc không
+  const shiftInfo = getCurrentShift();
+  if (!shiftInfo.start) {
+    alert('⚠️ Hiện tại không trong ca làm việc! Ca làm việc từ 18:30 đến 6:30 sáng hôm sau.');
+    return;
+  }
+
+  const data = { 
+    ten_diem, 
+    so_tien, 
+    dia_chi,
+    ca: shiftInfo.shiftKey,
+    timestamp: new Date().toISOString()
   };
-  document.head.appendChild(script);
 
-  const timer = setTimeout(function() {
-    cleanup();
-    onError && onError(new Error('Timeout'));
-  }, timeout);
+  try {
+    await fetch(scriptURL, {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+    alert('✅ Đã lưu thành công!');
+    document.getElementById('so_tien').value = '';
+    taiDuLieu();
+  } catch (error) {
+    alert('❌ Có lỗi xảy ra khi lưu dữ liệu!');
+    console.error(error);
+  }
 }
 
-/* Alert */
-function showAlert(msg) { alert(msg); }
+async function taiDuLieu() {
+  try {
+    const res = await fetch(scriptURL);
+    const data = await res.json();
+    allData = data;
+    
+    const select = document.getElementById('chon_diem');
+    select.innerHTML = '<option value="">-- Chọn điểm --</option><option value="new">➕ Thêm điểm mới...</option>';
+    cacheDiem = {};
 
-/* Auto set today */
-window.onload = function() {
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('dateInput').value = today;
-  document.getElementById('viewDate').value = today;
-};
+    data.forEach(row => {
+      const ten = row.ten_diem;
+      const diachi = row.dia_chi;
+      cacheDiem[ten] = diachi;
 
-/* Add record */
-document.getElementById('saveBtn').addEventListener('click', function(){
-  const date = document.getElementById('dateInput').value;
-  const location = document.getElementById('locationInput').value.trim();
-  const amount = document.getElementById('amountInput').value;
-  if (!date || !location || !amount) { showAlert('Vui lòng nhập đủ dữ liệu'); return; }
-
-  const url = API_URL + '?action=add&date=' + encodeURIComponent(date)
-            + '&location=' + encodeURIComponent(location)
-            + '&amount=' + encodeURIComponent(amount);
-
-  jsonpRequest(url,
-    function(data){
-      if (data && data.status === 'success') {
-        showAlert('Lưu thành công ✅');
-        document.getElementById('locationInput').value = '';
-        document.getElementById('amountInput').value = '';
-      } else {
-        showAlert('Lưu thất bại: ' + JSON.stringify(data));
+      // Thêm vào danh sách chọn nếu chưa có
+      if (![...select.options].some(o => o.value === ten)) {
+        const opt = document.createElement('option');
+        opt.value = ten;
+        opt.textContent = ten;
+        select.appendChild(opt);
       }
-    },
-    function(err){
-      console.error(err);
-      showAlert('❌ Không thể kết nối API');
-    }
-  );
-});
+    });
 
-/* Get records */
-document.getElementById('viewBtn').addEventListener('click', getRecords);
-document.getElementById('yesterdayBtn').addEventListener('click', function(){
-  const d = new Date();
-  d.setDate(d.getDate() - 1);
-  document.getElementById('viewDate').value = d.toISOString().split('T')[0];
-  getRecords();
-});
-
-function getRecords() {
-  const date = document.getElementById('viewDate').value;
-  if (!date) { showAlert('Chọn ngày trước'); return; }
-
-  const url = API_URL + '?action=get&date=' + encodeURIComponent(date);
-
-  jsonpRequest(url,
-    function(data){
-      const out = document.getElementById('result');
-      let html = '<h4>Kết quả ngày ' + date + '</h4>';
-      if (!data || !data.records || data.records.length === 0) {
-        html += '<p class="empty">❌ Không có dữ liệu</p>';
-      } else {
-        data.records.forEach(function(r){
-          var location = r[1] || '';
-          var amount = Number(r[2]) || 0;
-          html += '<div class="record">📍 ' + escapeHtml(location) + ' - 💰 ' + amount.toLocaleString() + ' VNĐ</div>';
-        });
-        html += '<strong class="total">Tổng: ' + (Number(data.total)||0).toLocaleString() + ' VNĐ</strong>';
-      }
-      out.innerHTML = html;
-    },
-    function(err){
-      console.error(err);
-      showAlert('❌ Không thể kết nối API');
-    }
-  );
+    // Hiển thị dữ liệu
+    displayData(data);
+    displayStats(calculateStats(data));
+    updateFilters(data);
+    
+  } catch (error) {
+    alert('❌ Có lỗi xảy ra khi tải dữ liệu!');
+    console.error(error);
+  }
 }
 
-/* Escape HTML */
-function escapeHtml(str) {
-  return String(str||'')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+function chonDiem() {
+  const val = document.getElementById('chon_diem').value;
+  const tenDiemInput = document.getElementById('ten_diem');
+  const diaChiInput = document.getElementById('dia_chi');
+  
+  if (val === 'new' || val === '') {
+    tenDiemInput.value = '';
+    diaChiInput.value = '';
+    tenDiemInput.disabled = false;
+    tenDiemInput.placeholder = "Nhập tên điểm (nếu thêm mới)";
+  } else {
+    tenDiemInput.value = val;
+    diaChiInput.value = cacheDiem[val] || '';
+    tenDiemInput.disabled = true;
+    tenDiemInput.placeholder = "Tên điểm đã chọn";
+  }
 }
+
+// Khởi tạo
+document.addEventListener('DOMContentLoaded', function() {
+  updateShiftInfo();
+  taiDuLieu();
+  
+  // Cập nhật thông tin ca mỗi phút
+  setInterval(updateShiftInfo, 60000);
+});
 </script>
 </body>
 </html>
