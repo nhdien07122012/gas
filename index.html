@@ -775,7 +775,16 @@ function filterData() {
   if (trangThaiFilter !== 'all') {
     filteredData = filteredData.filter(item => item.trang_thai === trangThaiFilter);
   }
-  
+
+  // Nếu đang chọn ca hiện tại và không có dữ liệu, hiển thị thông báo đặc biệt
+  const shiftInfo = getCurrentShift();
+  if (shiftFilter === shiftInfo.shiftKey && shiftInfo.start && filteredData.length === 0) {
+    document.getElementById('empty-state').style.display = 'block';
+    document.getElementById('empty-state').innerHTML = '<h3>📭 Chưa có điểm nào trong ca hiện tại</h3><p>Hãy thêm điểm gas đầu tiên để bắt đầu quản lý</p>';
+  } else {
+    document.getElementById('empty-state').innerHTML = '<h3>📭 Chưa có dữ liệu</h3><p>Hãy thêm điểm gas đầu tiên để bắt đầu quản lý</p>';
+  }
+
   displayData(filteredData);
   displayStats(calculateStats(filteredData));
 }
@@ -1054,10 +1063,21 @@ function chonDiem() {
 }
 
 // Khởi tạo
+// Khi load trang, mặc định chọn ca hiện tại nếu có, nếu không thì chọn "Tất cả các ca"
 document.addEventListener('DOMContentLoaded', function() {
   updateShiftInfo();
-  taiDuLieu();
-  
+  taiDuLieu().then(() => {
+    const shiftInfo = getCurrentShift();
+    const shiftFilter = document.getElementById('filter-shift');
+    if (shiftInfo.start) {
+      // Nếu đang trong ca, chọn ca hiện tại
+      shiftFilter.value = shiftInfo.shiftKey;
+    } else {
+      // Nếu không trong ca, chọn tất cả các ca
+      shiftFilter.value = 'all';
+    }
+    filterData();
+  });
   // Cập nhật thông tin ca mỗi phút
   setInterval(updateShiftInfo, 60000);
 });
