@@ -861,12 +861,19 @@ function displayData(data) {
   });
 }
 
-// Hàm thay đổi trạng thái nhanh
+// Hàm thay đổi trạng thái nhanh (đã có, cập nhật để tốt hơn)
 function toggleTrangThai(id) {
   const item = allData.find(item => item.id === id);
   if (!item) return;
 
   const newTrangThai = item.trang_thai === 'Đã nộp' ? 'Chưa nộp' : 'Đã nộp';
+
+  // Tìm phần tử badge để cập nhật trực tiếp (cho UX tốt hơn)
+  const badgeElement = document.querySelector(`[onclick="toggleTrangThai('${id}')"]`);
+  if (badgeElement) {
+    badgeElement.textContent = newTrangThai;
+    badgeElement.className = `badge ${newTrangThai === 'Đã nộp' ? 'badge-secondary' : 'badge-warning'} status-toggle`;
+  }
 
   // Tạo một bản sao của item và cập nhật trạng thái mới
   const updatedItem = { ...item, trang_thai: newTrangThai };
@@ -884,18 +891,27 @@ function toggleTrangThai(id) {
   .then(response => response.json())
   .then(result => {
     if (result.result === 'success') {
-      alert('✅ Đã cập nhật trạng thái!');
-      taiDuLieu();
+      // Không cần alert nữa vì đã cập nhật trực tiếp giao diện
+      console.log('✅ Đã cập nhật trạng thái!');
+      // Cập nhật dữ liệu trong bộ nhớ
+      const index = allData.findIndex(item => item.id === id);
+      if (index !== -1) {
+        allData[index].trang_thai = newTrangThai;
+      }
     } else {
       alert('❌ Có lỗi xảy ra khi cập nhật trạng thái!');
+      // Khôi phục trạng thái cũ nếu có lỗi
+      taiDuLieu();
     }
   })
   .catch(error => {
     alert('❌ Có lỗi xảy ra khi cập nhật trạng thái!');
     console.error(error);
+    // Khôi phục trạng thái cũ nếu có lỗi
+    taiDuLieu();
   });
 }
-
+//test
 // Cập nhật bộ lọc
 function updateFilters(data) {
   const shifts = new Set();
