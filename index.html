@@ -609,11 +609,48 @@
     align-items: center;
     gap: 8px;
   }
+  
+  /* Toast notification */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary);
+    color: white;
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    z-index: 1002;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  .toast.success {
+    background: var(--secondary);
+  }
+  
+  .toast.error {
+    background: var(--danger);
+  }
 </style>
 </head>
 <body>
   <!-- Overlay cho sidebar -->
   <div class="overlay" id="sidebar-overlay"></div>
+  
+  <!-- Toast notification -->
+  <div class="toast" id="toast">
+    <span id="toast-message">Đã sao chép vào clipboard!</span>
+  </div>
   
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
@@ -629,14 +666,14 @@
         ❓ Trợ giúp
       </button>
       <button class="sidebar-item" onclick="resetForm()">
-        🔙 Trở lại
+        🆕 Tạo mới
       </button>
       <button class="sidebar-item" onclick="taiDuLieu()">
         🔄 Tải lại dữ liệu
       </button>
     </div>
     <div class="sidebar-footer">
-      <p>Quản lý điểm gas &copy; 2025</p>
+      <p>Quản lý điểm gas &copy; 2023</p>
     </div>
   </div>
 
@@ -801,6 +838,44 @@ let editingId = null;
 let itemToDelete = null;
 let currentFilteredData = [];
 
+// Hàm hiển thị thông báo toast
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toast-message');
+  
+  toastMessage.textContent = message;
+  toast.className = `toast ${type} show`;
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+// Hàm sao chép vào clipboard
+async function copyToClipboard(text) {
+  try {
+    // Sử dụng Clipboard API hiện đại
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } else {
+      // Fallback cho các trình duyệt cũ hoặc không hỗ trợ
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.select();
+      const success = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      return success;
+    }
+  } catch (err) {
+    console.error('Lỗi khi sao chép vào clipboard: ', err);
+    return false;
+  }
+}
+
 // Hàm mở/đóng sidebar
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
@@ -820,14 +895,14 @@ function closeSidebar() {
 }
 
 // Hàm xuất dữ liệu dạng văn bản
-function exportToText() {
+async function exportToText() {
   closeSidebar();
   
   // Lấy dữ liệu đang được hiển thị (đã lọc)
   const dataToExport = currentFilteredData.length > 0 ? currentFilteredData : allData;
   
   if (dataToExport.length === 0) {
-    alert('❌ Không có dữ liệu để xuất!');
+    showToast('❌ Không có dữ liệu để xuất!', 'error');
     return;
   }
   
@@ -853,8 +928,14 @@ function exportToText() {
   // Giải phóng URL
   URL.revokeObjectURL(link.href);
   
-  // Thông báo thành công
-  alert('✅ Đã xuất dữ liệu văn bản thành công!');
+  // Sao chép nội dung vào clipboard
+  const copySuccess = await copyToClipboard(content);
+  
+  if (copySuccess) {
+    showToast('✅ Đã xuất dữ liệu và sao chép vào clipboard!');
+  } else {
+    showToast('✅ Đã xuất dữ liệu, nhưng không thể sao chép vào clipboard', 'error');
+  }
 }
 
 // Xử lý nhập nhanh số tiền hàng ngàn
@@ -1123,13 +1204,13 @@ function toggleTrangThai(id) {
         allData[index].trang_thai = newTrangThai;
       }
     } else {
-      alert('❌ Có lỗi xảy ra khi cập nhật trạng thái!');
+      showToast('❌ Có lỗi xảy ra khi cập nhật trạng thái!', 'error');
       // Khôi phục trạng thái cũ nếu có lỗi
       taiDuLieu();
     }
   })
   .catch(error => {
-    alert('❌ Có lỗi xảy ra khi cập nhật trạng thái!');
+    showToast('❌ Có lỗi xảy ra khi cập nhật trạng thái!', 'error');
     console.error(error);
     // Khôi phục trạng thái cũ nếu có lỗi
     taiDuLieu();
@@ -1236,15 +1317,15 @@ function confirmDelete() {
   .then(response => response.json())
   .then(result => {
     if (result.result === 'success') {
-      alert('✅ Đã xóa thành công!');
+      showToast('✅ Đã xóa thành công!');
       closeModal('delete-modal');
       taiDuLieu();
     } else {
-      alert('❌ Có lỗi xảy ra khi xóa!');
+      showToast('❌ Có lỗi xảy ra khi xóa!', 'error');
     }
   })
   .catch(error => {
-    alert('❌ Có lỗi xảy ra khi xóa!');
+    showToast('❌ Có lỗi xảy ra khi xóa!', 'error');
     console.error(error);
   });
 }
@@ -1267,7 +1348,7 @@ async function guiDuLieu() {
   const trang_thai = document.getElementById('trang_thai').value;
 
   if (!ten_diem || !so_tien || !dia_chi) {
-    alert('⚠️ Vui lòng nhập đầy đủ thông tin!');
+    showToast('⚠️ Vui lòng nhập đầy đủ thông tin!', 'error');
     return;
   }
 
@@ -1275,7 +1356,7 @@ async function guiDuLieu() {
   if (!editingId) {
     const shiftInfo = getCurrentShift();
     if (!shiftInfo.start) {
-      alert('⚠️ Hiện tại không trong ca làm việc! Ca làm việc từ 18:30 đến 6:30 sáng hôm sau.');
+      showToast('⚠️ Hiện tại không trong ca làm việc! Ca làm việc từ 18:30 đến 6:30 sáng hôm sau.', 'error');
       return;
     }
   }
@@ -1304,14 +1385,14 @@ async function guiDuLieu() {
     const result = await response.json();
     
     if (result.result === 'success') {
-      alert(editingId ? '✅ Đã cập nhật thành công!' : '✅ Đã lưu thành công!');
+      showToast(editingId ? '✅ Đã cập nhật thành công!' : '✅ Đã lưu thành công!');
       resetForm();
       taiDuLieu();
     } else {
-      alert('❌ Có lỗi xảy ra khi lưu dữ liệu!');
+      showToast('❌ Có lỗi xảy ra khi lưu dữ liệu!', 'error');
     }
   } catch (error) {
-    alert('❌ Có lỗi xảy ra khi lưu dữ liệu!');
+    showToast('❌ Có lỗi xảy ra khi lưu dữ liệu!', 'error');
     console.error(error);
   }
 }
@@ -1347,7 +1428,7 @@ async function taiDuLieu() {
     updateFilters(data);
     
   } catch (error) {
-    alert('❌ Có lỗi xảy ra khi tải dữ liệu!');
+    showToast('❌ Có lỗi xảy ra khi tải dữ liệu!', 'error');
     console.error(error);
   }
 }
