@@ -19,6 +19,7 @@
     --radius: 10px;
     --night-shift: #4a5568;
     --day-shift: #f7fafc;
+    --sidebar-width: 280px;
   }
   
   * {
@@ -34,6 +35,7 @@
     line-height: 1.6;
     padding: 20px;
     min-height: 100vh;
+    transition: margin-left 0.3s ease;
   }
   
   .container {
@@ -43,13 +45,123 @@
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     overflow: hidden;
+    transition: all 0.3s ease;
   }
   
+  /* Sidebar styles */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: var(--sidebar-width);
+    height: 100%;
+    background: white;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+    z-index: 1001;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+  
+  .sidebar-header {
+    padding: 20px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .sidebar-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .close-sidebar {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: auto;
+  }
+  
+  .sidebar-content {
+    padding: 20px;
+    flex: 1;
+  }
+  
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: var(--radius);
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 1rem;
+  }
+  
+  .sidebar-item:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+  }
+  
+  .sidebar-item.active {
+    background: var(--primary);
+    color: white;
+  }
+  
+  .sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--gray);
+    text-align: center;
+  }
+  
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: none;
+  }
+  
+  .overlay.active {
+    display: block;
+  }
+  
+  .menu-toggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 10px;
+  }
+  
+  /* Header styles */
   header {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: white;
     padding: 25px 30px;
     text-align: center;
+    position: relative;
   }
   
   header h1 {
@@ -500,8 +612,37 @@
 </style>
 </head>
 <body>
+  <!-- Overlay cho sidebar -->
+  <div class="overlay" id="sidebar-overlay"></div>
+  
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Menu</h2>
+      <button class="close-sidebar" id="close-sidebar">&times;</button>
+    </div>
+    <div class="sidebar-content">
+      <button class="sidebar-item" onclick="exportToText()">
+        📄 Xuất dữ liệu văn bản
+      </button>
+      <button class="sidebar-item" onclick="openModal('help-modal')">
+        ❓ Trợ giúp
+      </button>
+      <button class="sidebar-item" onclick="resetForm()">
+        🔙 Trở lại
+      </button>
+      <button class="sidebar-item" onclick="taiDuLieu()">
+        🔄 Tải lại dữ liệu
+      </button>
+    </div>
+    <div class="sidebar-footer">
+      <p>Quản lý điểm gas &copy; 2025</p>
+    </div>
+  </div>
+
   <div class="container">
     <header>
+      <button class="menu-toggle" id="menu-toggle">☰</button>
       <h1>📋 Quản lý tiền thu điểm gas theo ca</h1>
       <p>Theo dõi và quản lý thu chi tại các điểm gas theo ca làm việc</p>
     </header>
@@ -628,6 +769,29 @@
     </div>
   </div>
 
+  <!-- Modal trợ giúp -->
+  <div class="modal" id="help-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Trợ giúp</h2>
+        <button class="close-modal" onclick="closeModal('help-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h3>Cách sử dụng:</h3>
+        <ul style="margin-left: 20px; margin-top: 10px;">
+          <li>Chọn điểm gas từ danh sách hoặc thêm mới</li>
+          <li>Nhập số tiền thu được (có thể nhập số và thêm '000' tự động)</li>
+          <li>Chọn trạng thái đã nộp hoặc chưa nộp</li>
+          <li>Nhấn "Lưu thông tin" để lưu dữ liệu</li>
+          <li>Xuất dữ liệu văn bản từ menu để chia sẻ hoặc in ấn</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" onclick="closeModal('help-modal')">Đóng</button>
+      </div>
+    </div>
+  </div>
+
 <script>
 const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
 let cacheDiem = {};
@@ -635,6 +799,63 @@ let allData = [];
 let currentShift = '';
 let editingId = null;
 let itemToDelete = null;
+let currentFilteredData = [];
+
+// Hàm mở/đóng sidebar
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('active');
+}
+
+// Đóng sidebar
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  
+  sidebar.classList.remove('open');
+  overlay.classList.remove('active');
+}
+
+// Hàm xuất dữ liệu dạng văn bản
+function exportToText() {
+  closeSidebar();
+  
+  // Lấy dữ liệu đang được hiển thị (đã lọc)
+  const dataToExport = currentFilteredData.length > 0 ? currentFilteredData : allData;
+  
+  if (dataToExport.length === 0) {
+    alert('❌ Không có dữ liệu để xuất!');
+    return;
+  }
+  
+  // Tạo nội dung văn bản theo mẫu "điểm A - 311000"
+  let content = '';
+  dataToExport.forEach(item => {
+    // Định dạng: "điểm A - 311000"
+    content += `${item.ten_diem} - ${item.so_tien}\n`;
+  });
+  
+  // Tạo blob và tải xuống
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const link = document.createElement('a');
+  
+  // Lấy thông tin ca hiện tại để đặt tên file
+  const shiftInfo = getCurrentShift();
+  const fileName = shiftInfo.shiftKey ? `diem_gas_${shiftInfo.shiftKey}.txt` : `diem_gas_${new Date().toISOString().slice(0,10)}.txt`;
+  
+  link.download = fileName;
+  link.href = URL.createObjectURL(blob);
+  link.click();
+  
+  // Giải phóng URL
+  URL.revokeObjectURL(link.href);
+  
+  // Thông báo thành công
+  alert('✅ Đã xuất dữ liệu văn bản thành công!');
+}
 
 // Xử lý nhập nhanh số tiền hàng ngàn
 document.getElementById('so_tien').addEventListener('blur', function() {
@@ -803,6 +1024,9 @@ function filterData() {
     filteredData = filteredData.filter(item => item.trang_thai === trangThaiFilter);
   }
 
+  // Cập nhật biến toàn cục currentFilteredData
+  currentFilteredData = filteredData;
+
   // Nếu đang chọn ca hiện tại và không có dữ liệu, hiển thị thông báo đặc biệt
   const shiftInfo = getCurrentShift();
   if (shiftFilter === shiftInfo.shiftKey && shiftInfo.start && filteredData.length === 0) {
@@ -861,7 +1085,7 @@ function displayData(data) {
   });
 }
 
-// Hàm thay đổi trạng thái nhanh (đã có, cập nhật để tốt hơn)
+// Hàm thay đổi trạng thái nhanh
 function toggleTrangThai(id) {
   const item = allData.find(item => item.id === id);
   if (!item) return;
@@ -911,7 +1135,7 @@ function toggleTrangThai(id) {
     taiDuLieu();
   });
 }
-//test
+
 // Cập nhật bộ lọc
 function updateFilters(data) {
   const shifts = new Set();
@@ -947,6 +1171,7 @@ function updateFilters(data) {
 
 // Reset form
 function resetForm() {
+  closeSidebar();
   editingId = null;
   document.getElementById('chon_diem').value = '';
   document.getElementById('ten_diem').value = '';
@@ -1096,6 +1321,7 @@ async function taiDuLieu() {
     const res = await fetch(scriptURL);
     const data = await res.json();
     allData = data;
+    currentFilteredData = data;
     
     const select = document.getElementById('chon_diem');
     select.innerHTML = '<option value="">-- Chọn điểm --</option><option value="new">➕ Thêm điểm mới...</option>';
@@ -1160,6 +1386,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     filterData();
   });
+  
+  // Thêm sự kiện cho nút menu và đóng sidebar
+  document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
+  document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
+  document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
+  
   // Cập nhật thông tin ca mỗi phút
   setInterval(updateShiftInfo, 60000);
 });
