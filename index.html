@@ -481,6 +481,22 @@
   .form-row .form-group {
     flex: 1;
   }
+  
+  /* Các style mới cho chức năng thay đổi trạng thái nhanh */
+  .status-toggle {
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .status-toggle:hover {
+    transform: scale(1.05);
+  }
+  
+  .status-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 </style>
 </head>
 <body>
@@ -619,6 +635,17 @@ let allData = [];
 let currentShift = '';
 let editingId = null;
 let itemToDelete = null;
+
+// Xử lý nhập nhanh số tiền hàng ngàn
+document.getElementById('so_tien').addEventListener('blur', function() {
+  let value = this.value.trim();
+  
+  // Nếu giá trị nhập vào là số và có ít hơn 4 chữ số
+  if (/^\d+$/.test(value) && value.length > 0 && value.length <= 3) {
+    // Thêm "000" vào cuối
+    this.value = value + '000';
+  }
+});
 
 // Hàm xác định ca hiện tại (18h30 hôm nay đến 6h30 sáng hôm sau)
 function getCurrentShift() {
@@ -816,7 +843,11 @@ function displayData(data) {
       <td data-label="Tên điểm">${row.ten_diem}</td>
       <td data-label="Số tiền">${formatCurrency(row.so_tien)}</td>
       <td data-label="Địa chỉ">${row.dia_chi}</td>
-      <td data-label="Trạng thái"><span class="badge ${badgeClass}">${row.trang_thai || 'Chưa nộp'}</span></td>
+      <td data-label="Trạng thái">
+        <div class="status-toggle-wrapper">
+          <span class="badge ${badgeClass} status-toggle" onclick="toggleTrangThai('${row.id}')">${row.trang_thai || 'Chưa nộp'}</span>
+        </div>
+      </td>
       <td data-label="Ca"><span class="badge badge-primary">${row.ca || 'Không xác định'}</span></td>
       <td data-label="Thời gian">${row.timestamp ? new Date(row.timestamp).toLocaleString('vi-VN') : 'Không xác định'}</td>
       <td data-label="Thao tác">
@@ -827,6 +858,41 @@ function displayData(data) {
       </td>
     `;
     tbody.appendChild(tr);
+  });
+}
+
+// Hàm thay đổi trạng thái nhanh
+function toggleTrangThai(id) {
+  const item = allData.find(item => item.id === id);
+  if (!item) return;
+
+  const newTrangThai = item.trang_thai === 'Đã nộp' ? 'Chưa nộp' : 'Đã nộp';
+
+  // Tạo một bản sao của item và cập nhật trạng thái mới
+  const updatedItem = { ...item, trang_thai: newTrangThai };
+
+  // Gửi toàn bộ dữ liệu của mục đó để cập nhật
+  const data = {
+    action: 'update',
+    ...updatedItem
+  };
+
+  fetch(scriptURL, {
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.result === 'success') {
+      alert('✅ Đã cập nhật trạng thái!');
+      taiDuLieu();
+    } else {
+      alert('❌ Có lỗi xảy ra khi cập nhật trạng thái!');
+    }
+  })
+  .catch(error => {
+    alert('❌ Có lỗi xảy ra khi cập nhật trạng thái!');
+    console.error(error);
   });
 }
 
