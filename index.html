@@ -617,27 +617,29 @@
     gap: 8px;
   }
   
-  /* Toast notification */
   .toast {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(100px);
     background: var(--primary);
     color: white;
-    padding: 12px 20px;
+    padding: 16px 24px;
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     z-index: 1002;
     display: flex;
     align-items: center;
     gap: 10px;
-    transform: translateY(100px);
     opacity: 0;
     transition: all 0.3s ease;
+    min-width: 280px;
+    text-align: center;
+    justify-content: center;
   }
-  
+
   .toast.show {
-    transform: translateY(0);
+    transform: translate(-50%, -50%) translateY(0);
     opacity: 1;
   }
   
