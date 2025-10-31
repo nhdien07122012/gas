@@ -413,6 +413,7 @@
     z-index: 1000;
     align-items: center;
     justify-content: center;
+    padding: 20px;
   }
   
   .modal-content {
@@ -422,6 +423,10 @@
     max-width: 500px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     animation: modalFadeIn 0.3s ease-out;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow: visible; /* Sửa lỗi che nút trên mobile */
+    position: relative;
   }
   
   .modal-header {
@@ -446,6 +451,24 @@
     display: flex;
     justify-content: flex-end;
     gap: 10px;
+  }
+  
+  .modal-footer button {
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+    min-height: 44px;
+  }
+    
+  /* Tăng kích thước nút Xóa trên mobile */
+  .modal-footer .btn-danger {
+    font-size: 1.2rem;
+    min-height: 52px;
+    padding: 16px 0;
+    border-radius: 12px;
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
   }
   
   .close-modal {
@@ -513,8 +536,79 @@
       min-width: 600px;
     }
     
+    /* Cải thiện modal cho điện thoại */
+    .modal {
+      padding: 10px;
+    }
+    
     .modal-content {
       width: 95%;
+      margin: 10px;
+    }
+    
+    .modal-header, .modal-body, .modal-footer {
+      padding: 15px;
+    }
+    
+    .modal-footer {
+      flex-direction: column;
+      gap: 12px;
+      padding: 18px 10px;
+    }
+    
+    .modal-footer button {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.1rem;
+      min-height: 48px;
+      border-radius: 10px;
+    }
+    
+    .modal-footer .btn-danger {
+      font-size: 1.3rem;
+      min-height: 56px;
+      padding: 18px 0;
+      border-radius: 14px;
+      width: 100%;
+      z-index: 1;
+    }
+    
+    /* Tăng kích thước nút đóng modal */
+    .close-modal {
+      font-size: 1.8rem;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Cải thiện bảng cho điện thoại */
+    .table-container {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    
+    table {
+      min-width: 700px;
+    }
+    
+    /* Cải thiện các nút thao tác trong bảng */
+    .action-buttons {
+      flex-direction: column;
+      gap: 5px;
+    }
+    
+    .action-buttons button {
+      padding: 10px;
+      font-size: 0.9rem;
+      min-height: 36px;
+    }
+    
+    /* Tăng kích thước các badge cho dễ chạm */
+    .badge {
+      padding: 6px 10px;
+      font-size: 0.85rem;
     }
   }
   
@@ -537,10 +631,59 @@
     
     input, select {
       padding: 12px 14px;
+      font-size: 16px; /* Ngăn chặn zoom trên iOS */
     }
     
     button {
       padding: 14px;
+      min-height: 44px; /* Kích thước tối thiểu để dễ chạm */
+    }
+    
+    .btn-sm {
+      min-height: 36px;
+    }
+    
+    /* Đảm bảo modal luôn hiển thị đúng trên điện thoại nhỏ */
+    .modal-content {
+      width: 98%;
+      margin: 5px;
+    }
+    
+    .modal-header h2 {
+      font-size: 1.2rem;
+    }
+    
+    .modal-body {
+      padding: 15px 10px;
+    }
+    
+    .modal-footer {
+      flex-direction: column;
+      gap: 12px;
+      padding: 16px 6px;
+    }
+    
+    .modal-footer button {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.1rem;
+      min-height: 48px;
+      border-radius: 10px;
+    }
+    
+    .modal-footer .btn-danger {
+      font-size: 1.3rem;
+      min-height: 56px;
+      padding: 18px 0;
+      border-radius: 14px;
+      width: 100%;
+      z-index: 1;
+    }
+    
+    /* Tăng kích thước chữ trong modal */
+    .modal-body p {
+      font-size: 1rem;
+      line-height: 1.5;
     }
   }
   
@@ -1205,8 +1348,7 @@ function toggleTrangThai(id) {
   .then(response => response.json())
   .then(result => {
     if (result.result === 'success') {
-      // Không cần alert nữa vì đã cập nhật trực tiếp giao diện
-      console.log('✅ Đã cập nhật trạng thái!');
+      showToast('✅ Đã cập nhật trạng thái!');
       // Cập nhật dữ liệu trong bộ nhớ
       const index = allData.findIndex(item => item.id === id);
       if (index !== -1) {
@@ -1341,12 +1483,24 @@ function confirmDelete() {
 
 // Mở modal
 function openModal(modalId) {
-  document.getElementById(modalId).style.display = 'flex';
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'flex';
+    
+    // Thêm lớp để ngăn cuộn nền trên điện thoại
+    document.body.style.overflow = 'hidden';
+  }
 }
 
 // Đóng modal
 function closeModal(modalId) {
-  document.getElementById(modalId).style.display = 'none';
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'none';
+    
+    // Khôi phục cuộn nền
+    document.body.style.overflow = '';
+  }
 }
 
 async function guiDuLieu() {
@@ -1460,6 +1614,18 @@ function chonDiem() {
   }
 }
 
+// Thêm hàm để xử lý đóng modal khi chạm ra ngoài
+function setupModalCloseOnOutsideClick() {
+  const modals = document.querySelectorAll('.modal');
+  modals.forEach(modal => {
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        closeModal(modal.id);
+      }
+    });
+  });
+}
+
 // Khởi tạo
 // Khi load trang, mặc định chọn ca hiện tại nếu có, nếu không thì chọn "Tất cả các ca"
 document.addEventListener('DOMContentLoaded', function() {
@@ -1481,6 +1647,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
   document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
   document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
+  
+  // Thêm xử lý đóng modal khi chạm ra ngoài
+  setupModalCloseOnOutsideClick();
   
   // Cập nhật thông tin ca mỗi phút
   setInterval(updateShiftInfo, 60000);
