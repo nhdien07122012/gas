@@ -1106,11 +1106,10 @@ function getCurrentShift() {
   const now = new Date();
   const currentHour = now.getHours();
   const currentMinutes = now.getMinutes();
-  
-  // Tính toán thời gian bắt đầu và kết thúc ca
+
   let shiftStart = new Date(now);
   let shiftEnd = new Date(now);
-  
+
   // Nếu trước 6h30, ca thuộc về ngày hôm trước
   if (currentHour < 6 || (currentHour === 6 && currentMinutes < 30)) {
     shiftStart.setDate(shiftStart.getDate() - 1);
@@ -1131,22 +1130,24 @@ function getCurrentShift() {
       end: null
     };
   }
-  
-  // Định dạng ngày tháng
+
+  // Định dạng ngày tháng DD-MM-YYYY
   const formatDate = (date) => {
-    return date.toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    const d = date;
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    const hour = String(d.getHours()).padStart(2, '0');
+    const minute = String(d.getMinutes()).padStart(2, '0');
+    return `${day}-${month}-${year} ${hour}:${minute}`;
   };
-  
-  const shiftKey = shiftStart.toISOString().split('T')[0];
-  
+
+  // Tên ca đúng ngày của ca
+  const shiftKey = `${shiftStart.getFullYear()}-${String(shiftStart.getMonth() + 1).padStart(2, '0')}-${String(shiftStart.getDate()).padStart(2, '0')}`;
+  const shiftName = `Ca ${formatDate(shiftStart).split(' ')[0]}`;
+
   return {
-    shift: `Ca ${formatDate(shiftStart).split(' ')[0]}`,
+    shift: shiftName,
     shiftKey: shiftKey,
     start: formatDate(shiftStart),
     end: formatDate(shiftEnd)
@@ -1295,6 +1296,16 @@ function displayData(data) {
     if (row.trang_thai === 'Đã nộp') {
       badgeClass = 'badge-secondary';
     }
+
+    // Hiển thị ca đúng định dạng DD-MM-YYYY
+    let caLabel = row.ca || 'Không xác định';
+    if (/^\d{4}-\d{2}-\d{2}/.test(row.ca)) {
+      const d = new Date(row.ca);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      caLabel = `${day}-${month}-${year}`;
+    }
     
     tr.innerHTML = `
       <td data-label="Tên điểm">${row.ten_diem}</td>
@@ -1305,7 +1316,7 @@ function displayData(data) {
           <span class="badge ${badgeClass} status-toggle" onclick="toggleTrangThai('${row.id}')">${row.trang_thai || 'Chưa nộp'}</span>
         </div>
       </td>
-      <td data-label="Ca"><span class="badge badge-primary">${row.ca || 'Không xác định'}</span></td>
+      <td data-label="Ca"><span class="badge badge-primary">${caLabel}</span></td>
       <td data-label="Thời gian">${row.timestamp ? new Date(row.timestamp).toLocaleString('vi-VN') : 'Không xác định'}</td>
       <td data-label="Thao tác">
         <div class="action-buttons">
@@ -1372,27 +1383,38 @@ function toggleTrangThai(id) {
 function updateFilters(data) {
   const shifts = new Set();
   const diems = new Set();
-  
+
   data.forEach(item => {
     if (item.ca) shifts.add(item.ca);
     if (item.ten_diem) diems.add(item.ten_diem);
   });
-  
+
   // Cập nhật bộ lọc ca
   const shiftFilter = document.getElementById('filter-shift');
   shiftFilter.innerHTML = '<option value="all">Tất cả các ca</option>';
-  
+
   Array.from(shifts).sort().reverse().forEach(shift => {
+    // Nếu shift là dạng ISO, chuyển sang DD-MM-YYYY
+    let shiftLabel = shift;
+    if (/^\d{4}-\d{2}-\d{2}/.test(shift)) {
+      const d = new Date(shift);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      shiftLabel = `Ca ${day}-${month}-${year}`;
+    } else if (shift.startsWith('Ca ')) {
+      shiftLabel = shift;
+    }
     const option = document.createElement('option');
     option.value = shift;
-    option.textContent = `Ca ${shift}`;
+    option.textContent = shiftLabel;
     shiftFilter.appendChild(option);
   });
-  
+
   // Cập nhật bộ lọc điểm
   const diemFilter = document.getElementById('filter-diem');
   diemFilter.innerHTML = '<option value="all">Tất cả điểm gas</option>';
-  
+
   Array.from(diems).sort().forEach(diem => {
     const option = document.createElement('option');
     option.value = diem;
