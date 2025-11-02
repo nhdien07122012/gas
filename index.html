@@ -1526,6 +1526,9 @@ function closeModal(modalId) {
 }
 
 async function guiDuLieu() {
+  const btnSubmit = document.getElementById('btn-submit');
+  if (btnSubmit.disabled) return; // Nếu đang lưu thì không làm gì
+
   const ten_diem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
   const so_tien = document.getElementById('so_tien').value;
   const dia_chi = document.getElementById('dia_chi').value;
@@ -1545,6 +1548,10 @@ async function guiDuLieu() {
       return;
     }
   }
+
+  // Hiển thị trạng thái đang lưu và vô hiệu hóa nút
+  btnSubmit.textContent = '⏳ Đang lưu...';
+  btnSubmit.disabled = true;
 
   const data = { 
     ten_diem, 
@@ -1579,6 +1586,10 @@ async function guiDuLieu() {
   } catch (error) {
     showToast('❌ Có lỗi xảy ra khi lưu dữ liệu!', 'error');
     console.error(error);
+  } finally {
+    // Kích hoạt lại nút và đổi lại nội dung
+    btnSubmit.textContent = editingId ? '💾 Cập nhật' : '💾 Lưu thông tin';
+    btnSubmit.disabled = false;
   }
 }
 
