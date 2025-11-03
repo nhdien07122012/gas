@@ -1046,7 +1046,7 @@ function closeSidebar() {
 
 // Hàm xuất dữ liệu dạng văn bản
 async function exportToText() {
-  closeSidebar();
+  closeSidebar(); // Đảm bảo sidebar thu gọn khi nhấn nút
   
   // Lấy dữ liệu đang được hiển thị (đã lọc)
   const dataToExport = currentFilteredData.length > 0 ? currentFilteredData : allData;
@@ -1503,6 +1503,7 @@ function confirmDelete() {
 
 // Mở modal
 function openModal(modalId) {
+  closeSidebar(); // Đảm bảo sidebar thu gọn khi nhấn nút trợ giúp
   const modal = document.getElementById(modalId);
   if (modal) {
     modal.style.display = 'flex';
@@ -1592,6 +1593,7 @@ async function guiDuLieu() {
 }
 
 async function taiDuLieu() {
+  closeSidebar(); // Đảm bảo sidebar thu gọn khi nhấn nút tải lại
   try {
     const res = await fetch(scriptURL);
     const data = await res.json();
