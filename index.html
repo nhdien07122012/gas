@@ -832,7 +832,7 @@
   <div class="container">
     <header>
       <button class="menu-toggle" id="menu-toggle">☰</button>
-      <h1>📋 Quản lý tiền thu điểm gas theo ca</h1>
+      <h1>📋 Quản lý tiền điểm gas</h1>
       <p>Theo dõi và quản lý thu chi tại các điểm gas theo ca làm việc</p>
     </header>
     
@@ -865,10 +865,8 @@
       <div class="form-row">
         <div class="form-group">
           <label for="chon_diem">Chọn điểm:</label>
-          <select id="chon_diem" onchange="chonDiem()">
-            <option value="">-- Chọn điểm --</option>
-            <option value="new">➕ Thêm điểm mới...</option>
-          </select>
+          <input id="chon_diem" list="diem-list" placeholder="Nhập hoặc chọn điểm..." oninput="chonDiem()">
+          <datalist id="diem-list"></datalist>
         </div>
         
         <div class="form-group">
@@ -1600,25 +1598,23 @@ async function taiDuLieu() {
     allData = data;
     currentFilteredData = data;
     
-    const select = document.getElementById('chon_diem');
-    select.innerHTML = '<option value="">-- Chọn điểm --</option><option value="new">➕ Thêm điểm mới...</option>';
+    // Cập nhật datalist cho điểm
     cacheDiem = {};
-
+    const diemList = document.getElementById('diem-list');
+    diemList.innerHTML = '';
+    const uniqueDiems = new Set();
     data.forEach(row => {
       const ten = row.ten_diem;
       const diachi = row.dia_chi;
       cacheDiem[ten] = diachi;
-
-      // Thêm vào danh sách chọn nếu chưa có
-      if (![...select.options].some(o => o.value === ten)) {
+      if (!uniqueDiems.has(ten)) {
         const opt = document.createElement('option');
         opt.value = ten;
-        opt.textContent = ten;
-        select.appendChild(opt);
+        diemList.appendChild(opt);
+        uniqueDiems.add(ten);
       }
     });
 
-    // Hiển thị dữ liệu
     displayData(data);
     displayStats(calculateStats(data));
     updateFilters(data);
@@ -1633,8 +1629,7 @@ function chonDiem() {
   const val = document.getElementById('chon_diem').value;
   const tenDiemInput = document.getElementById('ten_diem');
   const diaChiInput = document.getElementById('dia_chi');
-  
-  if (val === 'new' || val === '') {
+  if (!val) {
     tenDiemInput.value = '';
     diaChiInput.value = '';
     tenDiemInput.disabled = false;
