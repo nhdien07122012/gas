@@ -817,6 +817,9 @@
       <button class="sidebar-item" hfref="thongke.html">
         📄 Thống kê
       </button>
+      <button class="sidebar-item" onclick="window.location.href='vitri.html'">
+        📍 Quản lý vị trí
+      </button>
       <button class="sidebar-item" onclick="openModal('help-modal')">
         ❓ Trợ giúp
       </button>
@@ -893,7 +896,10 @@
       
       <div class="form-group">
         <label for="dia_chi">Địa chỉ:</label>
-        <input id="dia_chi" placeholder="Nhập địa chỉ">
+        <div style="display: flex; gap: 8px;">
+          <input id="dia_chi" placeholder="Nhập địa chỉ" style="flex:1;">
+          <button class="btn-success btn-sm" type="button" id="btn-save-location" title="Lưu vị trí GPS">📍 Lưu vị trí</button>
+        </div>
       </div>
       
       <div class="form-group">
@@ -1531,6 +1537,33 @@ function closeModal(modalId) {
     document.body.style.overflow = '';
   }
 }
+
+// Xử lý nút lưu vị trí GPS
+function saveLocation() {
+  if (!navigator.geolocation) {
+    showToast('Thiết bị không hỗ trợ GPS!', 'error');
+    return;
+  }
+  const btn = document.getElementById('btn-save-location');
+  btn.disabled = true;
+  btn.textContent = '⏳ Đang lấy vị trí...';
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    const lat = pos.coords.latitude.toFixed(6); // Độ chính xác cao
+    const lng = pos.coords.longitude.toFixed(6);
+    // Hiển thị vị trí thực tế lên input ghi chú, xóa vị trí cũ nếu có
+    let ghiChuInput = document.getElementById('ghi_chu');
+    let ghiChu = ghiChuInput.value.replace(/\s*\[GPS: [\d.]+, [\d.]+\]/, '');
+    ghiChuInput.value = ghiChu + ` [GPS: ${lat}, ${lng}]`;
+    showToast('✅ Đã lấy vị trí GPS thực tế!');
+    btn.textContent = '📍 Lưu vị trí';
+    btn.disabled = false;
+  }, function(err) {
+    showToast('Không thể lấy vị trí: ' + err.message, 'error');
+    btn.textContent = '📍 Lưu vị trí';
+    btn.disabled = false;
+  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+}
+document.getElementById('btn-save-location').addEventListener('click', saveLocation);
 
 async function guiDuLieu() {
   const btnSubmit = document.getElementById('btn-submit');
