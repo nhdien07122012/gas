@@ -814,11 +814,14 @@
       <button class="sidebar-item" onclick="exportToText()">
         📄 Xuất dữ liệu văn bản
       </button>
+      <button class="sidebar-item" hfref="thongke.html">
+        📄 Thống kê
+      </button>
       <button class="sidebar-item" onclick="openModal('help-modal')">
         ❓ Trợ giúp
       </button>
       <button class="sidebar-item" onclick="resetForm()">
-        🆕 Tạo mới
+        ❌ Đóng
       </button>
       <button class="sidebar-item" onclick="taiDuLieu()">
         🔄 Tải lại dữ liệu
@@ -937,6 +940,11 @@
       </div>
     </div>
   </div>
+
+  <!-- Nút cuộn về đầu trang -->
+  <button id="scrollTopBtn" style="position:fixed;right:30px;bottom:30px;z-index:999;background:#2c80ff;color:white;border:none;border-radius:50%;width:56px;height:56px;box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:2rem;display:none;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.3s;">
+    ↑
+  </button>
 
   <!-- Modal xác nhận xóa -->
   <div class="modal" id="delete-modal">
@@ -1655,6 +1663,23 @@ function setupModalCloseOnOutsideClick() {
     });
   });
 }
+
+// Hiển thị/ẩn nút cuộn về đầu trang khi cuộn
+window.addEventListener('scroll', function() {
+  const btn = document.getElementById('scrollTopBtn');
+  if (window.scrollY > 200) {
+    btn.style.display = 'flex';
+    btn.style.opacity = '1';
+  } else {
+    btn.style.opacity = '0';
+    setTimeout(() => { btn.style.display = 'none'; }, 300);
+  }
+});
+
+// Xử lý sự kiện cuộn về đầu trang
+document.getElementById('scrollTopBtn').onclick = function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
 
 // Khởi tạo
 // Khi load trang, mặc định chọn ca hiện tại nếu có, nếu không thì chọn "Tất cả các ca"
