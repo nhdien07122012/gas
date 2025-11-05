@@ -793,6 +793,48 @@
   .toast.error {
     background: var(--danger);
   }
+
+  .diachi-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .diachi-row input {
+    flex: 8 1 0%;
+    min-width: 0;
+  }
+  .diachi-row button {
+    flex: 2 1 0%;
+    min-width: 0;
+    max-width: 100px;
+    white-space: nowrap;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+  @media (max-width: 768px) {
+    .diachi-row input {
+      flex: 8 1 0%;
+    }
+    .diachi-row button {
+      flex: 2 1 0%;
+      max-width: 90px;
+      font-size: 0.95rem;
+      padding-left: 0.3em;
+      padding-right: 0.3em;
+    }
+  }
+  @media (max-width: 480px) {
+    .diachi-row input {
+      flex: 8 1 0%;
+    }
+    .diachi-row button {
+      flex: 2 1 0%;
+      max-width: 70px;
+      font-size: 0.9rem;
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+    }
+  }
 </style>
 </head>
 <body>
@@ -893,9 +935,9 @@
       
       <div class="form-group">
         <label for="dia_chi">Địa chỉ:</label>
-        <div style="display: flex; gap: 8px;">
-          <input id="dia_chi" placeholder="Nhập địa chỉ" style="flex:1;">
-          <button class="btn-success btn-sm" type="button" id="btn-save-location" title="Lưu vị trí GPS">📍 Lưu vị trí</button>
+        <div class="diachi-row">
+          <input id="dia_chi" placeholder="Nhập địa chỉ">
+          <button class="btn-success btn-sm" type="button" id="btn-save-location" title="Lưu vị trí GPS">📍 Lưu </button>
         </div>
       </div>
       
