@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Quản lý tiền thu điểm gas</title>
+<style>
+  body { font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 30px; }
+  h2 { color: #333; }
+  select, input { padding: 8px; margin: 5px; border-radius: 5px; border: 1px solid #ccc; width: 220px; }
+  button { padding: 8px 16px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; background-color: #007bff; color: white; }
+  button:hover { background-color: #0056b3; }
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  th, td { border: 1px solid #ddd; padding: 8px; }
+  th { background-color: #f1f1f1; }
+
+  /* Responsive styles */
+  @media (max-width: 600px) {
+    body { padding: 10px; }
+    h2 { font-size: 1.3em; margin-bottom: 18px; }
+    label { font-size: 1em; margin-bottom: 8px; display: block; }
+    select, input {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      font-size: 1.1em;
+      padding: 12px 10px;
+      margin: 8px 0;
+      border-radius: 7px;
+    }
+    button {
+      width: 100%;
+      margin: 10px 0;
+      font-size: 1.15em;
+      padding: 14px 0;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    table, thead, tbody, th, td, tr {
+      display: block;
+      width: 100%;
+    }
+    thead { display: none; }
+    tr {
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 7px;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      padding: 8px 0;
+    }
+    td {
+      padding: 12px 10px;
+      border: none;
+      position: relative;
+      font-size: 1.05em;
+    }
+    td:before {
+      content: attr(data-label);
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+      font-size: 0.98em;
+    }
+  }
+  .form-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+    align-items: center;
+  }
+  .form-group label {
+    min-width: 100px;
+  }
+  .button-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .table-group {
+    margin-top: 18px;
+  }
+  @media (max-width: 600px) {
+    .form-group {
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .button-group {
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .table-group {
+      margin-top: 10px;
+    }
+  }
+  .main-layout {
+    width: 100%;
+    max-width: 900px;
+    min-width: 340px;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0 24px;
+    background: none;
+  }
+  .main-layout td {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    padding: 28px 24px;
+    vertical-align: top;
+  }
+  .main-layout label {
+    display: block;
+    margin-bottom: 14px;
+    font-weight: bold;
+    font-size: 1.18em;
+  }
+  .main-layout input, .main-layout select {
+    width: 100%;
+    margin-bottom: 18px;
+    font-size: 1.18em;
+    padding: 18px;
+    border-radius: 8px;
+    border: 1.5px solid #ccc;
+    box-sizing: border-box;
+  }
+  .main-layout button {
+    width: 48%;
+    margin: 8px 1%;
+    font-size: 1.18em;
+    padding: 18px 0;
+    border-radius: 9px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  .main-layout button:hover {
+    background: #0056b3;
+  }
+  .table-group {
+    width: 100%;
+    overflow-x: auto;
+  }
+  #bang {
+    width: 100%;
+    min-width: 400px;
+    border-collapse: collapse;
+    margin-top: 0;
+    background: #fff;
+  }
+  #bang th, #bang td {
+    padding: 18px 10px;
+    font-size: 1.15em;
+    word-break: break-word;
+  }
+  @media (max-width: 900px) {
+    .main-layout {
+      max-width: 98vw;
+      border-spacing: 0 16px;
+    }
+    .main-layout td {
+      padding: 18px 10px;
+    }
+    #bang th, #bang td {
+      font-size: 1.08em;
+      padding: 14px 8px;
+    }
+  }
+  @media (max-width: 600px) {
+    body {
+      padding: 8px;
+    }
+    .main-layout {
+      max-width: 100vw;
+      min-width: 0;
+      border-spacing: 0 8px;
+    }
+    .main-layout td {
+      padding: 12px 4px;
+    }
+    .main-layout label {
+      font-size: 1.08em;
+    }
+    .main-layout input, .main-layout select {
+      font-size: 1.08em;
+      padding: 14px 6px;
+      margin-bottom: 12px;
+    }
+    .main-layout button {
+      width: 100%;
+      margin: 10px 0;
+      font-size: 1.12em;
+      padding: 14px 0;
+    }
+    .table-group {
+      width: 100%;
+      overflow-x: auto;
+    }
+    #bang {
+      min-width: 340px;
+      font-size: 1em;
+    }
+    #bang th, #bang td {
+      padding: 12px 4px;
+      font-size: 1em;
+    }
+  }
+</style>
+</head>
+<body>
+  <h2>📋 Quản lý tiền thu điểm gas</h2>
+  <table class="main-layout">
+    <tr>
+      <td>
+        <label>Chọn điểm:</label>
+        <select id="chon_diem" onchange="chonDiem()">
+          <option value="">-- Chọn điểm --</option>
+          <option value="new">➕ Thêm điểm mới...</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input id="ten_diem" placeholder="Tên điểm (nếu thêm mới)"><br>
+        <input id="so_tien" placeholder="Số tiền"><br>
+        <input id="dia_chi" placeholder="Địa chỉ">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <button onclick="guiDuLieu()">💾 Gửi</button>
+        <button onclick="taiDuLieu()">🔄 Tải lại</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="table-group">
+          <table id="bang">
+            <thead>
+              <tr><th>Tên điểm</th><th>Số tiền</th><th>Địa chỉ</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+<script>
+const scriptURL = 'https://script.google.com/macros/s/AKfycbwHchYfrwaVsHgqAVxwrcnNsZ8vOpSiWfihgLUoQtEHoMVcFLATUu2BSmDdyp2Rbi1rwQ/exec'; // Thay link của bạn
+let cacheDiem = {}; // Lưu các điểm đã có để tự động điền
+
+async function guiDuLieu() {
+  const ten_diem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
+  const so_tien = document.getElementById('so_tien').value;
+  const dia_chi = document.getElementById('dia_chi').value;
+
+  if (!ten_diem || !so_tien || !dia_chi) {
+    alert('⚠️ Vui lòng nhập đầy đủ thông tin!');
+    return;
+  }
+
+  const data = { ten_diem, so_tien, dia_chi };
+
+  await fetch(scriptURL, {
+    method: 'POST',
+    body: JSON.stringify(data)
+  });
+  alert('✅ Đã lưu thành công!');
+  document.getElementById('so_tien').value = '';
+  taiDuLieu();
+}
+
+async function taiDuLieu() {
+  const res = await fetch(scriptURL);
+  const data = await res.json();
+  const tbody = document.querySelector('#bang tbody');
+  tbody.innerHTML = '';
+  cacheDiem = {}; // reset cache
+
+  const select = document.getElementById('chon_diem');
+  select.innerHTML = '<option value="">-- Chọn điểm --</option><option value="new">➕ Thêm điểm mới...</option>';
+
+  data.forEach(row => {
+    const ten = row.ten_diem;
+    const diachi = row.dia_chi;
+    cacheDiem[ten] = diachi;
+
+    // Thêm vào bảng
+    tbody.innerHTML += `<tr><td data-label="Tên điểm">${ten}</td><td data-label="Số tiền">${row.so_tien}</td><td data-label="Địa chỉ">${diachi}</td></tr>`;
+
+    // Thêm vào danh sách chọn nếu chưa có
+    if (![...select.options].some(o => o.value === ten)) {
+      const opt = document.createElement('option');
+      opt.value = ten;
+      opt.textContent = ten;
+      select.appendChild(opt);
+    }
+  });
+}
+
+// Khi chọn điểm
+function chonDiem() {
+  const val = document.getElementById('chon_diem').value;
+  if (val === 'new' || val === '') {
+    document.getElementById('ten_diem').value = '';
+    document.getElementById('dia_chi').value = '';
+    document.getElementById('ten_diem').disabled = false;
+  } else {
+    document.getElementById('ten_diem').value = val;
+    document.getElementById('dia_chi').value = cacheDiem[val] || '';
+    document.getElementById('ten_diem').disabled = true;
+  }
+}
+
+taiDuLieu();
+</script>
+</body>
+</html>

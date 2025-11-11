@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Quản lý tiền thu điểm gas</title>
+<style>
+  body { font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 30px; }
+  h2 { color: #333; }
+  input { padding: 8px; margin: 5px; border-radius: 5px; border: 1px solid #ccc; width: 200px; }
+  button { padding: 8px 16px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; background-color: #007bff; color: white; }
+  button:hover { background-color: #0056b3; }
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  th, td { border: 1px solid #ddd; padding: 8px; }
+  th { background-color: #f1f1f1; }
+</style>
+</head>
+<body>
+  <h2>📋 Quản lý tiền thu điểm gas</h2>
+
+  <input id="ten_diem" placeholder="Tên điểm">
+  <input id="so_tien" placeholder="Số tiền">
+  <input id="dia_chi" placeholder="Địa chỉ">
+  <button onclick="guiDuLieu()">💾 Gửi</button>
+  <button onclick="taiDuLieu()">🔄 Tải lại</button>
+
+  <table id="bang">
+    <thead>
+      <tr><th>Tên điểm</th><th>Số tiền</th><th>Địa chỉ</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+<script>
+const scriptURL = 'https://script.google.com/macros/s/AKfycbwHchYfrwaVsHgqAVxwrcnNsZ8vOpSiWfihgLUoQtEHoMVcFLATUu2BSmDdyp2Rbi1rwQ/exec'; // Thay link Web App của bạn vào đây
+
+async function guiDuLieu() {
+  const data = {
+    ten_diem: document.getElementById('ten_diem').value,
+    so_tien: document.getElementById('so_tien').value,
+    dia_chi: document.getElementById('dia_chi').value
+  };
+  if (!data.ten_diem || !data.so_tien || !data.dia_chi) {
+    alert('Vui lòng nhập đầy đủ thông tin!');
+    return;
+  }
+
+  await fetch(scriptURL, {
+    method: 'POST',
+    body: JSON.stringify(data)
+  });
+  alert('✅ Đã lưu thành công!');
+  taiDuLieu();
+}
+
+async function taiDuLieu() {
+  const res = await fetch(scriptURL);
+  const data = await res.json();
+  const tbody = document.querySelector('#bang tbody');
+  tbody.innerHTML = '';
+  data.forEach(row => {
+    tbody.innerHTML += `<tr>
+      <td>${row.ten_diem}</td>
+      <td>${row.so_tien}</td>
+      <td>${row.dia_chi}</td>
+    </tr>`;
+  });
+}
+
+taiDuLieu();
+</script>
+</body>
+</html>

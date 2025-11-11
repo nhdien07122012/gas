@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý vị trí điểm gas</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <style>
+    :root {
+      --primary: #2c80ff;
+      --primary-dark: #1a6de0;
+      --secondary: #34c759;
+      --danger: #ff3b30;
+      --warning: #ff9500;
+      --light: #f8f9fa;
+      --dark: #333;
+      --gray: #6c757d;
+      --border: #dee2e6;
+      --shadow: 0 2px 10px rgba(0,0,0,0.08);
+      --radius: 10px;
+      --sidebar-width: 280px;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      color: var(--dark);
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      padding: 30px;
+    }
+    h1 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-size: 2rem;
+      text-align: center;
+    }
+    .search-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    input {
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      font-size: 1rem;
+      flex: 1;
+      transition: all 0.3s ease;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+      min-width: 600px;
+    }
+    th {
+      background-color: #f8f9fa;
+      padding: 16px 12px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--dark);
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 14px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover {
+      background-color: #f8fafc;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--secondary);
+      color: white;
+    }
+    .map-link {
+      background: var(--primary);
+      color: #fff !important;
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 6px;
+      padding: 8px 16px;
+      display: inline-block;
+      box-shadow: 0 2px 8px rgba(44,128,255,0.08);
+      transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+      border: none;
+      outline: none;
+    }
+    .map-link:hover {
+      background: var(--primary-dark);
+      box-shadow: 0 4px 16px rgba(44,128,255,0.18);
+      transform: translateY(-2px) scale(1.04);
+    }
+    #empty-state {
+      text-align: center;
+      color: var(--gray);
+      margin: 30px 0;
+      display: none;
+      padding: 40px 20px;
+    }
+    #empty-state h3 {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+    #empty-state p {
+      font-size: 1rem;
+    }
+    /* Ẩn hoàn toàn cột ghi chú */
+    .col-ghichu { display: none !important; }
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      .container {
+        padding: 10px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      th, td {
+        padding: 12px 8px;
+        font-size: 0.95rem;
+      }
+      table {
+        min-width: 400px;
+      }
+      .search-group {
+        flex-direction: column;
+        gap: 8px;
+      }
+      input {
+        font-size: 1rem;
+        padding: 12px 14px;
+      }
+      #empty-state {
+        padding: 20px 10px;
+      }
+    }
+    @media (max-width: 480px) {
+      body {
+        padding: 5px;
+      }
+      .container {
+        padding: 5px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      th, td {
+        padding: 10px 6px;
+        font-size: 0.9rem;
+      }
+      table {
+        min-width: 320px;
+      }
+      input {
+        font-size: 0.95rem;
+        padding: 10px 10px;
+      }
+      #empty-state {
+        padding: 10px 2px;
+      }
+    }
+    /* Sidebar styles - giống index18.html */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      display: none;
+    }
+    .overlay.active {
+      display: block;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -60vw;
+      width: 60vw;
+      max-width: 420px;
+      min-width: 280px;
+      height: 100%;
+      background: white;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+      z-index: 1001;
+      transition: left 0.3s ease;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.open {
+      left: 0;
+    }
+    .sidebar-header {
+      padding: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sidebar-header h2 {
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .sidebar-header .menu-icon {
+      font-size: 1.6rem;
+      margin-right: 6px;
+      display: inline-block;
+    }
+    .close-sidebar {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0;
+      width: auto;
+    }
+    .sidebar-content {
+      padding: 20px;
+      flex: 1;
+    }
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: var(--radius);
+      background: #f8f9fa;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    .sidebar-item:hover {
+      background: #e9ecef;
+      transform: translateY(-2px);
+    }
+    .sidebar-item.active {
+      background: var(--primary);
+      color: white;
+    }
+    .sidebar-footer {
+      padding: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--gray);
+      text-align: center;
+    }
+    .menu-toggle {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      padding: 5px;
+      margin-right: 10px;
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      z-index: 1002;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(44,128,255,0.08);
+      width: 48px;
+      height: 48px;
+      transition: background 0.2s;
+    }
+    .menu-toggle:hover {
+      background: var(--primary-dark);
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 90vw;
+        left: -90vw;
+        max-width: none;
+        min-width: 0;
+      }
+      .sidebar.open {
+        left: 0;
+      }
+      .menu-toggle {
+        left: 10px;
+        top: 10px;
+        width: 44px;
+        height: 44px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Overlay cho sidebar -->
+  <div class="overlay" id="sidebar-overlay"></div>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2 style="font-size:1.3rem;display:flex;align-items:center;gap:10px;">
+        <span style="font-size:1.6rem;display:inline-block;"></span>
+        
+      </h2>
+      <button class="close-sidebar" id="close-sidebar">&times;</button>
+    </div>
+    <div class="sidebar-content">
+      <button class="sidebar-item" onclick="window.location.href='index18.html'">Quản lý điểm gas</button>
+      <button class="sidebar-item active" onclick="window.location.href='vitri.html'">📍 Quản lý vị trí</button>
+      <button class="sidebar-item" onclick="closeSidebar()">❌ Đóng</button>
+    </div>
+    <div class="sidebar-footer">Gas Manager &copy; 2025</div>
+  </div>
+  <!-- Nút menu-toggle ngoài container, nổi trên giao diện -->
+  <button class="menu-toggle" id="menu-toggle" style="background:var(--primary);color:white;font-size:1.5rem;position:fixed;left:30px;top:30px;z-index:1002;border:none;border-radius:10px;box-shadow:0 2px 8px rgba(44,128,255,0.08);width:48px;height:48px;display:flex;align-items:center;justify-content:center;transition:background 0.2s;">☰</button>
+  <div class="container">
+    <h1>📍 Quản lý vị trí</h1>
+    <div class="search-group">
+      <input id="search" placeholder="Tìm kiếm tên điểm, địa chỉ hoặc ghi chú...">
+    </div>
+    <table id="vitri-table">
+      <thead>
+        <tr>
+          <th>Tên điểm</th>
+          <th>Địa chỉ</th>
+          <!-- Ẩn hoàn toàn cột ghi chú -->
+          <th class="col-ghichu" style="display:none;">Ghi chú</th>
+          <th>Tọa độ</th>
+          <th>Bản đồ</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div id="empty-state" style="text-align:center;color:#888;margin:30px 0;display:none;">
+      <h3>📭 Chưa có vị trí nào được lưu</h3>
+      <p>Hãy sử dụng chức năng lưu vị trí trên trang chính để bắt đầu.</p>
+    </div>
+  </div>
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
+    let allData = [];
+    let vitriData = [];
+    // Trích xuất tọa độ từ ghi chú
+    function extractGPS(note) {
+      const match = note.match(/\[GPS: ([\d.]+), ([\d.]+)\]/);
+      if (match) return { lat: match[1], lng: match[2] };
+      return null;
+    }
+    function displayVitri(data) {
+      const tbody = document.querySelector('#vitri-table tbody');
+      tbody.innerHTML = '';
+      let count = 0;
+      data.forEach(row => {
+        const gps = extractGPS(row.ghi_chu || '');
+        if (!gps) return;
+        count++;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${row.ten_diem}</td>
+          <td>${row.dia_chi}</td>
+          <td class="col-ghichu" style="display:none;"></td>
+          <td><span class="badge">${gps.lat}, ${gps.lng}</span></td>
+          <td><a class="map-link" href="https://maps.google.com/?q=${gps.lat},${gps.lng}" target="_blank">🗺️</a></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.getElementById('empty-state').style.display = count === 0 ? 'block' : 'none';
+    }
+    function filterVitri() {
+      const q = document.getElementById('search').value.toLowerCase();
+      const filtered = vitriData.filter(row => {
+        return (row.ten_diem && row.ten_diem.toLowerCase().includes(q)) ||
+               (row.dia_chi && row.dia_chi.toLowerCase().includes(q)) ||
+               (row.ghi_chu && row.ghi_chu.toLowerCase().includes(q));
+      });
+      displayVitri(filtered);
+    }
+    async function taiDuLieu() {
+      try {
+        const res = await fetch(scriptURL);
+        allData = await res.json();
+        vitriData = allData.filter(row => extractGPS(row.ghi_chu || ''));
+        displayVitri(vitriData);
+      } catch (e) {
+        document.getElementById('empty-state').style.display = 'block';
+      }
+    }
+    document.getElementById('search').addEventListener('input', filterVitri);
+    taiDuLieu();
+    // Sidebar logic
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebar-overlay').classList.toggle('active');
+      // Ẩn nút menu khi sidebar mở
+      document.getElementById('menu-toggle').style.display = document.getElementById('sidebar').classList.contains('open') ? 'none' : 'flex';
+    }
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.remove('active');
+      // Hiện nút menu khi sidebar đóng
+      document.getElementById('menu-toggle').style.display = 'flex';
+    }
+    document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
+    document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
+    document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
+    // Khi load trang, đảm bảo nút menu hiện
+    window.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('menu-toggle').style.display = 'flex';
+    });
+  </script>
+</body>
+</html>
