@@ -811,6 +811,64 @@
     padding-left: 0.5em;
     padding-right: 0.5em;
   }
+  
+  /* Thêm style mới cho modal xem nhanh */
+  .quick-view-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 15px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  
+  .quick-view-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.2s ease;
+  }
+  
+  .quick-view-item:last-child {
+    border-bottom: none;
+  }
+  
+  .quick-view-item:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .quick-view-item-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .quick-view-item-name {
+    font-weight: 600;
+    color: var(--dark);
+  }
+  
+  .quick-view-item-address {
+    font-size: 0.85rem;
+    color: var(--gray);
+    margin-top: 3px;
+  }
+  
+  .quick-view-item-amount {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.1rem;
+  }
+  
+  .quick-view-total {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-top: 1px solid var(--border);
+    font-weight: 700;
+    text-align: center;
+    color: var(--dark);
+  }
+  
   @media (max-width: 768px) {
     .diachi-row input {
       flex: 8 1 0%;
@@ -855,6 +913,10 @@
     <div class="sidebar-content">
       <button class="sidebar-item" onclick="exportToText()">
         📄 Xuất dữ liệu văn bản
+      </button>
+      <!-- THÊM NÚT MỚI VÀO ĐÂY -->
+      <button class="sidebar-item" onclick="openQuickViewModal()">
+        👁️ Xem nhanh các điểm trong 1 ca
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='vitri.html'">
         📍 Quản lý vị trí
@@ -1032,6 +1094,40 @@
     </div>
   </div>
 
+  <!-- THÊM MODAL MỚI: XEM NHANH ĐIỂM TRONG CA -->
+  <div class="modal" id="quick-view-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>👁️ Xem nhanh điểm trong ca</h2>
+        <button class="close-modal" onclick="closeModal('quick-view-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="quick-view-shift">Chọn ca:</label>
+          <select id="quick-view-shift" onchange="updateQuickViewList()">
+            <option value="">-- Chọn ca --</option>
+            <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
+          </select>
+        </div>
+        
+        <div id="quick-view-empty" class="empty-state" style="display: none;">
+          <p>📭 Không có dữ liệu cho ca này</p>
+        </div>
+        
+        <div class="quick-view-list" id="quick-view-list" style="display: none;">
+          <!-- Danh sách điểm sẽ được thêm bằng JavaScript -->
+        </div>
+        
+        <div class="quick-view-total" id="quick-view-total" style="display: none;">
+          <!-- Tổng tiền sẽ được thêm bằng JavaScript -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" onclick="closeModal('quick-view-modal')">Đóng</button>
+      </div>
+    </div>
+  </div>
+
 <script>
 const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
 let cacheDiem = {};
@@ -1139,6 +1235,103 @@ async function exportToText() {
   } else {
     showToast('✅ Đã xuất dữ liệu, nhưng không thể sao chép vào clipboard', 'error');
   }
+}
+
+// THÊM HÀM MỚI: Mở modal xem nhanh
+function openQuickViewModal() {
+  closeSidebar(); // Đóng sidebar khi mở modal
+  
+  // Lấy danh sách các ca duy nhất
+  const shifts = new Set();
+  allData.forEach(item => {
+    if (item.ca) shifts.add(item.ca);
+  });
+  
+  // Cập nhật dropdown chọn ca
+  const shiftSelect = document.getElementById('quick-view-shift');
+  shiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
+  
+  // Thêm các ca vào dropdown, sắp xếp từ mới đến cũ
+  Array.from(shifts).sort().reverse().forEach(shift => {
+    // Định dạng tên ca cho dễ đọc
+    let shiftLabel = shift;
+    if (/^\d{4}-\d{2}-\d{2}/.test(shift)) {
+      const d = new Date(shift);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      shiftLabel = `Ca ${day}-${month}-${year}`;
+    }
+    
+    const option = document.createElement('option');
+    option.value = shift;
+    option.textContent = shiftLabel;
+    shiftSelect.appendChild(option);
+  });
+  
+  // Mặc định chọn ca hiện tại nếu có
+  const currentShift = getCurrentShift();
+  if (currentShift.shiftKey && shifts.has(currentShift.shiftKey)) {
+    shiftSelect.value = currentShift.shiftKey;
+    updateQuickViewList();
+  }
+  
+  openModal('quick-view-modal');
+}
+
+// THÊM HÀM MỚI: Cập nhật danh sách xem nhanh
+function updateQuickViewList() {
+  const selectedShift = document.getElementById('quick-view-shift').value;
+  const listContainer = document.getElementById('quick-view-list');
+  const totalContainer = document.getElementById('quick-view-total');
+  const emptyState = document.getElementById('quick-view-empty');
+  
+  // Ẩn tất cả trước
+  listContainer.style.display = 'none';
+  totalContainer.style.display = 'none';
+  emptyState.style.display = 'none';
+  
+  if (!selectedShift) {
+    emptyState.style.display = 'block';
+    emptyState.innerHTML = '<p>📭 Vui lòng chọn một ca</p>';
+    return;
+  }
+  
+  // Lọc dữ liệu theo ca đã chọn
+  const shiftData = allData.filter(item => item.ca === selectedShift);
+  
+  if (shiftData.length === 0) {
+    emptyState.style.display = 'block';
+    emptyState.innerHTML = '<p>📭 Không có dữ liệu cho ca này</p>';
+    return;
+  }
+  
+  // Hiển thị danh sách
+  listContainer.innerHTML = '';
+  let totalAmount = 0;
+  
+  shiftData.forEach(item => {
+    totalAmount += parseInt(item.so_tien) || 0;
+    
+    const itemElement = document.createElement('div');
+    itemElement.className = 'quick-view-item';
+    itemElement.innerHTML = `
+      <div class="quick-view-item-info">
+        <div class="quick-view-item-name">${item.ten_diem}</div>
+        <div class="quick-view-item-address">${item.dia_chi}</div>
+      </div>
+      <div class="quick-view-item-amount">${formatCurrency(item.so_tien)}</div>
+    `;
+    
+    listContainer.appendChild(itemElement);
+  });
+  
+  // Hiển thị tổng tiền
+  totalContainer.innerHTML = `Tổng tiền: ${formatCurrency(totalAmount)}`;
+  
+  // Hiển thị các container
+  listContainer.style.display = 'block';
+  totalContainer.style.display = 'block';
 }
 
 // Xử lý nhập nhanh số tiền hàng ngàn
