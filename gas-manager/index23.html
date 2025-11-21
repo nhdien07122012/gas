@@ -103,10 +103,11 @@
     flex: 1;
   }
   
+  /* ...existing code... */
   .sidebar-item {
     display: flex;
     align-items: center;
-    justify-content: left;
+    justify-content: left; /* Thay đổi từ 'flex-start' sang 'center' để căn giữa */
     gap: 12px;
     padding: 15px;
     margin-bottom: 10px;
@@ -120,6 +121,7 @@
     font-size: 1rem;
   }
 
+  
   .sidebar-item:hover {
     background: #e9ecef;
     transform: translateY(-2px);
@@ -424,8 +426,8 @@
     max-width: 500px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     animation: modalFadeIn 0.3s ease-out;
-    max-height: 85vh;
-    overflow: hidden;
+    max-height: 85vh; /* Giảm từ 90vh để có khoảng trống an toàn */
+    overflow: hidden; /* Quan trọng: ẩn overflow của container chính */
     display: flex;
     flex-direction: column;
     position: relative;
@@ -437,7 +439,7 @@
     display: flex;
     justify-content: between;
     align-items: center;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Ngăn header co lại */
   }
   
   .modal-header h2 {
@@ -447,9 +449,9 @@
   .modal-body {
     padding: 25px;
     flex: 1;
-    overflow-y: auto;
+    overflow-y: auto; /* Cho phép scroll khi nội dung dài */
     overflow-x: hidden;
-    max-height: calc(85vh - 120px);
+    max-height: calc(85vh - 120px); /* Trừ đi chiều cao header và footer */
   }
   
   .modal-footer {
@@ -458,8 +460,8 @@
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-    flex-shrink: 0;
-    margin-top: auto;
+    flex-shrink: 0; /* Ngăn footer co lại */
+    margin-top: auto; /* Đẩy footer xuống dưới cùng */
   }
   
   .modal-footer button {
@@ -469,6 +471,7 @@
     min-height: 44px;
   }
     
+  /* Tăng kích thước nút Xóa trên mobile */
   .modal-footer .btn-danger {
     font-size: 1.2rem;
     min-height: 52px;
@@ -544,6 +547,7 @@
       min-width: 600px;
     }
     
+    /* Cải thiện modal cho điện thoại */
     .modal {
       padding: 10px;
     }
@@ -551,7 +555,7 @@
     .modal-content {
       width: 95%;
       margin: 10px;
-      max-height: 90vh;
+      max-height: 90vh; /* Trên mobile có thể cao hơn */
     }
     
     .modal-header, .modal-body, .modal-footer {
@@ -585,6 +589,7 @@
       z-index: 1;
     }
     
+    /* Tăng kích thước nút đóng modal */
     .close-modal {
       font-size: 1.8rem;
       width: 40px;
@@ -594,6 +599,7 @@
       justify-content: center;
     }
     
+    /* Cải thiện bảng cho điện thoại */
     .table-container {
       border: 1px solid var(--border);
       border-radius: var(--radius);
@@ -603,6 +609,7 @@
       min-width: 700px;
     }
     
+    /* Cải thiện các nút thao tác trong bảng */
     .action-buttons {
       flex-direction: column;
       gap: 5px;
@@ -614,6 +621,7 @@
       min-height: 36px;
     }
     
+    /* Tăng kích thước các badge cho dễ chạm */
     .badge {
       padding: 6px 10px;
       font-size: 0.85rem;
@@ -639,18 +647,19 @@
     
     input, select {
       padding: 12px 14px;
-      font-size: 16px;
+      font-size: 16px; /* Ngăn chặn zoom trên iOS */
     }
     
     button {
       padding: 14px;
-      min-height: 44px;
+      min-height: 44px; /* Kích thước tối thiểu để dễ chạm */
     }
     
     .btn-sm {
       min-height: 36px;
     }
     
+    /* Đảm bảo modal luôn hiển thị đúng trên điện thoại nhỏ */
     .modal-content {
       width: 98%;
       margin: 5px;
@@ -689,6 +698,7 @@
       z-index: 1;
     }
     
+    /* Tăng kích thước chữ trong modal */
     .modal-body p {
       font-size: 1rem;
       line-height: 1.5;
@@ -752,6 +762,7 @@
     flex: 1;
   }
   
+  /* Các style mới cho chức năng thay đổi trạng thái nhanh */
   .status-toggle {
     cursor: pointer;
     transition: all 0.2s ease;
@@ -821,8 +832,8 @@
   
   /* Thêm style mới cho modal xem nhanh */
   .quick-view-list {
-    max-height: none;
-    overflow-y: visible;
+    max-height: none; /* Bỏ giới hạn cố định */
+    overflow-y: visible; /* Không scroll riêng danh sách */
     margin-top: 15px;
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -874,17 +885,6 @@
     font-weight: 700;
     text-align: center;
     color: var(--dark);
-  }
-  
-  /* Style cho ô số tiền khi được tự động điền */
-  #so_tien {
-    transition: all 0.3s ease;
-  }
-  
-  #so_tien:focus {
-    border-color: var(--secondary);
-    box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.1);
-    background-color: #f8fff9;
   }
   
   @media (max-width: 768px) {
@@ -949,9 +949,11 @@
       <button class="sidebar-item" onclick="exportToText()">
         📄 Xuất dữ liệu văn bản
       </button>
+      <!-- THÊM NÚT MỚI VÀO ĐÂY -->
       <button class="sidebar-item" onclick="openQuickViewModal()">
         👁️ Xem nhanh điểm (ca)
       </button>
+      <!-- THÊM NÚT MỚI: Thêm điểm ngoài ca -->
       <button class="sidebar-item" onclick="openOutOfHoursModal()">
         ⏰ Thêm điểm ngoài ca
       </button>
@@ -1209,7 +1211,7 @@ let currentShift = '';
 let editingId = null;
 let itemToDelete = null;
 let currentFilteredData = [];
-let selectedOutOfHoursShift = null;
+let selectedOutOfHoursShift = null; // Biến để lưu ca được chọn khi thêm ngoài giờ
 
 // Hàm hiển thị thông báo toast
 function showToast(message, type = 'success') {
@@ -1227,10 +1229,12 @@ function showToast(message, type = 'success') {
 // Hàm sao chép vào clipboard
 async function copyToClipboard(text) {
   try {
+    // Sử dụng Clipboard API hiện đại
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
       return true;
     } else {
+      // Fallback cho các trình duyệt cũ hoặc không hỗ trợ
       const textArea = document.createElement('textarea');
       textArea.value = text;
       textArea.style.position = 'fixed';
@@ -1267,8 +1271,9 @@ function closeSidebar() {
 
 // Hàm xuất dữ liệu dạng văn bản
 async function exportToText() {
-  closeSidebar();
+  closeSidebar(); // Đảm bảo sidebar thu gọn khi nhấn nút
   
+  // Lấy dữ liệu đang được hiển thị (đã lọc)
   const dataToExport = currentFilteredData.length > 0 ? currentFilteredData : allData;
   
   if (dataToExport.length === 0) {
@@ -1276,14 +1281,18 @@ async function exportToText() {
     return;
   }
   
+  // Tạo nội dung văn bản theo mẫu "điểm A - 311000"
   let content = '';
   dataToExport.forEach(item => {
+    // Định dạng: "điểm A - 311000"
     content += `${item.ten_diem} - ${item.so_tien}\n`;
   });
   
+  // Tạo blob và tải xuống
   const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
   const link = document.createElement('a');
   
+  // Lấy thông tin ca hiện tại để đặt tên file
   const shiftInfo = getCurrentShift();
   const fileName = shiftInfo.shiftKey ? `diem_gas_${shiftInfo.shiftKey}.txt` : `diem_gas_${new Date().toISOString().slice(0,10)}.txt`;
   
@@ -1291,8 +1300,10 @@ async function exportToText() {
   link.href = URL.createObjectURL(blob);
   link.click();
   
+  // Giải phóng URL
   URL.revokeObjectURL(link.href);
   
+  // Sao chép nội dung vào clipboard
   const copySuccess = await copyToClipboard(content);
   
   if (copySuccess) {
@@ -1304,23 +1315,28 @@ async function exportToText() {
 
 // THÊM HÀM MỚI: Mở modal thêm điểm ngoài ca
 function openOutOfHoursModal() {
-  closeSidebar();
+  closeSidebar(); // Đóng sidebar khi mở modal
   
+  // Kiểm tra xem có đang trong ca làm việc không
   const shiftInfo = getCurrentShift();
   if (shiftInfo.start) {
     showToast('⚠️ Bạn đang trong ca làm việc, hãy sử dụng chức năng thêm điểm bình thường!', 'error');
     return;
   }
   
+  // Lấy danh sách các ca duy nhất
   const shifts = new Set();
   allData.forEach(item => {
     if (item.ca) shifts.add(item.ca);
   });
   
+  // Cập nhật dropdown chọn ca
   const shiftSelect = document.getElementById('out-of-hours-shift');
   shiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
   
+  // Thêm các ca vào dropdown, sắp xếp từ mới đến cũ
   Array.from(shifts).sort().reverse().forEach(shift => {
+    // Định dạng tên ca cho dễ đọc
     let shiftLabel = shift;
     if (/^\d{4}-\d{2}-\d{2}/.test(shift)) {
       const d = new Date(shift);
@@ -1336,9 +1352,11 @@ function openOutOfHoursModal() {
     shiftSelect.appendChild(option);
   });
   
+  // Đặt ngày mặc định cho input date là hôm nay
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('custom-shift-date').value = today;
   
+  // Reset biến lựa chọn
   selectedOutOfHoursShift = null;
   
   openModal('out-of-hours-modal');
@@ -1352,12 +1370,14 @@ function useCustomShift() {
     return;
   }
   
+  // Định dạng ngày thành YYYY-MM-DD
   const dateObj = new Date(customDate);
   const year = dateObj.getFullYear();
   const month = String(dateObj.getMonth() + 1).padStart(2, '0');
   const day = String(dateObj.getDate()).padStart(2, '0');
   selectedOutOfHoursShift = `${year}-${month}-${day}`;
   
+  // Cập nhật dropdown để hiển thị lựa chọn
   document.getElementById('out-of-hours-shift').value = selectedOutOfHoursShift;
   
   showToast(`✅ Đã chọn ca ngày ${day}-${month}-${year}`);
@@ -1376,8 +1396,10 @@ function confirmOutOfHoursShift() {
   selectedOutOfHoursShift = selectedShift;
   closeModal('out-of-hours-modal');
   
+  // Hiển thị thông báo và kích hoạt form
   showToast(`✅ Đã chọn ca: ${formatShiftName(selectedShift)}. Bạn có thể thêm điểm gas bây giờ.`);
   
+  // Cuộn đến form nhập liệu
   document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
 }
 
@@ -1395,17 +1417,21 @@ function formatShiftName(shiftKey) {
 
 // THÊM HÀM MỚI: Mở modal xem nhanh
 function openQuickViewModal() {
-  closeSidebar();
+  closeSidebar(); // Đóng sidebar khi mở modal
   
+  // Lấy danh sách các ca duy nhất
   const shifts = new Set();
   allData.forEach(item => {
     if (item.ca) shifts.add(item.ca);
   });
   
+  // Cập nhật dropdown chọn ca
   const shiftSelect = document.getElementById('quick-view-shift');
   shiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
   
+  // Thêm các ca vào dropdown, sắp xếp từ mới đến cũ
   Array.from(shifts).sort().reverse().forEach(shift => {
+    // Định dạng tên ca cho dễ đọc
     let shiftLabel = shift;
     if (/^\d{4}-\d{2}-\d{2}/.test(shift)) {
       const d = new Date(shift);
@@ -1421,6 +1447,7 @@ function openQuickViewModal() {
     shiftSelect.appendChild(option);
   });
   
+  // Mặc định chọn ca hiện tại nếu có
   const currentShift = getCurrentShift();
   if (currentShift.shiftKey && shifts.has(currentShift.shiftKey)) {
     shiftSelect.value = currentShift.shiftKey;
@@ -1437,6 +1464,7 @@ function updateQuickViewList() {
   const totalContainer = document.getElementById('quick-view-total');
   const emptyState = document.getElementById('quick-view-empty');
   
+  // Ẩn tất cả trước
   listContainer.style.display = 'none';
   totalContainer.style.display = 'none';
   emptyState.style.display = 'none';
@@ -1447,6 +1475,7 @@ function updateQuickViewList() {
     return;
   }
   
+  // Lọc dữ liệu theo ca đã chọn
   const shiftData = allData.filter(item => item.ca === selectedShift);
   
   if (shiftData.length === 0) {
@@ -1455,6 +1484,7 @@ function updateQuickViewList() {
     return;
   }
   
+  // Hiển thị danh sách
   listContainer.innerHTML = '';
   let totalAmount = 0;
   
@@ -1474,11 +1504,14 @@ function updateQuickViewList() {
     listContainer.appendChild(itemElement);
   });
   
+  // Hiển thị tổng tiền
   totalContainer.innerHTML = `Tổng tiền: <strong>${formatCurrency(totalAmount)}</strong>`;
   totalContainer.style.display = 'block';
   
+  // Hiển thị danh sách - KHÔNG cần set max-height vì đã có scroll ở modal-body
   listContainer.style.display = 'block';
   
+  // Cuộn lên đầu danh sách
   const modalBody = document.querySelector('#quick-view-modal .modal-body');
   if (modalBody) {
     modalBody.scrollTop = 0;
@@ -1489,7 +1522,9 @@ function updateQuickViewList() {
 document.getElementById('so_tien').addEventListener('blur', function() {
   let value = this.value.trim();
   
+  // Nếu giá trị nhập vào là số và có ít hơn 4 chữ số
   if (/^\d+$/.test(value) && value.length > 0 && value.length <= 3) {
+    // Thêm "000" vào cuối
     this.value = value + '000';
   }
 });
@@ -1503,16 +1538,19 @@ function getCurrentShift() {
   let shiftStart = new Date(now);
   let shiftEnd = new Date(now);
 
+  // Nếu trước 6h30, ca thuộc về ngày hôm trước
   if (currentHour < 6 || (currentHour === 6 && currentMinutes < 30)) {
     shiftStart.setDate(shiftStart.getDate() - 1);
     shiftStart.setHours(18, 30, 0, 0);
     shiftEnd.setHours(6, 30, 0, 0);
   } 
+  // Nếu sau 18h30, ca thuộc về ngày hôm nay
   else if (currentHour > 18 || (currentHour === 18 && currentMinutes >= 30)) {
     shiftStart.setHours(18, 30, 0, 0);
     shiftEnd.setDate(shiftEnd.getDate() + 1);
     shiftEnd.setHours(6, 30, 0, 0);
   }
+  // Nếu trong khoảng 6h30 đến 18h30, không thuộc ca nào
   else {
     return {
       shift: 'Ngoài ca làm việc',
@@ -1521,6 +1559,7 @@ function getCurrentShift() {
     };
   }
 
+  // Định dạng ngày tháng DD-MM-YYYY
   const formatDate = (date) => {
     const d = date;
     const day = String(d.getDate()).padStart(2, '0');
@@ -1531,6 +1570,7 @@ function getCurrentShift() {
     return `${day}-${month}-${year} ${hour}:${minute}`;
   };
 
+  // Tên ca đúng ngày của ca
   const shiftKey = `${shiftStart.getFullYear()}-${String(shiftStart.getMonth() + 1).padStart(2, '0')}-${String(shiftStart.getDate()).padStart(2, '0')}`;
   const shiftName = `Ca ${formatDate(shiftStart).split(' ')[0]}`;
 
@@ -1646,8 +1686,10 @@ function filterData() {
     filteredData = filteredData.filter(item => item.trang_thai === trangThaiFilter);
   }
 
+  // Cập nhật biến toàn cục currentFilteredData
   currentFilteredData = filteredData;
 
+  // Nếu đang chọn ca hiện tại và không có dữ liệu, hiển thị thông báo đặc biệt
   const shiftInfo = getCurrentShift();
   if (shiftFilter === shiftInfo.shiftKey && shiftInfo.start && filteredData.length === 0) {
     document.getElementById('empty-state').style.display = 'block';
@@ -1665,6 +1707,7 @@ function displayData(data) {
   const tbody = document.querySelector('#bang tbody');
   tbody.innerHTML = '';
   
+  // Hiển thị thông báo nếu không có dữ liệu
   const emptyState = document.getElementById('empty-state');
   if (data.length === 0) {
     emptyState.style.display = 'block';
@@ -1676,11 +1719,13 @@ function displayData(data) {
     const tr = document.createElement('tr');
     tr.className = 'fade-in';
     
+    // Xác định badge class dựa trên trạng thái
     let badgeClass = 'badge-warning';
     if (row.trang_thai === 'Đã nộp') {
       badgeClass = 'badge-secondary';
     }
 
+    // Hiển thị ca đúng định dạng DD-MM-YYYY
     let caLabel = row.ca || 'Không xác định';
     if (/^\d{4}-\d{2}-\d{2}/.test(row.ca)) {
       const d = new Date(row.ca);
@@ -1719,14 +1764,17 @@ function toggleTrangThai(id) {
 
   const newTrangThai = item.trang_thai === 'Đã nộp' ? 'Chưa nộp' : 'Đã nộp';
 
+  // Tìm phần tử badge để cập nhật trực tiếp (cho UX tốt hơn)
   const badgeElement = document.querySelector(`[onclick="toggleTrangThai('${id}')"]`);
   if (badgeElement) {
     badgeElement.textContent = newTrangThai;
     badgeElement.className = `badge ${newTrangThai === 'Đã nộp' ? 'badge-secondary' : 'badge-warning'} status-toggle`;
   }
 
+  // Tạo một bản sao của item và cập nhật trạng thái mới
   const updatedItem = { ...item, trang_thai: newTrangThai };
 
+  // Gửi toàn bộ dữ liệu của mục đó để cập nhật
   const data = {
     action: 'update',
     ...updatedItem
@@ -1740,18 +1788,21 @@ function toggleTrangThai(id) {
   .then(result => {
     if (result.result === 'success') {
       showToast('✅ Đã cập nhật trạng thái!');
+      // Cập nhật dữ liệu trong bộ nhớ
       const index = allData.findIndex(item => item.id === id);
       if (index !== -1) {
         allData[index].trang_thai = newTrangThai;
       }
     } else {
       showToast('❌ Có lỗi xảy ra khi cập nhật trạng thái!', 'error');
+      // Khôi phục trạng thái cũ nếu có lỗi
       taiDuLieu();
     }
   })
   .catch(error => {
     showToast('❌ Có lỗi xảy ra khi cập nhật trạng thái!', 'error');
     console.error(error);
+    // Khôi phục trạng thái cũ nếu có lỗi
     taiDuLieu();
   });
 }
@@ -1766,10 +1817,12 @@ function updateFilters(data) {
     if (item.ten_diem) diems.add(item.ten_diem);
   });
 
+  // Cập nhật bộ lọc ca
   const shiftFilter = document.getElementById('filter-shift');
   shiftFilter.innerHTML = '<option value="all">Tất cả các ca</option>';
 
   Array.from(shifts).sort().reverse().forEach(shift => {
+    // Nếu shift là dạng ISO, chuyển sang DD-MM-YYYY
     let shiftLabel = shift;
     if (/^\d{4}-\d{2}-\d{2}/.test(shift)) {
       const d = new Date(shift);
@@ -1786,6 +1839,7 @@ function updateFilters(data) {
     shiftFilter.appendChild(option);
   });
 
+  // Cập nhật bộ lọc điểm
   const diemFilter = document.getElementById('filter-diem');
   diemFilter.innerHTML = '<option value="all">Tất cả điểm gas</option>';
 
@@ -1801,7 +1855,7 @@ function updateFilters(data) {
 function resetForm() {
   closeSidebar();
   editingId = null;
-  selectedOutOfHoursShift = null;
+  selectedOutOfHoursShift = null; // Reset ca ngoài giờ khi reset form
   document.getElementById('chon_diem').value = '';
   document.getElementById('ten_diem').value = '';
   document.getElementById('ten_diem').disabled = false;
@@ -1811,58 +1865,6 @@ function resetForm() {
   document.getElementById('trang_thai').value = 'Chưa nộp';
   document.getElementById('btn-submit').textContent = '💾 Lưu thông tin';
   document.getElementById('btn-cancel').style.display = 'none';
-}
-
-// HÀM MỚI: Tìm bản ghi gần nhất cho một điểm gas cụ thể
-function findLatestEntryForDiem(diemName) {
-  // Lọc tất cả các bản ghi của điểm gas này
-  const diemEntries = allData.filter(item => item.ten_diem === diemName);
-  
-  if (diemEntries.length === 0) {
-    return null;
-  }
-  
-  // Sắp xếp theo thời gian giảm dần (mới nhất đầu tiên)
-  diemEntries.sort((a, b) => {
-    const timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
-    const timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
-    return timeB - timeA;
-  });
-  
-  // Trả về bản ghi mới nhất
-  return diemEntries[0];
-}
-
-// HÀM CẬP NHẬT: Chọn điểm gas (tự động điền địa chỉ và số tiền của lần gần nhất)
-function chonDiem() {
-  const val = document.getElementById('chon_diem').value;
-  const tenDiemInput = document.getElementById('ten_diem');
-  const diaChiInput = document.getElementById('dia_chi');
-  const soTienInput = document.getElementById('so_tien');
-  
-  if (!val) {
-    tenDiemInput.value = '';
-    diaChiInput.value = '';
-    soTienInput.value = '';
-    tenDiemInput.disabled = false;
-    tenDiemInput.placeholder = "Nhập tên điểm (nếu thêm mới)";
-  } else {
-    tenDiemInput.value = val;
-    diaChiInput.value = cacheDiem[val] || '';
-    tenDiemInput.disabled = true;
-    tenDiemInput.placeholder = "Tên điểm đã chọn";
-    
-    // Tìm số tiền của lần gần nhất cho điểm gas này
-    const latestEntry = findLatestEntryForDiem(val);
-    if (latestEntry) {
-      soTienInput.value = latestEntry.so_tien;
-      // Thêm focus để người dùng có thể dễ dàng sửa nếu muốn
-      setTimeout(() => {
-        soTienInput.focus();
-        soTienInput.select();
-      }, 100);
-    }
-  }
 }
 
 // Chỉnh sửa item
@@ -1932,10 +1934,12 @@ function confirmDelete() {
 
 // Mở modal
 function openModal(modalId) {
-  closeSidebar();
+  closeSidebar(); // Đảm bảo sidebar thu gọn khi nhấn nút trợ giúp
   const modal = document.getElementById(modalId);
   if (modal) {
     modal.style.display = 'flex';
+    
+    // Thêm lớp để ngăn cuộn nền trên điện thoại
     document.body.style.overflow = 'hidden';
   }
 }
@@ -1945,6 +1949,8 @@ function closeModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
     modal.style.display = 'none';
+    
+    // Khôi phục cuộn nền
     document.body.style.overflow = '';
   }
 }
@@ -1959,8 +1965,9 @@ function saveLocation() {
   btn.disabled = true;
   btn.textContent = '⏳ Đang lấy vị trí...';
   navigator.geolocation.getCurrentPosition(function(pos) {
-    const lat = pos.coords.latitude.toFixed(6);
+    const lat = pos.coords.latitude.toFixed(6); // Độ chính xác cao
     const lng = pos.coords.longitude.toFixed(6);
+    // Hiển thị vị trí thực tế lên input ghi chú, xóa vị trí cũ nếu có
     let ghiChuInput = document.getElementById('ghi_chu');
     let ghiChu = ghiChuInput.value.replace(/\s*\[GPS: [\d.]+, [\d.]+\]/, '');
     ghiChuInput.value = ghiChu + ` [GPS: ${lat}, ${lng}]`;
@@ -1977,7 +1984,7 @@ document.getElementById('btn-save-location').addEventListener('click', saveLocat
 
 async function guiDuLieu() {
   const btnSubmit = document.getElementById('btn-submit');
-  if (btnSubmit.disabled) return;
+  if (btnSubmit.disabled) return; // Nếu đang lưu thì không làm gì
 
   const ten_diem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
   const so_tien = document.getElementById('so_tien').value;
@@ -1990,18 +1997,22 @@ async function guiDuLieu() {
     return;
   }
 
+  // Kiểm tra xem có đang trong ca làm việc không (chỉ kiểm tra khi thêm mới)
   if (!editingId) {
     const shiftInfo = getCurrentShift();
     
+    // Nếu không có ca được chọn ngoài giờ và không trong ca làm việc
     if (!selectedOutOfHoursShift && !shiftInfo.start) {
       showToast('⚠️ Hiện tại không trong ca làm việc! Vui lòng sử dụng chức năng "Thêm điểm ngoài ca" từ menu.', 'error');
       return;
     }
   }
 
+  // Hiển thị trạng thái đang lưu và vô hiệu hóa nút
   btnSubmit.textContent = '⏳ Đang lưu...';
   btnSubmit.disabled = true;
 
+  // Xác định ca sử dụng: ưu tiên ca ngoài giờ nếu có, sau đó đến ca hiện tại
   let shiftToUse = selectedOutOfHoursShift;
   if (!shiftToUse && !editingId) {
     shiftToUse = getCurrentShift().shiftKey;
@@ -2013,11 +2024,12 @@ async function guiDuLieu() {
     dia_chi,
     ghi_chu,
     trang_thai,
-    ca: editingId ? undefined : shiftToUse,
-    timestamp: editingId ? undefined : new Date().toISOString(),
-    id: editingId || undefined
+    ca: editingId ? undefined : shiftToUse, // Sử dụng ca đã xác định
+    timestamp: editingId ? undefined : new Date().toISOString(), // Giữ nguyên timestamp khi chỉnh sửa
+    id: editingId || undefined // Gửi ID nếu đang chỉnh sửa
   };
 
+  // Thêm action để xác định hành động
   if (editingId) {
     data.action = 'update';
   }
@@ -2040,19 +2052,21 @@ async function guiDuLieu() {
     showToast('❌ Có lỗi xảy ra khi lưu dữ liệu!', 'error');
     console.error(error);
   } finally {
+    // Kích hoạt lại nút và đổi lại nội dung
     btnSubmit.textContent = editingId ? '💾 Cập nhật' : '💾 Lưu thông tin';
     btnSubmit.disabled = false;
   }
 }
 
 async function taiDuLieu() {
-  closeSidebar();
+  closeSidebar(); // Đảm bảo sidebar thu gọn khi nhấn nút tải lại
   try {
     const res = await fetch(scriptURL);
     const data = await res.json();
     allData = data;
     currentFilteredData = data;
     
+    // Cập nhật datalist cho điểm
     cacheDiem = {};
     const diemList = document.getElementById('diem-list');
     diemList.innerHTML = '';
@@ -2076,6 +2090,23 @@ async function taiDuLieu() {
   } catch (error) {
     showToast('❌ Có lỗi xảy ra khi tải dữ liệu!', 'error');
     console.error(error);
+  }
+}
+
+function chonDiem() {
+  const val = document.getElementById('chon_diem').value;
+  const tenDiemInput = document.getElementById('ten_diem');
+  const diaChiInput = document.getElementById('dia_chi');
+  if (!val) {
+    tenDiemInput.value = '';
+    diaChiInput.value = '';
+    tenDiemInput.disabled = false;
+    tenDiemInput.placeholder = "Nhập tên điểm (nếu thêm mới)";
+  } else {
+    tenDiemInput.value = val;
+    diaChiInput.value = cacheDiem[val] || '';
+    tenDiemInput.disabled = true;
+    tenDiemInput.placeholder = "Tên điểm đã chọn";
   }
 }
 
@@ -2109,25 +2140,31 @@ document.getElementById('scrollTopBtn').onclick = function() {
 };
 
 // Khởi tạo
+// Khi load trang, mặc định chọn ca hiện tại nếu có, nếu không thì chọn "Tất cả các ca"
 document.addEventListener('DOMContentLoaded', function() {
   updateShiftInfo();
   taiDuLieu().then(() => {
     const shiftInfo = getCurrentShift();
     const shiftFilter = document.getElementById('filter-shift');
     if (shiftInfo.start) {
+      // Nếu đang trong ca, chọn ca hiện tại
       shiftFilter.value = shiftInfo.shiftKey;
     } else {
+      // Nếu không trong ca, chọn tất cả các ca
       shiftFilter.value = 'all';
     }
     filterData();
   });
   
+  // Thêm sự kiện cho nút menu và đóng sidebar
   document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
   document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
   document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
   
+  // Thêm xử lý đóng modal khi chạm ra ngoài
   setupModalCloseOnOutsideClick();
   
+  // Cập nhật thông tin ca mỗi phút
   setInterval(updateShiftInfo, 60000);
 });
 </script>
