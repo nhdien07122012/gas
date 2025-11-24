@@ -887,6 +887,17 @@
     background-color: #f8fff9;
   }
   
+  /* Style cho nút lưu vị trí khi đã có GPS */
+  .btn-location-disabled {
+    background-color: #6c757d !important;
+    cursor: not-allowed !important;
+  }
+  
+  .btn-location-disabled:hover {
+    transform: none !important;
+    background-color: #6c757d !important;
+  }
+  
   @media (max-width: 768px) {
     .diachi-row input {
       flex: 8 1 0%;
@@ -1036,7 +1047,7 @@
         <label for="dia_chi">Địa chỉ:</label>
         <div class="diachi-row">
           <input id="dia_chi" placeholder="Nhập địa chỉ">
-          <button class="btn-success btn-sm" type="button" id="btn-save-location" title="Lưu vị trí GPS">Lưu</button>
+          <button class="btn-success btn-sm" type="button" id="btn-save-location" title="Lưu vị trí GPS">📍 Lưu</button>
         </div>
       </div>
       
@@ -1210,6 +1221,20 @@ let editingId = null;
 let itemToDelete = null;
 let currentFilteredData = [];
 let selectedOutOfHoursShift = null;
+
+// HÀM MỚI: Kiểm tra xem điểm gas đã có vị trí GPS chưa
+function hasExistingGPSLocation(diemName) {
+  // Tìm tất cả các bản ghi của điểm gas này
+  const diemEntries = allData.filter(item => item.ten_diem === diemName);
+  
+  // Kiểm tra xem có bản ghi nào đã có GPS không
+  for (let i = 0; i < diemEntries.length; i++) {
+    if (diemEntries[i].ghi_chu && diemEntries[i].ghi_chu.includes('[GPS:')) {
+      return true;
+    }
+  }
+  return false;
+}
 
 // Hàm hiển thị thông báo toast
 function showToast(message, type = 'success') {
@@ -1811,6 +1836,17 @@ function resetForm() {
   document.getElementById('trang_thai').value = 'Chưa nộp';
   document.getElementById('btn-submit').textContent = '💾 Lưu thông tin';
   document.getElementById('btn-cancel').style.display = 'none';
+  
+  // Reset nút lưu vị trí
+  resetSaveLocationButton();
+}
+
+// HÀM MỚI: Reset trạng thái nút lưu vị trí
+function resetSaveLocationButton() {
+  const btn = document.getElementById('btn-save-location');
+  btn.textContent = '📍 Lưu vị trí';
+  btn.disabled = false;
+  btn.className = 'btn-success btn-sm';
 }
 
 // HÀM MỚI: Tìm bản ghi gần nhất cho một điểm gas cụ thể
@@ -1840,6 +1876,9 @@ function chonDiem() {
   const diaChiInput = document.getElementById('dia_chi');
   const soTienInput = document.getElementById('so_tien');
   
+  // Reset nút lưu vị trí khi thay đổi điểm gas
+  resetSaveLocationButton();
+  
   if (!val) {
     tenDiemInput.value = '';
     diaChiInput.value = '';
@@ -1862,7 +1901,72 @@ function chonDiem() {
         soTienInput.select();
       }, 100);
     }
+    
+    // Kiểm tra và cập nhật trạng thái nút lưu vị trí nếu điểm đã có GPS
+    if (hasExistingGPSLocation(val)) {
+      const btn = document.getElementById('btn-save-location');
+      btn.textContent = '📍 Đã có';
+      btn.disabled = true;
+      btn.className = 'btn-location-disabled btn-sm';
+    }
   }
+}
+
+// Xử lý nút lưu vị trí GPS - ĐÃ CẬP NHẬT
+function saveLocation() {
+  const tenDiem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
+  
+  // Kiểm tra xem đã chọn điểm gas chưa
+  if (!tenDiem) {
+    showToast('⚠️ Vui lòng chọn điểm gas trước khi lưu vị trí!', 'error');
+    return;
+  }
+  
+  // Kiểm tra xem điểm gas này đã có vị trí GPS chưa
+  if (hasExistingGPSLocation(tenDiem)) {
+    showToast('❌ Điểm gas này đã được lưu vị trí GPS trước đó!', 'error');
+    return;
+  }
+  
+  if (!navigator.geolocation) {
+    showToast('❌ Thiết bị không hỗ trợ GPS!', 'error');
+    return;
+  }
+  
+  const btn = document.getElementById('btn-save-location');
+  btn.disabled = true;
+  btn.textContent = '⏳ Đang lấy vị trí...';
+  
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      const lat = pos.coords.latitude.toFixed(6);
+      const lng = pos.coords.longitude.toFixed(6);
+      let ghiChuInput = document.getElementById('ghi_chu');
+      
+      // Xóa GPS cũ nếu có và thêm GPS mới
+      let ghiChu = ghiChuInput.value.replace(/\s*\[GPS: [\d.-]+, [\d.-]+\]/, '');
+      ghiChuInput.value = ghiChu + ` [GPS: ${lat}, ${lng}]`;
+      
+      showToast('✅ Đã lưu vị trí GPS thực tế!');
+      btn.textContent = '📍 Đã lưu vị trí';
+      btn.disabled = false;
+      
+      // Đổi màu nút để thể hiện đã lưu thành công
+      btn.className = 'btn-success btn-sm';
+      btn.style.backgroundColor = '#34c759';
+    }, 
+    function(err) {
+      showToast('❌ Không thể lấy vị trí: ' + err.message, 'error');
+      btn.textContent = '📍 Lưu vị trí';
+      btn.disabled = false;
+      btn.className = 'btn-success btn-sm';
+    }, 
+    { 
+      enableHighAccuracy: true, 
+      timeout: 15000, 
+      maximumAge: 0 
+    }
+  );
 }
 
 // Chỉnh sửa item
@@ -1884,6 +1988,16 @@ function editItem(id) {
   // Thay đổi nút thành cập nhật
   document.getElementById('btn-submit').textContent = '💾 Cập nhật';
   document.getElementById('btn-cancel').style.display = 'block';
+  
+  // Kiểm tra và cập nhật trạng thái nút lưu vị trí
+  if (hasExistingGPSLocation(item.ten_diem)) {
+    const btn = document.getElementById('btn-save-location');
+    btn.textContent = '📍 Đã có vị trí';
+    btn.disabled = true;
+    btn.className = 'btn-location-disabled btn-sm';
+  } else {
+    resetSaveLocationButton();
+  }
   
   // Cuộn lên đầu form
   document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
@@ -1949,30 +2063,7 @@ function closeModal(modalId) {
   }
 }
 
-// Xử lý nút lưu vị trí GPS
-function saveLocation() {
-  if (!navigator.geolocation) {
-    showToast('Thiết bị không hỗ trợ GPS!', 'error');
-    return;
-  }
-  const btn = document.getElementById('btn-save-location');
-  btn.disabled = true;
-  btn.textContent = '⏳ Đang lấy vị trí...';
-  navigator.geolocation.getCurrentPosition(function(pos) {
-    const lat = pos.coords.latitude.toFixed(6);
-    const lng = pos.coords.longitude.toFixed(6);
-    let ghiChuInput = document.getElementById('ghi_chu');
-    let ghiChu = ghiChuInput.value.replace(/\s*\[GPS: [\d.]+, [\d.]+\]/, '');
-    ghiChuInput.value = ghiChu + ` [GPS: ${lat}, ${lng}]`;
-    showToast('✅ Đã lấy vị trí GPS thực tế!');
-    btn.textContent = '📍 Lưu vị trí';
-    btn.disabled = false;
-  }, function(err) {
-    showToast('Không thể lấy vị trí: ' + err.message, 'error');
-    btn.textContent = '📍 Lưu vị trí';
-    btn.disabled = false;
-  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
-}
+// Cập nhật sự kiện click cho nút lưu vị trí
 document.getElementById('btn-save-location').addEventListener('click', saveLocation);
 
 async function guiDuLieu() {
