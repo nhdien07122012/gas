@@ -1047,7 +1047,7 @@
         <label for="dia_chi">Địa chỉ:</label>
         <div class="diachi-row">
           <input id="dia_chi" placeholder="Nhập địa chỉ">
-          <button class="btn-success btn-sm" type="button" id="btn-save-location" title="Lưu vị trí GPS">📍 Lưu</button>
+          <button class="btn-success btn-sm" type="button" id="btn-save-location" title="Lưu vị trí GPS">Lưu</button>
         </div>
       </div>
       
@@ -1905,7 +1905,7 @@ function chonDiem() {
     // Kiểm tra và cập nhật trạng thái nút lưu vị trí nếu điểm đã có GPS
     if (hasExistingGPSLocation(val)) {
       const btn = document.getElementById('btn-save-location');
-      btn.textContent = '📍 Đã có';
+      btn.textContent = 'Đã có';
       btn.disabled = true;
       btn.className = 'btn-location-disabled btn-sm';
     }
