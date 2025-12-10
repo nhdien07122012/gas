@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tính công và lương</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-icon-precomposed" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Tính công lương">
+<style>
+  :root {
+    --primary: #2c80ff;
+    --primary-dark: #1a6de0;
+    --secondary: #34c759;
+    --danger: #ff3b30;
+    --warning: #ff9500;
+    --light: #f8f9fa;
+    --dark: #333;
+    --gray: #6c757d;
+    --border: #dee2e6;
+    --shadow: 0 2px 10px rgba(0,0,0,0.08);
+    --radius: 10px;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: var(--dark);
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  
+  header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 25px 30px;
+    text-align: center;
+    position: relative;
+  }
+  
+  header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  header p {
+    opacity: 0.9;
+    font-size: 1rem;
+  }
+  
+  .card {
+    padding: 25px 30px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .card:last-child {
+    border-bottom: none;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+  }
+  
+  button {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .btn-primary {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 128, 255, 0.3);
+  }
+  
+  .btn-secondary {
+    background-color: #f1f3f5;
+    color: var(--dark);
+  }
+  
+  .btn-secondary:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+  }
+  
+  .btn-success {
+    background-color: var(--secondary);
+    color: white;
+  }
+  
+  .btn-success:hover {
+    background-color: #30b352;
+    transform: translateY(-2px);
+  }
+  
+  .stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .stat-card {
+    flex: 1;
+    min-width: 150px;
+    background: #f8f9fa;
+    border-radius: var(--radius);
+    padding: 15px;
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin-top: 5px;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    margin-top: 10px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+  }
+  
+  th {
+    background-color: #f8f9fa;
+    padding: 16px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--dark);
+    border-bottom: 2px solid var(--border);
+  }
+  
+  td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gray);
+  }
+  
+  .empty-state p {
+    margin-top: 10px;
+  }
+  
+  .salary-summary {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: var(--radius);
+    padding: 25px;
+    margin: 20px 0;
+    text-align: center;
+    border-left: 5px solid var(--secondary);
+  }
+  
+  .salary-amount {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--secondary);
+    margin: 15px 0;
+  }
+  
+  .salary-breakdown {
+    margin-top: 20px;
+    padding: 15px;
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+  
+  .toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(100px);
+    background: var(--primary);
+    color: white;
+    padding: 16px 24px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    z-index: 1002;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    min-width: 280px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .toast.show {
+    transform: translate(-50%, -50%) translateY(0);
+    opacity: 1;
+  }
+  
+  .toast.success {
+    background: var(--secondary);
+  }
+  
+  .toast.error {
+    background: var(--danger);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+  
+  @media (max-width: 768px) {
+    body { padding: 15px; }
+    header { padding: 20px; }
+    header h1 { font-size: 1.5rem; }
+    .card { padding: 20px; }
+    .button-group { flex-direction: column; }
+    .stats-container { flex-direction: column; }
+    .salary-amount { font-size: 2rem; }
+    th, td { padding: 12px 8px; font-size: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="toast" id="toast">
+    <span id="toast-message">Đã sao chép vào clipboard!</span>
+  </div>
+
+  <div class="container">
+    <header>
+      <a href="index.html" style="position: absolute; left: 30px; top: 30px; color: white; text-decoration: none; font-size: 1.2rem;">←</a>
+      <h1>💰 Tính công và lương</h1>
+      <p>Tính lương dựa trên số ca làm việc thực tế</p>
+    </header>
+    
+    <div class="card">
+      <div class="form-group">
+        <label for="luong-thang">Lương tháng (VND):</label>
+        <input type="number" id="luong-thang" value="5000000" placeholder="Nhập lương tháng">
+      </div>
+      
+      <div class="form-group">
+        <label for="ngay-bat-dau">Chu kỳ lương (từ ngày):</label>
+        <div style="display: flex; gap: 10px;">
+          <select id="ngay-bat-dau" style="flex: 1;">
+            <option value="5" selected>Ngày 05</option>
+            <option value="1">Ngày 01</option>
+            <option value="10">Ngày 10</option>
+            <option value="15">Ngày 15</option>
+            <option value="20">Ngày 20</option>
+          </select>
+          <select id="thang-bat-dau" style="flex: 1;">
+            <!-- Tháng sẽ được thêm bằng JavaScript -->
+          </select>
+          <select id="nam-bat-dau" style="flex: 1;">
+            <!-- Năm sẽ được thêm bằng JavaScript -->
+          </select>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--gray); margin-top: 5px;">
+          <i>Lương được tính từ ngày 05 tháng này đến ngày 05 tháng sau (30 ngày)</i>
+        </p>
+      </div>
+      
+      <div class="button-group">
+        <button class="btn-primary" onclick="tinhLuong()" id="btn-tinh-luong">
+          🧮 Tính lương
+        </button>
+        <button class="btn-secondary" onclick="resetForm()">
+          🔄 Làm mới
+        </button>
+        <button class="btn-warning" onclick="testLoadData()">
+          🔍 Test dữ liệu
+        </button>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2 style="margin-bottom: 15px;">📊 Kết quả tính lương</h2>
+      
+      <div class="stats-container" id="stats-container">
+        <!-- Thống kê sẽ được thêm bằng JavaScript -->
+      </div>
+      
+      <div id="salary-result" style="display: none;">
+        <div class="salary-summary">
+          <h3>Tổng lương tạm tính</h3>
+          <div class="salary-amount" id="tong-luong">0 VND</div>
+          <p id="thoi-gian-tinh">Thời gian tính: </p>
+        </div>
+        
+        <div class="salary-breakdown">
+          <h4>📝 Chi tiết tính lương:</h4>
+          <ul id="chi-tiet-luong">
+            <!-- Chi tiết sẽ được thêm bằng JavaScript -->
+          </ul>
+        </div>
+        
+        <div class="button-group">
+          <button class="btn-success" onclick="copySalaryToClipboard()">
+            📋 Sao chép kết quả
+          </button>
+        </div>
+      </div>
+      
+      <div id="empty-state" class="empty-state">
+        <h3>📭 Chưa có kết quả tính lương</h3>
+        <p>Hãy nhấn "Tính lương" để xem kết quả</p>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2 style="margin-bottom: 15px;">📅 Chi tiết các ca làm việc</h2>
+      <div class="table-container">
+        <table id="bang-cong">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Ngày làm việc</th>
+              <th>Số điểm gas</th>
+              <th>Tổng tiền thu</th>
+              <th>Trạng thái nộp</th>
+            </tr>
+          </thead>
+          <tbody id="bang-cong-body">
+            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+          </tbody>
+        </table>
+        <div id="empty-cong" class="empty-state" style="display: none;">
+          <h3>📭 Không có dữ liệu ca làm việc</h3>
+          <p id="empty-message">Hệ thống chưa tìm thấy ca làm việc nào</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="index.html" style="position:fixed;right:30px;bottom:30px;z-index:999;background:#2c80ff;color:white;border:none;border-radius:50%;width:56px;height:56px;box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.3s; text-decoration: none;">
+    ←
+  </a>
+
+<script>
+// SỬA LẠI: Dùng CÙNG URL với file index.html
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
+let allData = [];
+let caLamViecList = [];
+
+// Hàm hiển thị thông báo toast
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toast-message');
+  
+  toastMessage.textContent = message;
+  toast.className = `toast ${type} show`;
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+// Hàm định dạng tiền tệ
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  }).format(amount);
+}
+
+// Hàm định dạng ngày tháng
+function formatDate(date) {
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}-${month}-${year}`;
+}
+
+// Hàm lấy tháng và năm từ dữ liệu
+function populateMonthYearSelectors() {
+  const monthSelect = document.getElementById('thang-bat-dau');
+  const yearSelect = document.getElementById('nam-bat-dau');
+  
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1;
+  const currentYear = now.getFullYear();
+  
+  monthSelect.innerHTML = '';
+  yearSelect.innerHTML = '';
+  
+  // Thêm các tháng
+  const months = [
+    {value: 1, text: 'Tháng 1'}, {value: 2, text: 'Tháng 2'}, {value: 3, text: 'Tháng 3'},
+    {value: 4, text: 'Tháng 4'}, {value: 5, text: 'Tháng 5'}, {value: 6, text: 'Tháng 6'},
+    {value: 7, text: 'Tháng 7'}, {value: 8, text: 'Tháng 8'}, {value: 9, text: 'Tháng 9'},
+    {value: 10, text: 'Tháng 10'}, {value: 11, text: 'Tháng 11'}, {value: 12, text: 'Tháng 12'}
+  ];
+  
+  months.forEach(month => {
+    const option = document.createElement('option');
+    option.value = month.value;
+    option.textContent = month.text;
+    if (month.value === currentMonth) {
+      option.selected = true;
+    }
+    monthSelect.appendChild(option);
+  });
+  
+  // Thêm các năm
+  for (let year = currentYear - 1; year <= currentYear + 1; year++) {
+    const option = document.createElement('option');
+    option.value = year;
+    option.textContent = `Năm ${year}`;
+    if (year === currentYear) {
+      option.selected = true;
+    }
+    yearSelect.appendChild(option);
+  }
+}
+
+// Hàm TEST tải dữ liệu
+async function testLoadData() {
+  console.log('=== BẮT ĐẦU TEST DỮ LIỆU ===');
+  console.log('URL API:', scriptURL);
+  
+  try {
+    const response = await fetch(scriptURL + '?t=' + Date.now());
+    console.log('Response status:', response.status);
+    console.log('Response ok:', response.ok);
+    
+    const text = await response.text();
+    console.log('Response text (first 500 chars):', text.substring(0, 500));
+    
+    try {
+      const data = JSON.parse(text);
+      console.log('Parsed data type:', typeof data);
+      console.log('Parsed data length:', Array.isArray(data) ? data.length : 'Not an array');
+      console.log('Sample data (first item):', Array.isArray(data) && data.length > 0 ? data[0] : 'No data');
+      
+      if (Array.isArray(data) && data.length > 0) {
+        // Kiểm tra cấu trúc dữ liệu
+        const sample = data[0];
+        console.log('Data structure:', Object.keys(sample));
+        console.log('Ca field value:', sample.ca);
+        console.log('Ca field type:', typeof sample.ca);
+        
+        // Đếm số bản ghi có trường "ca"
+        const hasCaCount = data.filter(item => item.ca && item.ca.trim() !== '').length;
+        console.log('Số bản ghi có trường ca:', hasCaCount);
+        
+        // Lấy danh sách ca duy nhất
+        const caSet = new Set();
+        data.forEach(item => {
+          if (item.ca && item.ca.trim() !== '') {
+            caSet.add(item.ca);
+          }
+        });
+        console.log('Số ca duy nhất:', caSet.size);
+        console.log('Danh sách ca:', Array.from(caSet));
+        
+        alert(`TEST DỮ LIỆU:\n- Tổng bản ghi: ${data.length}\n- Có trường "ca": ${hasCaCount}\n- Số ca duy nhất: ${caSet.size}\n- Xem Console để biết chi tiết`);
+      } else {
+        alert('Dữ liệu trống hoặc không phải mảng!');
+      }
+    } catch (parseError) {
+      console.error('Lỗi parse JSON:', parseError);
+      alert('Lỗi parse JSON! Xem Console để biết chi tiết.');
+    }
+  } catch (fetchError) {
+    console.error('Lỗi fetch:', fetchError);
+    alert('Lỗi khi tải dữ liệu! Xem Console để biết chi tiết.');
+  }
+}
+
+// Hàm TẢI DỮ LIỆU TỪ GOOGLE SHEETS - PHIÊN BẢN ĐƠN GIẢN
+async function taiDuLieu() {
+  console.log('Đang tải dữ liệu từ Google Sheets...');
+  
+  try {
+    // Thêm timestamp để tránh cache
+    const url = scriptURL + '?t=' + Date.now();
+    
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const text = await response.text();
+    
+    // Thử parse JSON
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      console.error('Lỗi parse JSON:', e);
+      // Thử fix nếu có vấn đề với JSON
+      const fixedText = text.trim();
+      if (fixedText.startsWith('[') && fixedText.endsWith(']')) {
+        data = JSON.parse(fixedText);
+      } else {
+        throw new Error('Dữ liệu không phải JSON hợp lệ');
+      }
+    }
+    
+    if (!Array.isArray(data)) {
+      console.error('Dữ liệu không phải là mảng:', data);
+      allData = [];
+      showToast('⚠️ Dữ liệu không đúng định dạng!', 'error');
+      return;
+    }
+    
+    allData = data;
+    console.log('Đã tải được', allData.length, 'bản ghi từ Google Sheets');
+    
+    // Phân tích dữ liệu ca
+    analyzeCaData();
+    
+    if (allData.length === 0) {
+      showToast('⚠️ Không có dữ liệu trong Google Sheets!', 'warning');
+    } else {
+      showToast(`✅ Đã tải ${allData.length} bản ghi từ Google Sheets`);
+    }
+    
+  } catch (error) {
+    console.error('Lỗi khi tải dữ liệu:', error);
+    showToast('❌ Không thể tải dữ liệu từ Google Sheets!', 'error');
+    allData = [];
+  }
+}
+
+// Hàm phân tích dữ liệu ca
+function analyzeCaData() {
+  console.log('=== PHÂN TÍCH DỮ LIỆU CA ===');
+  
+  // Reset danh sách ca
+  caLamViecList = [];
+  
+  if (allData.length === 0) {
+    console.log('Không có dữ liệu để phân tích');
+    return;
+  }
+  
+  // Nhóm dữ liệu theo ca
+  const caMap = new Map();
+  
+  allData.forEach((item, index) => {
+    // Kiểm tra xem có trường "ca" không
+    if (!item.ca) {
+      console.log(`Bản ghi ${index} không có trường "ca"`);
+      return;
+    }
+    
+    const caValue = item.ca.toString().trim();
+    
+    if (!caValue || caValue === '') {
+      console.log(`Bản ghi ${index} có trường "ca" rỗng`);
+      return;
+    }
+    
+    // Parse ngày từ trường ca
+    let caDate;
+    try {
+      // Thử parse theo định dạng YYYY-MM-DD
+      if (caValue.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) {
+        caDate = new Date(caValue);
+      } else {
+        // Thử parse các định dạng khác
+        caDate = new Date(caValue);
+      }
+      
+      if (isNaN(caDate.getTime())) {
+        console.log(`Ngày không hợp lệ: ${caValue}`);
+        return;
+      }
+      
+      // Chuẩn hóa ngày về YYYY-MM-DD
+      const year = caDate.getFullYear();
+      const month = String(caDate.getMonth() + 1).padStart(2, '0');
+      const day = String(caDate.getDate()).padStart(2, '0');
+      const caKey = `${year}-${month}-${day}`;
+      
+      if (!caMap.has(caKey)) {
+        caMap.set(caKey, {
+          ngay: caKey,
+          diemGas: [],
+          tongTien: 0,
+          daNopCount: 0,
+          chuaNopCount: 0,
+          dateObj: caDate
+        });
+      }
+      
+      const caData = caMap.get(caKey);
+      caData.diemGas.push(item);
+      
+      // Tính tổng tiền
+      const soTien = parseInt(item.so_tien) || 0;
+      caData.tongTien += soTien;
+      
+      // Đếm trạng thái nộp
+      if (item.trang_thai === 'Đã nộp') {
+        caData.daNopCount++;
+      } else {
+        caData.chuaNopCount++;
+      }
+      
+    } catch (e) {
+      console.log(`Lỗi parse ngày ${caValue}:`, e);
+    }
+  });
+  
+  // Chuyển Map thành mảng và sắp xếp theo ngày (mới nhất trước)
+  caLamViecList = Array.from(caMap.values());
+  caLamViecList.sort((a, b) => b.dateObj - a.dateObj);
+  
+  console.log(`Tìm thấy ${caLamViecList.length} ca làm việc`);
+  console.log('Danh sách ca:', caLamViecList.map(ca => ca.ngay));
+  
+  // Hiển thị danh sách ca
+  displayWorkingDays(caLamViecList);
+}
+
+// Hàm hiển thị danh sách ngày công
+function displayWorkingDays(caLamViec) {
+  const bangCongBody = document.getElementById('bang-cong-body');
+  const emptyCong = document.getElementById('empty-cong');
+  const emptyMessage = document.getElementById('empty-message');
+  
+  if (!caLamViec || caLamViec.length === 0) {
+    bangCongBody.innerHTML = '';
+    emptyCong.style.display = 'block';
+    emptyMessage.textContent = allData.length === 0 
+      ? 'Không thể tải dữ liệu từ Google Sheets. Vui lòng kiểm tra kết nối.' 
+      : 'Không tìm thấy ca làm việc nào trong dữ liệu';
+    return;
+  }
+  
+  emptyCong.style.display = 'none';
+  bangCongBody.innerHTML = '';
+  
+  caLamViec.forEach((ca, index) => {
+    const tr = document.createElement('tr');
+    tr.className = 'fade-in';
+    
+    const caDate = new Date(ca.ngay);
+    const day = String(caDate.getDate()).padStart(2, '0');
+    const month = String(caDate.getMonth() + 1).padStart(2, '0');
+    const year = caDate.getFullYear();
+    
+    tr.innerHTML = `
+      <td>${index + 1}</td>
+      <td>
+        <div style="font-weight: 600;">${day}-${month}-${year}</div>
+        <div style="font-size: 0.8rem; color: var(--gray);">Ca ${day}-${month}</div>
+      </td>
+      <td>${ca.diemGas.length}</td>
+      <td>${formatCurrency(ca.tongTien)}</td>
+      <td>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <span style="color: var(--secondary); font-size: 0.85rem;">✅ Đã nộp: ${ca.daNopCount}</span>
+          <span style="color: var(--warning); font-size: 0.85rem;">⏳ Chưa nộp: ${ca.chuaNopCount}</span>
+        </div>
+      </td>
+    `;
+    bangCongBody.appendChild(tr);
+  });
+}
+
+// Hàm tính lương - CHÍNH XÁC DỰA TRÊN SỐ CA THỰC TẾ
+async function tinhLuong() {
+  const btn = document.getElementById('btn-tinh-luong');
+  const originalText = btn.textContent;
+  
+  try {
+    btn.textContent = '⏳ Đang tính...';
+    btn.disabled = true;
+    
+    // 1. Lấy thông tin đầu vào
+    const luongThang = parseInt(document.getElementById('luong-thang').value);
+    const ngayBatDau = parseInt(document.getElementById('ngay-bat-dau').value);
+    const thangBatDau = parseInt(document.getElementById('thang-bat-dau').value);
+    const namBatDau = parseInt(document.getElementById('nam-bat-dau').value);
+    
+    if (!luongThang || luongThang <= 0) {
+      showToast('⚠️ Vui lòng nhập lương tháng hợp lệ!', 'error');
+      return;
+    }
+    
+    // 2. Tải dữ liệu mới nhất nếu chưa có
+    if (allData.length === 0) {
+      await taiDuLieu();
+    }
+    
+    // 3. Tính ngày bắt đầu và kết thúc chu kỳ
+    const ngayBatDauChuKy = new Date(namBatDau, thangBatDau - 1, ngayBatDau);
+    
+    let ngayKetThucChuKy;
+    if (thangBatDau === 12) {
+      ngayKetThucChuKy = new Date(namBatDau + 1, 0, ngayBatDau);
+    } else {
+      ngayKetThucChuKy = new Date(namBatDau, thangBatDau, ngayBatDau);
+    }
+    
+    console.log('Chu kỳ lương:', {
+      batDau: ngayBatDauChuKy.toISOString().split('T')[0],
+      ketThuc: ngayKetThucChuKy.toISOString().split('T')[0]
+    });
+    
+    // 4. Lọc các ca làm việc trong chu kỳ
+    const caLamViecTrongChuKy = caLamViecList.filter(ca => {
+      const caDate = new Date(ca.ngay);
+      return caDate >= ngayBatDauChuKy && caDate < ngayKetThucChuKy;
+    });
+    
+    console.log('Ca làm việc trong chu kỳ:', caLamViecTrongChuKy.length);
+    console.log('Chi tiết:', caLamViecTrongChuKy.map(ca => ca.ngay));
+    
+    // 5. Tính số ngày công = số ca làm việc thực tế
+    const soNgayCong = caLamViecTrongChuKy.length;
+    
+    // 6. Tính lương: lương tháng / 30 ngày * số ngày công thực tế
+    const luongTheoNgay = luongThang / 30;
+    const tongLuong = Math.round(luongTheoNgay * soNgayCong);
+    
+    // 7. Hiển thị kết quả
+    displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViecTrongChuKy, ngayBatDauChuKy, ngayKetThucChuKy);
+    
+    showToast('✅ Đã tính lương thành công!');
+    
+  } catch (error) {
+    console.error('Lỗi khi tính lương:', error);
+    showToast('❌ Có lỗi khi tính lương!', 'error');
+  } finally {
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+}
+
+// Hàm hiển thị kết quả tính lương
+function displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViec, startDate, endDate) {
+  const statsContainer = document.getElementById('stats-container');
+  
+  // Tính tổng tiền thu được từ các ca làm việc
+  const tongTienThu = caLamViec.reduce((sum, ca) => sum + ca.tongTien, 0);
+  
+  statsContainer.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-value">${soNgayCong}</div>
+      <div class="stat-label">Số ca làm việc</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${formatCurrency(luongThang)}</div>
+      <div class="stat-label">Lương tháng</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${formatCurrency(tongLuong)}</div>
+      <div class="stat-label">Lương tạm tính</div>
+    </div>
+  `;
+  
+  document.getElementById('tong-luong').textContent = formatCurrency(tongLuong);
+  
+  const startStr = formatDate(startDate);
+  const endStr = formatDate(endDate);
+  document.getElementById('thoi-gian-tinh').textContent = `Thời gian tính: Từ ${startStr} đến ${endStr}`;
+  
+  const chiTietLuong = document.getElementById('chi-tiet-luong');
+  const luongTheoNgay = luongThang / 30;
+  
+  chiTietLuong.innerHTML = `
+    <li>Lương tháng: ${formatCurrency(luongThang)}</li>
+    <li>Quy ước: 30 ngày công/tháng</li>
+    <li>Lương mỗi ngày: ${formatCurrency(luongTheoNgay)}</li>
+    <li>Số ca làm việc thực tế: ${soNgayCong} ca</li>
+    <li>Tổng tiền thu được: ${formatCurrency(tongTienThu)}</li>
+    <li><strong>Tổng lương tạm tính: ${formatCurrency(tongLuong)}</strong></li>
+  `;
+  
+  document.getElementById('salary-result').style.display = 'block';
+  document.getElementById('empty-state').style.display = 'none';
+  
+  // Hiển thị danh sách ca làm việc trong chu kỳ
+  displayWorkingDays(caLamViec);
+}
+
+// Hàm sao chép kết quả
+async function copySalaryToClipboard() {
+  const luongThang = document.getElementById('luong-thang').value;
+  const tongLuong = document.getElementById('tong-luong').textContent;
+  const thoiGianTinh = document.getElementById('thoi-gian-tinh').textContent;
+  const soCa = caLamViecList.filter(ca => {
+    // Lọc các ca trong chu kỳ hiện tại
+    const ngayBatDau = parseInt(document.getElementById('ngay-bat-dau').value);
+    const thangBatDau = parseInt(document.getElementById('thang-bat-dau').value);
+    const namBatDau = parseInt(document.getElementById('nam-bat-dau').value);
+    
+    const ngayBatDauChuKy = new Date(namBatDau, thangBatDau - 1, ngayBatDau);
+    let ngayKetThucChuKy;
+    if (thangBatDau === 12) {
+      ngayKetThucChuKy = new Date(namBatDau + 1, 0, ngayBatDau);
+    } else {
+      ngayKetThucChuKy = new Date(namBatDau, thangBatDau, ngayBatDau);
+    }
+    
+    const caDate = new Date(ca.ngay);
+    return caDate >= ngayBatDauChuKy && caDate < ngayKetThucChuKy;
+  }).length;
+  
+  const content = `
+TÍNH LƯƠNG THEO SỐ CA LÀM VIỆC
+${thoiGianTinh}
+Lương tháng: ${formatCurrency(parseInt(luongThang))}
+Số ca làm việc thực tế: ${soCa} ca
+Tổng lương tạm tính: ${tongLuong}
+---
+Kết quả tính từ ứng dụng Quản lý điểm gas
+  `.trim();
+  
+  try {
+    await navigator.clipboard.writeText(content);
+    showToast('✅ Đã sao chép kết quả vào clipboard!');
+  } catch (err) {
+    showToast('❌ Không thể sao chép vào clipboard!', 'error');
+  }
+}
+
+// Hàm reset form
+function resetForm() {
+  document.getElementById('luong-thang').value = '5000000';
+  document.getElementById('ngay-bat-dau').value = '5';
+  populateMonthYearSelectors();
+  
+  document.getElementById('salary-result').style.display = 'none';
+  document.getElementById('empty-state').style.display = 'block';
+  
+  const bangCongBody = document.getElementById('bang-cong-body');
+  bangCongBody.innerHTML = '';
+  document.getElementById('empty-cong').style.display = 'block';
+  document.getElementById('empty-message').textContent = 'Hệ thống chưa tìm thấy ca làm việc nào';
+}
+
+// Khởi tạo khi trang được tải
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('=== TRANG TÍNH LƯƠNG ĐANG KHỞI ĐỘNG ===');
+  
+  // 1. Điền tháng/năm
+  populateMonthYearSelectors();
+  
+  // 2. Tải dữ liệu ngay khi trang load
+  taiDuLieu().then(() => {
+    // 3. Tự động tính lương sau khi có dữ liệu (nếu có)
+    if (caLamViecList.length > 0) {
+      setTimeout(() => {
+        tinhLuong();
+      }, 500);
+    }
+  });
+  
+  // 4. Thêm sự kiện cho ô nhập lương
+  document.getElementById('luong-thang').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      tinhLuong();
+    }
+  });
+});
+</script>
+</body>
+</html>
