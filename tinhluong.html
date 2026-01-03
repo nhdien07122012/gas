@@ -662,49 +662,64 @@ function populateMonthYearSelectors() {
   }
 }
 
-// Hàm tự động điền chu kỳ từ ngày 05 tháng trước đến 05 tháng này
+// Hàm tự động điền chu kỳ từ ngày 05 tháng trước đến 05 tháng này - FIXED LOGIC
 function autoFillLastCycle() {
   const now = new Date();
   const currentDay = now.getDate();
   const currentMonth = now.getMonth() + 1;
   const currentYear = now.getFullYear();
   
-  let startMonth, startYear;
   const selectedDay = parseInt(document.getElementById('ngay-bat-dau').value) || 5;
   
+  let startMonth, startYear;
+  let endMonth, endYear;
+  
+  // Logic FIXED: 
+  // 1. Nếu ngày hiện tại >= ngày đã chọn (ví dụ 5): tính từ [ngày] tháng NÀY đến [ngày] tháng SAU
+  // 2. Nếu ngày hiện tại < ngày đã chọn: tính từ [ngày] tháng TRƯỚC đến [ngày] tháng NÀY
+  
   if (currentDay >= selectedDay) {
-    // Nếu hiện tại >= ngày đã chọn: chu kỳ là từ [ngày] tháng trước đến [ngày] tháng này
-    startMonth = currentMonth - 1;
+    // Ví dụ: Hôm nay 10/01/2026, ngày chọn 5 -> tính từ 05/01/2026 đến 05/02/2026
+    startMonth = currentMonth;
     startYear = currentYear;
-    if (startMonth === 0) {
-      startMonth = 12;
-      startYear = currentYear - 1;
+    
+    // Tính tháng kết thúc
+    if (currentMonth === 12) {
+      endMonth = 1;
+      endYear = currentYear + 1;
+    } else {
+      endMonth = currentMonth + 1;
+      endYear = currentYear;
     }
   } else {
-    // Nếu hiện tại < ngày đã chọn: chu kỳ là từ [ngày] tháng trước nữa đến [ngày] tháng trước
-    startMonth = currentMonth - 2;
-    startYear = currentYear;
-    if (startMonth <= 0) {
-      startMonth += 12;
+    // Ví dụ: Hôm nay 03/01/2026, ngày chọn 5 -> tính từ 05/12/2025 đến 05/01/2026
+    if (currentMonth === 1) {
+      startMonth = 12;
       startYear = currentYear - 1;
+    } else {
+      startMonth = currentMonth - 1;
+      startYear = currentYear;
     }
+    
+    endMonth = currentMonth;
+    endYear = currentYear;
   }
   
-  // Cập nhật form
+  // Cập nhật form với ngày bắt đầu (tháng và năm)
   document.getElementById('thang-bat-dau').value = startMonth;
   document.getElementById('nam-bat-dau').value = startYear;
   
-  // Tính ngày kết thúc để hiển thị thông báo
-  let endMonth, endYear;
-  if (startMonth === 12) {
-    endMonth = 1;
-    endYear = startYear + 1;
-  } else {
-    endMonth = startMonth + 1;
-    endYear = startYear;
-  }
-  
+  // Hiển thị thông báo với cả ngày bắt đầu và kết thúc
   showToast(`✅ Đã điền chu kỳ: ${selectedDay}/${startMonth}/${startYear} - ${selectedDay}/${endMonth}/${endYear}`);
+  
+  // Log để debug
+  console.log('Tự động điền chu kỳ:', {
+    selectedDay,
+    currentDate: `${currentDay}/${currentMonth}/${currentYear}`,
+    startDate: `${selectedDay}/${startMonth}/${startYear}`,
+    endDate: `${selectedDay}/${endMonth}/${endYear}`,
+    condition: currentDay >= selectedDay ? 'currentDay >= selectedDay' : 'currentDay < selectedDay'
+  });
 }
 
 // Hàm TEST tải dữ liệu
