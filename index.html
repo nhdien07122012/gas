@@ -1063,8 +1063,9 @@
       <button class="sidebar-item" onclick="exportToText()">
         📄 Xuất dữ liệu văn bản
       </button>
-      <button class="sidebar-item" onclick="openQuickViewModal()">
-        👁️ Xem nhanh điểm (ca)
+      <!-- Thêm vào sidebar-content trong index.html -->
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='diemtien.html'">
+          💵 Đếm tiền
       </button>
       <button class="sidebar-item" onclick="openOutOfHoursModal()">
         ⏰ Thêm điểm ngoài ca
@@ -1081,6 +1082,9 @@
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='tinhluong.html'">
         💰 Tính công & lương
+      </button>
+       <button class="sidebar-item" onclick="openQuickViewModal()">
+        👁️ Xem nhanh điểm (ca)
       </button>
       <button class="sidebar-item" onclick="openModal('help-modal')">
         ❓ Trợ giúp

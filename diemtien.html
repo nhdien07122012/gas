@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đếm tiền theo mệnh giá - Quản lý điểm gas</title>
+<style>
+    :root {
+        --primary: #2c80ff;
+        --primary-dark: #1a6de0;
+        --secondary: #34c759;
+        --danger: #ff3b30;
+        --warning: #ff9500;
+        --info: #5ac8fa;
+        --light: #f8f9fa;
+        --dark: #333;
+        --gray: #6c757d;
+        --border: #dee2e6;
+        --shadow: 0 2px 10px rgba(0,0,0,0.08);
+        --radius: 10px;
+    }
+    
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f7fa;
+        color: var(--dark);
+        line-height: 1.6;
+        padding: 15px;
+        min-height: 100vh;
+    }
+    
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+    
+    /* Header */
+    header {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        padding: 20px;
+        position: relative;
+    }
+    
+    header h1 {
+        font-size: 1.6rem;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    header p {
+        opacity: 0.9;
+        font-size: 0.95rem;
+        text-align: center;
+    }
+    
+    .menu-back {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.2);
+        border: none;
+        color: white;
+        padding: 8px 12px;
+        border-radius: var(--radius);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.9rem;
+    }
+    
+    .menu-back:hover {
+        background: rgba(255,255,255,0.3);
+    }
+    
+    /* Kết quả trên cùng */
+    .result-header {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        padding: 20px;
+        border-bottom: 2px solid var(--border);
+    }
+    
+    .total-display {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    
+    .total-amount {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--primary);
+        margin: 10px 0;
+    }
+    
+    .comparison-row {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        margin: 15px 0;
+    }
+    
+    .comparison-item {
+        text-align: center;
+        min-width: 150px;
+    }
+    
+    .comparison-label {
+        font-size: 0.9rem;
+        color: var(--gray);
+        margin-bottom: 5px;
+    }
+    
+    .comparison-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    
+    .revenue-total {
+        color: var(--secondary);
+    }
+    
+    .difference {
+        color: var(--warning);
+    }
+    
+    .positive {
+        color: var(--secondary);
+    }
+    
+    .negative {
+        color: var(--danger);
+    }
+    
+    /* Form nhập liệu */
+    .input-section {
+        padding: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--dark);
+    }
+    
+    select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
+    }
+    
+    /* Bảng nhập mệnh giá gọn */
+    .denominations-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: white;
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .denominations-table th {
+        background: #f8f9fa;
+        padding: 12px 15px;
+        text-align: left;
+        font-weight: 600;
+        color: var(--dark);
+        border-bottom: 2px solid var(--border);
+    }
+    
+    .denominations-table td {
+        padding: 10px 15px;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .denominations-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .denominations-table tr:hover {
+        background-color: #fafbfc;
+    }
+    
+    .denomination-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .denomination-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+    
+    .denomination-text {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .denomination-value {
+        font-weight: 700;
+        color: var(--dark);
+    }
+    
+    .denomination-label {
+        font-size: 0.85rem;
+        color: var(--gray);
+    }
+    
+    .input-cell {
+        width: 120px;
+    }
+    
+    .bill-input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        font-size: 1.1rem;
+        text-align: center;
+        transition: all 0.2s ease;
+    }
+    
+    .bill-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(44, 128, 255, 0.1);
+    }
+    
+    .amount-cell {
+        text-align: right;
+        font-weight: 600;
+        color: var(--primary);
+        font-size: 1.1rem;
+    }
+    
+    /* Nút điều chỉnh nhanh */
+    .quick-controls {
+        display: flex;
+        gap: 5px;
+        margin-top: 5px;
+    }
+    
+    .quick-btn {
+        flex: 1;
+        padding: 5px;
+        border: 1px solid var(--border);
+        background: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
+    
+    .quick-btn:hover {
+        background: #f8f9fa;
+        border-color: var(--primary);
+    }
+    
+    /* Nút hành động */
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+    
+    .action-btn {
+        flex: 1;
+        min-width: 140px;
+        padding: 14px;
+        border: none;
+        border-radius: var(--radius);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .btn-primary {
+        background-color: var(--primary);
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(44, 128, 255, 0.3);
+    }
+    
+    .btn-secondary {
+        background-color: #f1f3f5;
+        color: var(--dark);
+    }
+    
+    .btn-secondary:hover {
+        background-color: #e9ecef;
+        transform: translateY(-2px);
+    }
+    
+    .btn-success {
+        background-color: var(--secondary);
+        color: white;
+    }
+    
+    .btn-success:hover {
+        background-color: #30b352;
+        transform: translateY(-2px);
+    }
+    
+    .btn-warning {
+        background-color: var(--warning);
+        color: white;
+    }
+    
+    .btn-warning:hover {
+        background-color: #e08900;
+        transform: translateY(-2px);
+    }
+    
+    /* Toast */
+    .toast {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) translateY(100px);
+        background: var(--primary);
+        color: white;
+        padding: 16px 24px;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        z-index: 1000;
+        opacity: 0;
+        transition: all 0.3s ease;
+        min-width: 280px;
+        text-align: center;
+    }
+
+    .toast.show {
+        transform: translate(-50%, -50%) translateY(0);
+        opacity: 1;
+    }
+    
+    .toast.success {
+        background: var(--secondary);
+    }
+    
+    .toast.error {
+        background: var(--danger);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        body {
+            padding: 10px;
+        }
+        
+        .total-amount {
+            font-size: 1.8rem;
+        }
+        
+        .comparison-row {
+            gap: 15px;
+        }
+        
+        .comparison-item {
+            min-width: 120px;
+        }
+        
+        .comparison-value {
+            font-size: 1.3rem;
+        }
+        
+        .denominations-table {
+            font-size: 0.9rem;
+        }
+        
+        .denominations-table th,
+        .denominations-table td {
+            padding: 8px 10px;
+        }
+        
+        .denomination-icon {
+            width: 35px;
+            height: 35px;
+            font-size: 0.8rem;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+        }
+        
+        .action-btn {
+            min-width: 100%;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        header h1 {
+            font-size: 1.3rem;
+        }
+        
+        .denominations-table {
+            display: block;
+            overflow-x: auto;
+        }
+        
+        .input-cell {
+            width: 100px;
+        }
+        
+        .bill-input {
+            padding: 8px 10px;
+            font-size: 1rem;
+        }
+        
+        .comparison-row {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <button class="menu-back" onclick="window.location.href='index.html'">
+                ← Quay lại
+            </button>
+            <h1>💰 Đếm tiền theo mệnh giá</h1>
+            <p>Nhập số lượng tờ tiền để tính tổng nhanh chóng</p>
+        </header>
+        
+        <!-- KẾT QUẢ TRÊN CÙNG -->
+        <div class="result-header" id="result-header" style="display: none;">
+            <div class="total-display">
+                <div class="total-amount" id="total-amount">0 ₫</div>
+                <div>Tổng tiền đếm được</div>
+            </div>
+            
+            <div class="comparison-row">
+                <div class="comparison-item">
+                    <div class="comparison-label">Doanh thu ca</div>
+                    <div class="comparison-value revenue-total" id="revenue-total">0 ₫</div>
+                </div>
+                <div class="comparison-item">
+                    <div class="comparison-label">Chênh lệch</div>
+                    <div class="comparison-value difference" id="difference-amount">0 ₫</div>
+                </div>
+                <div class="comparison-item">
+                    <div class="comparison-label">Tình trạng</div>
+                    <div class="comparison-value" id="status-text">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FORM NHẬP LIỆU -->
+        <div class="input-section">
+            <div class="form-group">
+                <label for="select-shift">Chọn ca cần đếm tiền:</label>
+                <select id="select-shift">
+                    <option value="">-- Chọn ca --</option>
+                    <!-- Options sẽ được thêm bằng JS -->
+                </select>
+            </div>
+            
+            <h3 style="margin: 20px 0 15px 0; color: var(--dark);">Nhập số lượng tờ tiền:</h3>
+            
+            <table class="denominations-table">
+                <thead>
+                    <tr>
+                        <th>Mệnh giá</th>
+                        <th>Số tờ</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody id="denominations-body">
+                    <!-- Các dòng mệnh giá sẽ được thêm bằng JS -->
+                </tbody>
+            </table>
+            
+            <div class="action-buttons">
+                <button class="action-btn btn-primary" onclick="calculateTotal(true)">
+                    🧮 Tính toán
+                </button>
+                <button class="action-btn btn-secondary" onclick="resetForm()">
+                    🔄 Nhập lại
+                </button>
+                <button class="action-btn btn-success" onclick="saveCount()">
+                    💾 Lưu kết quả
+                </button>
+                <button class="action-btn btn-warning" onclick="copyToClipboard()">
+                    📋 Sao chép
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+        <span id="toast-message">Đã sao chép vào clipboard!</span>
+    </div>
+
+    <script>
+        // Danh sách mệnh giá tiền Việt Nam (chỉ các mệnh giá phổ biến)
+        const denominations = [
+            { value: 500000, label: "500,000 VNĐ", short: "500K", color: "#ff6b6b" },
+            { value: 200000, label: "200,000 VNĐ", short: "200K", color: "#4ecdc4" },
+            { value: 100000, label: "100,000 VNĐ", short: "100K", color: "#45b7d1" },
+            { value: 50000, label: "50,000 VNĐ", short: "50K", color: "#96ceb4" },
+            { value: 20000, label: "20,000 VNĐ", short: "20K", color: "#feca57" },
+            { value: 10000, label: "10,000 VNĐ", short: "10K", color: "#ff9ff3" },
+            { value: 5000, label: "5,000 VNĐ", short: "5K", color: "#54a0ff" },
+            { value: 2000, label: "2,000 VNĐ", short: "2K", color: "#5f27cd" },
+            { value: 1000, label: "1,000 VNĐ", short: "1K", color: "#c8d6e5" }
+        ];
+
+        // Biến lưu doanh thu ca được chọn
+        let selectedShiftRevenue = 0;
+        let currentCalculations = [];
+        
+        // Hàm định dạng tiền tệ
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(amount);
+        }
+        
+        // Hàm hiển thị toast
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            toastMessage.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Hàm tạo bảng nhập liệu
+        function createDenominationTable() {
+            const tbody = document.getElementById('denominations-body');
+            tbody.innerHTML = '';
+            
+            denominations.forEach((denom, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="denomination-info">
+                            <div class="denomination-icon" style="background-color: ${denom.color}">
+                                ${denom.short}
+                            </div>
+                            <div class="denomination-text">
+                                <div class="denomination-value">${denom.label}</div>
+                                <div class="denomination-label">${formatCurrency(denom.value)}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="input-cell">
+                        <input 
+                            type="number" 
+                            class="bill-input" 
+                            id="denom-${denom.value}"
+                            placeholder="0"
+                            min="0"
+                            oninput="calculateSingleRow(${denom.value})"
+                            onfocus="this.select()"
+                        >
+                        <div class="quick-controls">
+                            <button class="quick-btn" onclick="quickAdd(${denom.value}, 1)">+1</button>
+                            <button class="quick-btn" onclick="quickAdd(${denom.value}, 5)">+5</button>
+                            <button class="quick-btn" onclick="quickAdd(${denom.value}, 10)">+10</button>
+                            <button class="quick-btn" onclick="quickAdd(${denom.value}, -1)">-1</button>
+                        </div>
+                    </td>
+                    <td class="amount-cell" id="amount-${denom.value}">
+                        0 ₫
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Hàm thêm nhanh số tờ
+        function quickAdd(denomValue, amount) {
+            const input = document.getElementById(`denom-${denomValue}`);
+            let currentValue = parseInt(input.value) || 0;
+            let newValue = currentValue + amount;
+            
+            if (newValue < 0) newValue = 0;
+            
+            input.value = newValue;
+            calculateSingleRow(denomValue);
+        }
+        
+        // Hàm tính toán một dòng
+        function calculateSingleRow(denomValue) {
+            const input = document.getElementById(`denom-${denomValue}`);
+            const amountCell = document.getElementById(`amount-${denomValue}`);
+            const quantity = parseInt(input.value) || 0;
+            const amount = quantity * denomValue;
+            
+            amountCell.textContent = formatCurrency(amount);
+            
+            // Tự động tính tổng khi nhập (không cuộn trang)
+            setTimeout(() => calculateTotal(false), 100);
+        }
+        
+        // Hàm tính tổng tiền (với tùy chọn cuộn trang)
+        function calculateTotal(scrollToResult = false) {
+            let total = 0;
+            currentCalculations = [];
+            
+            denominations.forEach(denom => {
+                const input = document.getElementById(`denom-${denom.value}`);
+                const quantity = parseInt(input.value) || 0;
+                
+                if (quantity > 0) {
+                    const amount = quantity * denom.value;
+                    total += amount;
+                    
+                    currentCalculations.push({
+                        denomination: denom.value,
+                        label: denom.label,
+                        quantity: quantity,
+                        amount: amount
+                    });
+                }
+            });
+            
+            displayResults(total);
+            
+            // Tự động cuộn lên phần kết quả nếu được yêu cầu
+            if (scrollToResult) {
+                const resultHeader = document.getElementById('result-header');
+                if (resultHeader) {
+                    resultHeader.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start',
+                        inline: 'nearest'
+                    });
+                }
+            }
+            
+            return total;
+        }
+        
+        // Hàm hiển thị kết quả (trên cùng)
+        function displayResults(total) {
+            const resultHeader = document.getElementById('result-header');
+            const totalAmount = document.getElementById('total-amount');
+            const revenueTotal = document.getElementById('revenue-total');
+            const differenceAmount = document.getElementById('difference-amount');
+            const statusText = document.getElementById('status-text');
+            
+            // Hiển thị kết quả
+            totalAmount.textContent = formatCurrency(total);
+            
+            // Tính chênh lệch với doanh thu ca
+            const difference = total - selectedShiftRevenue;
+            differenceAmount.textContent = formatCurrency(difference);
+            
+            // Hiển thị doanh thu ca
+            revenueTotal.textContent = formatCurrency(selectedShiftRevenue);
+            
+            // Hiển thị tình trạng
+            if (difference === 0) {
+                statusText.textContent = "ĐẦY ĐỦ";
+                statusText.className = "comparison-value positive";
+            } else if (difference > 0) {
+                statusText.textContent = `DƯ ${formatCurrency(difference)}`;
+                statusText.className = "comparison-value positive";
+            } else {
+                statusText.textContent = `THIẾU ${formatCurrency(Math.abs(difference))}`;
+                statusText.className = "comparison-value negative";
+            }
+            
+            resultHeader.style.display = 'block';
+        }
+        
+        // Hàm reset form
+        function resetForm() {
+            denominations.forEach(denom => {
+                const input = document.getElementById(`denom-${denom.value}`);
+                input.value = '';
+                document.getElementById(`amount-${denom.value}`).textContent = '0 ₫';
+            });
+            
+            document.getElementById('result-header').style.display = 'none';
+            showToast('✅ Đã xóa tất cả số liệu!');
+            
+            // Tự động focus vào ô nhập đầu tiên sau khi reset
+            setTimeout(() => {
+                const firstInput = document.getElementById('denom-500000');
+                if (firstInput) firstInput.focus();
+            }, 300);
+        }
+        
+        // Hàm lưu kết quả
+        function saveCount() {
+            const selectedShift = document.getElementById('select-shift').value;
+            const total = calculateTotal(false);
+            
+            if (total === 0) {
+                showToast('⚠️ Chưa có số liệu để lưu!', 'error');
+                return;
+            }
+            
+            if (!selectedShift) {
+                showToast('⚠️ Vui lòng chọn ca trước khi lưu!', 'error');
+                return;
+            }
+            
+            const countData = {
+                shift: selectedShift,
+                timestamp: new Date().toISOString(),
+                total: total,
+                revenue: selectedShiftRevenue,
+                difference: total - selectedShiftRevenue,
+                details: currentCalculations
+            };
+            
+            let savedCounts = JSON.parse(localStorage.getItem('money_counts') || '[]');
+            savedCounts = savedCounts.filter(item => item.shift !== selectedShift);
+            savedCounts.push(countData);
+            
+            localStorage.setItem('money_counts', JSON.stringify(savedCounts));
+            
+            showToast(`✅ Đã lưu kết quả cho ca ${getShiftDisplayName(selectedShift)}`);
+        }
+        
+        // Hàm sao chép kết quả
+        async function copyToClipboard() {
+            const total = calculateTotal(false);
+            
+            if (total === 0) {
+                showToast('⚠️ Chưa có số liệu để sao chép!', 'error');
+                return;
+            }
+            
+            const selectedShift = document.getElementById('select-shift').value;
+            const shiftName = selectedShift ? getShiftDisplayName(selectedShift) : 'Không xác định';
+            const difference = total - selectedShiftRevenue;
+            
+            let text = `=== KẾT QUẢ ĐẾM TIỀN ===\n`;
+            text += `Ca: ${shiftName}\n`;
+            text += `Thời gian: ${new Date().toLocaleString('vi-VN')}\n\n`;
+            
+            text += `CHI TIẾT MỆNH GIÁ:\n`;
+            currentCalculations.forEach(item => {
+                text += `${item.label.padEnd(15)} × ${item.quantity.toString().padStart(3)} tờ = ${formatCurrency(item.amount)}\n`;
+            });
+            
+            text += `\nTỔNG ĐẾM ĐƯỢC: ${formatCurrency(total)}\n`;
+            text += `DOANH THU CA: ${formatCurrency(selectedShiftRevenue)}\n`;
+            
+            if (difference > 0) {
+                text += `CHÊNH LỆCH: DƯ ${formatCurrency(difference)}\n`;
+            } else if (difference < 0) {
+                text += `CHÊNH LỆCH: THIẾU ${formatCurrency(Math.abs(difference))}\n`;
+            } else {
+                text += `CHÊNH LỆCH: ĐẦY ĐỦ\n`;
+            }
+            
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast('✅ Đã sao chép kết quả vào clipboard!');
+            } catch (err) {
+                showToast('❌ Lỗi khi sao chép!', 'error');
+                console.error(err);
+            }
+        }
+        
+        // Hàm lấy tên hiển thị của ca
+        function getShiftDisplayName(shiftKey) {
+            if (/^\d{4}-\d{2}-\d{2}/.test(shiftKey)) {
+                const d = new Date(shiftKey);
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const year = d.getFullYear();
+                return `Ca ${day}-${month}-${year}`;
+            }
+            return shiftKey;
+        }
+        
+        // Hàm tải danh sách ca và doanh thu
+        async function loadShiftsAndRevenue() {
+            try {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec');
+                const data = await response.json();
+                
+                const shiftMap = new Map();
+                
+                // Tính doanh thu từng ca
+                data.forEach(item => {
+                    if (item.ca && item.so_tien) {
+                        const amount = parseInt(item.so_tien) || 0;
+                        if (shiftMap.has(item.ca)) {
+                            shiftMap.set(item.ca, shiftMap.get(item.ca) + amount);
+                        } else {
+                            shiftMap.set(item.ca, amount);
+                        }
+                    }
+                });
+                
+                // Điền vào dropdown
+                const select = document.getElementById('select-shift');
+                const shifts = Array.from(shiftMap.entries()).sort((a, b) => {
+                    // Sắp xếp theo ngày giảm dần
+                    return b[0].localeCompare(a[0]);
+                });
+                
+                shifts.forEach(([shiftKey, revenue]) => {
+                    const option = document.createElement('option');
+                    option.value = shiftKey;
+                    option.textContent = `${getShiftDisplayName(shiftKey)} (${formatCurrency(revenue)})`;
+                    option.dataset.revenue = revenue;
+                    select.appendChild(option);
+                });
+                
+                // Sự kiện khi chọn ca
+                select.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    selectedShiftRevenue = parseInt(selectedOption.dataset.revenue) || 0;
+                    
+                    // Load kết quả đã lưu nếu có
+                    loadSavedCount();
+                    
+                    // Tính lại nếu đã có dữ liệu
+                    if (currentCalculations.length > 0) {
+                        calculateTotal(false);
+                    }
+                });
+                
+            } catch (error) {
+                console.log('Không thể tải dữ liệu từ server:', error);
+                createSampleShifts();
+            }
+        }
+        
+        // Hàm tạo ca mẫu
+        function createSampleShifts() {
+            const select = document.getElementById('select-shift');
+            const today = new Date();
+            
+            // Tạo 5 ca gần nhất
+            for (let i = 0; i < 5; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() - i);
+                
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const shiftKey = `${year}-${month}-${day}`;
+                
+                // Doanh thu ngẫu nhiên mẫu
+                const sampleRevenue = Math.floor(Math.random() * 50000000) + 10000000;
+                
+                const option = document.createElement('option');
+                option.value = shiftKey;
+                option.textContent = `${getShiftDisplayName(shiftKey)} (${formatCurrency(sampleRevenue)})`;
+                option.dataset.revenue = sampleRevenue;
+                select.appendChild(option);
+            }
+        }
+        
+        // Hàm load kết quả đã lưu
+        function loadSavedCount() {
+            const selectedShift = document.getElementById('select-shift').value;
+            if (!selectedShift) return;
+            
+            const savedCounts = JSON.parse(localStorage.getItem('money_counts') || '[]');
+            const savedData = savedCounts.find(item => item.shift === selectedShift);
+            
+            if (savedData) {
+                // Điền số liệu vào form
+                savedData.details.forEach(item => {
+                    const input = document.getElementById(`denom-${item.denomination}`);
+                    if (input) {
+                        input.value = item.quantity;
+                        calculateSingleRow(item.denomination);
+                    }
+                });
+                
+                // Tính và hiển thị kết quả (không cuộn trang)
+                calculateTotal(false);
+                showToast('✅ Đã tải số liệu đã lưu!');
+            }
+        }
+        
+        // Khởi tạo trang
+        document.addEventListener('DOMContentLoaded', function() {
+            createDenominationTable();
+            loadShiftsAndRevenue();
+            
+            // Tự động focus vào ô nhập đầu tiên
+            setTimeout(() => {
+                const firstInput = document.getElementById('denom-500000');
+                if (firstInput) firstInput.focus();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
