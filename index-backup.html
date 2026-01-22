@@ -1440,50 +1440,9 @@ let expenseTemplateList = [];
 // Biến toàn cục để lưu danh sách chi tiêu của ca hiện tại
 let currentExpenses = [];
 
-// ========== HÀM RUNG ĐIỆN THOẠI ==========
-function vibratePhone() {
-  // Kiểm tra xem trình duyệt có hỗ trợ rung không
-  if ("vibrate" in navigator) {
-    // Rung với pattern: 100ms rung, 50ms nghỉ, 100ms rung
-    navigator.vibrate([100, 50, 100]);
-  } else {
-    // Fallback cho trình duyệt không hỗ trợ
-    console.log("Trình duyệt không hỗ trợ rung");
-  }
-}
-
-// Hàm rung ngắn cho các thao tác nhẹ
-function vibrateShort() {
-  if ("vibrate" in navigator) {
-    navigator.vibrate(100);
-  }
-}
-
-// Hàm rung dài cho các thao tác quan trọng
-function vibrateLong() {
-  if ("vibrate" in navigator) {
-    navigator.vibrate([200, 50, 200]);
-  }
-}
-
-// Hàm rung cho xác nhận thành công
-function vibrateSuccess() {
-  if ("vibrate" in navigator) {
-    navigator.vibrate([100, 50, 100, 50, 100]);
-  }
-}
-
-// Hàm rung cho cảnh báo lỗi
-function vibrateError() {
-  if ("vibrate" in navigator) {
-    navigator.vibrate([300, 100, 300]);
-  }
-}
-
 // HÀM MỚI: Mở modal báo cáo cuối ca
 function openReportModal() {
   closeSidebar();
-  vibrateShort(); // Rung khi mở modal
   
   // Load danh sách người nhận từ localStorage
   loadRecipients();
@@ -1578,14 +1537,11 @@ function updateExpenseTemplatesDatalist() {
 
 // HÀM MỚI: Lưu người nhận mới
 function saveRecipient() {
-  vibrateShort(); // Rung khi bấm nút
-  
   const recipientInput = document.getElementById('report-recipient');
   const recipient = recipientInput.value.trim();
   
   if (!recipient) {
     showToast('⚠️ Vui lòng nhập tên người nhận!', 'error');
-    vibrateError();
     return;
   }
   
@@ -1598,10 +1554,8 @@ function saveRecipient() {
     loadRecipients();
     
     showToast('✅ Đã lưu người nhận mới!');
-    vibrateSuccess();
   } else {
     showToast('ℹ️ Người nhận đã có trong danh sách!');
-    vibrateShort();
   }
   
   // Cập nhật thông tin báo cáo
@@ -1610,21 +1564,17 @@ function saveRecipient() {
 
 // HÀM MỚI: Thêm chi tiêu vào danh sách - ĐÃ CẬP NHẬT LOGIC
 function addExpense() {
-  vibrateShort(); // Rung khi bấm nút
-  
   const expenseName = document.getElementById('expense-name').value.trim();
   const expenseAmount = document.getElementById('expense-amount').value.trim();
   
   if (!expenseName || !expenseAmount) {
     showToast('⚠️ Vui lòng nhập đầy đủ mô tả và số tiền chi tiêu!', 'error');
-    vibrateError();
     return;
   }
   
   const amount = parseInt(expenseAmount);
   if (isNaN(amount) || amount <= 0) {
     showToast('⚠️ Số tiền chi tiêu không hợp lệ!', 'error');
-    vibrateError();
     return;
   }
   
@@ -1646,7 +1596,6 @@ function addExpense() {
       localStorage.setItem('gas_point_expense_templates', JSON.stringify(expenseTemplateList));
       updateExpenseTemplatesDatalist();
       showToast('✅ Đã lưu vào danh sách chi tiêu mẫu!');
-      vibrateSuccess();
     }
   }
   
@@ -1679,7 +1628,7 @@ function updateExpensesList() {
           <div class="expense-item-name">${expense.name}</div>
         </div>
         <div class="expense-item-amount">-${formatCurrency(expense.amount)}</div>
-        <button class="expense-item-delete" onclick="removeExpense(${index})" onmousedown="vibrateShort()">×</button>
+        <button class="expense-item-delete" onclick="removeExpense(${index})">×</button>
       </div>
     `;
   });
@@ -1693,7 +1642,6 @@ function updateExpensesList() {
 
 // HÀM MỚI: Xóa chi tiêu khỏi danh sách
 function removeExpense(index) {
-  vibrateShort(); // Rung khi xóa chi tiêu
   currentExpenses.splice(index, 1);
   updateExpensesList();
   updateReportSummary();
@@ -1751,14 +1699,11 @@ function updateReportSummary() {
 
 // HÀM MỚI: Tạo báo cáo và copy vào clipboard
 async function generateReport() {
-  vibrateLong(); // Rung khi tạo báo cáo
-  
   const selectedShift = document.getElementById('report-shift').value;
   const recipient = document.getElementById('report-recipient').value;
   
   if (!selectedShift || !recipient) {
     showToast('⚠️ Vui lòng chọn ca và người nhận!', 'error');
-    vibrateError();
     return;
   }
   
@@ -1766,7 +1711,6 @@ async function generateReport() {
   
   if (shiftData.length === 0) {
     showToast('❌ Không có dữ liệu cho ca này!', 'error');
-    vibrateError();
     return;
   }
   
@@ -1796,14 +1740,12 @@ async function generateReport() {
   
   if (copySuccess) {
     showToast('✅ Đã sao chép báo cáo vào clipboard!');
-    vibrateSuccess();
     closeModal('report-modal');
     
     // Hiển thị nội dung đã copy (tùy chọn)
     console.log('Nội dung báo cáo:', reportContent);
   } else {
     showToast('❌ Không thể sao chép vào clipboard!', 'error');
-    vibrateError();
   }
 }
 
@@ -1815,7 +1757,6 @@ function formatNumber(amount) {
 // HÀM MỚI: Mở modal chuyển trạng thái đồng loạt
 function openBatchStatusModal() {
   closeSidebar();
-  vibrateShort(); // Rung khi mở modal
   
   const shifts = new Set();
   allData.forEach(item => {
@@ -1850,8 +1791,6 @@ function openBatchStatusModal() {
 
 // HÀM MỚI: Cập nhật thông tin khi chọn ca trong modal chuyển trạng thái
 function updateBatchStatusInfo() {
-  vibrateShort(); // Rung ngắn khi thay đổi lựa chọn
-  
   const selectedShift = document.getElementById('batch-status-shift').value;
   const newStatus = document.getElementById('batch-status-new-status').value;
   const infoDiv = document.getElementById('batch-status-info');
@@ -1893,14 +1832,11 @@ function updateBatchStatusInfo() {
 
 // HÀM MỚI: Xác nhận chuyển trạng thái đồng loạt - ĐÃ SỬA LỖI
 async function confirmBatchStatusUpdate() {
-  vibrateLong(); // Rung dài khi xác nhận thao tác quan trọng
-  
   const selectedShift = document.getElementById('batch-status-shift').value;
   const newStatus = document.getElementById('batch-status-new-status').value;
   
   if (!selectedShift) {
     showToast('⚠️ Vui lòng chọn một ca!', 'error');
-    vibrateError();
     return;
   }
   
@@ -1908,7 +1844,6 @@ async function confirmBatchStatusUpdate() {
   
   if (shiftData.length === 0) {
     showToast('✅ Không có điểm gas nào cần chuyển đổi!');
-    vibrateShort();
     return;
   }
   
@@ -1956,10 +1891,8 @@ async function confirmBatchStatusUpdate() {
   // Hiển thị kết quả
   if (errorCount === 0) {
     showToast(`✅ Đã chuyển thành công ${successCount} điểm gas sang "${newStatus}"`);
-    vibrateSuccess();
   } else {
     showToast(`⚠️ Đã chuyển ${successCount} điểm, ${errorCount} điểm lỗi`, 'error');
-    vibrateError();
   }
   
   // Đóng modal và cập nhật giao diện - ĐÃ SỬA: Gọi filterData() thay vì taiDuLieu()
@@ -2038,7 +1971,6 @@ async function copyToClipboard(text) {
 
 // Hàm mở/đóng sidebar
 function toggleSidebar() {
-  vibrateShort(); // Rung khi mở/đóng sidebar
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
   
@@ -2058,13 +1990,11 @@ function closeSidebar() {
 // Hàm xuất dữ liệu dạng văn bản
 async function exportToText() {
   closeSidebar();
-  vibrateShort(); // Rung khi xuất dữ liệu
   
   const dataToExport = currentFilteredData.length > 0 ? currentFilteredData : allData;
   
   if (dataToExport.length === 0) {
     showToast('❌ Không có dữ liệu để xuất!', 'error');
-    vibrateError();
     return;
   }
   
@@ -2089,22 +2019,18 @@ async function exportToText() {
   
   if (copySuccess) {
     showToast('✅ Đã xuất dữ liệu và sao chép vào clipboard!');
-    vibrateSuccess();
   } else {
     showToast('✅ Đã xuất dữ liệu, nhưng không thể sao chép vào clipboard', 'error');
-    vibrateError();
   }
 }
 
 // THÊM HÀM MỚI: Mở modal thêm điểm ngoài ca
 function openOutOfHoursModal() {
   closeSidebar();
-  vibrateShort(); // Rung khi mở modal
   
   const shiftInfo = getCurrentShift();
   if (shiftInfo.start) {
     showToast('⚠️ Bạn đang trong ca làm việc, hãy sử dụng chức năng thêm điểm bình thường!', 'error');
-    vibrateError();
     return;
   }
   
@@ -2142,12 +2068,9 @@ function openOutOfHoursModal() {
 
 // THÊM HÀM MỚI: Sử dụng ngày tùy chỉnh
 function useCustomShift() {
-  vibrateShort(); // Rung khi bấm nút
-  
   const customDate = document.getElementById('custom-shift-date').value;
   if (!customDate) {
     showToast('⚠️ Vui lòng chọn ngày!', 'error');
-    vibrateError();
     return;
   }
   
@@ -2160,19 +2083,15 @@ function useCustomShift() {
   document.getElementById('out-of-hours-shift').value = selectedOutOfHoursShift;
   
   showToast(`✅ Đã chọn ca ngày ${day}-${month}-${year}`);
-  vibrateSuccess();
 }
 
 // THÊM HÀM MỚI: Xác nhận ca khi thêm ngoài giờ
 function confirmOutOfHoursShift() {
-  vibrateShort(); // Rung khi xác nhận
-  
   const shiftSelect = document.getElementById('out-of-hours-shift');
   const selectedShift = shiftSelect.value;
   
   if (!selectedShift) {
     showToast('⚠️ Vui lòng chọn một ca!', 'error');
-    vibrateError();
     return;
   }
   
@@ -2180,7 +2099,6 @@ function confirmOutOfHoursShift() {
   closeModal('out-of-hours-modal');
   
   showToast(`✅ Đã chọn ca: ${formatShiftName(selectedShift)}. Bạn có thể thêm điểm gas bây giờ.`);
-  vibrateSuccess();
   
   document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
 }
@@ -2200,7 +2118,6 @@ function formatShiftName(shiftKey) {
 // THÊM HÀM MỚI: Mở modal xem nhanh
 function openQuickViewModal() {
   closeSidebar();
-  vibrateShort(); // Rung khi mở modal
   
   const shifts = new Set();
   allData.forEach(item => {
@@ -2237,8 +2154,6 @@ function openQuickViewModal() {
 
 // THÊM HÀM MỚI: Cập nhật danh sách xem nhanh
 function updateQuickViewList() {
-  vibrateShort(); // Rung ngắn khi thay đổi lựa chọn
-  
   const selectedShift = document.getElementById('quick-view-shift').value;
   const listContainer = document.getElementById('quick-view-list');
   const totalContainer = document.getElementById('quick-view-total');
@@ -2420,19 +2335,16 @@ function displayStats(stats) {
 
 // Lọc dữ liệu theo ca
 function filterByShift() {
-  vibrateShort(); // Rung khi lọc dữ liệu
   filterData();
 }
 
 // Lọc dữ liệu theo điểm
 function filterByDiem() {
-  vibrateShort(); // Rung khi lọc dữ liệu
   filterData();
 }
 
 // Lọc dữ liệu theo trạng thái
 function filterByTrangThai() {
-  vibrateShort(); // Rung khi lọc dữ liệu
   filterData();
 }
 
@@ -2506,15 +2418,15 @@ function displayData(data) {
       <td data-label="Địa chỉ">${row.dia_chi}</td>
       <td data-label="Trạng thái">
         <div class="status-toggle-wrapper">
-          <span class="badge ${badgeClass} status-toggle" onclick="toggleTrangThai('${row.id}')" onmousedown="vibrateShort()">${row.trang_thai || 'Chưa nộp'}</span>
+          <span class="badge ${badgeClass} status-toggle" onclick="toggleTrangThai('${row.id}')">${row.trang_thai || 'Chưa nộp'}</span>
         </div>
       </td>
       <td data-label="Ca"><span class="badge badge-primary">${caLabel}</span></td>
       <td data-label="Thời gian">${row.timestamp ? new Date(row.timestamp).toLocaleString('vi-VN') : 'Không xác định'}</td>
       <td data-label="Thao tác">
         <div class="action-buttons">
-          <button class="btn-secondary btn-sm" onclick="editItem('${row.id}')" onmousedown="vibrateShort()">✏️ Sửa</button>
-          <button class="btn-danger btn-sm" onclick="deleteItem('${row.id}')" onmousedown="vibrateShort()">🗑️ Xóa</button>
+          <button class="btn-secondary btn-sm" onclick="editItem('${row.id}')">✏️ Sửa</button>
+          <button class="btn-danger btn-sm" onclick="deleteItem('${row.id}')">🗑️ Xóa</button>
         </div>
       </td>
     `;
@@ -2524,8 +2436,6 @@ function displayData(data) {
 
 // Hàm thay đổi trạng thái nhanh
 function toggleTrangThai(id) {
-  vibrateShort(); // Rung khi thay đổi trạng thái
-  
   const item = allData.find(item => item.id === id);
   if (!item) return;
 
@@ -2552,7 +2462,6 @@ function toggleTrangThai(id) {
   .then(result => {
     if (result.result === 'success') {
       showToast('✅ Đã cập nhật trạng thái!');
-      vibrateSuccess();
       const index = allData.findIndex(item => item.id === id);
       if (index !== -1) {
         allData[index] = updatedItem;
@@ -2562,13 +2471,11 @@ function toggleTrangThai(id) {
       filterData();
     } else {
       showToast('❌ Có lỗi xảy ra khi cập nhật trạng thái!', 'error');
-      vibrateError();
       taiDuLieu();
     }
   })
   .catch(error => {
     showToast('❌ Có lỗi xảy ra khi cập nhật trạng thái!', 'error');
-    vibrateError();
     console.error(error);
     taiDuLieu();
   });
@@ -2618,8 +2525,6 @@ function updateFilters(data) {
 // Reset form
 function resetForm() {
   closeSidebar();
-  vibrateShort(); // Rung khi reset form
-  
   editingId = null;
   selectedOutOfHoursShift = null;
   document.getElementById('chon_diem').value = '';
@@ -2666,8 +2571,6 @@ function findLatestEntryForDiem(diemName) {
 
 // HÀM CẬP NHẬT: Chọn điểm gas (tự động điền địa chỉ và số tiền của lần gần nhất)
 function chonDiem() {
-  vibrateShort(); // Rung ngắn khi chọn điểm
-  
   const val = document.getElementById('chon_diem').value;
   const tenDiemInput = document.getElementById('ten_diem');
   const diaChiInput = document.getElementById('dia_chi');
@@ -2711,27 +2614,22 @@ function chonDiem() {
 
 // Xử lý nút lưu vị trí GPS - ĐÃ CẬP NHẬT
 function saveLocation() {
-  vibrateShort(); // Rung khi bấm nút lưu vị trí
-  
   const tenDiem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
   
   // Kiểm tra xem đã chọn điểm gas chưa
   if (!tenDiem) {
     showToast('⚠️ Vui lòng chọn điểm gas trước khi lưu vị trí!', 'error');
-    vibrateError();
     return;
   }
   
   // Kiểm tra xem điểm gas này đã có vị trí GPS chưa
   if (hasExistingGPSLocation(tenDiem)) {
     showToast('❌ Điểm gas này đã được lưu vị trí GPS trước đó!', 'error');
-    vibrateError();
     return;
   }
   
   if (!navigator.geolocation) {
     showToast('❌ Thiết bị không hỗ trợ GPS!', 'error');
-    vibrateError();
     return;
   }
   
@@ -2750,7 +2648,6 @@ function saveLocation() {
       ghiChuInput.value = ghiChu + ` [GPS: ${lat}, ${lng}]`;
       
       showToast('✅ Đã lưu vị trí GPS thực tế!');
-      vibrateSuccess();
       btn.textContent = '📍 Đã lưu vị trí';
       btn.disabled = false;
       
@@ -2760,7 +2657,6 @@ function saveLocation() {
     }, 
     function(err) {
       showToast('❌ Không thể lấy vị trí: ' + err.message, 'error');
-      vibrateError();
       btn.textContent = '📍 Lưu vị trí';
       btn.disabled = false;
       btn.className = 'btn-success btn-sm';
@@ -2775,8 +2671,6 @@ function saveLocation() {
 
 // Chỉnh sửa item
 function editItem(id) {
-  vibrateShort(); // Rung khi bấm nút sửa
-  
   const item = allData.find(item => item.id === id);
   if (!item) return;
   
@@ -2811,8 +2705,6 @@ function editItem(id) {
 
 // Xóa item
 function deleteItem(id) {
-  vibrateShort(); // Rung khi bấm nút xóa
-  
   const item = allData.find(item => item.id === id);
   if (!item) return;
   
@@ -2825,8 +2717,6 @@ function deleteItem(id) {
 
 // Xác nhận xóa
 function confirmDelete() {
-  vibrateLong(); // Rung dài khi xác nhận xóa
-  
   if (!itemToDelete) return;
   
   const data = { 
@@ -2842,17 +2732,14 @@ function confirmDelete() {
   .then(result => {
     if (result.result === 'success') {
       showToast('✅ Đã xóa thành công!');
-      vibrateSuccess();
       closeModal('delete-modal');
       taiDuLieu();
     } else {
       showToast('❌ Có lỗi xảy ra khi xóa!', 'error');
-      vibrateError();
     }
   })
   .catch(error => {
     showToast('❌ Có lỗi xảy ra khi xóa!', 'error');
-    vibrateError();
     console.error(error);
   });
 }
@@ -2880,8 +2767,6 @@ function closeModal(modalId) {
 document.getElementById('btn-save-location').addEventListener('click', saveLocation);
 
 async function guiDuLieu() {
-  vibrateShort(); // Rung khi bắt đầu lưu dữ liệu
-  
   const btnSubmit = document.getElementById('btn-submit');
   if (btnSubmit.disabled) return;
 
@@ -2893,7 +2778,6 @@ async function guiDuLieu() {
 
   if (!ten_diem || !so_tien || !dia_chi) {
     showToast('⚠️ Vui lòng nhập đầy đủ thông tin!', 'error');
-    vibrateError();
     return;
   }
 
@@ -2902,7 +2786,6 @@ async function guiDuLieu() {
     
     if (!selectedOutOfHoursShift && !shiftInfo.start) {
       showToast('⚠️ Hiện tại không trong ca làm việc! Vui lòng sử dụng chức năng "Thêm điểm ngoài ca" từ menu.', 'error');
-      vibrateError();
       return;
     }
   }
@@ -2939,16 +2822,13 @@ async function guiDuLieu() {
     
     if (result.result === 'success') {
       showToast(editingId ? '✅ Đã cập nhật thành công!' : '✅ Đã lưu thành công!');
-      vibrateSuccess();
       resetForm();
       taiDuLieu();
     } else {
       showToast('❌ Có lỗi xảy ra khi lưu dữ liệu!', 'error');
-      vibrateError();
     }
   } catch (error) {
     showToast('❌ Có lỗi xảy ra khi lưu dữ liệu!', 'error');
-    vibrateError();
     console.error(error);
   } finally {
     btnSubmit.textContent = editingId ? '💾 Cập nhật' : '💾 Lưu thông tin';
@@ -2958,8 +2838,6 @@ async function guiDuLieu() {
 
 async function taiDuLieu() {
   closeSidebar();
-  vibrateShort(); // Rung khi tải dữ liệu
-  
   try {
     const res = await fetch(scriptURL);
     const data = await res.json();
@@ -2988,7 +2866,6 @@ async function taiDuLieu() {
     
   } catch (error) {
     showToast('❌ Có lỗi xảy ra khi tải dữ liệu!', 'error');
-    vibrateError();
     console.error(error);
   }
 }
@@ -3019,7 +2896,6 @@ window.addEventListener('scroll', function() {
 
 // Xử lý sự kiện cuộn về đầu trang
 document.getElementById('scrollTopBtn').onclick = function() {
-  vibrateShort(); // Rung khi bấm nút cuộn lên
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
@@ -3053,7 +2929,6 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Thêm sự kiện cho ô nhập tên chi tiêu (tự động điền số tiền từ mẫu)
   document.getElementById('expense-name').addEventListener('change', function() {
-    vibrateShort(); // Rung khi chọn từ datalist
     const expenseName = this.value.trim();
     if (!expenseName) return;
     
@@ -3069,24 +2944,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let value = this.value.trim();
     if (/^\d+$/.test(value) && value.length > 0 && value.length <= 3) {
       this.value = value + '000';
-      vibrateShort(); // Rung khi tự động thêm '000'
     }
-  });
-  
-  // Thêm rung cho các nút trong sidebar
-  const sidebarItems = document.querySelectorAll('.sidebar-item');
-  sidebarItems.forEach(item => {
-    item.addEventListener('mousedown', function() {
-      vibrateShort();
-    });
-  });
-  
-  // Thêm rung cho các nút chính trong form
-  const mainButtons = document.querySelectorAll('.button-group button, .btn-sm');
-  mainButtons.forEach(button => {
-    button.addEventListener('mousedown', function() {
-      vibrateShort();
-    });
   });
   
   setInterval(updateShiftInfo, 60000);
