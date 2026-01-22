@@ -1440,50 +1440,127 @@ let expenseTemplateList = [];
 // Biến toàn cục để lưu danh sách chi tiêu của ca hiện tại
 let currentExpenses = [];
 
-// ========== HÀM RUNG ĐIỆN THOẠI ==========
-function vibratePhone() {
-  // Kiểm tra xem trình duyệt có hỗ trợ rung không
-  if ("vibrate" in navigator) {
-    // Rung với pattern: 100ms rung, 50ms nghỉ, 100ms rung
-    navigator.vibrate([100, 50, 100]);
-  } else {
-    // Fallback cho trình duyệt không hỗ trợ
-    console.log("Trình duyệt không hỗ trợ rung");
+// Biến để lưu AudioContext cho âm thanh click
+let audioContext = null;
+let clickSoundBuffer = null;
+
+// ========== HÀM TẠO ÂM THANH CLICK CHO IPHONE ==========
+function initAudio() {
+  try {
+    // Tạo AudioContext
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Tạo âm thanh click đơn giản
+    const duration = 0.1;
+    const sampleRate = audioContext.sampleRate;
+    const frameCount = duration * sampleRate;
+    const buffer = audioContext.createBuffer(1, frameCount, sampleRate);
+    const channelData = buffer.getChannelData(0);
+    
+    // Tạo sóng sine ngắn cho âm thanh click
+    for (let i = 0; i < frameCount; i++) {
+      channelData[i] = Math.sin(2 * Math.PI * 800 * i / sampleRate) * 
+                      Math.exp(-i / (sampleRate * 0.01));
+    }
+    
+    clickSoundBuffer = buffer;
+  } catch (error) {
+    console.log("Không thể khởi tạo âm thanh:", error);
   }
 }
 
-// Hàm rung ngắn cho các thao tác nhẹ
+// Hàm phát âm thanh click
+function playClickSound() {
+  try {
+    if (!audioContext) {
+      initAudio();
+    }
+    
+    if (audioContext && clickSoundBuffer) {
+      const source = audioContext.createBufferSource();
+      source.buffer = clickSoundBuffer;
+      
+      const gainNode = audioContext.createGain();
+      gainNode.gain.value = 0.3;
+      
+      source.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      source.start();
+      
+      // Tự động ngắt kết nối sau khi phát xong
+      source.onended = () => {
+        source.disconnect();
+        gainNode.disconnect();
+      };
+      
+      return true;
+    }
+  } catch (error) {
+    console.log("Không thể phát âm thanh:", error);
+  }
+  return false;
+}
+
+// ========== HÀM PHẢN HỒI XÚC GIÁC (RUNG/ÂM THANH) ==========
+function provideHapticFeedback(type = 'short') {
+  // Thử rung trước (cho Android và các thiết bị hỗ trợ)
+  let vibrated = false;
+  
+  if ("vibrate" in navigator) {
+    try {
+      switch(type) {
+        case 'short':
+          navigator.vibrate(50);
+          break;
+        case 'long':
+          navigator.vibrate(100);
+          break;
+        case 'success':
+          navigator.vibrate([50, 30, 50]);
+          break;
+        case 'error':
+          navigator.vibrate([100, 50, 100]);
+          break;
+        default:
+          navigator.vibrate(50);
+      }
+      vibrated = true;
+    } catch (error) {
+      console.log("Lỗi khi rung:", error);
+    }
+  }
+  
+  // Nếu không rung được (iPhone) thì phát âm thanh click
+  if (!vibrated) {
+    playClickSound();
+  }
+}
+
+// Hàm rung/âm thanh ngắn cho thao tác nhẹ
 function vibrateShort() {
-  if ("vibrate" in navigator) {
-    navigator.vibrate(100);
-  }
+  provideHapticFeedback('short');
 }
 
-// Hàm rung dài cho các thao tác quan trọng
+// Hàm rung/âm thanh dài cho thao tác quan trọng
 function vibrateLong() {
-  if ("vibrate" in navigator) {
-    navigator.vibrate([200, 50, 200]);
-  }
+  provideHapticFeedback('long');
 }
 
-// Hàm rung cho xác nhận thành công
+// Hàm rung/âm thanh cho thành công
 function vibrateSuccess() {
-  if ("vibrate" in navigator) {
-    navigator.vibrate([100, 50, 100, 50, 100]);
-  }
+  provideHapticFeedback('success');
 }
 
-// Hàm rung cho cảnh báo lỗi
+// Hàm rung/âm thanh cho lỗi
 function vibrateError() {
-  if ("vibrate" in navigator) {
-    navigator.vibrate([300, 100, 300]);
-  }
+  provideHapticFeedback('error');
 }
 
 // HÀM MỚI: Mở modal báo cáo cuối ca
 function openReportModal() {
   closeSidebar();
-  vibrateShort(); // Rung khi mở modal
+  vibrateShort();
   
   // Load danh sách người nhận từ localStorage
   loadRecipients();
@@ -1578,7 +1655,7 @@ function updateExpenseTemplatesDatalist() {
 
 // HÀM MỚI: Lưu người nhận mới
 function saveRecipient() {
-  vibrateShort(); // Rung khi bấm nút
+  vibrateShort();
   
   const recipientInput = document.getElementById('report-recipient');
   const recipient = recipientInput.value.trim();
@@ -1610,7 +1687,7 @@ function saveRecipient() {
 
 // HÀM MỚI: Thêm chi tiêu vào danh sách - ĐÃ CẬP NHẬT LOGIC
 function addExpense() {
-  vibrateShort(); // Rung khi bấm nút
+  vibrateShort();
   
   const expenseName = document.getElementById('expense-name').value.trim();
   const expenseAmount = document.getElementById('expense-amount').value.trim();
@@ -1693,7 +1770,7 @@ function updateExpensesList() {
 
 // HÀM MỚI: Xóa chi tiêu khỏi danh sách
 function removeExpense(index) {
-  vibrateShort(); // Rung khi xóa chi tiêu
+  vibrateShort();
   currentExpenses.splice(index, 1);
   updateExpensesList();
   updateReportSummary();
@@ -1751,7 +1828,7 @@ function updateReportSummary() {
 
 // HÀM MỚI: Tạo báo cáo và copy vào clipboard
 async function generateReport() {
-  vibrateLong(); // Rung khi tạo báo cáo
+  vibrateLong();
   
   const selectedShift = document.getElementById('report-shift').value;
   const recipient = document.getElementById('report-recipient').value;
@@ -1815,7 +1892,7 @@ function formatNumber(amount) {
 // HÀM MỚI: Mở modal chuyển trạng thái đồng loạt
 function openBatchStatusModal() {
   closeSidebar();
-  vibrateShort(); // Rung khi mở modal
+  vibrateShort();
   
   const shifts = new Set();
   allData.forEach(item => {
@@ -1850,7 +1927,7 @@ function openBatchStatusModal() {
 
 // HÀM MỚI: Cập nhật thông tin khi chọn ca trong modal chuyển trạng thái
 function updateBatchStatusInfo() {
-  vibrateShort(); // Rung ngắn khi thay đổi lựa chọn
+  vibrateShort();
   
   const selectedShift = document.getElementById('batch-status-shift').value;
   const newStatus = document.getElementById('batch-status-new-status').value;
@@ -1893,7 +1970,7 @@ function updateBatchStatusInfo() {
 
 // HÀM MỚI: Xác nhận chuyển trạng thái đồng loạt - ĐÃ SỬA LỖI
 async function confirmBatchStatusUpdate() {
-  vibrateLong(); // Rung dài khi xác nhận thao tác quan trọng
+  vibrateLong();
   
   const selectedShift = document.getElementById('batch-status-shift').value;
   const newStatus = document.getElementById('batch-status-new-status').value;
@@ -2038,7 +2115,7 @@ async function copyToClipboard(text) {
 
 // Hàm mở/đóng sidebar
 function toggleSidebar() {
-  vibrateShort(); // Rung khi mở/đóng sidebar
+  vibrateShort();
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
   
@@ -2058,7 +2135,7 @@ function closeSidebar() {
 // Hàm xuất dữ liệu dạng văn bản
 async function exportToText() {
   closeSidebar();
-  vibrateShort(); // Rung khi xuất dữ liệu
+  vibrateShort();
   
   const dataToExport = currentFilteredData.length > 0 ? currentFilteredData : allData;
   
@@ -2099,7 +2176,7 @@ async function exportToText() {
 // THÊM HÀM MỚI: Mở modal thêm điểm ngoài ca
 function openOutOfHoursModal() {
   closeSidebar();
-  vibrateShort(); // Rung khi mở modal
+  vibrateShort();
   
   const shiftInfo = getCurrentShift();
   if (shiftInfo.start) {
@@ -2142,7 +2219,7 @@ function openOutOfHoursModal() {
 
 // THÊM HÀM MỚI: Sử dụng ngày tùy chỉnh
 function useCustomShift() {
-  vibrateShort(); // Rung khi bấm nút
+  vibrateShort();
   
   const customDate = document.getElementById('custom-shift-date').value;
   if (!customDate) {
@@ -2165,7 +2242,7 @@ function useCustomShift() {
 
 // THÊM HÀM MỚI: Xác nhận ca khi thêm ngoài giờ
 function confirmOutOfHoursShift() {
-  vibrateShort(); // Rung khi xác nhận
+  vibrateShort();
   
   const shiftSelect = document.getElementById('out-of-hours-shift');
   const selectedShift = shiftSelect.value;
@@ -2200,7 +2277,7 @@ function formatShiftName(shiftKey) {
 // THÊM HÀM MỚI: Mở modal xem nhanh
 function openQuickViewModal() {
   closeSidebar();
-  vibrateShort(); // Rung khi mở modal
+  vibrateShort();
   
   const shifts = new Set();
   allData.forEach(item => {
@@ -2237,7 +2314,7 @@ function openQuickViewModal() {
 
 // THÊM HÀM MỚI: Cập nhật danh sách xem nhanh
 function updateQuickViewList() {
-  vibrateShort(); // Rung ngắn khi thay đổi lựa chọn
+  vibrateShort();
   
   const selectedShift = document.getElementById('quick-view-shift').value;
   const listContainer = document.getElementById('quick-view-list');
@@ -2298,6 +2375,7 @@ document.getElementById('so_tien').addEventListener('blur', function() {
   
   if (/^\d+$/.test(value) && value.length > 0 && value.length <= 3) {
     this.value = value + '000';
+    vibrateShort();
   }
 });
 
@@ -2420,19 +2498,19 @@ function displayStats(stats) {
 
 // Lọc dữ liệu theo ca
 function filterByShift() {
-  vibrateShort(); // Rung khi lọc dữ liệu
+  vibrateShort();
   filterData();
 }
 
 // Lọc dữ liệu theo điểm
 function filterByDiem() {
-  vibrateShort(); // Rung khi lọc dữ liệu
+  vibrateShort();
   filterData();
 }
 
 // Lọc dữ liệu theo trạng thái
 function filterByTrangThai() {
-  vibrateShort(); // Rung khi lọc dữ liệu
+  vibrateShort();
   filterData();
 }
 
@@ -2524,7 +2602,7 @@ function displayData(data) {
 
 // Hàm thay đổi trạng thái nhanh
 function toggleTrangThai(id) {
-  vibrateShort(); // Rung khi thay đổi trạng thái
+  vibrateShort();
   
   const item = allData.find(item => item.id === id);
   if (!item) return;
@@ -2618,7 +2696,7 @@ function updateFilters(data) {
 // Reset form
 function resetForm() {
   closeSidebar();
-  vibrateShort(); // Rung khi reset form
+  vibrateShort();
   
   editingId = null;
   selectedOutOfHoursShift = null;
@@ -2666,7 +2744,7 @@ function findLatestEntryForDiem(diemName) {
 
 // HÀM CẬP NHẬT: Chọn điểm gas (tự động điền địa chỉ và số tiền của lần gần nhất)
 function chonDiem() {
-  vibrateShort(); // Rung ngắn khi chọn điểm
+  vibrateShort();
   
   const val = document.getElementById('chon_diem').value;
   const tenDiemInput = document.getElementById('ten_diem');
@@ -2711,7 +2789,7 @@ function chonDiem() {
 
 // Xử lý nút lưu vị trí GPS - ĐÃ CẬP NHẬT
 function saveLocation() {
-  vibrateShort(); // Rung khi bấm nút lưu vị trí
+  vibrateShort();
   
   const tenDiem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
   
@@ -2775,7 +2853,7 @@ function saveLocation() {
 
 // Chỉnh sửa item
 function editItem(id) {
-  vibrateShort(); // Rung khi bấm nút sửa
+  vibrateShort();
   
   const item = allData.find(item => item.id === id);
   if (!item) return;
@@ -2811,7 +2889,7 @@ function editItem(id) {
 
 // Xóa item
 function deleteItem(id) {
-  vibrateShort(); // Rung khi bấm nút xóa
+  vibrateShort();
   
   const item = allData.find(item => item.id === id);
   if (!item) return;
@@ -2825,7 +2903,7 @@ function deleteItem(id) {
 
 // Xác nhận xóa
 function confirmDelete() {
-  vibrateLong(); // Rung dài khi xác nhận xóa
+  vibrateLong();
   
   if (!itemToDelete) return;
   
@@ -2880,7 +2958,7 @@ function closeModal(modalId) {
 document.getElementById('btn-save-location').addEventListener('click', saveLocation);
 
 async function guiDuLieu() {
-  vibrateShort(); // Rung khi bắt đầu lưu dữ liệu
+  vibrateShort();
   
   const btnSubmit = document.getElementById('btn-submit');
   if (btnSubmit.disabled) return;
@@ -2958,7 +3036,7 @@ async function guiDuLieu() {
 
 async function taiDuLieu() {
   closeSidebar();
-  vibrateShort(); // Rung khi tải dữ liệu
+  vibrateShort();
   
   try {
     const res = await fetch(scriptURL);
@@ -3019,12 +3097,15 @@ window.addEventListener('scroll', function() {
 
 // Xử lý sự kiện cuộn về đầu trang
 document.getElementById('scrollTopBtn').onclick = function() {
-  vibrateShort(); // Rung khi bấm nút cuộn lên
+  vibrateShort();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
 // Khởi tạo
 document.addEventListener('DOMContentLoaded', function() {
+  // Khởi tạo âm thanh
+  initAudio();
+  
   updateShiftInfo();
   taiDuLieu().then(() => {
     const shiftInfo = getCurrentShift();
@@ -3053,7 +3134,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Thêm sự kiện cho ô nhập tên chi tiêu (tự động điền số tiền từ mẫu)
   document.getElementById('expense-name').addEventListener('change', function() {
-    vibrateShort(); // Rung khi chọn từ datalist
+    vibrateShort();
     const expenseName = this.value.trim();
     if (!expenseName) return;
     
@@ -3069,11 +3150,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let value = this.value.trim();
     if (/^\d+$/.test(value) && value.length > 0 && value.length <= 3) {
       this.value = value + '000';
-      vibrateShort(); // Rung khi tự động thêm '000'
+      vibrateShort();
     }
   });
   
-  // Thêm rung cho các nút trong sidebar
+  // Thêm rung/âm thanh cho các nút trong sidebar
   const sidebarItems = document.querySelectorAll('.sidebar-item');
   sidebarItems.forEach(item => {
     item.addEventListener('mousedown', function() {
@@ -3081,10 +3162,34 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Thêm rung cho các nút chính trong form
-  const mainButtons = document.querySelectorAll('.button-group button, .btn-sm');
+  // Thêm rung/âm thanh cho các nút chính trong form
+  const mainButtons = document.querySelectorAll('.button-group button, .btn-sm, .btn-primary, .btn-secondary, .btn-success, .btn-warning, .btn-danger');
   mainButtons.forEach(button => {
     button.addEventListener('mousedown', function() {
+      vibrateShort();
+    });
+  });
+  
+  // Thêm rung/âm thanh cho các nút trong modal
+  const modalButtons = document.querySelectorAll('.modal-footer button, .modal-header .close-modal');
+  modalButtons.forEach(button => {
+    button.addEventListener('mousedown', function() {
+      vibrateShort();
+    });
+  });
+  
+  // Thêm rung/âm thanh khi chọn trong select
+  const selectElements = document.querySelectorAll('select');
+  selectElements.forEach(select => {
+    select.addEventListener('change', function() {
+      vibrateShort();
+    });
+  });
+  
+  // Thêm hiệu ứng cho các badge trạng thái
+  const statusBadges = document.querySelectorAll('.status-toggle');
+  statusBadges.forEach(badge => {
+    badge.addEventListener('mousedown', function() {
       vibrateShort();
     });
   });
