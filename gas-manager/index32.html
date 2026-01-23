@@ -13,20 +13,41 @@
 <meta name="apple-mobile-web-app-title" content="Quản lý điểm gas">
 <style>
   :root {
-    --primary: #2c80ff;
-    --primary-dark: #1a6de0;
-    --secondary: #34c759;
-    --danger: #ff3b30;
-    --warning: #ff9500;
-    --light: #f8f9fa;
-    --dark: #333;
-    --gray: #6c757d;
-    --border: #dee2e6;
-    --shadow: 0 2px 10px rgba(0,0,0,0.08);
-    --radius: 10px;
-    --night-shift: #4a5568;
-    --day-shift: #f7fafc;
+    /* Màu sắc theo phong cách Apple Liquid Glass */
+    --primary: rgba(10, 132, 255, 0.9);
+    --primary-dark: rgba(5, 100, 200, 0.9);
+    --secondary: rgba(48, 209, 88, 0.9);
+    --danger: rgba(255, 69, 58, 0.9);
+    --warning: rgba(255, 159, 10, 0.9);
+    --info: rgba(100, 210, 255, 0.9);
+    --light: rgba(242, 242, 247, 0.9);
+    --dark: rgba(28, 28, 30, 0.9);
+    --gray: rgba(142, 142, 147, 0.8);
+    --border: rgba(229, 229, 234, 0.8);
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    --radius: 12px;
+    --night-shift: rgba(28, 28, 30, 0.95);
+    --day-shift: rgba(242, 242, 247, 0.95);
     --sidebar-width: 280px;
+    
+    /* Hiệu ứng gradient liquid - Giảm opacity để đỡ nặng */
+    --gradient-primary: linear-gradient(135deg, 
+      rgba(10, 132, 255, 0.9) 0%, 
+      rgba(0, 122, 255, 0.8) 100%);
+    --gradient-danger: linear-gradient(135deg, 
+      rgba(255, 69, 58, 0.9) 0%, 
+      rgba(255, 45, 85, 0.8) 100%);
+    --gradient-success: linear-gradient(135deg, 
+      rgba(48, 209, 88, 0.9) 0%, 
+      rgba(52, 199, 89, 0.8) 100%);
+    --gradient-warning: linear-gradient(135deg, 
+      rgba(255, 159, 10, 0.9) 0%, 
+      rgba(255, 149, 0, 0.8) 100%);
+    --gradient-glass: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.3) 0%, 
+      rgba(255, 255, 255, 0.2) 100%);
   }
   
   * {
@@ -36,39 +57,61 @@
   }
   
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f7fa;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 
+                 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: linear-gradient(135deg, 
+      rgba(242, 242, 247, 0.95) 0%, 
+      rgba(229, 229, 234, 0.9) 100%);
     color: var(--dark);
     line-height: 1.6;
     padding: 20px;
     min-height: 100vh;
     transition: margin-left 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Tắt hiệu ứng blur mặc định */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
   
   .container {
     max-width: 1200px;
     margin: 0 auto;
-    background: white;
+    background: var(--glass-bg);
+    /* GIẢM BLUR: Từ 20px xuống 5px */
+    backdrop-filter: blur(5px) saturate(140%);
+    -webkit-backdrop-filter: blur(5px) saturate(140%);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    box-shadow: var(--glass-shadow);
     overflow: hidden;
     transition: all 0.3s ease;
+    /* Tối ưu hóa GPU */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
   
-  /* Sidebar styles */
+  /* Sidebar styles - GIẢM BLUR MẠNH */
   .sidebar {
     position: fixed;
     top: 0;
     left: -280px;
     width: var(--sidebar-width);
     height: 100%;
-    background: white;
-    box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+    background: var(--glass-bg);
+    /* GIẢM BLUR: Từ 30px xuống 8px */
+    backdrop-filter: blur(8px) saturate(160%);
+    -webkit-backdrop-filter: blur(8px) saturate(160%);
+    border-right: 1px solid var(--glass-border);
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
     z-index: 1001;
     transition: left 0.3s ease;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    /* Tối ưu hóa GPU */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
   
   .sidebar.open {
@@ -76,26 +119,40 @@
   }
   
   .sidebar-header {
-    padding: 20px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    padding: 25px 20px;
+    background: var(--gradient-primary);
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   }
   
   .sidebar-header h2 {
     font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: -0.5px;
   }
   
   .close-sidebar {
-    background: none;
-    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
     font-size: 1.5rem;
     cursor: pointer;
-    padding: 0;
-    width: auto;
+    padding: 5px 10px;
+    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  
+  .close-sidebar:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
   }
   
   .sidebar-content {
@@ -107,27 +164,35 @@
     display: flex;
     align-items: center;
     justify-content: left;
-    gap: 12px;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: var(--radius);
-    background: #f8f9fa;
+    gap: 15px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    background: var(--gradient-glass);
+    /* GIẢM BLUR: Từ 10px xuống 3px */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
     width: 100%;
     text-align: left;
     font-size: 1rem;
+    font-weight: 500;
+    color: var(--dark);
   }
 
   .sidebar-item:hover {
-    background: #e9ecef;
+    background: rgba(255, 255, 255, 0.4);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
   
   .sidebar-item.active {
-    background: var(--primary);
+    background: var(--gradient-primary);
     color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
   
   .sidebar-footer {
@@ -136,6 +201,7 @@
     font-size: 0.85rem;
     color: var(--gray);
     text-align: center;
+    background: var(--gradient-glass);
   }
   
   .overlay {
@@ -144,9 +210,13 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.4);
+    /* GIẢM BLUR: Từ 5px xuống 2px */
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
     z-index: 1000;
     display: none;
+    animation: fadeIn 0.3s ease;
   }
   
   .overlay.active {
@@ -154,62 +224,91 @@
   }
   
   .menu-toggle {
-    background: none;
-    border: none;
+    background: var(--gradient-primary);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
     font-size: 1.5rem;
     cursor: pointer;
-    padding: 5px;
-    margin-right: 10px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .menu-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);
   }
   
   /* Header styles */
   header {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    background: var(--gradient-primary);
     color: white;
-    padding: 25px 30px;
+    padding: 30px 35px;
     text-align: center;
     position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   }
   
   header h1 {
-    font-size: 1.8rem;
-    margin-bottom: 8px;
+    font-size: 2rem;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
   }
   
   header p {
     opacity: 0.9;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    font-weight: 400;
   }
   
   .shift-info {
     background: var(--night-shift);
     color: white;
-    padding: 15px 30px;
+    padding: 20px 35px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    /* GIẢM BLUR: Từ 10px xuống 3px */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
   }
   
   .shift-info .current-shift {
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
   
   .shift-info .shift-time {
-    font-size: 0.9rem;
+    font-size: 1rem;
     opacity: 0.9;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 15px;
+    border-radius: 12px;
   }
   
   .card {
-    padding: 25px 30px;
+    padding: 30px 35px;
     border-bottom: 1px solid var(--border);
+    background: var(--glass-bg);
+    /* GIẢM BLUR: Từ 10px xuống 3px */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
   }
   
   .card:last-child {
@@ -217,111 +316,148 @@
   }
   
   .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
   }
   
   label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-weight: 600;
     color: var(--dark);
+    font-size: 1rem;
   }
   
   input, select {
     width: 100%;
-    padding: 14px 16px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
+    padding: 16px 18px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid var(--border);
+    border-radius: 14px;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    color: var(--dark);
   }
   
   input:focus, select:focus {
     outline: none;
+    background: rgba(255, 255, 255, 0.95);
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
+    transform: translateY(-1px);
   }
   
   .button-group {
     display: flex;
     gap: 15px;
-    margin-top: 25px;
+    margin-top: 30px;
   }
   
   button {
     flex: 1;
-    padding: 16px;
+    padding: 18px;
     border: none;
-    border-radius: var(--radius);
+    border-radius: 14px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
+    letter-spacing: 0.3px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(255, 255, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  button:hover::after {
+    opacity: 1;
   }
   
   .btn-primary {
-    background-color: var(--primary);
+    background: var(--gradient-primary);
     color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
   
   .btn-primary:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(44, 128, 255, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(10, 132, 255, 0.3);
   }
   
   .btn-secondary {
-    background-color: #f1f3f5;
+    background: var(--gradient-glass);
     color: var(--dark);
+    border: 1px solid var(--glass-border);
   }
   
   .btn-secondary:hover {
-    background-color: #e9ecef;
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   }
   
   .btn-success {
-    background-color: var(--secondary);
+    background: var(--gradient-success);
     color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
   
   .btn-success:hover {
-    background-color: #30b352;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(48, 209, 88, 0.3);
   }
   
   .btn-warning {
-    background-color: var(--warning);
+    background: var(--gradient-warning);
     color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
   
   .btn-warning:hover {
-    background-color: #e08900;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 159, 10, 0.3);
   }
   
   .btn-danger {
-    background-color: var(--danger);
+    background: var(--gradient-danger);
     color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
   
   .btn-danger:hover {
-    background-color: #e0352b;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 69, 58, 0.3);
   }
   
   .btn-sm {
-    padding: 8px 12px;
-    font-size: 0.85rem;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    border-radius: 12px;
   }
   
   .table-container {
     overflow-x: auto;
-    margin-top: 10px;
+    margin-top: 20px;
+    border-radius: 14px;
+    background: var(--glass-bg);
+    /* GIẢM BLUR: Từ 10px xuống 3px */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid var(--glass-border);
   }
   
   table {
@@ -331,17 +467,20 @@
   }
   
   th {
-    background-color: #f8f9fa;
-    padding: 16px 12px;
+    background: var(--gradient-glass);
+    padding: 18px 16px;
     text-align: left;
     font-weight: 600;
     color: var(--dark);
     border-bottom: 2px solid var(--border);
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
   }
   
   td {
-    padding: 14px 12px;
+    padding: 16px 16px;
     border-bottom: 1px solid var(--border);
+    transition: background-color 0.2s ease;
   }
   
   tr:last-child td {
@@ -349,60 +488,72 @@
   }
   
   tr:hover {
-    background-color: #f8fafc;
+    background: rgba(255, 255, 255, 0.3);
   }
   
   .empty-state {
     text-align: center;
-    padding: 40px 20px;
+    padding: 60px 20px;
     color: var(--gray);
   }
   
   .empty-state p {
-    margin-top: 10px;
+    margin-top: 15px;
+    font-size: 1.1rem;
   }
   
   .stats-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 20px;
+    margin-bottom: 25px;
   }
   
   .stat-card {
     flex: 1;
-    min-width: 150px;
-    background: #f8f9fa;
-    border-radius: var(--radius);
-    padding: 15px;
+    min-width: 180px;
+    background: var(--gradient-glass);
+    /* GIẢM BLUR: Từ 10px xuống 3px */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 20px;
     text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   }
   
   .stat-value {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: var(--primary);
+    margin-bottom: 5px;
   }
   
   .stat-label {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--gray);
-    margin-top: 5px;
   }
   
   .filter-group {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 15px;
+    margin-bottom: 25px;
     flex-wrap: wrap;
   }
   
   .filter-group select {
     flex: 1;
-    min-width: 200px;
+    min-width: 220px;
+    background: rgba(255, 255, 255, 0.9);
   }
   
-  /* Modal styles */
+  /* Modal styles - GIẢM BLUR */
   .modal {
     display: none;
     position: fixed;
@@ -410,113 +561,141 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.5);
+    /* GIẢM BLUR: Từ 10px xuống 3px */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     z-index: 1000;
     align-items: center;
     justify-content: center;
     padding: 20px;
+    animation: modalFadeIn 0.3s ease;
   }
   
   .modal-content {
-    background: white;
+    background: var(--glass-bg);
+    /* GIẢM BLUR: Từ 30px xuống 8px */
+    backdrop-filter: blur(8px) saturate(160%);
+    -webkit-backdrop-filter: blur(8px) saturate(160%);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     width: 90%;
     max-width: 500px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    animation: modalFadeIn 0.3s ease-out;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     max-height: 85vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     position: relative;
+    /* Tối ưu hóa GPU */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
   
   .modal-header {
-    padding: 20px 25px;
+    padding: 25px 30px;
     border-bottom: 1px solid var(--border);
     display: flex;
-    justify-content: between;
+    justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
+    background: var(--gradient-glass);
   }
   
   .modal-header h2 {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark);
   }
   
   .modal-body {
-    padding: 25px;
+    padding: 30px;
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: calc(85vh - 120px);
+    max-height: calc(85vh - 130px);
   }
   
   .modal-footer {
-    padding: 20px 25px;
+    padding: 25px 30px;
     border-top: 1px solid var(--border);
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 12px;
     flex-shrink: 0;
     margin-top: auto;
+    background: var(--gradient-glass);
   }
   
   .modal-footer button {
-    width: 100%;
-    padding: 14px;
-    font-size: 1rem;
-    min-height: 44px;
-  }
-    
-  .modal-footer .btn-danger {
-    font-size: 1.2rem;
-    min-height: 52px;
-    padding: 16px 0;
-    border-radius: 12px;
-    position: relative;
-    z-index: 2;
-    pointer-events: auto;
+    min-height: 48px;
+    padding: 14px 24px;
   }
   
   .close-modal {
-    background: none;
-    border: none;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border);
+    color: var(--gray);
     font-size: 1.5rem;
     cursor: pointer;
-    color: var(--gray);
-    padding: 0;
-    width: auto;
+    padding: 8px 12px;
+    border-radius: 12px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
   }
   
   .close-modal:hover {
+    background: rgba(0, 0, 0, 0.1);
     color: var(--dark);
-    transform: none;
+    transform: rotate(90deg);
   }
   
-  /* Responsive styles */
+  /* Responsive styles - TỐI ƯU CHO MOBILE */
   @media (max-width: 768px) {
     body {
       padding: 15px;
+      /* Trên mobile, tắt hoàn toàn blur để tăng hiệu suất */
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
     }
     
+    .container, .sidebar, .modal-content, .card, .table-container, .stat-card, .badge {
+      /* Trên mobile, giảm hoặc tắt blur */
+      backdrop-filter: blur(2px) !important;
+      -webkit-backdrop-filter: blur(2px) !important;
+    }
+    
+    /* Hoặc tắt hoàn toàn blur trên mobile để tối ưu */
+    /*
+    .container, .sidebar, .modal-content, .card, .table-container, .stat-card, .badge {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      background: rgba(255, 255, 255, 0.98) !important;
+    }
+    */
+    
     header {
-      padding: 20px;
+      padding: 25px 20px;
     }
     
     header h1 {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
     }
     
     .shift-info {
-      padding: 15px 20px;
+      padding: 18px 20px;
       flex-direction: column;
       align-items: flex-start;
-      gap: 5px;
+      gap: 10px;
     }
     
     .card {
-      padding: 20px;
+      padding: 25px 20px;
     }
     
     .button-group {
@@ -536,7 +715,7 @@
     }
     
     th, td {
-      padding: 12px 8px;
+      padding: 14px 12px;
       font-size: 0.9rem;
     }
     
@@ -555,48 +734,32 @@
     }
     
     .modal-header, .modal-body, .modal-footer {
-      padding: 15px;
+      padding: 20px;
     }
     
     .modal-body {
-      max-height: calc(90vh - 110px);
+      max-height: calc(90vh - 120px);
     }
     
     .modal-footer {
       flex-direction: column;
       gap: 12px;
-      padding: 15px 10px;
+      padding: 20px 15px;
     }
     
     .modal-footer button {
       width: 100%;
-      padding: 16px;
-      font-size: 1.1rem;
-      min-height: 48px;
-      border-radius: 10px;
-    }
-    
-    .modal-footer .btn-danger {
-      font-size: 1.3rem;
-      min-height: 56px;
-      padding: 18px 0;
-      border-radius: 14px;
-      width: 100%;
-      z-index: 1;
     }
     
     .close-modal {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       width: 40px;
       height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     
     .table-container {
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: 12px;
     }
     
     table {
@@ -605,50 +768,50 @@
     
     .action-buttons {
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
     }
     
     .action-buttons button {
       padding: 10px;
       font-size: 0.9rem;
-      min-height: 36px;
+      min-height: 40px;
     }
     
     .badge {
-      padding: 6px 10px;
+      padding: 6px 12px;
       font-size: 0.85rem;
     }
   }
   
   @media (max-width: 480px) {
     body {
-      padding: 10px;
+      padding: 12px;
     }
     
     header {
-      padding: 18px 15px;
+      padding: 22px 18px;
     }
     
     header h1 {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
     }
     
     .card {
-      padding: 18px 15px;
+      padding: 22px 18px;
     }
     
     input, select {
-      padding: 12px 14px;
+      padding: 14px 16px;
       font-size: 16px;
     }
     
     button {
-      padding: 14px;
-      min-height: 44px;
+      padding: 16px;
+      min-height: 50px;
     }
     
     .btn-sm {
-      min-height: 36px;
+      min-height: 38px;
     }
     
     .modal-content {
@@ -658,35 +821,26 @@
     }
     
     .modal-header h2 {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
     }
     
     .modal-body {
-      padding: 15px 10px;
-      max-height: calc(95vh - 100px);
+      padding: 20px 15px;
+      max-height: calc(95vh - 120px);
     }
     
     .modal-footer {
       flex-direction: column;
       gap: 12px;
-      padding: 16px 6px;
+      padding: 20px 12px;
     }
     
     .modal-footer button {
       width: 100%;
       padding: 16px;
       font-size: 1.1rem;
-      min-height: 48px;
-      border-radius: 10px;
-    }
-    
-    .modal-footer .btn-danger {
-      font-size: 1.3rem;
-      min-height: 56px;
-      padding: 18px 0;
-      border-radius: 14px;
-      width: 100%;
-      z-index: 1;
+      min-height: 50px;
+      border-radius: 12px;
     }
     
     .modal-body p {
@@ -697,55 +851,79 @@
   
   /* Animation */
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
   
   @keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes modalSlideIn {
     from { opacity: 0; transform: translateY(-20px) scale(0.95); }
     to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
   }
   
   .fade-in {
     animation: fadeIn 0.4s ease-out;
   }
   
+  .float-animation {
+    animation: float 3s ease-in-out infinite;
+  }
+  
   .badge {
     display: inline-block;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.8rem;
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 0.85rem;
     font-weight: 600;
+    letter-spacing: 0.3px;
+    /* GIẢM BLUR: Từ 10px xuống 3px */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
   
   .badge-primary {
-    background-color: var(--primary);
+    background: var(--gradient-primary);
     color: white;
   }
   
   .badge-secondary {
-    background-color: var(--secondary);
+    background: var(--gradient-success);
     color: white;
   }
   
   .badge-warning {
-    background-color: var(--warning);
+    background: var(--gradient-warning);
     color: white;
   }
   
   .badge-danger {
-    background-color: var(--danger);
+    background: var(--gradient-danger);
     color: white;
+  }
+  
+  .badge-info {
+    background: var(--gradient-glass);
+    color: var(--dark);
   }
   
   .action-buttons {
     display: flex;
-    gap: 5px;
+    gap: 8px;
   }
   
   .form-row {
     display: flex;
-    gap: 15px;
+    gap: 20px;
   }
   
   .form-row .form-group {
@@ -754,17 +932,18 @@
   
   .status-toggle {
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .status-toggle:hover {
     transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
   
   .status-toggle-wrapper {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
   
   .toast {
@@ -772,20 +951,25 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) translateY(100px);
-    background: var(--primary);
+    background: var(--gradient-primary);
     color: white;
-    padding: 16px 24px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    padding: 18px 28px;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     z-index: 1002;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     opacity: 0;
-    transition: all 0.3s ease;
-    min-width: 280px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 300px;
     text-align: center;
     justify-content: center;
+    /* GIẢM BLUR: Từ 20px xuống 5px */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-weight: 500;
   }
 
   .toast.show {
@@ -794,22 +978,28 @@
   }
   
   .toast.success {
-    background: var(--secondary);
+    background: var(--gradient-success);
   }
   
   .toast.error {
-    background: var(--danger);
+    background: var(--gradient-danger);
+  }
+
+  .toast.warning {
+    background: var(--gradient-warning);
   }
 
   .diachi-row {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     align-items: center;
   }
+  
   .diachi-row input {
     flex: 8 1 0%;
     min-width: 0;
   }
+  
   .diachi-row button {
     flex: 2 1 0%;
     min-width: 0;
@@ -819,20 +1009,21 @@
     padding-right: 0.5em;
   }
   
-  /* Thêm style mới cho modal xem nhanh */
+  /* Quick view modal styles */
   .quick-view-list {
     max-height: none;
     overflow-y: visible;
-    margin-top: 15px;
+    margin-top: 20px;
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: 14px;
+    background: var(--gradient-glass);
   }
   
   .quick-view-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 15px;
+    padding: 16px 20px;
     border-bottom: 1px solid var(--border);
     transition: background-color 0.2s ease;
   }
@@ -842,7 +1033,7 @@
   }
   
   .quick-view-item:hover {
-    background-color: #f8f9fa;
+    background-color: rgba(255, 255, 255, 0.3);
   }
   
   .quick-view-item-info {
@@ -853,27 +1044,30 @@
   .quick-view-item-name {
     font-weight: 600;
     color: var(--dark);
+    font-size: 1.05rem;
   }
   
   .quick-view-item-address {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--gray);
-    margin-top: 3px;
+    margin-top: 4px;
   }
   
   .quick-view-item-amount {
     font-weight: 700;
     color: var(--primary);
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
   
   .quick-view-total {
-    padding: 15px;
-    background-color: #f8f9fa;
+    padding: 20px;
+    background: var(--gradient-glass);
     border-top: 1px solid var(--border);
     font-weight: 700;
     text-align: center;
     color: var(--dark);
+    font-size: 1.1rem;
+    border-radius: 0 0 14px 14px;
   }
   
   /* Style cho ô số tiền khi được tự động điền */
@@ -883,34 +1077,39 @@
   
   #so_tien:focus {
     border-color: var(--secondary);
-    box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.1);
-    background-color: #f8fff9;
+    box-shadow: 0 0 0 3px rgba(48, 209, 88, 0.15);
+    background-color: rgba(255, 255, 255, 0.95);
   }
   
   /* Style cho nút lưu vị trí khi đã có GPS */
   .btn-location-disabled {
-    background-color: #6c757d !important;
+    background: rgba(142, 142, 147, 0.5) !important;
     cursor: not-allowed !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
   }
   
   .btn-location-disabled:hover {
     transform: none !important;
-    background-color: #6c757d !important;
+    box-shadow: none !important;
   }
   
   /* Style cho modal báo cáo */
   #report-summary {
     border-left: 4px solid var(--primary);
-    margin-top: 20px;
+    margin-top: 25px;
+    padding: 20px;
+    background: var(--gradient-glass);
+    border-radius: 14px;
   }
   
   #report-details {
     line-height: 1.6;
+    font-size: 1.05rem;
   }
   
   .recipient-row {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: center;
   }
   
@@ -919,13 +1118,13 @@
   }
   
   .recipient-row button {
-    min-width: 80px;
+    min-width: 90px;
   }
   
   /* Style cho phần chi tiêu */
   .expense-input-group {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: center;
   }
   
@@ -934,17 +1133,18 @@
   }
   
   .expense-input-group button {
-    min-width: 80px;
+    min-width: 90px;
   }
   
   .expense-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 15px;
-    margin-bottom: 8px;
-    background-color: #f8f9fa;
-    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    background: var(--gradient-glass);
+    border-radius: 14px;
+    border: 1px solid var(--glass-border);
   }
   
   .expense-item:last-child {
@@ -964,6 +1164,7 @@
   .expense-item-amount {
     font-weight: 700;
     color: var(--danger);
+    font-size: 1.1rem;
   }
   
   .expense-item-delete {
@@ -971,34 +1172,49 @@
     border: none;
     color: var(--danger);
     cursor: pointer;
-    font-size: 1.2rem;
-    padding: 5px;
+    font-size: 1.3rem;
+    padding: 6px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  
+  .expense-item-delete:hover {
+    background: rgba(255, 69, 58, 0.1);
+    transform: scale(1.1);
   }
   
   .expense-total {
-    margin-top: 15px;
-    padding: 12px 15px;
-    background-color: #f1f3f5;
-    border-radius: var(--radius);
+    margin-top: 20px;
+    padding: 18px;
+    background: var(--gradient-glass);
+    border-radius: 14px;
     font-weight: 700;
     text-align: center;
     color: var(--danger);
+    font-size: 1.2rem;
+    border: 1px solid var(--glass-border);
   }
   
   @media (max-width: 768px) {
     .diachi-row input {
       flex: 8 1 0%;
     }
+    
     .diachi-row button {
       flex: 2 1 0%;
-      max-width: 90px;
+      max-width: 95px;
       font-size: 0.95rem;
       padding-left: 0.3em;
       padding-right: 0.3em;
     }
     
     .quick-view-item {
-      padding: 10px 12px;
+      padding: 14px 16px;
     }
     
     .recipient-row {
@@ -1022,25 +1238,140 @@
     .diachi-row input {
       flex: 8 1 0%;
     }
+    
     .diachi-row button {
       flex: 2 1 0%;
-      max-width: 70px;
+      max-width: 75px;
       font-size: 0.9rem;
       padding-left: 0.2em;
       padding-right: 0.2em;
     }
     
     .quick-view-item {
-      padding: 10px 12px;
+      padding: 12px 14px;
     }
     
     .quick-view-item-name {
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
     
     .quick-view-item-amount {
-      font-size: 1rem;
+      font-size: 1.1rem;
     }
+  }
+
+  /* Scrollbar styling - Tối ưu cho hiệu suất */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(142, 142, 147, 0.3);
+    border-radius: 5px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(142, 142, 147, 0.5);
+  }
+  
+  /* Nút cuộn về đầu trang */
+  #scrollTopBtn {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    z-index: 999;
+    background: var(--gradient-primary);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);
+    font-size: 2.2rem;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* GIẢM BLUR: Từ 10px xuống 3px */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+  
+  #scrollTopBtn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(10, 132, 255, 0.4);
+  }
+
+  /* Hiệu ứng liquid cho các container - Đơn giản hóa */
+  .liquid-effect {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .liquid-effect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.15),
+      transparent
+    );
+    transition: left 0.7s ease;
+  }
+  
+  .liquid-effect:hover::before {
+    left: 100%;
+  }
+
+  /* Hiệu ứng cho các icon */
+  .icon-glow {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  }
+  
+  /* Lớp tối ưu hóa cho thiết bị cũ */
+  .performance-mode .container,
+  .performance-mode .sidebar,
+  .performance-mode .modal-content,
+  .performance-mode .card,
+  .performance-mode .table-container,
+  .performance-mode .stat-card,
+  .performance-mode .toast,
+  .performance-mode .badge {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+  }
+  
+  /* Nút chuyển chế độ hiệu suất */
+  .performance-toggle {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 999;
+    background: var(--gradient-warning);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 159, 10, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 </style>
 </head>
@@ -1053,60 +1384,67 @@
     <span id="toast-message">Đã sao chép vào clipboard!</span>
   </div>
   
+  <!-- Nút chuyển chế độ hiệu suất -->
+  <button class="performance-toggle" id="performance-toggle" onclick="togglePerformanceMode()">
+    <span id="performance-icon">⚡</span>
+    <span id="performance-text">Tối ưu</span>
+  </button>
+  
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <h2>MenuBar</h2>
+      <h2>📱 MenuBar</h2>
       <button class="close-sidebar" id="close-sidebar">&times;</button>
     </div>
     <div class="sidebar-content">
-      <button class="sidebar-item" onclick="exportToText()">
-        📄 Xuất dữ liệu văn bản
+      <button class="sidebar-item liquid-effect" onclick="exportToText()">
+        <span class="icon-glow">📄</span> Xuất dữ liệu
       </button>
-      <!-- Thêm vào sidebar-content trong index.html -->
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='diemtien.html'">
-          💵 Đếm tiền
+      <button class="sidebar-item liquid-effect" onclick="closeSidebar(); window.location.href='diemtien.html'">
+        <span class="icon-glow">💵</span> Đếm tiền
       </button>
-      <button class="sidebar-item" onclick="openOutOfHoursModal()">
-        ⏰ Thêm điểm ngoài ca
+      <button class="sidebar-item liquid-effect" onclick="openOutOfHoursModal()">
+        <span class="icon-glow">⏰</span> Thêm điểm ngoài ca
       </button>
-      <button class="sidebar-item" onclick="openBatchStatusModal()">
-        🔄 Chuyển trạng thái
+      <button class="sidebar-item liquid-effect" onclick="openBatchStatusModal()">
+        <span class="icon-glow">🔄</span> Chuyển trạng thái
       </button>
-      <!-- THÊM NÚT MỚI: BÁO CÁO CUỐI CA -->
-      <button class="sidebar-item" onclick="openReportModal()">
-        📊 Báo cáo cuối ca
+      <button class="sidebar-item liquid-effect" onclick="openReportModal()">
+        <span class="icon-glow">📊</span> Báo cáo cuối ca
       </button>
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='vitri.html'">
-        📍 Quản lý vị trí
+      <button class="sidebar-item liquid-effect" onclick="closeSidebar(); window.location.href='vitri.html'">
+        <span class="icon-glow">📍</span> Quản lý vị trí
       </button>
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='tinhluong.html'">
-        💰 Tính công & lương
+      <button class="sidebar-item liquid-effect" onclick="closeSidebar(); window.location.href='tinhluong.html'">
+        <span class="icon-glow">💰</span> Tính công & lương
       </button>
-       <button class="sidebar-item" onclick="openQuickViewModal()">
-        👁️ Xem nhanh điểm (ca)
+      <button class="sidebar-item liquid-effect" onclick="openQuickViewModal()">
+        <span class="icon-glow">👁️</span> Xem nhanh điểm (ca)
       </button>
-      <button class="sidebar-item" onclick="openModal('help-modal')">
-        ❓ Trợ giúp
+      <button class="sidebar-item liquid-effect" onclick="openModal('help-modal')">
+        <span class="icon-glow">❓</span> Trợ giúp
       </button>
-      <button class="sidebar-item" onclick="resetForm()">
-        ❌ Đóng
+      <button class="sidebar-item liquid-effect" onclick="resetForm()">
+        <span class="icon-glow">❌</span> Đóng
       </button>
     </div>
     <div class="sidebar-footer">
       <p>Quản lý điểm gas &copy; 2025</p>
+      <p style="margin-top: 5px; font-size: 0.8rem; opacity: 0.7;">Apple Liquid Glass Design - Tối ưu hiệu suất</p>
     </div>
   </div>
 
   <div class="container">
     <header>
       <button class="menu-toggle" id="menu-toggle">☰</button>
-      <h1>📋 Quản lý tiền điểm gas</h1>
+      <h1>📱 Quản lý tiền điểm gas</h1>
       <p>Theo dõi và quản lý thu chi tại các điểm gas theo ca làm việc</p>
     </header>
     
     <div class="shift-info">
-      <div class="current-shift" id="current-shift">Đang tải thông tin ca...</div>
+      <div class="current-shift" id="current-shift">
+        <span>⏰</span> Đang tải thông tin ca...
+      </div>
       <div class="shift-time" id="shift-time"></div>
     </div>
     
@@ -1161,7 +1499,7 @@
         <label for="dia_chi">Địa chỉ:</label>
         <div class="diachi-row">
           <input id="dia_chi" placeholder="Nhập địa chỉ">
-          <button class="btn-success btn-sm" type="button" id="btn-save-location" title="Lưu vị trí GPS">Lưu</button>
+          <button class="btn-success btn-sm liquid-effect" type="button" id="btn-save-location" title="Lưu vị trí GPS">📍 Lưu</button>
         </div>
       </div>
       
@@ -1171,20 +1509,20 @@
       </div>
       
       <div class="button-group">
-        <button class="btn-primary" onclick="guiDuLieu()" id="btn-submit">
-          💾 Lưu thông tin
+        <button class="btn-primary liquid-effect" onclick="guiDuLieu()" id="btn-submit">
+          <span class="icon-glow">💾</span> Lưu thông tin
         </button>
-        <button class="btn-secondary" onclick="taiDuLieu()">
-          🔄 Tải lại
+        <button class="btn-secondary liquid-effect" onclick="taiDuLieu()">
+          <span class="icon-glow">🔄</span> Tải lại
         </button>
-        <button class="btn-warning" onclick="resetForm()" id="btn-cancel" style="display: none;">
-          ❌ Hủy
+        <button class="btn-warning liquid-effect" onclick="resetForm()" id="btn-cancel" style="display: none;">
+          <span class="icon-glow">❌</span> Hủy
         </button>
       </div>
     </div>
     
     <div class="card">
-      <h2 style="margin-bottom: 15px;">📊 Danh sách điểm gas theo ca</h2>
+      <h2 style="margin-bottom: 20px; font-size: 1.5rem; color: var(--dark);">📊 Danh sách điểm gas theo ca</h2>
       <div class="table-container">
         <table id="bang">
           <thead>
@@ -1203,7 +1541,8 @@
           </tbody>
         </table>
         <div id="empty-state" class="empty-state" style="display: none;">
-          <h3>📭 Chưa có dữ liệu</h3>
+          <div style="font-size: 4rem; margin-bottom: 20px;">📭</div>
+          <h3 style="margin-bottom: 10px; color: var(--gray);">Chưa có dữ liệu</h3>
           <p>Hãy thêm điểm gas đầu tiên để bắt đầu quản lý</p>
         </div>
       </div>
@@ -1211,24 +1550,22 @@
   </div>
 
   <!-- Nút cuộn về đầu trang -->
-  <button id="scrollTopBtn" style="position:fixed;right:30px;bottom:30px;z-index:999;background:#2c80ff;color:white;border:none;border-radius:50%;width:56px;height:56px;box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:2rem;display:none;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.3s;">
-    ↑
-  </button>
+  <button id="scrollTopBtn" class="liquid-effect">↑</button>
 
   <!-- Modal xác nhận xóa -->
   <div class="modal" id="delete-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Xác nhận xóa</h2>
+        <h2>⚠️ Xác nhận xóa</h2>
         <button class="close-modal" onclick="closeModal('delete-modal')">&times;</button>
       </div>
       <div class="modal-body">
         <p>Bạn có chắc chắn muốn xóa điểm gas này?</p>
-        <p id="delete-item-info" style="font-weight: bold; margin-top: 10px;"></p>
+        <p id="delete-item-info" style="font-weight: bold; margin-top: 15px; padding: 15px; background: var(--gradient-glass); border-radius: 12px;"></p>
       </div>
       <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeModal('delete-modal')">Hủy</button>
-        <button class="btn-danger" onclick="confirmDelete()">Xóa</button>
+        <button class="btn-secondary liquid-effect" onclick="closeModal('delete-modal')">Hủy</button>
+        <button class="btn-danger liquid-effect" onclick="confirmDelete()">Xóa</button>
       </div>
     </div>
   </div>
@@ -1237,21 +1574,24 @@
   <div class="modal" id="help-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Trợ giúp</h2>
+        <h2>❓ Trợ giúp</h2>
         <button class="close-modal" onclick="closeModal('help-modal')">&times;</button>
       </div>
       <div class="modal-body">
-        <h3>Cách sử dụng:</h3>
-        <ul style="margin-left: 20px; margin-top: 10px;">
+        <h3 style="margin-bottom: 15px;">Cách sử dụng:</h3>
+        <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
           <li>Chọn điểm gas từ danh sách hoặc thêm mới</li>
           <li>Nhập số tiền thu được (có thể nhập số và thêm '000' tự động)</li>
           <li>Chọn trạng thái đã nộp hoặc chưa nộp</li>
           <li>Nhấn "Lưu thông tin" để lưu dữ liệu</li>
           <li>Xuất dữ liệu văn bản từ menu để chia sẻ hoặc in ấn</li>
         </ul>
+        <div style="margin-top: 20px; padding: 15px; background: var(--gradient-glass); border-radius: 12px;">
+          <strong>💡 Mẹo:</strong> Sử dụng chức năng "Lưu vị trí" để ghi lại GPS thực tế của điểm gas.
+        </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-primary" onclick="closeModal('help-modal')">Đóng</button>
+        <button class="btn-primary liquid-effect" onclick="closeModal('help-modal')">Đóng</button>
       </div>
     </div>
   </div>
@@ -1285,7 +1625,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-primary" onclick="closeModal('quick-view-modal')">Đóng</button>
+        <button class="btn-primary liquid-effect" onclick="closeModal('quick-view-modal')">Đóng</button>
       </div>
     </div>
   </div>
@@ -1314,14 +1654,14 @@
         </div>
         
         <div class="form-group">
-          <button class="btn-primary" onclick="useCustomShift()" style="width: 100%;">
-            Sử dụng ngày đã chọn
+          <button class="btn-primary liquid-effect" onclick="useCustomShift()" style="width: 100%;">
+            <span class="icon-glow">📅</span> Sử dụng ngày đã chọn
           </button>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeModal('out-of-hours-modal')">Hủy</button>
-        <button class="btn-primary" onclick="confirmOutOfHoursShift()">Xác nhận</button>
+        <button class="btn-secondary liquid-effect" onclick="closeModal('out-of-hours-modal')">Hủy</button>
+        <button class="btn-primary liquid-effect" onclick="confirmOutOfHoursShift()">Xác nhận</button>
       </div>
     </div>
   </div>
@@ -1330,7 +1670,7 @@
   <div class="modal" id="batch-status-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>🔄 Chuyển trạng thái đồng loạt</h2>
+        <h2>🔄 Chuyển trạng thái</h2>
         <button class="close-modal" onclick="closeModal('batch-status-modal')">&times;</button>
       </div>
       <div class="modal-body">
@@ -1352,14 +1692,14 @@
           </select>
         </div>
         
-        <div id="batch-status-info" style="margin-top: 15px; padding: 15px; background-color: #f8f9fa; border-radius: var(--radius); display: none;">
-          <p id="batch-status-summary"></p>
-          <p id="batch-status-details" style="font-size: 0.9rem; margin-top: 8px; color: var(--gray);"></p>
+        <div id="batch-status-info" style="margin-top: 20px; padding: 20px; background: var(--gradient-glass); border-radius: 14px; display: none;">
+          <p id="batch-status-summary" style="font-weight: 600;"></p>
+          <p id="batch-status-details" style="font-size: 0.95rem; margin-top: 10px; color: var(--gray);"></p>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeModal('batch-status-modal')">Hủy</button>
-        <button class="btn-primary" id="batch-status-confirm" onclick="confirmBatchStatusUpdate()" disabled>Xác nhận</button>
+        <button class="btn-secondary liquid-effect" onclick="closeModal('batch-status-modal')">Hủy</button>
+        <button class="btn-primary liquid-effect" id="batch-status-confirm" onclick="confirmBatchStatusUpdate()" disabled>Xác nhận</button>
       </div>
     </div>
   </div>
@@ -1384,7 +1724,7 @@
           <label for="report-recipient">Người nhận báo cáo:</label>
           <div class="recipient-row">
             <input id="report-recipient" list="recipient-list" placeholder="Chọn hoặc nhập tên người nhận">
-            <button class="btn-success btn-sm" onclick="saveRecipient()">Lưu</button>
+            <button class="btn-success btn-sm liquid-effect" onclick="saveRecipient()">Lưu</button>
           </div>
           <datalist id="recipient-list">
             <!-- Danh sách người nhận sẽ được thêm bằng JavaScript -->
@@ -1397,7 +1737,7 @@
           <div class="expense-input-group">
             <input id="expense-name" list="expense-templates-list" placeholder="Chọn hoặc nhập tên chi tiêu">
             <input id="expense-amount" type="number" placeholder="Số tiền">
-            <button class="btn-warning btn-sm" onclick="addExpense()">Thêm</button>
+            <button class="btn-warning btn-sm liquid-effect" onclick="addExpense()">Thêm</button>
           </div>
           <datalist id="expense-templates-list">
             <!-- Danh sách chi tiêu mẫu sẽ được thêm bằng JavaScript -->
@@ -1409,14 +1749,14 @@
         </div>
         
         <div id="report-summary" style="display: none;">
-          <h4>📈 Tổng kết ca:</h4>
+          <h4 style="margin-bottom: 15px;">📈 Tổng kết ca:</h4>
           <p id="report-details" style="margin: 10px 0;"></p>
-          <p style="font-weight: bold; color: var(--primary);" id="report-total"></p>
+          <p style="font-weight: bold; color: var(--primary); font-size: 1.1rem;" id="report-total"></p>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeModal('report-modal')">Hủy</button>
-        <button class="btn-primary" id="btn-generate-report" onclick="generateReport()" disabled>Tạo báo cáo</button>
+        <button class="btn-secondary liquid-effect" onclick="closeModal('report-modal')">Hủy</button>
+        <button class="btn-primary liquid-effect" id="btn-generate-report" onclick="generateReport()" disabled>Tạo báo cáo</button>
       </div>
     </div>
   </div>
@@ -1434,7 +1774,7 @@ let selectedOutOfHoursShift = null;
 // Biến toàn cục để lưu danh sách người nhận
 let recipientList = [];
 
-// Biến toàn cục để lưu danh sách chi tiêu mẫu (tương tự người nhận)
+// Biến toàn cục để lưu danh sách chi tiêu mẫu
 let expenseTemplateList = [];
 
 // Biến toàn cục để lưu danh sách chi tiêu của ca hiện tại
@@ -1444,20 +1784,39 @@ let currentExpenses = [];
 let audioContext = null;
 let clickSoundBuffer = null;
 
+// Biến để kiểm tra chế độ hiệu suất
+let performanceMode = false;
+
+// ========== HÀM CHUYỂN ĐỔI CHẾ ĐỘ HIỆU SUẤT ==========
+function togglePerformanceMode() {
+  performanceMode = !performanceMode;
+  
+  if (performanceMode) {
+    document.body.classList.add('performance-mode');
+    document.getElementById('performance-icon').textContent = '🐇';
+    document.getElementById('performance-text').textContent = 'Nhanh';
+    showToast('✅ Đã bật chế độ tối ưu hiệu suất');
+  } else {
+    document.body.classList.remove('performance-mode');
+    document.getElementById('performance-icon').textContent = '⚡';
+    document.getElementById('performance-text').textContent = 'Tối ưu';
+    showToast('✅ Đã tắt chế độ tối ưu hiệu suất');
+  }
+  
+  vibrateShort();
+}
+
 // ========== HÀM TẠO ÂM THANH CLICK CHO IPHONE ==========
 function initAudio() {
   try {
-    // Tạo AudioContext
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     
-    // Tạo âm thanh click đơn giản
     const duration = 0.1;
     const sampleRate = audioContext.sampleRate;
     const frameCount = duration * sampleRate;
     const buffer = audioContext.createBuffer(1, frameCount, sampleRate);
     const channelData = buffer.getChannelData(0);
     
-    // Tạo sóng sine ngắn cho âm thanh click
     for (let i = 0; i < frameCount; i++) {
       channelData[i] = Math.sin(2 * Math.PI * 800 * i / sampleRate) * 
                       Math.exp(-i / (sampleRate * 0.01));
@@ -1481,14 +1840,13 @@ function playClickSound() {
       source.buffer = clickSoundBuffer;
       
       const gainNode = audioContext.createGain();
-      gainNode.gain.value = 0.3;
+      gainNode.gain.value = 0.2;
       
       source.connect(gainNode);
       gainNode.connect(audioContext.destination);
       
       source.start();
       
-      // Tự động ngắt kết nối sau khi phát xong
       source.onended = () => {
         source.disconnect();
         gainNode.disconnect();
@@ -1502,28 +1860,27 @@ function playClickSound() {
   return false;
 }
 
-// ========== HÀM PHẢN HỒI XÚC GIÁC (RUNG/ÂM THANH) ==========
+// ========== HÀM PHẢN HỒI XÚC GIÁC ==========
 function provideHapticFeedback(type = 'short') {
-  // Thử rung trước (cho Android và các thiết bị hỗ trợ)
   let vibrated = false;
   
   if ("vibrate" in navigator) {
     try {
       switch(type) {
         case 'short':
-          navigator.vibrate(50);
+          navigator.vibrate(30);
           break;
         case 'long':
-          navigator.vibrate(100);
+          navigator.vibrate(70);
           break;
         case 'success':
-          navigator.vibrate([50, 30, 50]);
+          navigator.vibrate([30, 20, 30]);
           break;
         case 'error':
-          navigator.vibrate([100, 50, 100]);
+          navigator.vibrate([70, 40, 70]);
           break;
         default:
-          navigator.vibrate(50);
+          navigator.vibrate(30);
       }
       vibrated = true;
     } catch (error) {
@@ -1531,28 +1888,23 @@ function provideHapticFeedback(type = 'short') {
     }
   }
   
-  // Nếu không rung được (iPhone) thì phát âm thanh click
   if (!vibrated) {
     playClickSound();
   }
 }
 
-// Hàm rung/âm thanh ngắn cho thao tác nhẹ
 function vibrateShort() {
   provideHapticFeedback('short');
 }
 
-// Hàm rung/âm thanh dài cho thao tác quan trọng
 function vibrateLong() {
   provideHapticFeedback('long');
 }
 
-// Hàm rung/âm thanh cho thành công
 function vibrateSuccess() {
   provideHapticFeedback('success');
 }
 
-// Hàm rung/âm thanh cho lỗi
 function vibrateError() {
   provideHapticFeedback('error');
 }
@@ -1562,17 +1914,12 @@ function openReportModal() {
   closeSidebar();
   vibrateShort();
   
-  // Load danh sách người nhận từ localStorage
   loadRecipients();
-  
-  // Load danh sách chi tiêu mẫu từ localStorage
   loadExpenseTemplates();
   
-  // Reset danh sách chi tiêu của ca hiện tại
   currentExpenses = [];
   updateExpensesList();
   
-  // Điền danh sách ca
   const shifts = new Set();
   allData.forEach(item => {
     if (item.ca) shifts.add(item.ca);
@@ -1597,7 +1944,6 @@ function openReportModal() {
     shiftSelect.appendChild(option);
   });
   
-  // Reset thông tin
   document.getElementById('report-summary').style.display = 'none';
   document.getElementById('btn-generate-report').disabled = true;
   
@@ -1610,11 +1956,9 @@ function loadRecipients() {
   if (savedRecipients) {
     recipientList = JSON.parse(savedRecipients);
   } else {
-    // Danh sách mặc định nếu chưa có
     recipientList = ['anh út', 'phước'];
   }
   
-  // Cập nhật datalist
   const recipientDatalist = document.getElementById('recipient-list');
   recipientDatalist.innerHTML = '';
   recipientList.forEach(recipient => {
@@ -1630,14 +1974,12 @@ function loadExpenseTemplates() {
   if (savedExpenses) {
     expenseTemplateList = JSON.parse(savedExpenses);
   } else {
-    // Danh sách mẫu mặc định nếu chưa có
     expenseTemplateList = [
       { name: 'xăng', amount: 0 }   
     ];
     localStorage.setItem('gas_point_expense_templates', JSON.stringify(expenseTemplateList));
   }
   
-  // Cập nhật datalist cho chi tiêu
   updateExpenseTemplatesDatalist();
 }
 
@@ -1666,12 +2008,10 @@ function saveRecipient() {
     return;
   }
   
-  // Kiểm tra nếu chưa có trong danh sách thì thêm vào
   if (!recipientList.includes(recipient)) {
     recipientList.push(recipient);
     localStorage.setItem('gas_point_recipients', JSON.stringify(recipientList));
     
-    // Cập nhật lại datalist
     loadRecipients();
     
     showToast('✅ Đã lưu người nhận mới!');
@@ -1681,11 +2021,10 @@ function saveRecipient() {
     vibrateShort();
   }
   
-  // Cập nhật thông tin báo cáo
   updateReportSummary();
 }
 
-// HÀM MỚI: Thêm chi tiêu vào danh sách - ĐÃ CẬP NHẬT LOGIC
+// HÀM MỚI: Thêm chi tiêu vào danh sách
 function addExpense() {
   vibrateShort();
   
@@ -1705,20 +2044,17 @@ function addExpense() {
     return;
   }
   
-  // Thêm chi tiêu vào danh sách hiện tại
   currentExpenses.push({
     name: expenseName,
     amount: amount
   });
   
-  // Kiểm tra nếu tên chi tiêu chưa có trong danh sách mẫu thì hỏi người dùng
   const existingTemplate = expenseTemplateList.find(template => template.name.toLowerCase() === expenseName.toLowerCase());
   if (!existingTemplate) {
-    // Hỏi người dùng có muốn lưu làm mẫu không
     if (confirm(`Bạn có muốn lưu "${expenseName}" vào danh sách chi tiêu mẫu không?`)) {
       expenseTemplateList.push({
         name: expenseName,
-        amount: amount // Lưu cả số tiền mẫu
+        amount: amount
       });
       localStorage.setItem('gas_point_expense_templates', JSON.stringify(expenseTemplateList));
       updateExpenseTemplatesDatalist();
@@ -1727,14 +2063,11 @@ function addExpense() {
     }
   }
   
-  // Cập nhật danh sách hiển thị
   updateExpensesList();
   
-  // Reset input
   document.getElementById('expense-name').value = '';
   document.getElementById('expense-amount').value = '';
   
-  // Cập nhật thông tin báo cáo
   updateReportSummary();
 }
 
@@ -1756,12 +2089,11 @@ function updateExpensesList() {
           <div class="expense-item-name">${expense.name}</div>
         </div>
         <div class="expense-item-amount">-${formatCurrency(expense.amount)}</div>
-        <button class="expense-item-delete" onclick="removeExpense(${index})" onmousedown="vibrateShort()">×</button>
+        <button class="expense-item-delete liquid-effect" onclick="removeExpense(${index})" onmousedown="vibrateShort()">×</button>
       </div>
     `;
   });
   
-  // Tính tổng chi tiêu
   const totalExpense = currentExpenses.reduce((sum, expense) => sum + expense.amount, 0);
   html += `<div class="expense-total">Tổng chi tiêu: -${formatCurrency(totalExpense)}</div>`;
   
@@ -1801,16 +2133,10 @@ function updateReportSummary() {
     return;
   }
   
-  // Tính tổng tiền doanh thu
   const totalRevenue = shiftData.reduce((sum, item) => sum + (parseInt(item.so_tien) || 0), 0);
-  
-  // Tính tổng chi tiêu
   const totalExpense = currentExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-  
-  // Tính số tiền thực tế (doanh thu - chi tiêu)
   const actualAmount = totalRevenue - totalExpense;
   
-  // Thống kê
   const daNopCount = shiftData.filter(item => item.trang_thai === 'Đã nộp').length;
   const chuaNopCount = shiftData.length - daNopCount;
   
@@ -1847,28 +2173,21 @@ async function generateReport() {
     return;
   }
   
-  // Tính tổng tiền doanh thu
   const totalRevenue = shiftData.reduce((sum, item) => sum + (parseInt(item.so_tien) || 0), 0);
-  
-  // Tính tổng chi tiêu
   const totalExpense = currentExpenses.reduce((sum, expense) => sum + expense.amount, 0);
   
-  // Tạo nội dung báo cáo theo logic mới
   let reportContent;
   
   if (currentExpenses.length > 0) {
-    // Nếu có chi tiêu: "Giao [người nhận] [tổng doanh thu] (Trừ [mô tả chi tiêu 1] [số tiền 1], [mô tả chi tiêu 2] [số tiền 2], ...)"
     const expenseString = currentExpenses.map(expense => 
       `${expense.name} ${formatNumber(expense.amount)}`
     ).join(', ');
     
     reportContent = `Giao ${recipient} ${formatNumber(totalRevenue)} (Trừ ${expenseString})`;
   } else {
-    // Nếu không có chi tiêu: "Giao [người nhận] [tổng doanh thu]"
     reportContent = `Giao ${recipient} ${formatNumber(totalRevenue)}`;
   }
   
-  // Copy vào clipboard
   const copySuccess = await copyToClipboard(reportContent);
   
   if (copySuccess) {
@@ -1876,7 +2195,6 @@ async function generateReport() {
     vibrateSuccess();
     closeModal('report-modal');
     
-    // Hiển thị nội dung đã copy (tùy chọn)
     console.log('Nội dung báo cáo:', reportContent);
   } else {
     showToast('❌ Không thể sao chép vào clipboard!', 'error');
@@ -1918,7 +2236,6 @@ function openBatchStatusModal() {
     shiftSelect.appendChild(option);
   });
   
-  // Reset thông tin
   document.getElementById('batch-status-info').style.display = 'none';
   document.getElementById('batch-status-confirm').disabled = true;
   
@@ -1968,7 +2285,7 @@ function updateBatchStatusInfo() {
   }
 }
 
-// HÀM MỚI: Xác nhận chuyển trạng thái đồng loạt - ĐÃ SỬA LỖI
+// HÀM MỚI: Xác nhận chuyển trạng thái đồng loạt
 async function confirmBatchStatusUpdate() {
   vibrateLong();
   
@@ -1996,10 +2313,8 @@ async function confirmBatchStatusUpdate() {
   let successCount = 0;
   let errorCount = 0;
   
-  // Cập nhật từng bản ghi
   for (const item of shiftData) {
     try {
-      // Tạo bản sao của item để tránh thay đổi dữ liệu gốc
       const updatedItem = { ...item, trang_thai: newStatus };
       
       const data = {
@@ -2016,7 +2331,6 @@ async function confirmBatchStatusUpdate() {
       
       if (result.result === 'success') {
         successCount++;
-        // Cập nhật dữ liệu cục bộ - ĐÃ SỬA: Cập nhật toàn bộ thông tin item
         const index = allData.findIndex(d => d.id === item.id);
         if (index !== -1) {
           allData[index] = updatedItem;
@@ -2030,7 +2344,6 @@ async function confirmBatchStatusUpdate() {
     }
   }
   
-  // Hiển thị kết quả
   if (errorCount === 0) {
     showToast(`✅ Đã chuyển thành công ${successCount} điểm gas sang "${newStatus}"`);
     vibrateSuccess();
@@ -2039,16 +2352,10 @@ async function confirmBatchStatusUpdate() {
     vibrateError();
   }
   
-  // Đóng modal và cập nhật giao diện - ĐÃ SỬA: Gọi filterData() thay vì taiDuLieu()
   closeModal('batch-status-modal');
-  
-  // Cập nhật cacheDiem để đảm bảo dữ liệu nhất quán
   updateCacheDiem();
-  
-  // Cập nhật giao diện với dữ liệu cục bộ đã được cập nhật
   filterData();
   
-  // Reset nút xác nhận
   confirmBtn.textContent = 'Xác nhận';
   confirmBtn.disabled = false;
 }
@@ -2065,10 +2372,8 @@ function updateCacheDiem() {
 
 // HÀM MỚI: Kiểm tra xem điểm gas đã có vị trí GPS chưa
 function hasExistingGPSLocation(diemName) {
-  // Tìm tất cả các bản ghi của điểm gas này
   const diemEntries = allData.filter(item => item.ten_diem === diemName);
   
-  // Kiểm tra xem có bản ghi nào đã có GPS không
   for (let i = 0; i < diemEntries.length; i++) {
     if (diemEntries[i].ghi_chu && diemEntries[i].ghi_chu.includes('[GPS:')) {
       return true;
@@ -2481,15 +2786,15 @@ function displayStats(stats) {
   const container = document.getElementById('stats-container');
   
   container.innerHTML = `
-    <div class="stat-card">
+    <div class="stat-card liquid-effect">
       <div class="stat-value">${stats.count}</div>
       <div class="stat-label">Số giao dịch</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card liquid-effect">
       <div class="stat-value">${formatCurrency(stats.total)}</div>
       <div class="stat-label">Tổng tiền</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card liquid-effect">
       <div class="stat-value">${stats.daNop}/${stats.chuaNop}</div>
       <div class="stat-label">Đã nộp/Chưa nộp</div>
     </div>
@@ -2584,15 +2889,15 @@ function displayData(data) {
       <td data-label="Địa chỉ">${row.dia_chi}</td>
       <td data-label="Trạng thái">
         <div class="status-toggle-wrapper">
-          <span class="badge ${badgeClass} status-toggle" onclick="toggleTrangThai('${row.id}')" onmousedown="vibrateShort()">${row.trang_thai || 'Chưa nộp'}</span>
+          <span class="badge ${badgeClass} status-toggle liquid-effect" onclick="toggleTrangThai('${row.id}')" onmousedown="vibrateShort()">${row.trang_thai || 'Chưa nộp'}</span>
         </div>
       </td>
-      <td data-label="Ca"><span class="badge badge-primary">${caLabel}</span></td>
+      <td data-label="Ca"><span class="badge badge-info">${caLabel}</span></td>
       <td data-label="Thời gian">${row.timestamp ? new Date(row.timestamp).toLocaleString('vi-VN') : 'Không xác định'}</td>
       <td data-label="Thao tác">
         <div class="action-buttons">
-          <button class="btn-secondary btn-sm" onclick="editItem('${row.id}')" onmousedown="vibrateShort()">✏️ Sửa</button>
-          <button class="btn-danger btn-sm" onclick="deleteItem('${row.id}')" onmousedown="vibrateShort()">🗑️ Xóa</button>
+          <button class="btn-secondary btn-sm liquid-effect" onclick="editItem('${row.id}')" onmousedown="vibrateShort()">✏️ Sửa</button>
+          <button class="btn-danger btn-sm liquid-effect" onclick="deleteItem('${row.id}')" onmousedown="vibrateShort()">🗑️ Xóa</button>
         </div>
       </td>
     `;
@@ -2612,7 +2917,7 @@ function toggleTrangThai(id) {
   const badgeElement = document.querySelector(`[onclick="toggleTrangThai('${id}')"]`);
   if (badgeElement) {
     badgeElement.textContent = newTrangThai;
-    badgeElement.className = `badge ${newTrangThai === 'Đã nộp' ? 'badge-secondary' : 'badge-warning'} status-toggle`;
+    badgeElement.className = `badge ${newTrangThai === 'Đã nộp' ? 'badge-secondary' : 'badge-warning'} status-toggle liquid-effect`;
   }
 
   const updatedItem = { ...item, trang_thai: newTrangThai };
@@ -2635,7 +2940,6 @@ function toggleTrangThai(id) {
       if (index !== -1) {
         allData[index] = updatedItem;
       }
-      // Cập nhật cacheDiem
       updateCacheDiem();
       filterData();
     } else {
@@ -2710,7 +3014,6 @@ function resetForm() {
   document.getElementById('btn-submit').textContent = '💾 Lưu thông tin';
   document.getElementById('btn-cancel').style.display = 'none';
   
-  // Reset nút lưu vị trí
   resetSaveLocationButton();
 }
 
@@ -2719,26 +3022,23 @@ function resetSaveLocationButton() {
   const btn = document.getElementById('btn-save-location');
   btn.textContent = '📍 Lưu vị trí';
   btn.disabled = false;
-  btn.className = 'btn-success btn-sm';
+  btn.className = 'btn-success btn-sm liquid-effect';
 }
 
 // HÀM MỚI: Tìm bản ghi gần nhất cho một điểm gas cụ thể
 function findLatestEntryForDiem(diemName) {
-  // Lọc tất cả các bản ghi của điểm gas này
   const diemEntries = allData.filter(item => item.ten_diem === diemName);
   
   if (diemEntries.length === 0) {
     return null;
   }
   
-  // Sắp xếp theo thời gian giảm dần (mới nhất đầu tiên)
   diemEntries.sort((a, b) => {
     const timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
     const timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
     return timeB - timeA;
   });
   
-  // Trả về bản ghi mới nhất
   return diemEntries[0];
 }
 
@@ -2751,7 +3051,6 @@ function chonDiem() {
   const diaChiInput = document.getElementById('dia_chi');
   const soTienInput = document.getElementById('so_tien');
   
-  // Reset nút lưu vị trí khi thay đổi điểm gas
   resetSaveLocationButton();
   
   if (!val) {
@@ -2766,41 +3065,36 @@ function chonDiem() {
     tenDiemInput.disabled = true;
     tenDiemInput.placeholder = "Tên điểm đã chọn";
     
-    // Tìm số tiền của lần gần nhất cho điểm gas này
     const latestEntry = findLatestEntryForDiem(val);
     if (latestEntry) {
       soTienInput.value = latestEntry.so_tien;
-      // Thêm focus để người dùng có thể dễ dàng sửa nếu muốn
       setTimeout(() => {
         soTienInput.focus();
         soTienInput.select();
       }, 100);
     }
     
-    // Kiểm tra và cập nhật trạng thái nút lưu vị trí nếu điểm đã có GPS
     if (hasExistingGPSLocation(val)) {
       const btn = document.getElementById('btn-save-location');
-      btn.textContent = 'Đã có';
+      btn.textContent = '📍 Đã có';
       btn.disabled = true;
       btn.className = 'btn-location-disabled btn-sm';
     }
   }
 }
 
-// Xử lý nút lưu vị trí GPS - ĐÃ CẬP NHẬT
+// Xử lý nút lưu vị trí GPS
 function saveLocation() {
   vibrateShort();
   
   const tenDiem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
   
-  // Kiểm tra xem đã chọn điểm gas chưa
   if (!tenDiem) {
     showToast('⚠️ Vui lòng chọn điểm gas trước khi lưu vị trí!', 'error');
     vibrateError();
     return;
   }
   
-  // Kiểm tra xem điểm gas này đã có vị trí GPS chưa
   if (hasExistingGPSLocation(tenDiem)) {
     showToast('❌ Điểm gas này đã được lưu vị trí GPS trước đó!', 'error');
     vibrateError();
@@ -2823,7 +3117,6 @@ function saveLocation() {
       const lng = pos.coords.longitude.toFixed(6);
       let ghiChuInput = document.getElementById('ghi_chu');
       
-      // Xóa GPS cũ nếu có và thêm GPS mới
       let ghiChu = ghiChuInput.value.replace(/\s*\[GPS: [\d.-]+, [\d.-]+\]/, '');
       ghiChuInput.value = ghiChu + ` [GPS: ${lat}, ${lng}]`;
       
@@ -2832,16 +3125,15 @@ function saveLocation() {
       btn.textContent = '📍 Đã lưu vị trí';
       btn.disabled = false;
       
-      // Đổi màu nút để thể hiện đã lưu thành công
-      btn.className = 'btn-success btn-sm';
-      btn.style.backgroundColor = '#34c759';
+      btn.className = 'btn-success btn-sm liquid-effect';
+      btn.style.backgroundColor = 'rgba(48, 209, 88, 0.9)';
     }, 
     function(err) {
       showToast('❌ Không thể lấy vị trí: ' + err.message, 'error');
       vibrateError();
       btn.textContent = '📍 Lưu vị trí';
       btn.disabled = false;
-      btn.className = 'btn-success btn-sm';
+      btn.className = 'btn-success btn-sm liquid-effect';
     }, 
     { 
       enableHighAccuracy: true, 
@@ -2860,7 +3152,6 @@ function editItem(id) {
   
   editingId = id;
   
-  // Điền dữ liệu vào form
   document.getElementById('chon_diem').value = item.ten_diem;
   document.getElementById('ten_diem').value = item.ten_diem;
   document.getElementById('ten_diem').disabled = true;
@@ -2869,11 +3160,9 @@ function editItem(id) {
   document.getElementById('ghi_chu').value = item.ghi_chu || '';
   document.getElementById('trang_thai').value = item.trang_thai || 'Chưa nộp';
   
-  // Thay đổi nút thành cập nhật
   document.getElementById('btn-submit').textContent = '💾 Cập nhật';
   document.getElementById('btn-cancel').style.display = 'block';
   
-  // Kiểm tra và cập nhật trạng thái nút lưu vị trí
   if (hasExistingGPSLocation(item.ten_diem)) {
     const btn = document.getElementById('btn-save-location');
     btn.textContent = '📍 Đã có vị trí';
@@ -2883,7 +3172,6 @@ function editItem(id) {
     resetSaveLocationButton();
   }
   
-  // Cuộn lên đầu form
   document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
 }
 
@@ -3044,7 +3332,6 @@ async function taiDuLieu() {
     allData = data;
     currentFilteredData = data;
     
-    // Cập nhật cacheDiem từ dữ liệu mới
     updateCacheDiem();
     
     const diemList = document.getElementById('diem-list');
@@ -3103,7 +3390,6 @@ document.getElementById('scrollTopBtn').onclick = function() {
 
 // Khởi tạo
 document.addEventListener('DOMContentLoaded', function() {
-  // Khởi tạo âm thanh
   initAudio();
   
   updateShiftInfo();
@@ -3124,28 +3410,23 @@ document.addEventListener('DOMContentLoaded', function() {
   
   setupModalCloseOnOutsideClick();
   
-  // Thêm sự kiện cho modal chuyển trạng thái đồng loạt
   document.getElementById('batch-status-shift').addEventListener('change', updateBatchStatusInfo);
   document.getElementById('batch-status-new-status').addEventListener('change', updateBatchStatusInfo);
   
-  // Thêm sự kiện cho modal báo cáo cuối ca
   document.getElementById('report-shift').addEventListener('change', updateReportSummary);
   document.getElementById('report-recipient').addEventListener('input', updateReportSummary);
   
-  // Thêm sự kiện cho ô nhập tên chi tiêu (tự động điền số tiền từ mẫu)
   document.getElementById('expense-name').addEventListener('change', function() {
     vibrateShort();
     const expenseName = this.value.trim();
     if (!expenseName) return;
     
-    // Tìm trong danh sách mẫu
     const template = expenseTemplateList.find(t => t.name === expenseName);
     if (template && template.amount > 0) {
       document.getElementById('expense-amount').value = template.amount;
     }
   });
   
-  // Thêm sự kiện cho ô nhập số tiền chi tiêu
   document.getElementById('expense-amount').addEventListener('blur', function() {
     let value = this.value.trim();
     if (/^\d+$/.test(value) && value.length > 0 && value.length <= 3) {
@@ -3154,7 +3435,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // Thêm rung/âm thanh cho các nút trong sidebar
   const sidebarItems = document.querySelectorAll('.sidebar-item');
   sidebarItems.forEach(item => {
     item.addEventListener('mousedown', function() {
@@ -3162,7 +3442,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Thêm rung/âm thanh cho các nút chính trong form
   const mainButtons = document.querySelectorAll('.button-group button, .btn-sm, .btn-primary, .btn-secondary, .btn-success, .btn-warning, .btn-danger');
   mainButtons.forEach(button => {
     button.addEventListener('mousedown', function() {
@@ -3170,7 +3449,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Thêm rung/âm thanh cho các nút trong modal
   const modalButtons = document.querySelectorAll('.modal-footer button, .modal-header .close-modal');
   modalButtons.forEach(button => {
     button.addEventListener('mousedown', function() {
@@ -3178,7 +3456,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Thêm rung/âm thanh khi chọn trong select
   const selectElements = document.querySelectorAll('select');
   selectElements.forEach(select => {
     select.addEventListener('change', function() {
@@ -3186,7 +3463,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Thêm hiệu ứng cho các badge trạng thái
   const statusBadges = document.querySelectorAll('.status-toggle');
   statusBadges.forEach(badge => {
     badge.addEventListener('mousedown', function() {

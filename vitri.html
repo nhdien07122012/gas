@@ -5,676 +5,216 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản lý vị trí điểm gas</title>
   <link rel="icon" type="image/png" href="icon.png">
-  <link rel="apple-touch-icon" href="icon.png">
-  <link rel="apple-touch-icon-precomposed" href="icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Quản lý vị trí">
   <style>
     :root {
-      /* Màu sắc theo phong cách Apple Liquid Glass */
-      --primary: rgba(10, 132, 255, 0.9);
-      --primary-dark: rgba(5, 100, 200, 0.9);
-      --secondary: rgba(48, 209, 88, 0.9);
-      --danger: rgba(255, 69, 58, 0.9);
-      --warning: rgba(255, 159, 10, 0.9);
-      --info: rgba(100, 210, 255, 0.9);
-      --light: rgba(242, 242, 247, 0.7);
-      --dark: rgba(28, 28, 30, 0.9);
-      --gray: rgba(142, 142, 147, 0.8);
-      --border: rgba(229, 229, 234, 0.6);
-      --glass-bg: rgba(255, 255, 255, 0.7);
-      --glass-border: rgba(255, 255, 255, 0.3);
-      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-      --radius: 16px;
-      
-      /* Gradient Liquid */
-      --gradient-primary: linear-gradient(135deg, 
-        rgba(10, 132, 255, 0.8) 0%, 
-        rgba(0, 122, 255, 0.6) 100%);
-      --gradient-success: linear-gradient(135deg, 
-        rgba(48, 209, 88, 0.8) 0%, 
-        rgba(52, 199, 89, 0.6) 100%);
-      --gradient-warning: linear-gradient(135deg, 
-        rgba(255, 159, 10, 0.8) 0%, 
-        rgba(255, 149, 0, 0.6) 100%);
-      --gradient-danger: linear-gradient(135deg, 
-        rgba(255, 69, 58, 0.8) 0%, 
-        rgba(255, 45, 85, 0.6) 100%);
-      --gradient-glass: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.2) 0%, 
-        rgba(255, 255, 255, 0.1) 100%);
+      --primary: #2c80ff;
+      --primary-dark: #1a6de0;
+      --secondary: #34c759;
+      --danger: #ff3b30;
+      --warning: #ff9500;
+      --light: #f8f9fa;
+      --dark: #333;
+      --gray: #6c757d;
+      --border: #dee2e6;
+      --shadow: 0 2px 10px rgba(0,0,0,0.08);
+      --radius: 10px;
     }
-    
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 
-                   'Segoe UI', 'Helvetica Neue', sans-serif;
-      background: linear-gradient(135deg, 
-        rgba(242, 242, 247, 0.95) 0%, 
-        rgba(229, 229, 234, 0.9) 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
       color: var(--dark);
       line-height: 1.6;
       padding: 20px;
       min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      transition: margin-left 0.3s ease;
     }
-    
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border: 1px solid var(--glass-border);
+      background: white;
       border-radius: var(--radius);
-      box-shadow: var(--glass-shadow);
+      box-shadow: var(--shadow);
       overflow: hidden;
-      padding: 30px;
       transition: all 0.3s ease;
+      padding: 30px;
     }
-    
-    header {
-      margin-bottom: 30px;
-      padding: 25px 30px;
-      background: var(--gradient-primary);
-      border-radius: var(--radius);
-      color: white;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        45deg,
-        transparent,
-        rgba(255, 255, 255, 0.1),
-        transparent
-      );
-      animation: liquidMove 8s ease-in-out infinite;
-    }
-    
-    @keyframes liquidMove {
-      0%, 100% { transform: translateX(-100%); }
-      50% { transform: translateX(100%); }
-    }
-    
     h1 {
-      font-size: 2.2rem;
-      margin-bottom: 10px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      position: relative;
-      z-index: 1;
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-size: 2rem;
+      text-align: center;
     }
-    
-    .header-subtitle {
-      font-size: 1.1rem;
-      opacity: 0.9;
-      font-weight: 400;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .back-button {
-      position: fixed;
-      left: 30px;
-      top: 30px;
-      width: 50px;
-      height: 50px;
-      background: var(--gradient-primary);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 14px;
-      color: white;
-      font-size: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      cursor: pointer;
-      z-index: 100;
-      box-shadow: 0 4px 20px rgba(10, 132, 255, 0.3);
-    }
-    
-    .back-button:hover {
-      transform: translateX(-3px);
-      box-shadow: 0 6px 25px rgba(10, 132, 255, 0.4);
-    }
-    
     .search-group {
       display: flex;
-      gap: 15px;
-      margin-bottom: 30px;
+      gap: 10px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
     }
-    
     input {
-      flex: 1;
-      padding: 16px 18px;
-      background: rgba(255, 255, 255, 0.7);
-      border: 2px solid var(--border);
-      border-radius: 14px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
       font-size: 1rem;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-      color: var(--dark);
-      min-width: 250px;
+      flex: 1;
+      transition: all 0.3s ease;
     }
-    
     input:focus {
       outline: none;
-      background: rgba(255, 255, 255, 0.9);
       border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15);
-      transform: translateY(-1px);
+      box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
     }
-    
-    .stats-card {
-      background: var(--gradient-glass);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 25px;
-      text-align: center;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .stats-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    }
-    
-    .stat-value {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 5px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    .stat-label {
-      font-size: 0.95rem;
-      color: var(--gray);
-      font-weight: 500;
-    }
-    
-    .table-container {
-      overflow-x: auto;
-      margin-top: 10px;
-      border-radius: 14px;
-      background: var(--gradient-glass);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
-    }
-    
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 5px;
-      min-width: 700px;
+      min-width: 600px;
     }
-    
     th {
-      background: var(--gradient-glass);
-      padding: 18px 16px;
+      background-color: #f8f9fa;
+      padding: 16px 12px;
       text-align: left;
       font-weight: 600;
       color: var(--dark);
       border-bottom: 2px solid var(--border);
-      font-size: 0.95rem;
-      letter-spacing: 0.3px;
     }
-    
     td {
-      padding: 16px 16px;
+      padding: 14px 12px;
       border-bottom: 1px solid var(--border);
-      transition: background-color 0.2s ease;
     }
-    
     tr:last-child td {
       border-bottom: none;
     }
-    
     tr:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background-color: #f8fafc;
     }
-    
     .badge {
       display: inline-block;
-      padding: 8px 14px;
-      border-radius: 12px;
-      font-size: 0.85rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
       font-weight: 600;
-      letter-spacing: 0.3px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    .badge-primary {
-      background: var(--gradient-primary);
+      background: var(--secondary);
       color: white;
     }
-    
-    .badge-success {
-      background: var(--gradient-success);
-      color: white;
-    }
-    
-    .badge-warning {
-      background: var(--gradient-warning);
-      color: white;
-    }
-    
-    .badge-info {
-      background: var(--gradient-glass);
-      color: var(--dark);
-    }
-    
     .map-link {
-      background: var(--gradient-primary);
-      color: white;
+      background: var(--primary);
+      color: #fff !important;
       text-decoration: none;
       cursor: pointer;
       font-weight: 600;
-      border-radius: 14px;
-      padding: 12px 20px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 15px rgba(10, 132, 255, 0.2);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      min-width: 110px;
+      border-radius: 6px;
+      padding: 8px 16px;
+      display: inline-block;
+      box-shadow: 0 2px 8px rgba(44,128,255,0.08);
+      transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+      border: none;
+      outline: none;
     }
-    
     .map-link:hover {
       background: var(--primary-dark);
-      box-shadow: 0 6px 25px rgba(10, 132, 255, 0.3);
-      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 4px 16px rgba(44,128,255,0.18);
+      transform: translateY(-2px) scale(1.04);
     }
-    
-    .map-link:active {
-      transform: translateY(0) scale(0.98);
-    }
-    
-    .location-actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    
-    .copy-btn {
-      background: var(--gradient-glass);
-      color: var(--dark);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 10px 16px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-    
-    .copy-btn:hover {
-      background: rgba(255, 255, 255, 0.4);
-      transform: translateY(-1px);
-    }
-    
     #empty-state {
       text-align: center;
-      padding: 60px 20px;
       color: var(--gray);
+      margin: 30px 0;
       display: none;
+      padding: 40px 20px;
     }
-    
     #empty-state h3 {
-      margin-bottom: 15px;
-      font-size: 1.3rem;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
     }
-    
     #empty-state p {
-      margin-top: 10px;
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
-    
-    /* Toast notification */
-    .toast {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) translateY(100px);
-      background: var(--gradient-primary);
-      color: white;
-      padding: 18px 28px;
-      border-radius: 14px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-      z-index: 1002;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      min-width: 300px;
-      text-align: center;
-      justify-content: center;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      font-weight: 500;
-    }
-
-    .toast.show {
-      transform: translate(-50%, -50%) translateY(0);
-      opacity: 1;
-    }
-    
-    .toast.success {
-      background: var(--gradient-success);
-    }
-    
-    .toast.error {
-      background: var(--gradient-danger);
-    }
-
-    .toast.warning {
-      background: var(--gradient-warning);
-    }
-    
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-    
-    ::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-    }
-    
-    ::-webkit-scrollbar-thumb {
-      background: rgba(142, 142, 147, 0.4);
-      border-radius: 10px;
-      border: 2px solid transparent;
-      background-clip: padding-box;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(142, 142, 147, 0.6);
-    }
-    
-    /* Liquid effect for interactive elements */
-    .liquid-effect {
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .liquid-effect::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.2),
-        transparent
-      );
-      transition: left 0.7s ease;
-    }
-    
-    .liquid-effect:hover::before {
-      left: 100%;
-    }
-    
-    /* Animation */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .fade-in {
-      animation: fadeIn 0.4s ease-out;
-    }
-    
-    /* Responsive styles */
+    /* Ẩn hoàn toàn cột ghi chú */
+    .col-ghichu { display: none !important; }
     @media (max-width: 768px) {
       body {
-        padding: 15px;
+        padding: 10px;
       }
-      
       .container {
-        padding: 20px;
+        padding: 10px;
       }
-      
-      header {
-        padding: 20px;
-        margin-bottom: 20px;
-      }
-      
       h1 {
-        font-size: 1.6rem;
+        font-size: 2rem;
       }
-      
-      .back-button {
-        width: 44px;
-        height: 44px;
-        font-size: 1.3rem;
-        left: 20px;
-        top: 20px;
-      }
-      
-      .search-group {
-        flex-direction: column;
-        gap: 12px;
-      }
-      
-      input {
-        min-width: 100%;
-        padding: 14px 16px;
-      }
-      
       th, td {
-        padding: 14px 12px;
-        font-size: 0.9rem;
+        padding: 12px 8px;
+        font-size: 0.95rem;
       }
-      
       table {
-        min-width: 600px;
+        min-width: 400px;
       }
-      
-      .map-link {
-        padding: 10px 16px;
-        min-width: 90px;
-        font-size: 0.9rem;
-      }
-      
-      .location-actions {
+      .search-group {
         flex-direction: column;
         gap: 8px;
       }
-      
-      .toast {
-        min-width: 280px;
-        padding: 16px 24px;
+      input {
+        font-size: 1rem;
+        padding: 12px 14px;
+      }
+      #empty-state {
+        padding: 20px 10px;
       }
     }
-    
     @media (max-width: 480px) {
       body {
-        padding: 12px;
+        padding: 5px;
       }
-      
       .container {
-        padding: 15px;
+        padding: 5px;
       }
-      
-      header {
-        padding: 18px;
-      }
-      
       h1 {
-        font-size: 1.4rem;
+        font-size: 2rem;
       }
-      
-      .back-button {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-        left: 15px;
-        top: 15px;
-      }
-      
-      input {
-        padding: 12px 14px;
-        font-size: 16px;
-      }
-      
       th, td {
-        padding: 12px 10px;
-        font-size: 0.85rem;
+        padding: 10px 6px;
+        font-size: 0.9rem;
       }
-      
       table {
-        min-width: 500px;
+        min-width: 320px;
       }
-      
-      .map-link {
-        padding: 8px 12px;
-        min-width: 80px;
-        font-size: 0.85rem;
-      }
-      
-      .toast {
-        min-width: 260px;
-        padding: 14px 20px;
+      input {
         font-size: 0.95rem;
+        padding: 10px 10px;
+      }
+      #empty-state {
+        padding: 10px 2px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Nút quay lại -->
-  <a href="index.html" class="back-button liquid-effect" title="Quay lại trang chính">
-    ←
-  </a>
-  
-  <!-- Toast notification -->
-  <div class="toast" id="toast">
-    <span id="toast-message">Đã sao chép vào clipboard!</span>
-  </div>
-
   <div class="container">
-    <header class="liquid-effect">
-      <h1><span class="icon-glow">📍</span> Quản lý vị trí điểm gas</h1>
-      <p class="header-subtitle">Xem và quản lý tất cả vị trí GPS đã được lưu</p>
-    </header>
-    
-    <div class="stats-card liquid-effect" id="stats-card" style="display: none;">
-      <div class="stat-value" id="total-locations">0</div>
-      <div class="stat-label">Vị trí đã lưu</div>
-    </div>
-    
+    <h1>📍 Quản lý vị trí</h1>
     <div class="search-group">
-      <input id="search" placeholder="🔍 Tìm kiếm tên điểm, địa chỉ hoặc tọa độ..." 
-             class="liquid-effect" oninput="filterVitri()">
+      <input id="search" placeholder="Tìm kiếm tên điểm, địa chỉ hoặc ghi chú...">
     </div>
-    
-    <div class="table-container">
-      <table id="vitri-table">
-        <thead>
-          <tr>
-            <th>Tên điểm</th>
-            <th>Địa chỉ</th>
-            <th>Tọa độ GPS</th>
-            <th>Thao tác</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    
-    <div id="empty-state">
-      <div style="font-size: 4rem; margin-bottom: 20px;">📭</div>
-      <h3>Chưa có vị trí nào được lưu</h3>
-      <p>Hãy sử dụng chức năng "Lưu vị trí GPS" trên trang chính để bắt đầu.</p>
-      <p style="margin-top: 20px; font-size: 0.9rem; color: var(--gray);">
-        <a href="index.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">
-          ← Quay lại trang chính để lưu vị trí
-        </a>
-      </p>
+    <table id="vitri-table">
+      <thead>
+        <tr>
+          <th>Tên điểm</th>
+          <th>Địa chỉ</th>
+          <!-- Ẩn hoàn toàn cột ghi chú -->
+          <th class="col-ghichu" style="display:none;">Ghi chú</th>
+          <th>Tọa độ</th>
+          <th>Bản đồ</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div id="empty-state" style="text-align:center;color:#888;margin:30px 0;display:none;">
+      <h3>📭 Chưa có vị trí nào được lưu</h3>
+      <p>Hãy sử dụng chức năng lưu vị trí trên trang chính để bắt đầu.</p>
     </div>
   </div>
-
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
     let allData = [];
     let vitriData = [];
-
-    // Hàm hiển thị thông báo toast
-    function showToast(message, type = 'success') {
-      const toast = document.getElementById('toast');
-      const toastMessage = document.getElementById('toast-message');
-      
-      toastMessage.textContent = message;
-      toast.className = `toast ${type} show`;
-      
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
-    }
-
-    // Hàm sao chép vào clipboard
-    async function copyToClipboard(text) {
-      try {
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(text);
-          return true;
-        } else {
-          const textArea = document.createElement('textarea');
-          textArea.value = text;
-          textArea.style.position = 'fixed';
-          textArea.style.opacity = '0';
-          document.body.appendChild(textArea);
-          textArea.select();
-          const success = document.execCommand('copy');
-          document.body.removeChild(textArea);
-          return success;
-        }
-      } catch (err) {
-        console.error('Lỗi khi sao chép vào clipboard: ', err);
-        return false;
-      }
-    }
 
     // Hàm trích xuất GPS từ ghi chú
     function extractGPS(note) {
@@ -692,12 +232,6 @@
       return null;
     }
 
-    // Hàm định dạng tọa độ đẹp
-    function formatCoordinates(lat, lng) {
-      return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-    }
-
-    // Hàm hiển thị dữ liệu vị trí
     function displayVitri(data) {
       const tbody = document.querySelector('#vitri-table tbody');
       tbody.innerHTML = '';
@@ -709,90 +243,45 @@
         
         count++;
         const tr = document.createElement('tr');
-        tr.className = 'fade-in';
         tr.innerHTML = `
-          <td>
-            <div style="font-weight: 600; color: var(--dark);">${row.ten_diem || 'N/A'}</div>
-          </td>
-          <td>
-            <div style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">${row.dia_chi || 'N/A'}</div>
-          </td>
-          <td>
-            <div class="badge badge-info" style="font-family: monospace; cursor: pointer;" 
-                 onclick="copyCoordinates('${gps.lat}', '${gps.lng}')" 
-                 title="Nhấn để sao chép tọa độ">
-              ${formatCoordinates(gps.lat, gps.lng)}
-            </div>
-          </td>
-          <td>
-            <div class="location-actions">
-              <a class="map-link liquid-effect" href="https://maps.google.com/?q=${gps.lat},${gps.lng}" target="_blank">
-                <span style="font-size: 1.2rem;">🗺️</span> Xem bản đồ
-              </a>
-              <button class="copy-btn liquid-effect" onclick="copyCoordinates('${gps.lat}', '${gps.lng}')">
-                📋 Sao chép
-              </button>
-            </div>
-          </td>
+          <td>${row.ten_diem || 'N/A'}</td>
+          <td>${row.dia_chi || 'N/A'}</td>
+          <td class="col-ghichu" style="display:none;">${row.ghi_chu || ''}</td>
+          <td><span class="badge">${gps.lat}, ${gps.lng}</span></td>
+          <td><a class="map-link" href="https://maps.google.com/?q=${gps.lat},${gps.lng}" target="_blank">🗺️</a></td>
         `;
         tbody.appendChild(tr);
       });
       
-      // Cập nhật thống kê
-      const statsCard = document.getElementById('stats-card');
-      const totalLocations = document.getElementById('total-locations');
-      
-      if (count > 0) {
-        statsCard.style.display = 'block';
-        totalLocations.textContent = count;
-      } else {
-        statsCard.style.display = 'none';
-      }
-      
-      // Hiển thị/ẩn empty state
-      const emptyState = document.getElementById('empty-state');
-      emptyState.style.display = count === 0 ? 'block' : 'none';
+      document.getElementById('empty-state').style.display = count === 0 ? 'block' : 'none';
     }
 
-    // Hàm sao chép tọa độ
-    async function copyCoordinates(lat, lng) {
-      const text = `${lat}, ${lng}`;
-      const success = await copyToClipboard(text);
-      
-      if (success) {
-        showToast('✅ Đã sao chép tọa độ vào clipboard!');
-      } else {
-        showToast('❌ Không thể sao chép tọa độ!', 'error');
-      }
-    }
-
-    // Hàm lọc vị trí
     function filterVitri() {
-      const query = document.getElementById('search').value.toLowerCase().trim();
+      const q = document.getElementById('search').value.toLowerCase().trim();
       
-      if (!query) {
+      if (!q) {
         displayVitri(vitriData);
         return;
       }
       
       const filtered = vitriData.filter(row => {
+        // Tìm kiếm trong tên điểm, địa chỉ và ghi chú
         const searchableText = `
           ${row.ten_diem || ''}
           ${row.dia_chi || ''}
           ${row.ghi_chu || ''}
         `.toLowerCase();
         
-        return searchableText.includes(query);
+        return searchableText.includes(q);
       });
       
       displayVitri(filtered);
     }
 
-    // Hàm tải dữ liệu
     async function taiDuLieu() {
       try {
         console.log('Đang tải dữ liệu từ Google Sheets...');
-        const res = await fetch(scriptURL + '?t=' + Date.now());
+        const res = await fetch(scriptURL);
         
         if (!res.ok) {
           throw new Error(`Lỗi HTTP! status: ${res.status}`);
@@ -810,25 +299,13 @@
         console.log('Dữ liệu có GPS:', vitriData);
         displayVitri(vitriData);
         
-        if (vitriData.length > 0) {
-          showToast(`✅ Đã tải ${vitriData.length} vị trí từ hệ thống`);
-        } else {
-          showToast('ℹ️ Không tìm thấy vị trí GPS nào trong dữ liệu', 'warning');
-        }
-        
       } catch (e) {
         console.error('Lỗi khi tải dữ liệu:', e);
-        const emptyState = document.getElementById('empty-state');
-        emptyState.style.display = 'block';
-        emptyState.innerHTML = `
-          <div style="font-size: 4rem; margin-bottom: 20px;">❌</div>
-          <h3>Lỗi khi tải dữ liệu</h3>
+        document.getElementById('empty-state').style.display = 'block';
+        document.getElementById('empty-state').innerHTML = `
+          <h3>❌ Lỗi khi tải dữ liệu</h3>
           <p>Không thể kết nối đến nguồn dữ liệu. Vui lòng thử lại sau.</p>
-          <p style="margin-top: 20px; font-size: 0.9rem; color: var(--gray);">
-            <a href="javascript:location.reload()" style="color: var(--primary); text-decoration: none; font-weight: 600;">
-              🔄 Thử lại
-            </a>
-          </p>
+          <p><small>Chi tiết lỗi: ${e.message}</small></p>
         `;
       }
     }
@@ -837,19 +314,7 @@
     document.getElementById('search').addEventListener('input', filterVitri);
 
     // Khởi động
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('=== TRANG QUẢN LÝ VỊ TRÍ ĐANG KHỞI ĐỘNG ===');
-      
-      // Tải dữ liệu ngay khi trang load
-      taiDuLieu();
-      
-      // Thêm sự kiện Enter để tìm kiếm
-      document.getElementById('search').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          filterVitri();
-        }
-      });
-    });
+    taiDuLieu();
   </script>
 </body>
 </html>
