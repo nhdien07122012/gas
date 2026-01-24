@@ -13,29 +13,19 @@
 <meta name="apple-mobile-web-app-title" content="Quản lý điểm gas">
 <style>
   :root {
-    --primary: #007AFF;
-    --primary-dark: #0056CC;
-    --primary-light: #409CFF;
-    --secondary: #34C759;
-    --secondary-dark: #2CA94F;
-    --danger: #FF3B30;
-    --danger-dark: #D70015;
-    --warning: #FF9500;
-    --warning-dark: #E68500;
-    --info: #5AC8FA;
-    --light: #F8F9FA;
-    --dark: #1D1D1F;
-    --gray: #8E8E93;
-    --border: #D1D1D6;
-    --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    --shadow-strong: 0 8px 32px rgba(0, 0, 0, 0.12);
-    --radius: 20px;
-    --radius-pill: 50px;
-    --radius-sm: 12px;
-    --glass-white: rgba(255, 255, 255, 0.35);
-    --glass-black: rgba(0, 0, 0, 0.05);
-    --night-shift: #2C2C2E;
-    --day-shift: #F2F2F7;
+    --primary: #2c80ff;
+    --primary-dark: #1a6de0;
+    --secondary: #34c759;
+    --danger: #ff3b30;
+    --warning: #ff9500;
+    --light: #f8f9fa;
+    --dark: #333;
+    --gray: #6c757d;
+    --border: #dee2e6;
+    --shadow: 0 2px 10px rgba(0,0,0,0.08);
+    --radius: 10px;
+    --night-shift: #4a5568;
+    --day-shift: #f7fafc;
     --sidebar-width: 280px;
   }
   
@@ -46,8 +36,8 @@
   }
   
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    background: linear-gradient(135deg, #F2F2F7 0%, #E5E5EA 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
     color: var(--dark);
     line-height: 1.6;
     padding: 20px;
@@ -58,13 +48,11 @@
   .container {
     max-width: 1200px;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.95);
+    background: white;
     border-radius: var(--radius);
-    box-shadow: var(--shadow-strong);
+    box-shadow: var(--shadow);
     overflow: hidden;
     transition: all 0.3s ease;
-    border: 1px solid var(--glass-white);
-    backdrop-filter: blur(20px);
   }
   
   /* Sidebar styles */
@@ -74,15 +62,13 @@
     left: -280px;
     width: var(--sidebar-width);
     height: 100%;
-    background: rgba(255, 255, 255, 0.95);
+    background: white;
     box-shadow: 2px 0 15px rgba(0,0,0,0.1);
     z-index: 1001;
     transition: left 0.3s ease;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--glass-white);
-    backdrop-filter: blur(30px);
   }
   
   .sidebar.open {
@@ -90,40 +76,26 @@
   }
   
   .sidebar-header {
-    padding: 25px 20px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    padding: 20px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--glass-white);
   }
   
   .sidebar-header h2 {
     font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
   }
   
   .close-sidebar {
     background: none;
     border: none;
     color: white;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     cursor: pointer;
     padding: 0;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-  }
-  
-  .close-sidebar:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
+    width: auto;
   }
   
   .sidebar-content {
@@ -134,56 +106,28 @@
   .sidebar-item {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 15px;
-    padding: 18px 20px;
-    margin-bottom: 12px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 248, 248, 0.9) 100%);
+    justify-content: left;
+    gap: 12px;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: var(--radius);
+    background: #f8f9fa;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    border: 1px solid var(--glass-white);
+    transition: all 0.2s ease;
+    border: none;
     width: 100%;
     text-align: left;
     font-size: 1rem;
-    font-weight: 500;
-    color: var(--dark);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-    position: relative;
-    overflow: hidden;
   }
-  
-  .sidebar-item:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 16px;
-  }
-  
+
   .sidebar-item:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  }
-  
-  .sidebar-item:hover:before {
-    opacity: 1;
+    background: #e9ecef;
+    transform: translateY(-2px);
   }
   
   .sidebar-item.active {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    background: var(--primary);
     color: white;
-    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.25);
-  }
-  
-  .sidebar-item.active:before {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.15) 100%);
-    opacity: 1;
   }
   
   .sidebar-footer {
@@ -192,7 +136,6 @@
     font-size: 0.85rem;
     color: var(--gray);
     text-align: center;
-    background: rgba(248, 248, 248, 0.9);
   }
   
   .overlay {
@@ -204,7 +147,6 @@
     background: rgba(0,0,0,0.5);
     z-index: 1000;
     display: none;
-    backdrop-filter: blur(5px);
   }
   
   .overlay.active {
@@ -212,30 +154,22 @@
   }
   
   .menu-toggle {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid var(--glass-white);
+    background: none;
+    border: none;
     color: white;
     font-size: 1.5rem;
     cursor: pointer;
-    padding: 10px 12px;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-  }
-  
-  .menu-toggle:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
+    padding: 5px;
+    margin-right: 10px;
   }
   
   /* Header styles */
   header {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: white;
-    padding: 30px;
+    padding: 25px 30px;
     text-align: center;
     position: relative;
-    border-bottom: 1px solid var(--glass-white);
   }
   
   header h1 {
@@ -244,27 +178,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    gap: 10px;
   }
   
   header p {
     opacity: 0.9;
     font-size: 1rem;
-    font-weight: 400;
   }
   
   .shift-info {
-    background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%);
+    background: var(--night-shift);
     color: white;
-    padding: 18px 30px;
+    padding: 15px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
   
   .shift-info .current-shift {
@@ -278,9 +208,8 @@
   }
   
   .card {
-    padding: 30px;
+    padding: 25px 30px;
     border-bottom: 1px solid var(--border);
-    background: #FFFFFF;
   }
   
   .card:last-child {
@@ -288,162 +217,111 @@
   }
   
   .form-group {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
   
   label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-weight: 600;
     color: var(--dark);
-    font-size: 1rem;
   }
   
   input, select {
     width: 100%;
-    padding: 16px 18px;
+    padding: 14px 16px;
     border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius);
     font-size: 1rem;
     transition: all 0.3s ease;
-    background: #FFFFFF;
-    font-family: inherit;
   }
   
   input:focus, select:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
-    background: #FFFFFF;
-  }
-  
-  /* NÚT LIQUID GLASS STYLES */
-  button {
-    flex: 1;
-    padding: 18px 24px;
-    border: none;
-    border-radius: var(--radius-pill);
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    position: relative;
-    overflow: hidden;
-    letter-spacing: -0.01em;
-    border: 1px solid var(--glass-white);
-    backdrop-filter: blur(10px);
-  }
-  
-  button:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: var(--radius-pill);
-  }
-  
-  button:hover:before {
-    opacity: 1;
-  }
-  
-  /* Nút chính - Primary */
-  .btn-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.25);
-  }
-  
-  .btn-primary:hover {
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 25px rgba(0, 122, 255, 0.35);
-  }
-  
-  .btn-primary:active {
-    transform: translateY(0) scale(0.98);
-    box-shadow: 0 2px 10px rgba(0, 122, 255, 0.2);
-  }
-  
-  /* Nút phụ - Secondary */
-  .btn-secondary {
-    background: linear-gradient(135deg, #F2F2F7 0%, #E5E5EA 100%);
-    color: var(--dark);
-    box-shadow: 0 4px 15px rgba(142, 142, 147, 0.1);
-  }
-  
-  .btn-secondary:hover {
-    background: linear-gradient(135deg, #E5E5EA 0%, #D1D1D6 100%);
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 25px rgba(142, 142, 147, 0.15);
-  }
-  
-  /* Nút thành công - Success */
-  .btn-success {
-    background: linear-gradient(135deg, var(--secondary) 0%, #4CD964 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(52, 199, 89, 0.25);
-  }
-  
-  .btn-success:hover {
-    background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--secondary) 100%);
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 25px rgba(52, 199, 89, 0.35);
-  }
-  
-  /* Nút cảnh báo - Warning */
-  .btn-warning {
-    background: linear-gradient(135deg, var(--warning) 0%, #FFB323 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 149, 0, 0.25);
-  }
-  
-  .btn-warning:hover {
-    background: linear-gradient(135deg, var(--warning-dark) 0%, var(--warning) 100%);
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 25px rgba(255, 149, 0, 0.35);
-  }
-  
-  /* Nút nguy hiểm - Danger */
-  .btn-danger {
-    background: linear-gradient(135deg, var(--danger) 0%, #FF6961 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 59, 48, 0.25);
-  }
-  
-  .btn-danger:hover {
-    background: linear-gradient(135deg, var(--danger-dark) 0%, var(--danger) 100%);
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 25px rgba(255, 59, 48, 0.35);
-  }
-  
-  /* Nút nhỏ */
-  .btn-sm {
-    padding: 12px 20px;
-    font-size: 0.9rem;
-    border-radius: 20px;
+    box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
   }
   
   .button-group {
     display: flex;
     gap: 15px;
-    margin-top: 30px;
+    margin-top: 25px;
+  }
+  
+  button {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .btn-primary {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 128, 255, 0.3);
+  }
+  
+  .btn-secondary {
+    background-color: #f1f3f5;
+    color: var(--dark);
+  }
+  
+  .btn-secondary:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+  }
+  
+  .btn-success {
+    background-color: var(--secondary);
+    color: white;
+  }
+  
+  .btn-success:hover {
+    background-color: #30b352;
+    transform: translateY(-2px);
+  }
+  
+  .btn-warning {
+    background-color: var(--warning);
+    color: white;
+  }
+  
+  .btn-warning:hover {
+    background-color: #e08900;
+    transform: translateY(-2px);
+  }
+  
+  .btn-danger {
+    background-color: var(--danger);
+    color: white;
+  }
+  
+  .btn-danger:hover {
+    background-color: #e0352b;
+    transform: translateY(-2px);
+  }
+  
+  .btn-sm {
+    padding: 8px 12px;
+    font-size: 0.85rem;
   }
   
   .table-container {
     overflow-x: auto;
     margin-top: 10px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    background: #FFFFFF;
   }
   
   table {
@@ -453,8 +331,8 @@
   }
   
   th {
-    background: linear-gradient(135deg, #F8F9FA 0%, #F2F2F7 100%);
-    padding: 18px 16px;
+    background-color: #f8f9fa;
+    padding: 16px 12px;
     text-align: left;
     font-weight: 600;
     color: var(--dark);
@@ -462,7 +340,7 @@
   }
   
   td {
-    padding: 16px 16px;
+    padding: 14px 12px;
     border-bottom: 1px solid var(--border);
   }
   
@@ -471,12 +349,12 @@
   }
   
   tr:hover {
-    background: linear-gradient(135deg, #F8F9FA 0%, #F2F2F7 100%);
+    background-color: #f8fafc;
   }
   
   .empty-state {
     text-align: center;
-    padding: 50px 20px;
+    padding: 40px 20px;
     color: var(--gray);
   }
   
@@ -488,50 +366,40 @@
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
   }
   
   .stat-card {
     flex: 1;
-    min-width: 180px;
-    background: linear-gradient(135deg, #F8F9FA 0%, #F2F2F7 100%);
+    min-width: 150px;
+    background: #f8f9fa;
     border-radius: var(--radius);
-    padding: 25px 20px;
+    padding: 15px;
     text-align: center;
-    border: 1px solid var(--glass-white);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-    transition: all 0.3s ease;
-  }
-  
-  .stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   }
   
   .stat-value {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--primary);
-    margin-bottom: 8px;
   }
   
   .stat-label {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: var(--gray);
+    margin-top: 5px;
   }
   
   .filter-group {
     display: flex;
-    gap: 12px;
-    margin-bottom: 25px;
+    gap: 10px;
+    margin-bottom: 20px;
     flex-wrap: wrap;
   }
   
   .filter-group select {
     flex: 1;
     min-width: 200px;
-    border-radius: var(--radius-pill);
-    padding: 14px 20px;
   }
   
   /* Modal styles */
@@ -547,42 +415,37 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
-    backdrop-filter: blur(10px);
   }
   
   .modal-content {
-    background: rgba(255, 255, 255, 0.98);
+    background: white;
     border-radius: var(--radius);
     width: 90%;
     max-width: 500px;
-    box-shadow: var(--shadow-strong);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     animation: modalFadeIn 0.3s ease-out;
     max-height: 85vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     position: relative;
-    border: 1px solid var(--glass-white);
-    backdrop-filter: blur(30px);
   }
   
   .modal-header {
-    padding: 24px 28px;
+    padding: 20px 25px;
     border-bottom: 1px solid var(--border);
     display: flex;
-    justify-content: space-between;
+    justify-content: between;
     align-items: center;
     flex-shrink: 0;
-    background: linear-gradient(135deg, #F8F9FA 0%, #F2F2F7 100%);
   }
   
   .modal-header h2 {
     font-size: 1.4rem;
-    font-weight: 700;
   }
   
   .modal-body {
-    padding: 28px;
+    padding: 25px;
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
@@ -590,43 +453,45 @@
   }
   
   .modal-footer {
-    padding: 24px 28px;
+    padding: 20px 25px;
     border-top: 1px solid var(--border);
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
+    gap: 10px;
     flex-shrink: 0;
     margin-top: auto;
-    background: linear-gradient(135deg, #F8F9FA 0%, #F2F2F7 100%);
   }
   
   .modal-footer button {
-    min-width: 120px;
+    width: 100%;
     padding: 14px;
     font-size: 1rem;
-    min-height: 48px;
+    min-height: 44px;
+  }
+    
+  .modal-footer .btn-danger {
+    font-size: 1.2rem;
+    min-height: 52px;
+    padding: 16px 0;
+    border-radius: 12px;
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
   }
   
   .close-modal {
-    background: rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--glass-white);
+    background: none;
+    border: none;
     font-size: 1.5rem;
     cursor: pointer;
     color: var(--gray);
     padding: 0;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.2s ease;
+    width: auto;
   }
   
   .close-modal:hover {
-    background: rgba(0, 0, 0, 0.1);
     color: var(--dark);
-    transform: scale(1.1);
+    transform: none;
   }
   
   /* Responsive styles */
@@ -636,7 +501,7 @@
     }
     
     header {
-      padding: 25px 20px;
+      padding: 20px;
     }
     
     header h1 {
@@ -644,14 +509,14 @@
     }
     
     .shift-info {
-      padding: 16px 20px;
+      padding: 15px 20px;
       flex-direction: column;
       align-items: flex-start;
-      gap: 8px;
+      gap: 5px;
     }
     
     .card {
-      padding: 24px;
+      padding: 20px;
     }
     
     .button-group {
@@ -668,11 +533,10 @@
     
     .filter-group select {
       min-width: 100%;
-      border-radius: var(--radius-pill);
     }
     
     th, td {
-      padding: 14px 12px;
+      padding: 12px 8px;
       font-size: 0.9rem;
     }
     
@@ -681,7 +545,7 @@
     }
     
     .modal {
-      padding: 15px;
+      padding: 10px;
     }
     
     .modal-content {
@@ -691,7 +555,7 @@
     }
     
     .modal-header, .modal-body, .modal-footer {
-      padding: 20px;
+      padding: 15px;
     }
     
     .modal-body {
@@ -701,16 +565,38 @@
     .modal-footer {
       flex-direction: column;
       gap: 12px;
-      padding: 20px;
+      padding: 15px 10px;
     }
     
     .modal-footer button {
       width: 100%;
-      min-width: auto;
+      padding: 16px;
+      font-size: 1.1rem;
+      min-height: 48px;
+      border-radius: 10px;
+    }
+    
+    .modal-footer .btn-danger {
+      font-size: 1.3rem;
+      min-height: 56px;
+      padding: 18px 0;
+      border-radius: 14px;
+      width: 100%;
+      z-index: 1;
+    }
+    
+    .close-modal {
+      font-size: 1.8rem;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .table-container {
-      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
     }
     
     table {
@@ -719,28 +605,28 @@
     
     .action-buttons {
       flex-direction: column;
-      gap: 8px;
+      gap: 5px;
     }
     
     .action-buttons button {
-      padding: 12px;
+      padding: 10px;
       font-size: 0.9rem;
-      min-height: 40px;
+      min-height: 36px;
     }
     
     .badge {
-      padding: 8px 14px;
+      padding: 6px 10px;
       font-size: 0.85rem;
     }
   }
   
   @media (max-width: 480px) {
     body {
-      padding: 12px;
+      padding: 10px;
     }
     
     header {
-      padding: 22px 18px;
+      padding: 18px 15px;
     }
     
     header h1 {
@@ -748,22 +634,21 @@
     }
     
     .card {
-      padding: 20px;
+      padding: 18px 15px;
     }
     
     input, select {
-      padding: 14px 16px;
+      padding: 12px 14px;
       font-size: 16px;
     }
     
     button {
-      padding: 16px;
-      min-height: 52px;
+      padding: 14px;
+      min-height: 44px;
     }
     
     .btn-sm {
-      min-height: 44px;
-      padding: 10px 16px;
+      min-height: 36px;
     }
     
     .modal-content {
@@ -777,73 +662,85 @@
     }
     
     .modal-body {
-      padding: 20px;
+      padding: 15px 10px;
       max-height: calc(95vh - 100px);
     }
     
     .modal-footer {
-      padding: 20px;
+      flex-direction: column;
+      gap: 12px;
+      padding: 16px 6px;
     }
     
     .modal-footer button {
-      min-height: 52px;
+      width: 100%;
+      padding: 16px;
+      font-size: 1.1rem;
+      min-height: 48px;
+      border-radius: 10px;
+    }
+    
+    .modal-footer .btn-danger {
+      font-size: 1.3rem;
+      min-height: 56px;
+      padding: 18px 0;
+      border-radius: 14px;
+      width: 100%;
+      z-index: 1;
+    }
+    
+    .modal-body p {
+      font-size: 1rem;
+      line-height: 1.5;
     }
   }
   
   /* Animation */
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   
   @keyframes modalFadeIn {
-    from { opacity: 0; transform: translateY(-25px) scale(0.9); }
+    from { opacity: 0; transform: translateY(-20px) scale(0.95); }
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
   
   .fade-in {
-    animation: fadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: fadeIn 0.4s ease-out;
   }
   
   .badge {
     display: inline-block;
-    padding: 8px 16px;
-    border-radius: var(--radius-pill);
-    font-size: 0.85rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
     font-weight: 600;
-    border: 1px solid var(--glass-white);
-    backdrop-filter: blur(10px);
-    transition: all 0.2s ease;
   }
   
   .badge-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    background-color: var(--primary);
     color: white;
   }
   
   .badge-secondary {
-    background: linear-gradient(135deg, var(--secondary) 0%, #4CD964 100%);
+    background-color: var(--secondary);
     color: white;
   }
   
   .badge-warning {
-    background: linear-gradient(135deg, var(--warning) 0%, #FFB323 100%);
+    background-color: var(--warning);
     color: white;
   }
   
   .badge-danger {
-    background: linear-gradient(135deg, var(--danger) 0%, #FF6961 100%);
+    background-color: var(--danger);
     color: white;
-  }
-  
-  .badge:hover {
-    transform: translateY(-1px) scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
   
   .action-buttons {
     display: flex;
-    gap: 8px;
+    gap: 5px;
   }
   
   .form-row {
@@ -875,22 +772,20 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) translateY(100px);
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    background: var(--primary);
     color: white;
-    padding: 18px 28px;
-    border-radius: var(--radius-pill);
-    box-shadow: var(--shadow-strong);
+    padding: 16px 24px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
     z-index: 1002;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     opacity: 0;
     transition: all 0.3s ease;
-    min-width: 300px;
+    min-width: 280px;
     text-align: center;
     justify-content: center;
-    border: 1px solid var(--glass-white);
-    backdrop-filter: blur(20px);
   }
 
   .toast.show {
@@ -899,22 +794,21 @@
   }
   
   .toast.success {
-    background: linear-gradient(135deg, var(--secondary) 0%, #4CD964 100%);
+    background: var(--secondary);
   }
   
   .toast.error {
-    background: linear-gradient(135deg, var(--danger) 0%, #FF6961 100%);
+    background: var(--danger);
   }
 
   .diachi-row {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
   }
   .diachi-row input {
     flex: 8 1 0%;
     min-width: 0;
-    border-radius: var(--radius-sm);
   }
   .diachi-row button {
     flex: 2 1 0%;
@@ -923,7 +817,6 @@
     white-space: nowrap;
     padding-left: 0.5em;
     padding-right: 0.5em;
-    border-radius: var(--radius-pill);
   }
   
   /* Thêm style mới cho modal xem nhanh */
@@ -933,17 +826,15 @@
     margin-top: 15px;
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    background: #FFFFFF;
   }
   
   .quick-view-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 18px 20px;
+    padding: 12px 15px;
     border-bottom: 1px solid var(--border);
-    transition: all 0.2s ease;
-    background: #FFFFFF;
+    transition: background-color 0.2s ease;
   }
   
   .quick-view-item:last-child {
@@ -951,8 +842,7 @@
   }
   
   .quick-view-item:hover {
-    background: linear-gradient(135deg, #F8F9FA 0%, #F2F2F7 100%);
-    transform: translateY(-1px);
+    background-color: #f8f9fa;
   }
   
   .quick-view-item-info {
@@ -966,26 +856,24 @@
   }
   
   .quick-view-item-address {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--gray);
-    margin-top: 4px;
+    margin-top: 3px;
   }
   
   .quick-view-item-amount {
     font-weight: 700;
     color: var(--primary);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
   
   .quick-view-total {
-    padding: 20px;
-    background: linear-gradient(135deg, #F8F9FA 0%, #F2F2F7 100%);
+    padding: 15px;
+    background-color: #f8f9fa;
     border-top: 1px solid var(--border);
     font-weight: 700;
     text-align: center;
     color: var(--dark);
-    font-size: 1.1rem;
-    border-radius: 0 0 var(--radius) var(--radius);
   }
   
   /* Style cho ô số tiền khi được tự động điền */
@@ -995,28 +883,25 @@
   
   #so_tien:focus {
     border-color: var(--secondary);
-    box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.1);
-    background-color: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.1);
+    background-color: #f8fff9;
   }
   
   /* Style cho nút lưu vị trí khi đã có GPS */
   .btn-location-disabled {
-    background: linear-gradient(135deg, #8E8E93 0%, #6C6C70 100%) !important;
+    background-color: #6c757d !important;
     cursor: not-allowed !important;
   }
   
   .btn-location-disabled:hover {
     transform: none !important;
-    background: linear-gradient(135deg, #8E8E93 0%, #6C6C70 100%) !important;
+    background-color: #6c757d !important;
   }
   
   /* Style cho modal báo cáo */
   #report-summary {
     border-left: 4px solid var(--primary);
     margin-top: 20px;
-    padding: 20px;
-    background: linear-gradient(135deg, #F8F9FA 0%, #F2F2F7 100%);
-    border-radius: var(--radius-sm);
   }
   
   #report-details {
@@ -1025,52 +910,41 @@
   
   .recipient-row {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
   }
   
   .recipient-row input {
     flex: 1;
-    border-radius: var(--radius-sm);
   }
   
   .recipient-row button {
-    min-width: 100px;
-    border-radius: var(--radius-pill);
+    min-width: 80px;
   }
   
   /* Style cho phần chi tiêu */
   .expense-input-group {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
   }
   
   .expense-input-group input {
     flex: 1;
-    border-radius: var(--radius-sm);
   }
   
   .expense-input-group button {
-    min-width: 100px;
-    border-radius: var(--radius-pill);
+    min-width: 80px;
   }
   
   .expense-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 20px;
-    margin-bottom: 10px;
-    background: linear-gradient(135deg, #F8F9FA 0%, #F2F2F7 100%);
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--glass-white);
-    transition: all 0.2s ease;
-  }
-  
-  .expense-item:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    background-color: #f8f9fa;
+    border-radius: var(--radius);
   }
   
   .expense-item:last-child {
@@ -1090,67 +964,25 @@
   .expense-item-amount {
     font-weight: 700;
     color: var(--danger);
-    font-size: 1.1rem;
   }
   
   .expense-item-delete {
-    background: rgba(255, 59, 48, 0.1);
-    border: 1px solid var(--glass-white);
+    background: none;
+    border: none;
     color: var(--danger);
     cursor: pointer;
-    font-size: 1.3rem;
-    padding: 8px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-  }
-  
-  .expense-item-delete:hover {
-    background: rgba(255, 59, 48, 0.2);
-    transform: scale(1.1);
+    font-size: 1.2rem;
+    padding: 5px;
   }
   
   .expense-total {
-    margin-top: 20px;
-    padding: 18px 20px;
-    background: linear-gradient(135deg, rgba(255, 59, 48, 0.1) 0%, rgba(255, 59, 48, 0.05) 100%);
-    border-radius: var(--radius-sm);
+    margin-top: 15px;
+    padding: 12px 15px;
+    background-color: #f1f3f5;
+    border-radius: var(--radius);
     font-weight: 700;
     text-align: center;
     color: var(--danger);
-    font-size: 1.1rem;
-    border: 1px solid rgba(255, 59, 48, 0.2);
-  }
-  
-  /* Nút cuộn về đầu trang */
-  #scrollTopBtn {
-    position: fixed;
-    right: 30px;
-    bottom: 30px;
-    z-index: 999;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-    color: white;
-    border: 1px solid var(--glass-white);
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    box-shadow: var(--shadow-strong);
-    font-size: 1.8rem;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(20px);
-  }
-  
-  #scrollTopBtn:hover {
-    transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 12px 40px rgba(0, 122, 255, 0.35);
   }
   
   @media (max-width: 768px) {
@@ -1166,7 +998,7 @@
     }
     
     .quick-view-item {
-      padding: 16px 18px;
+      padding: 10px 12px;
     }
     
     .recipient-row {
@@ -1184,14 +1016,6 @@
     .expense-input-group button {
       width: 100%;
     }
-    
-    #scrollTopBtn {
-      right: 20px;
-      bottom: 20px;
-      width: 56px;
-      height: 56px;
-      font-size: 1.6rem;
-    }
   }
   
   @media (max-width: 480px) {
@@ -1200,14 +1024,14 @@
     }
     .diachi-row button {
       flex: 2 1 0%;
-      max-width: 80px;
+      max-width: 70px;
       font-size: 0.9rem;
       padding-left: 0.2em;
       padding-right: 0.2em;
     }
     
     .quick-view-item {
-      padding: 14px 16px;
+      padding: 10px 12px;
     }
     
     .quick-view-item-name {
@@ -1215,15 +1039,7 @@
     }
     
     .quick-view-item-amount {
-      font-size: 1.1rem;
-    }
-    
-    #scrollTopBtn {
-      right: 15px;
-      bottom: 15px;
-      width: 52px;
-      height: 52px;
-      font-size: 1.5rem;
+      font-size: 1rem;
     }
   }
 </style>
@@ -1368,7 +1184,7 @@
     </div>
     
     <div class="card">
-      <h2 style="margin-bottom: 20px; font-size: 1.4rem; color: var(--dark);">📊 Danh sách điểm gas theo ca</h2>
+      <h2 style="margin-bottom: 15px;">📊 Danh sách điểm gas theo ca</h2>
       <div class="table-container">
         <table id="bang">
           <thead>
@@ -1395,7 +1211,7 @@
   </div>
 
   <!-- Nút cuộn về đầu trang -->
-  <button id="scrollTopBtn" style="display: none;">
+  <button id="scrollTopBtn" style="position:fixed;right:30px;bottom:30px;z-index:999;background:#2c80ff;color:white;border:none;border-radius:50%;width:56px;height:56px;box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:2rem;display:none;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.3s;">
     ↑
   </button>
 
@@ -1408,7 +1224,7 @@
       </div>
       <div class="modal-body">
         <p>Bạn có chắc chắn muốn xóa điểm gas này?</p>
-        <p id="delete-item-info" style="font-weight: bold; margin-top: 10px; padding: 12px; background: linear-gradient(135deg, #F8F9FA 0%, #F2F2F7 100%); border-radius: var(--radius-sm);"></p>
+        <p id="delete-item-info" style="font-weight: bold; margin-top: 10px;"></p>
       </div>
       <div class="modal-footer">
         <button class="btn-secondary" onclick="closeModal('delete-modal')">Hủy</button>
@@ -1426,7 +1242,7 @@
       </div>
       <div class="modal-body">
         <h3>Cách sử dụng:</h3>
-        <ul style="margin-left: 20px; margin-top: 15px; line-height: 1.8;">
+        <ul style="margin-left: 20px; margin-top: 10px;">
           <li>Chọn điểm gas từ danh sách hoặc thêm mới</li>
           <li>Nhập số tiền thu được (có thể nhập số và thêm '000' tự động)</li>
           <li>Chọn trạng thái đã nộp hoặc chưa nộp</li>
@@ -1536,8 +1352,8 @@
           </select>
         </div>
         
-        <div id="batch-status-info" style="margin-top: 15px; padding: 20px; background: linear-gradient(135deg, #F8F9FA 0%, #F2F2F7 100%); border-radius: var(--radius-sm); display: none;">
-          <p id="batch-status-summary" style="font-weight: 600;"></p>
+        <div id="batch-status-info" style="margin-top: 15px; padding: 15px; background-color: #f8f9fa; border-radius: var(--radius); display: none;">
+          <p id="batch-status-summary"></p>
           <p id="batch-status-details" style="font-size: 0.9rem; margin-top: 8px; color: var(--gray);"></p>
         </div>
       </div>
@@ -1624,9 +1440,127 @@ let expenseTemplateList = [];
 // Biến toàn cục để lưu danh sách chi tiêu của ca hiện tại
 let currentExpenses = [];
 
+// Biến để lưu AudioContext cho âm thanh click
+let audioContext = null;
+let clickSoundBuffer = null;
+
+// ========== HÀM TẠO ÂM THANH CLICK CHO IPHONE ==========
+function initAudio() {
+  try {
+    // Tạo AudioContext
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Tạo âm thanh click đơn giản
+    const duration = 0.1;
+    const sampleRate = audioContext.sampleRate;
+    const frameCount = duration * sampleRate;
+    const buffer = audioContext.createBuffer(1, frameCount, sampleRate);
+    const channelData = buffer.getChannelData(0);
+    
+    // Tạo sóng sine ngắn cho âm thanh click
+    for (let i = 0; i < frameCount; i++) {
+      channelData[i] = Math.sin(2 * Math.PI * 800 * i / sampleRate) * 
+                      Math.exp(-i / (sampleRate * 0.01));
+    }
+    
+    clickSoundBuffer = buffer;
+  } catch (error) {
+    console.log("Không thể khởi tạo âm thanh:", error);
+  }
+}
+
+// Hàm phát âm thanh click
+function playClickSound() {
+  try {
+    if (!audioContext) {
+      initAudio();
+    }
+    
+    if (audioContext && clickSoundBuffer) {
+      const source = audioContext.createBufferSource();
+      source.buffer = clickSoundBuffer;
+      
+      const gainNode = audioContext.createGain();
+      gainNode.gain.value = 0.3;
+      
+      source.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      source.start();
+      
+      // Tự động ngắt kết nối sau khi phát xong
+      source.onended = () => {
+        source.disconnect();
+        gainNode.disconnect();
+      };
+      
+      return true;
+    }
+  } catch (error) {
+    console.log("Không thể phát âm thanh:", error);
+  }
+  return false;
+}
+
+// ========== HÀM PHẢN HỒI XÚC GIÁC (RUNG/ÂM THANH) ==========
+function provideHapticFeedback(type = 'short') {
+  // Thử rung trước (cho Android và các thiết bị hỗ trợ)
+  let vibrated = false;
+  
+  if ("vibrate" in navigator) {
+    try {
+      switch(type) {
+        case 'short':
+          navigator.vibrate(50);
+          break;
+        case 'long':
+          navigator.vibrate(100);
+          break;
+        case 'success':
+          navigator.vibrate([50, 30, 50]);
+          break;
+        case 'error':
+          navigator.vibrate([100, 50, 100]);
+          break;
+        default:
+          navigator.vibrate(50);
+      }
+      vibrated = true;
+    } catch (error) {
+      console.log("Lỗi khi rung:", error);
+    }
+  }
+  
+  // Nếu không rung được (iPhone) thì phát âm thanh click
+  if (!vibrated) {
+    playClickSound();
+  }
+}
+
+// Hàm rung/âm thanh ngắn cho thao tác nhẹ
+function vibrateShort() {
+  provideHapticFeedback('short');
+}
+
+// Hàm rung/âm thanh dài cho thao tác quan trọng
+function vibrateLong() {
+  provideHapticFeedback('long');
+}
+
+// Hàm rung/âm thanh cho thành công
+function vibrateSuccess() {
+  provideHapticFeedback('success');
+}
+
+// Hàm rung/âm thanh cho lỗi
+function vibrateError() {
+  provideHapticFeedback('error');
+}
+
 // HÀM MỚI: Mở modal báo cáo cuối ca
 function openReportModal() {
   closeSidebar();
+  vibrateShort();
   
   // Load danh sách người nhận từ localStorage
   loadRecipients();
@@ -1721,11 +1655,14 @@ function updateExpenseTemplatesDatalist() {
 
 // HÀM MỚI: Lưu người nhận mới
 function saveRecipient() {
+  vibrateShort();
+  
   const recipientInput = document.getElementById('report-recipient');
   const recipient = recipientInput.value.trim();
   
   if (!recipient) {
     showToast('⚠️ Vui lòng nhập tên người nhận!', 'error');
+    vibrateError();
     return;
   }
   
@@ -1738,8 +1675,10 @@ function saveRecipient() {
     loadRecipients();
     
     showToast('✅ Đã lưu người nhận mới!');
+    vibrateSuccess();
   } else {
     showToast('ℹ️ Người nhận đã có trong danh sách!');
+    vibrateShort();
   }
   
   // Cập nhật thông tin báo cáo
@@ -1748,17 +1687,21 @@ function saveRecipient() {
 
 // HÀM MỚI: Thêm chi tiêu vào danh sách - ĐÃ CẬP NHẬT LOGIC
 function addExpense() {
+  vibrateShort();
+  
   const expenseName = document.getElementById('expense-name').value.trim();
   const expenseAmount = document.getElementById('expense-amount').value.trim();
   
   if (!expenseName || !expenseAmount) {
     showToast('⚠️ Vui lòng nhập đầy đủ mô tả và số tiền chi tiêu!', 'error');
+    vibrateError();
     return;
   }
   
   const amount = parseInt(expenseAmount);
   if (isNaN(amount) || amount <= 0) {
     showToast('⚠️ Số tiền chi tiêu không hợp lệ!', 'error');
+    vibrateError();
     return;
   }
   
@@ -1780,6 +1723,7 @@ function addExpense() {
       localStorage.setItem('gas_point_expense_templates', JSON.stringify(expenseTemplateList));
       updateExpenseTemplatesDatalist();
       showToast('✅ Đã lưu vào danh sách chi tiêu mẫu!');
+      vibrateSuccess();
     }
   }
   
@@ -1812,7 +1756,7 @@ function updateExpensesList() {
           <div class="expense-item-name">${expense.name}</div>
         </div>
         <div class="expense-item-amount">-${formatCurrency(expense.amount)}</div>
-        <button class="expense-item-delete" onclick="removeExpense(${index})">×</button>
+        <button class="expense-item-delete" onclick="removeExpense(${index})" onmousedown="vibrateShort()">×</button>
       </div>
     `;
   });
@@ -1826,6 +1770,7 @@ function updateExpensesList() {
 
 // HÀM MỚI: Xóa chi tiêu khỏi danh sách
 function removeExpense(index) {
+  vibrateShort();
   currentExpenses.splice(index, 1);
   updateExpensesList();
   updateReportSummary();
@@ -1883,11 +1828,14 @@ function updateReportSummary() {
 
 // HÀM MỚI: Tạo báo cáo và copy vào clipboard
 async function generateReport() {
+  vibrateLong();
+  
   const selectedShift = document.getElementById('report-shift').value;
   const recipient = document.getElementById('report-recipient').value;
   
   if (!selectedShift || !recipient) {
     showToast('⚠️ Vui lòng chọn ca và người nhận!', 'error');
+    vibrateError();
     return;
   }
   
@@ -1895,6 +1843,7 @@ async function generateReport() {
   
   if (shiftData.length === 0) {
     showToast('❌ Không có dữ liệu cho ca này!', 'error');
+    vibrateError();
     return;
   }
   
@@ -1924,12 +1873,14 @@ async function generateReport() {
   
   if (copySuccess) {
     showToast('✅ Đã sao chép báo cáo vào clipboard!');
+    vibrateSuccess();
     closeModal('report-modal');
     
     // Hiển thị nội dung đã copy (tùy chọn)
     console.log('Nội dung báo cáo:', reportContent);
   } else {
     showToast('❌ Không thể sao chép vào clipboard!', 'error');
+    vibrateError();
   }
 }
 
@@ -1941,6 +1892,7 @@ function formatNumber(amount) {
 // HÀM MỚI: Mở modal chuyển trạng thái đồng loạt
 function openBatchStatusModal() {
   closeSidebar();
+  vibrateShort();
   
   const shifts = new Set();
   allData.forEach(item => {
@@ -1975,6 +1927,8 @@ function openBatchStatusModal() {
 
 // HÀM MỚI: Cập nhật thông tin khi chọn ca trong modal chuyển trạng thái
 function updateBatchStatusInfo() {
+  vibrateShort();
+  
   const selectedShift = document.getElementById('batch-status-shift').value;
   const newStatus = document.getElementById('batch-status-new-status').value;
   const infoDiv = document.getElementById('batch-status-info');
@@ -2016,11 +1970,14 @@ function updateBatchStatusInfo() {
 
 // HÀM MỚI: Xác nhận chuyển trạng thái đồng loạt - ĐÃ SỬA LỖI
 async function confirmBatchStatusUpdate() {
+  vibrateLong();
+  
   const selectedShift = document.getElementById('batch-status-shift').value;
   const newStatus = document.getElementById('batch-status-new-status').value;
   
   if (!selectedShift) {
     showToast('⚠️ Vui lòng chọn một ca!', 'error');
+    vibrateError();
     return;
   }
   
@@ -2028,6 +1985,7 @@ async function confirmBatchStatusUpdate() {
   
   if (shiftData.length === 0) {
     showToast('✅ Không có điểm gas nào cần chuyển đổi!');
+    vibrateShort();
     return;
   }
   
@@ -2075,8 +2033,10 @@ async function confirmBatchStatusUpdate() {
   // Hiển thị kết quả
   if (errorCount === 0) {
     showToast(`✅ Đã chuyển thành công ${successCount} điểm gas sang "${newStatus}"`);
+    vibrateSuccess();
   } else {
     showToast(`⚠️ Đã chuyển ${successCount} điểm, ${errorCount} điểm lỗi`, 'error');
+    vibrateError();
   }
   
   // Đóng modal và cập nhật giao diện - ĐÃ SỬA: Gọi filterData() thay vì taiDuLieu()
@@ -2155,6 +2115,7 @@ async function copyToClipboard(text) {
 
 // Hàm mở/đóng sidebar
 function toggleSidebar() {
+  vibrateShort();
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
   
@@ -2174,11 +2135,13 @@ function closeSidebar() {
 // Hàm xuất dữ liệu dạng văn bản
 async function exportToText() {
   closeSidebar();
+  vibrateShort();
   
   const dataToExport = currentFilteredData.length > 0 ? currentFilteredData : allData;
   
   if (dataToExport.length === 0) {
     showToast('❌ Không có dữ liệu để xuất!', 'error');
+    vibrateError();
     return;
   }
   
@@ -2203,18 +2166,22 @@ async function exportToText() {
   
   if (copySuccess) {
     showToast('✅ Đã xuất dữ liệu và sao chép vào clipboard!');
+    vibrateSuccess();
   } else {
     showToast('✅ Đã xuất dữ liệu, nhưng không thể sao chép vào clipboard', 'error');
+    vibrateError();
   }
 }
 
 // THÊM HÀM MỚI: Mở modal thêm điểm ngoài ca
 function openOutOfHoursModal() {
   closeSidebar();
+  vibrateShort();
   
   const shiftInfo = getCurrentShift();
   if (shiftInfo.start) {
     showToast('⚠️ Bạn đang trong ca làm việc, hãy sử dụng chức năng thêm điểm bình thường!', 'error');
+    vibrateError();
     return;
   }
   
@@ -2252,9 +2219,12 @@ function openOutOfHoursModal() {
 
 // THÊM HÀM MỚI: Sử dụng ngày tùy chỉnh
 function useCustomShift() {
+  vibrateShort();
+  
   const customDate = document.getElementById('custom-shift-date').value;
   if (!customDate) {
     showToast('⚠️ Vui lòng chọn ngày!', 'error');
+    vibrateError();
     return;
   }
   
@@ -2267,15 +2237,19 @@ function useCustomShift() {
   document.getElementById('out-of-hours-shift').value = selectedOutOfHoursShift;
   
   showToast(`✅ Đã chọn ca ngày ${day}-${month}-${year}`);
+  vibrateSuccess();
 }
 
 // THÊM HÀM MỚI: Xác nhận ca khi thêm ngoài giờ
 function confirmOutOfHoursShift() {
+  vibrateShort();
+  
   const shiftSelect = document.getElementById('out-of-hours-shift');
   const selectedShift = shiftSelect.value;
   
   if (!selectedShift) {
     showToast('⚠️ Vui lòng chọn một ca!', 'error');
+    vibrateError();
     return;
   }
   
@@ -2283,6 +2257,7 @@ function confirmOutOfHoursShift() {
   closeModal('out-of-hours-modal');
   
   showToast(`✅ Đã chọn ca: ${formatShiftName(selectedShift)}. Bạn có thể thêm điểm gas bây giờ.`);
+  vibrateSuccess();
   
   document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
 }
@@ -2302,6 +2277,7 @@ function formatShiftName(shiftKey) {
 // THÊM HÀM MỚI: Mở modal xem nhanh
 function openQuickViewModal() {
   closeSidebar();
+  vibrateShort();
   
   const shifts = new Set();
   allData.forEach(item => {
@@ -2338,6 +2314,8 @@ function openQuickViewModal() {
 
 // THÊM HÀM MỚI: Cập nhật danh sách xem nhanh
 function updateQuickViewList() {
+  vibrateShort();
+  
   const selectedShift = document.getElementById('quick-view-shift').value;
   const listContainer = document.getElementById('quick-view-list');
   const totalContainer = document.getElementById('quick-view-total');
@@ -2397,6 +2375,7 @@ document.getElementById('so_tien').addEventListener('blur', function() {
   
   if (/^\d+$/.test(value) && value.length > 0 && value.length <= 3) {
     this.value = value + '000';
+    vibrateShort();
   }
 });
 
@@ -2519,16 +2498,19 @@ function displayStats(stats) {
 
 // Lọc dữ liệu theo ca
 function filterByShift() {
+  vibrateShort();
   filterData();
 }
 
 // Lọc dữ liệu theo điểm
 function filterByDiem() {
+  vibrateShort();
   filterData();
 }
 
 // Lọc dữ liệu theo trạng thái
 function filterByTrangThai() {
+  vibrateShort();
   filterData();
 }
 
@@ -2602,15 +2584,15 @@ function displayData(data) {
       <td data-label="Địa chỉ">${row.dia_chi}</td>
       <td data-label="Trạng thái">
         <div class="status-toggle-wrapper">
-          <span class="badge ${badgeClass} status-toggle" onclick="toggleTrangThai('${row.id}')">${row.trang_thai || 'Chưa nộp'}</span>
+          <span class="badge ${badgeClass} status-toggle" onclick="toggleTrangThai('${row.id}')" onmousedown="vibrateShort()">${row.trang_thai || 'Chưa nộp'}</span>
         </div>
       </td>
       <td data-label="Ca"><span class="badge badge-primary">${caLabel}</span></td>
       <td data-label="Thời gian">${row.timestamp ? new Date(row.timestamp).toLocaleString('vi-VN') : 'Không xác định'}</td>
       <td data-label="Thao tác">
         <div class="action-buttons">
-          <button class="btn-secondary btn-sm" onclick="editItem('${row.id}')">✏️ Sửa</button>
-          <button class="btn-danger btn-sm" onclick="deleteItem('${row.id}')">🗑️ Xóa</button>
+          <button class="btn-secondary btn-sm" onclick="editItem('${row.id}')" onmousedown="vibrateShort()">✏️ Sửa</button>
+          <button class="btn-danger btn-sm" onclick="deleteItem('${row.id}')" onmousedown="vibrateShort()">🗑️ Xóa</button>
         </div>
       </td>
     `;
@@ -2620,6 +2602,8 @@ function displayData(data) {
 
 // Hàm thay đổi trạng thái nhanh
 function toggleTrangThai(id) {
+  vibrateShort();
+  
   const item = allData.find(item => item.id === id);
   if (!item) return;
 
@@ -2646,6 +2630,7 @@ function toggleTrangThai(id) {
   .then(result => {
     if (result.result === 'success') {
       showToast('✅ Đã cập nhật trạng thái!');
+      vibrateSuccess();
       const index = allData.findIndex(item => item.id === id);
       if (index !== -1) {
         allData[index] = updatedItem;
@@ -2655,11 +2640,13 @@ function toggleTrangThai(id) {
       filterData();
     } else {
       showToast('❌ Có lỗi xảy ra khi cập nhật trạng thái!', 'error');
+      vibrateError();
       taiDuLieu();
     }
   })
   .catch(error => {
     showToast('❌ Có lỗi xảy ra khi cập nhật trạng thái!', 'error');
+    vibrateError();
     console.error(error);
     taiDuLieu();
   });
@@ -2709,6 +2696,8 @@ function updateFilters(data) {
 // Reset form
 function resetForm() {
   closeSidebar();
+  vibrateShort();
+  
   editingId = null;
   selectedOutOfHoursShift = null;
   document.getElementById('chon_diem').value = '';
@@ -2755,6 +2744,8 @@ function findLatestEntryForDiem(diemName) {
 
 // HÀM CẬP NHẬT: Chọn điểm gas (tự động điền địa chỉ và số tiền của lần gần nhất)
 function chonDiem() {
+  vibrateShort();
+  
   const val = document.getElementById('chon_diem').value;
   const tenDiemInput = document.getElementById('ten_diem');
   const diaChiInput = document.getElementById('dia_chi');
@@ -2798,22 +2789,27 @@ function chonDiem() {
 
 // Xử lý nút lưu vị trí GPS - ĐÃ CẬP NHẬT
 function saveLocation() {
+  vibrateShort();
+  
   const tenDiem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
   
   // Kiểm tra xem đã chọn điểm gas chưa
   if (!tenDiem) {
     showToast('⚠️ Vui lòng chọn điểm gas trước khi lưu vị trí!', 'error');
+    vibrateError();
     return;
   }
   
   // Kiểm tra xem điểm gas này đã có vị trí GPS chưa
   if (hasExistingGPSLocation(tenDiem)) {
     showToast('❌ Điểm gas này đã được lưu vị trí GPS trước đó!', 'error');
+    vibrateError();
     return;
   }
   
   if (!navigator.geolocation) {
     showToast('❌ Thiết bị không hỗ trợ GPS!', 'error');
+    vibrateError();
     return;
   }
   
@@ -2832,6 +2828,7 @@ function saveLocation() {
       ghiChuInput.value = ghiChu + ` [GPS: ${lat}, ${lng}]`;
       
       showToast('✅ Đã lưu vị trí GPS thực tế!');
+      vibrateSuccess();
       btn.textContent = '📍 Đã lưu vị trí';
       btn.disabled = false;
       
@@ -2841,6 +2838,7 @@ function saveLocation() {
     }, 
     function(err) {
       showToast('❌ Không thể lấy vị trí: ' + err.message, 'error');
+      vibrateError();
       btn.textContent = '📍 Lưu vị trí';
       btn.disabled = false;
       btn.className = 'btn-success btn-sm';
@@ -2855,6 +2853,8 @@ function saveLocation() {
 
 // Chỉnh sửa item
 function editItem(id) {
+  vibrateShort();
+  
   const item = allData.find(item => item.id === id);
   if (!item) return;
   
@@ -2889,6 +2889,8 @@ function editItem(id) {
 
 // Xóa item
 function deleteItem(id) {
+  vibrateShort();
+  
   const item = allData.find(item => item.id === id);
   if (!item) return;
   
@@ -2901,6 +2903,8 @@ function deleteItem(id) {
 
 // Xác nhận xóa
 function confirmDelete() {
+  vibrateLong();
+  
   if (!itemToDelete) return;
   
   const data = { 
@@ -2916,14 +2920,17 @@ function confirmDelete() {
   .then(result => {
     if (result.result === 'success') {
       showToast('✅ Đã xóa thành công!');
+      vibrateSuccess();
       closeModal('delete-modal');
       taiDuLieu();
     } else {
       showToast('❌ Có lỗi xảy ra khi xóa!', 'error');
+      vibrateError();
     }
   })
   .catch(error => {
     showToast('❌ Có lỗi xảy ra khi xóa!', 'error');
+    vibrateError();
     console.error(error);
   });
 }
@@ -2951,6 +2958,8 @@ function closeModal(modalId) {
 document.getElementById('btn-save-location').addEventListener('click', saveLocation);
 
 async function guiDuLieu() {
+  vibrateShort();
+  
   const btnSubmit = document.getElementById('btn-submit');
   if (btnSubmit.disabled) return;
 
@@ -2962,6 +2971,7 @@ async function guiDuLieu() {
 
   if (!ten_diem || !so_tien || !dia_chi) {
     showToast('⚠️ Vui lòng nhập đầy đủ thông tin!', 'error');
+    vibrateError();
     return;
   }
 
@@ -2970,6 +2980,7 @@ async function guiDuLieu() {
     
     if (!selectedOutOfHoursShift && !shiftInfo.start) {
       showToast('⚠️ Hiện tại không trong ca làm việc! Vui lòng sử dụng chức năng "Thêm điểm ngoài ca" từ menu.', 'error');
+      vibrateError();
       return;
     }
   }
@@ -3006,13 +3017,16 @@ async function guiDuLieu() {
     
     if (result.result === 'success') {
       showToast(editingId ? '✅ Đã cập nhật thành công!' : '✅ Đã lưu thành công!');
+      vibrateSuccess();
       resetForm();
       taiDuLieu();
     } else {
       showToast('❌ Có lỗi xảy ra khi lưu dữ liệu!', 'error');
+      vibrateError();
     }
   } catch (error) {
     showToast('❌ Có lỗi xảy ra khi lưu dữ liệu!', 'error');
+    vibrateError();
     console.error(error);
   } finally {
     btnSubmit.textContent = editingId ? '💾 Cập nhật' : '💾 Lưu thông tin';
@@ -3022,6 +3036,8 @@ async function guiDuLieu() {
 
 async function taiDuLieu() {
   closeSidebar();
+  vibrateShort();
+  
   try {
     const res = await fetch(scriptURL);
     const data = await res.json();
@@ -3050,6 +3066,7 @@ async function taiDuLieu() {
     
   } catch (error) {
     showToast('❌ Có lỗi xảy ra khi tải dữ liệu!', 'error');
+    vibrateError();
     console.error(error);
   }
 }
@@ -3080,11 +3097,15 @@ window.addEventListener('scroll', function() {
 
 // Xử lý sự kiện cuộn về đầu trang
 document.getElementById('scrollTopBtn').onclick = function() {
+  vibrateShort();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
 // Khởi tạo
 document.addEventListener('DOMContentLoaded', function() {
+  // Khởi tạo âm thanh
+  initAudio();
+  
   updateShiftInfo();
   taiDuLieu().then(() => {
     const shiftInfo = getCurrentShift();
@@ -3113,6 +3134,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Thêm sự kiện cho ô nhập tên chi tiêu (tự động điền số tiền từ mẫu)
   document.getElementById('expense-name').addEventListener('change', function() {
+    vibrateShort();
     const expenseName = this.value.trim();
     if (!expenseName) return;
     
@@ -3128,7 +3150,48 @@ document.addEventListener('DOMContentLoaded', function() {
     let value = this.value.trim();
     if (/^\d+$/.test(value) && value.length > 0 && value.length <= 3) {
       this.value = value + '000';
+      vibrateShort();
     }
+  });
+  
+  // Thêm rung/âm thanh cho các nút trong sidebar
+  const sidebarItems = document.querySelectorAll('.sidebar-item');
+  sidebarItems.forEach(item => {
+    item.addEventListener('mousedown', function() {
+      vibrateShort();
+    });
+  });
+  
+  // Thêm rung/âm thanh cho các nút chính trong form
+  const mainButtons = document.querySelectorAll('.button-group button, .btn-sm, .btn-primary, .btn-secondary, .btn-success, .btn-warning, .btn-danger');
+  mainButtons.forEach(button => {
+    button.addEventListener('mousedown', function() {
+      vibrateShort();
+    });
+  });
+  
+  // Thêm rung/âm thanh cho các nút trong modal
+  const modalButtons = document.querySelectorAll('.modal-footer button, .modal-header .close-modal');
+  modalButtons.forEach(button => {
+    button.addEventListener('mousedown', function() {
+      vibrateShort();
+    });
+  });
+  
+  // Thêm rung/âm thanh khi chọn trong select
+  const selectElements = document.querySelectorAll('select');
+  selectElements.forEach(select => {
+    select.addEventListener('change', function() {
+      vibrateShort();
+    });
+  });
+  
+  // Thêm hiệu ứng cho các badge trạng thái
+  const statusBadges = document.querySelectorAll('.status-toggle');
+  statusBadges.forEach(badge => {
+    badge.addEventListener('mousedown', function() {
+      vibrateShort();
+    });
   });
   
   setInterval(updateShiftInfo, 60000);
