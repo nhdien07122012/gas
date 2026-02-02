@@ -23,16 +23,10 @@
     --gray: #6c757d;
     --border: #dee2e6;
     --shadow: 0 2px 10px rgba(0,0,0,0.08);
-    --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
-    --radius-xl: 28px;    /* Góc rất lớn cho container chính */
-    --radius-lg: 20px;    /* Góc lớn cho card, modal */
-    --radius-md: 16px;    /* Góc trung bình cho nút, input */
-    --radius-sm: 12px;    /* Góc nhỏ cho badge, stat-card */
-    --radius-xs: 8px;     /* Góc rất nhỏ cho item nhỏ */
+    --radius: 10px;
     --night-shift: #4a5568;
     --day-shift: #f7fafc;
     --sidebar-width: 280px;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   * {
@@ -51,15 +45,14 @@
     transition: margin-left 0.3s ease;
   }
   
-  /* Container chính với bo góc lớn */
   .container {
     max-width: 1200px;
     margin: 0 auto;
     background: white;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
     overflow: hidden;
-    transition: var(--transition);
+    transition: all 0.3s ease;
   }
   
   /* Sidebar styles */
@@ -76,7 +69,6 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   }
   
   .sidebar.open {
@@ -90,7 +82,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 0 var(--radius-lg) 0 0;
   }
   
   .sidebar-header h2 {
@@ -119,10 +110,10 @@
     gap: 12px;
     padding: 15px;
     margin-bottom: 10px;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius);
     background: #f8f9fa;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.2s ease;
     border: none;
     width: 100%;
     text-align: left;
@@ -132,7 +123,6 @@
   .sidebar-item:hover {
     background: #e9ecef;
     transform: translateY(-2px);
-    border-radius: var(--radius-lg);
   }
   
   .sidebar-item.active {
@@ -146,7 +136,6 @@
     font-size: 0.85rem;
     color: var(--gray);
     text-align: center;
-    border-radius: 0 0 var(--radius-lg) 0;
   }
   
   .overlay {
@@ -174,14 +163,13 @@
     margin-right: 10px;
   }
   
-  /* Header styles với bo góc trên */
+  /* Header styles */
   header {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: white;
     padding: 25px 30px;
     text-align: center;
     position: relative;
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
   
   header h1 {
@@ -207,7 +195,6 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   }
   
   .shift-info .current-shift {
@@ -244,9 +231,9 @@
     width: 100%;
     padding: 14px 16px;
     border: 1.5px solid var(--border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius);
     font-size: 1rem;
-    transition: var(--transition);
+    transition: all 0.3s ease;
   }
   
   input:focus, select:focus {
@@ -265,11 +252,11 @@
     flex: 1;
     padding: 16px;
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius);
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -328,22 +315,19 @@
   }
   
   .btn-sm {
-    padding: 10px 16px;
+    padding: 8px 12px;
     font-size: 0.85rem;
-    border-radius: var(--radius-sm);
   }
   
   .table-container {
     overflow-x: auto;
     margin-top: 10px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
   }
   
   table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 0;
+    margin-top: 5px;
   }
   
   th {
@@ -378,7 +362,6 @@
     margin-top: 10px;
   }
   
-  /* Stat cards với bo góc đẹp */
   .stats-container {
     display: flex;
     flex-wrap: wrap;
@@ -389,21 +372,14 @@
   .stat-card {
     flex: 1;
     min-width: 150px;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    border-radius: var(--radius-lg);
-    padding: 20px;
+    background: #f8f9fa;
+    border-radius: var(--radius);
+    padding: 15px;
     text-align: center;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-  }
-  
-  .stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
   }
   
   .stat-value {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--primary);
   }
@@ -424,11 +400,9 @@
   .filter-group select {
     flex: 1;
     min-width: 200px;
-    border-radius: var(--radius-md);
-    padding: 12px 16px;
   }
   
-  /* Modal styles với bo góc lớn */
+  /* Modal styles */
   .modal {
     display: none;
     position: fixed;
@@ -445,7 +419,7 @@
   
   .modal-content {
     background: white;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius);
     width: 90%;
     max-width: 500px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -464,7 +438,6 @@
     justify-content: between;
     align-items: center;
     flex-shrink: 0;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   }
   
   .modal-header h2 {
@@ -487,7 +460,6 @@
     gap: 10px;
     flex-shrink: 0;
     margin-top: auto;
-    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   }
   
   .modal-footer button {
@@ -501,7 +473,7 @@
     font-size: 1.2rem;
     min-height: 52px;
     padding: 16px 0;
-    border-radius: var(--radius-md);
+    border-radius: 12px;
     position: relative;
     z-index: 2;
     pointer-events: auto;
@@ -530,7 +502,6 @@
     
     header {
       padding: 20px;
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     }
     
     header h1 {
@@ -542,7 +513,6 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 5px;
-      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
     }
     
     .card {
@@ -557,17 +527,12 @@
       flex-direction: column;
     }
     
-    .stat-card {
-      border-radius: var(--radius-md);
-    }
-    
     .filter-group {
       flex-direction: column;
     }
     
     .filter-group select {
       min-width: 100%;
-      border-radius: var(--radius-sm);
     }
     
     th, td {
@@ -587,7 +552,6 @@
       width: 95%;
       margin: 10px;
       max-height: 90vh;
-      border-radius: var(--radius-md);
     }
     
     .modal-header, .modal-body, .modal-footer {
@@ -609,14 +573,14 @@
       padding: 16px;
       font-size: 1.1rem;
       min-height: 48px;
-      border-radius: var(--radius-sm);
+      border-radius: 10px;
     }
     
     .modal-footer .btn-danger {
       font-size: 1.3rem;
       min-height: 56px;
       padding: 18px 0;
-      border-radius: var(--radius-md);
+      border-radius: 14px;
       width: 100%;
       z-index: 1;
     }
@@ -631,7 +595,8 @@
     }
     
     .table-container {
-      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
     }
     
     table {
@@ -647,7 +612,6 @@
       padding: 10px;
       font-size: 0.9rem;
       min-height: 36px;
-      border-radius: var(--radius-sm);
     }
     
     .badge {
@@ -663,7 +627,6 @@
     
     header {
       padding: 18px 15px;
-      border-radius: var(--radius-md) var(--radius-md) 0 0;
     }
     
     header h1 {
@@ -677,25 +640,21 @@
     input, select {
       padding: 12px 14px;
       font-size: 16px;
-      border-radius: var(--radius-sm);
     }
     
     button {
       padding: 14px;
       min-height: 44px;
-      border-radius: var(--radius-sm);
     }
     
     .btn-sm {
       min-height: 36px;
-      border-radius: var(--radius-xs);
     }
     
     .modal-content {
       width: 98%;
       margin: 5px;
       max-height: 95vh;
-      border-radius: var(--radius-md);
     }
     
     .modal-header h2 {
@@ -718,14 +677,14 @@
       padding: 16px;
       font-size: 1.1rem;
       min-height: 48px;
-      border-radius: var(--radius-sm);
+      border-radius: 10px;
     }
     
     .modal-footer .btn-danger {
       font-size: 1.3rem;
       min-height: 56px;
       padding: 18px 0;
-      border-radius: var(--radius-md);
+      border-radius: 14px;
       width: 100%;
       z-index: 1;
     }
@@ -751,11 +710,10 @@
     animation: fadeIn 0.4s ease-out;
   }
   
-  /* Badge với bo góc */
   .badge {
     display: inline-block;
-    padding: 6px 12px;
-    border-radius: var(--radius-xs);
+    padding: 4px 8px;
+    border-radius: 4px;
     font-size: 0.8rem;
     font-weight: 600;
   }
@@ -796,7 +754,7 @@
   
   .status-toggle {
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.2s ease;
   }
   
   .status-toggle:hover {
@@ -809,7 +767,6 @@
     gap: 8px;
   }
   
-  /* Toast với bo góc */
   .toast {
     position: fixed;
     top: 50%;
@@ -818,14 +775,14 @@
     background: var(--primary);
     color: white;
     padding: 16px 24px;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
     z-index: 1002;
     display: flex;
     align-items: center;
     gap: 10px;
     opacity: 0;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     min-width: 280px;
     text-align: center;
     justify-content: center;
@@ -852,7 +809,6 @@
   .diachi-row input {
     flex: 8 1 0%;
     min-width: 0;
-    border-radius: var(--radius-sm);
   }
   .diachi-row button {
     flex: 2 1 0%;
@@ -861,7 +817,6 @@
     white-space: nowrap;
     padding-left: 0.5em;
     padding-right: 0.5em;
-    border-radius: var(--radius-sm);
   }
   
   /* Thêm style mới cho modal xem nhanh */
@@ -870,7 +825,7 @@
     overflow-y: visible;
     margin-top: 15px;
     border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius);
   }
   
   .quick-view-item {
@@ -882,13 +837,8 @@
     transition: background-color 0.2s ease;
   }
   
-  .quick-view-item:first-child {
-    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  }
-  
   .quick-view-item:last-child {
     border-bottom: none;
-    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   }
   
   .quick-view-item:hover {
@@ -924,13 +874,11 @@
     font-weight: 700;
     text-align: center;
     color: var(--dark);
-    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   }
   
   /* Style cho ô số tiền khi được tự động điền */
   #so_tien {
-    transition: var(--transition);
-    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
   }
   
   #so_tien:focus {
@@ -954,9 +902,6 @@
   #report-summary {
     border-left: 4px solid var(--primary);
     margin-top: 20px;
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: var(--radius-sm);
   }
   
   #report-details {
@@ -971,12 +916,10 @@
   
   .recipient-row input {
     flex: 1;
-    border-radius: var(--radius-sm);
   }
   
   .recipient-row button {
     min-width: 80px;
-    border-radius: var(--radius-sm);
   }
   
   /* Style cho phần chi tiêu */
@@ -988,27 +931,20 @@
   
   .expense-input-group input {
     flex: 1;
-    border-radius: var(--radius-sm);
   }
   
   .expense-input-group button {
     min-width: 80px;
-    border-radius: var(--radius-sm);
   }
   
   .expense-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 15px;
+    padding: 10px 15px;
     margin-bottom: 8px;
     background-color: #f8f9fa;
-    border-radius: var(--radius-sm);
-    transition: var(--transition);
-  }
-  
-  .expense-item:hover {
-    background-color: #e9ecef;
+    border-radius: var(--radius);
   }
   
   .expense-item:last-child {
@@ -1037,70 +973,21 @@
     cursor: pointer;
     font-size: 1.2rem;
     padding: 5px;
-    border-radius: var(--radius-xs);
   }
   
   .expense-total {
     margin-top: 15px;
     padding: 12px 15px;
     background-color: #f1f3f5;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius);
     font-weight: 700;
     text-align: center;
     color: var(--danger);
   }
   
-  /* Scrollbar styling */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: var(--radius-sm);
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: var(--radius-sm);
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
-  }
-  
-  /* Nút cuộn về đầu trang với bo góc */
-  #scrollTopBtn {
-    position: fixed;
-    right: 30px;
-    bottom: 30px;
-    z-index: 999;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 56px;
-    height: 56px;
-    box-shadow: var(--shadow-lg);
-    font-size: 2rem;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition);
-  }
-  
-  #scrollTopBtn:hover {
-    background: var(--primary-dark);
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(44, 128, 255, 0.3);
-  }
-  
   @media (max-width: 768px) {
     .diachi-row input {
       flex: 8 1 0%;
-      border-radius: var(--radius-sm);
     }
     .diachi-row button {
       flex: 2 1 0%;
@@ -1108,7 +995,6 @@
       font-size: 0.95rem;
       padding-left: 0.3em;
       padding-right: 0.3em;
-      border-radius: var(--radius-sm);
     }
     
     .quick-view-item {
@@ -1121,7 +1007,6 @@
     
     .recipient-row button {
       width: 100%;
-      border-radius: var(--radius-sm);
     }
     
     .expense-input-group {
@@ -1130,22 +1015,12 @@
     
     .expense-input-group button {
       width: 100%;
-      border-radius: var(--radius-sm);
-    }
-    
-    #scrollTopBtn {
-      right: 20px;
-      bottom: 20px;
-      width: 50px;
-      height: 50px;
-      font-size: 1.8rem;
     }
   }
   
   @media (max-width: 480px) {
     .diachi-row input {
       flex: 8 1 0%;
-      border-radius: var(--radius-sm);
     }
     .diachi-row button {
       flex: 2 1 0%;
@@ -1153,7 +1028,6 @@
       font-size: 0.9rem;
       padding-left: 0.2em;
       padding-right: 0.2em;
-      border-radius: var(--radius-xs);
     }
     
     .quick-view-item {
@@ -1167,17 +1041,8 @@
     .quick-view-item-amount {
       font-size: 1rem;
     }
-    
-    #scrollTopBtn {
-      right: 15px;
-      bottom: 15px;
-      width: 45px;
-      height: 45px;
-      font-size: 1.5rem;
-    }
   }
 </style>
-
 </head>
 <body>
   <!-- Overlay cho sidebar -->
