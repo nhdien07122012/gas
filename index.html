@@ -11,6 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Quản lý điểm gas">
+
 <style>
   /* ========== CSS VARIABLES FOR LIGHT MODE ========== */
   :root {
@@ -125,6 +126,47 @@
       /* Màu ca làm việc Dark Mode */
       --night-shift: #2d3748;
       --day-shift: #2d3748;
+    }
+    
+    /* Đảm bảo header và các thành phần liên quan có chữ trắng */
+    header {
+      color: #ffffff !important;
+    }
+    
+    header h1,
+    header p {
+      color: #ffffff !important;
+    }
+    
+    .menu-toggle {
+      color: #ffffff !important;
+    }
+    
+    .shift-info {
+      color: #ffffff !important;
+    }
+    
+    .shift-info .current-shift,
+    .shift-info .shift-time {
+      color: #ffffff !important;
+    }
+    
+    /* Đảm bảo sidebar có chữ trắng */
+    .sidebar-header h2 {
+      color: #ffffff !important;
+    }
+    
+    .close-sidebar {
+      color: #ffffff !important;
+    }
+    
+    /* Đảm bảo sidebar item có chữ trắng */
+    .sidebar-item {
+      color: #ffffff !important;
+    }
+    
+    .sidebar-footer p {
+      color: rgba(255, 255, 255, 0.8) !important;
     }
   }
   
@@ -1325,7 +1367,8 @@
     }
     
     /* Điều chỉnh màu placeholder */
-    input::placeholder, textarea::placeholder {
+    input::placeholder,
+    textarea::placeholder {
       color: var(--text-muted);
     }
     
