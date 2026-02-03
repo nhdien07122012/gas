@@ -11,72 +11,217 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Quản lý điểm gas">
+
 <style>
+  /* ========== CSS VARIABLES FOR LIGHT MODE ========== */
   :root {
+    /* Màu sắc cơ bản */
     --primary: #2c80ff;
     --primary-dark: #1a6de0;
+    --primary-light: #5a9dff;
     --secondary: #34c759;
+    --secondary-dark: #2aa64a;
     --danger: #ff3b30;
+    --danger-dark: #e0352b;
     --warning: #ff9500;
-    --light: #f8f9fa;
-    --dark: #333;
-    --gray: #6c757d;
-    --border: #dee2e6;
+    --warning-dark: #e08900;
+    --info: #5ac8fa;
+    --success: #34c759;
+    
+    /* Màu nền và văn bản Light Mode */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f7fa;
+    --bg-tertiary: #f8f9fa;
+    --bg-card: #ffffff;
+    --bg-sidebar: #ffffff;
+    --bg-modal: #ffffff;
+    --bg-input: #ffffff;
+    --bg-hover: #f8fafc;
+    --bg-active: #e8f0fe;
+    
+    /* Màu văn bản Light Mode */
+    --text-primary: #333333;
+    --text-secondary: #6c757d;
+    --text-tertiary: #868e96;
+    --text-inverse: #ffffff;
+    --text-muted: #adb5bd;
+    
+    /* Màu viền và bóng */
+    --border-color: #dee2e6;
+    --border-light: #e9ecef;
+    --border-dark: #ced4da;
     --shadow: 0 2px 10px rgba(0,0,0,0.08);
     --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
-    --radius-xl: 28px;    /* Góc rất lớn cho container chính */
-    --radius-lg: 20px;    /* Góc lớn cho card, modal */
-    --radius-md: 16px;    /* Góc trung bình cho nút, input */
-    --radius-sm: 12px;    /* Góc nhỏ cho badge, stat-card */
-    --radius-xs: 8px;     /* Góc rất nhỏ cho item nhỏ */
+    --shadow-dark: 0 2px 10px rgba(0,0,0,0.15);
+    
+    /* Màu ca làm việc */
     --night-shift: #4a5568;
     --day-shift: #f7fafc;
+    
+    /* Border radius */
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
+    --radius-circle: 50%;
+    
+    /* Kích thước */
     --sidebar-width: 280px;
+    --header-height: auto;
+    
+    /* Hiệu ứng chuyển tiếp */
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s ease;
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Độ trong suốt */
+    --opacity-disabled: 0.6;
+    --opacity-hover: 0.9;
+    --opacity-active: 0.8;
   }
   
+  /* ========== DARK MODE VARIABLES ========== */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Màu sắc cơ bản (giữ nguyên nhưng có thể điều chỉnh độ sáng) */
+      --primary: #3d8eff;
+      --primary-dark: #2c7de6;
+      --primary-light: #5a9dff;
+      --secondary: #30c75a;
+      --secondary-dark: #26a64a;
+      --danger: #ff5252;
+      --danger-dark: #ff3838;
+      --warning: #ffa726;
+      --warning-dark: #ff9800;
+      --info: #42a5f5;
+      --success: #30c75a;
+      
+      /* Màu nền và văn bản Dark Mode */
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-tertiary: #2d2d2d;
+      --bg-card: #1e1e1e;
+      --bg-sidebar: #1e1e1e;
+      --bg-modal: #252525;
+      --bg-input: #2d2d2d;
+      --bg-hover: #2a2a2a;
+      --bg-active: #2c3e50;
+      
+      /* Màu văn bản Dark Mode */
+      --text-primary: #f5f5f5;
+      --text-secondary: #b0b0b0;
+      --text-tertiary: #8a8a8a;
+      --text-inverse: #121212;
+      --text-muted: #666666;
+      
+      /* Màu viền và bóng Dark Mode */
+      --border-color: #3a3a3a;
+      --border-light: #4a4a4a;
+      --border-dark: #555555;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+      --shadow-lg: 0 8px 25px rgba(0,0,0,0.4);
+      --shadow-dark: 0 2px 10px rgba(0,0,0,0.5);
+      
+      /* Màu ca làm việc Dark Mode */
+      --night-shift: #2d3748;
+      --day-shift: #2d3748;
+    }
+    
+    /* Đảm bảo header và các thành phần liên quan có chữ trắng */
+    header {
+      color: #ffffff !important;
+    }
+    
+    header h1,
+    header p {
+      color: #ffffff !important;
+    }
+    
+    .menu-toggle {
+      color: #ffffff !important;
+    }
+    
+    .shift-info {
+      color: #ffffff !important;
+    }
+    
+    .shift-info .current-shift,
+    .shift-info .shift-time {
+      color: #ffffff !important;
+    }
+    
+    /* Đảm bảo sidebar có chữ trắng */
+    .sidebar-header h2 {
+      color: #ffffff !important;
+    }
+    
+    .close-sidebar {
+      color: #ffffff !important;
+    }
+    
+    /* Đảm bảo sidebar item có chữ trắng */
+    .sidebar-item {
+      color: #ffffff !important;
+    }
+    
+    .sidebar-footer p {
+      color: rgba(255, 255, 255, 0.8) !important;
+    }
+  }
+  
+  /* ========== CSS RESET & BASE STYLES ========== */
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
   
+  html {
+    font-size: 16px;
+    transition: background-color 0.5s ease;
+  }
+  
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f7fa;
-    color: var(--dark);
+    font-family: 'Segoe UI', 'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
     line-height: 1.6;
     padding: 20px;
     min-height: 100vh;
-    transition: margin-left 0.3s ease;
+    transition: var(--transition-slow);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   /* Container chính với bo góc lớn */
   .container {
     max-width: 1200px;
     margin: 0 auto;
-    background: white;
+    background: var(--bg-card);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg);
     overflow: hidden;
     transition: var(--transition);
+    border: 1px solid var(--border-color);
   }
   
-  /* Sidebar styles */
+  /* ========== SIDEBAR STYLES ========== */
   .sidebar {
     position: fixed;
     top: 0;
     left: -280px;
     width: var(--sidebar-width);
     height: 100%;
-    background: white;
-    box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+    background: var(--bg-sidebar);
+    box-shadow: 2px 0 15px rgba(0,0,0,0.2);
     z-index: 1001;
     transition: left 0.3s ease;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    border-right: 1px solid var(--border-color);
   }
   
   .sidebar.open {
@@ -86,7 +231,7 @@
   .sidebar-header {
     padding: 20px;
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: white;
+    color: var(--text-inverse);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -100,11 +245,17 @@
   .close-sidebar {
     background: none;
     border: none;
-    color: white;
+    color: var(--text-inverse);
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0;
     width: auto;
+    transition: var(--transition-fast);
+  }
+  
+  .close-sidebar:hover {
+    opacity: var(--opacity-hover);
+    transform: scale(1.1);
   }
   
   .sidebar-content {
@@ -120,31 +271,36 @@
     padding: 15px;
     margin-bottom: 10px;
     border-radius: var(--radius-md);
-    background: #f8f9fa;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
     cursor: pointer;
     transition: var(--transition);
-    border: none;
+    border: 1px solid transparent;
     width: 100%;
     text-align: left;
     font-size: 1rem;
+    font-weight: 500;
   }
 
   .sidebar-item:hover {
-    background: #e9ecef;
+    background: var(--bg-hover);
     transform: translateY(-2px);
     border-radius: var(--radius-lg);
+    border-color: var(--border-light);
+    box-shadow: var(--shadow);
   }
   
   .sidebar-item.active {
     background: var(--primary);
-    color: white;
+    color: var(--text-inverse);
+    border-color: var(--primary-dark);
   }
   
   .sidebar-footer {
     padding: 20px;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--border-color);
     font-size: 0.85rem;
-    color: var(--gray);
+    color: var(--text-secondary);
     text-align: center;
     border-radius: 0 0 var(--radius-lg) 0;
   }
@@ -158,6 +314,7 @@
     background: rgba(0,0,0,0.5);
     z-index: 1000;
     display: none;
+    backdrop-filter: blur(2px);
   }
   
   .overlay.active {
@@ -167,17 +324,23 @@
   .menu-toggle {
     background: none;
     border: none;
-    color: white;
+    color: var(--text-inverse);
     font-size: 1.5rem;
     cursor: pointer;
     padding: 5px;
     margin-right: 10px;
+    transition: var(--transition-fast);
+    border-radius: var(--radius-sm);
   }
   
-  /* Header styles với bo góc trên */
+  .menu-toggle:hover {
+    background: rgba(255,255,255,0.1);
+  }
+  
+  /* ========== HEADER STYLES ========== */
   header {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: white;
+    color: var(--text-inverse);
     padding: 25px 30px;
     text-align: center;
     position: relative;
@@ -200,7 +363,7 @@
   
   .shift-info {
     background: var(--night-shift);
-    color: white;
+    color: var(--text-inverse);
     padding: 15px 30px;
     display: flex;
     justify-content: space-between;
@@ -220,15 +383,18 @@
     opacity: 0.9;
   }
   
+  /* ========== CARD STYLES ========== */
   .card {
     padding: 25px 30px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-color);
+    transition: var(--transition);
   }
   
   .card:last-child {
     border-bottom: none;
   }
   
+  /* ========== FORM STYLES ========== */
   .form-group {
     margin-bottom: 20px;
   }
@@ -237,24 +403,32 @@
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: var(--dark);
+    color: var(--text-primary);
   }
   
-  input, select {
+  input, select, textarea {
     width: 100%;
     padding: 14px 16px;
-    border: 1.5px solid var(--border);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border: 1.5px solid var(--border-color);
     border-radius: var(--radius-md);
     font-size: 1rem;
     transition: var(--transition);
   }
   
-  input:focus, select:focus {
+  input:focus, select:focus, textarea:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(61, 142, 255, 0.2);
+    background: var(--bg-input);
   }
   
+  input::placeholder, textarea::placeholder {
+    color: var(--text-muted);
+  }
+  
+  /* ========== BUTTON STYLES ========== */
   .button-group {
     display: flex;
     gap: 15px;
@@ -278,7 +452,7 @@
   
   .btn-primary {
     background-color: var(--primary);
-    color: white;
+    color: var(--text-inverse);
   }
   
   .btn-primary:hover {
@@ -288,43 +462,50 @@
   }
   
   .btn-secondary {
-    background-color: #f1f3f5;
-    color: var(--dark);
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
   }
   
   .btn-secondary:hover {
-    background-color: #e9ecef;
+    background-color: var(--bg-hover);
     transform: translateY(-2px);
+    border-color: var(--border-dark);
   }
   
   .btn-success {
     background-color: var(--secondary);
-    color: white;
+    color: var(--text-inverse);
   }
   
   .btn-success:hover {
-    background-color: #30b352;
+    background-color: var(--secondary-dark);
     transform: translateY(-2px);
   }
   
   .btn-warning {
     background-color: var(--warning);
-    color: white;
+    color: var(--text-inverse);
   }
   
   .btn-warning:hover {
-    background-color: #e08900;
+    background-color: var(--warning-dark);
     transform: translateY(-2px);
   }
   
   .btn-danger {
     background-color: var(--danger);
-    color: white;
+    color: var(--text-inverse);
   }
   
   .btn-danger:hover {
-    background-color: #e0352b;
+    background-color: var(--danger-dark);
     transform: translateY(-2px);
+  }
+  
+  .btn-info {
+    background-color: var(--info);
+    color: var(--text-inverse);
   }
   
   .btn-sm {
@@ -333,11 +514,13 @@
     border-radius: var(--radius-sm);
   }
   
+  /* ========== TABLE STYLES ========== */
   .table-container {
     overflow-x: auto;
     margin-top: 10px;
     border-radius: var(--radius-md);
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
   }
   
   table {
@@ -347,17 +530,18 @@
   }
   
   th {
-    background-color: #f8f9fa;
+    background-color: var(--bg-tertiary);
     padding: 16px 12px;
     text-align: left;
     font-weight: 600;
-    color: var(--dark);
-    border-bottom: 2px solid var(--border);
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
   }
   
   td {
     padding: 14px 12px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
   }
   
   tr:last-child td {
@@ -365,20 +549,21 @@
   }
   
   tr:hover {
-    background-color: #f8fafc;
+    background-color: var(--bg-hover);
   }
   
+  /* ========== EMPTY STATE ========== */
   .empty-state {
     text-align: center;
     padding: 40px 20px;
-    color: var(--gray);
+    color: var(--text-secondary);
   }
   
   .empty-state p {
     margin-top: 10px;
   }
   
-  /* Stat cards với bo góc đẹp */
+  /* ========== STAT CARDS ========== */
   .stats-container {
     display: flex;
     flex-wrap: wrap;
@@ -389,17 +574,19 @@
   .stat-card {
     flex: 1;
     min-width: 150px;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    background: var(--bg-tertiary);
     border-radius: var(--radius-lg);
     padding: 20px;
     text-align: center;
     box-shadow: var(--shadow);
     transition: var(--transition);
+    border: 1px solid var(--border-color);
   }
   
   .stat-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
+    border-color: var(--primary-light);
   }
   
   .stat-value {
@@ -410,10 +597,11 @@
   
   .stat-label {
     font-size: 0.9rem;
-    color: var(--gray);
+    color: var(--text-secondary);
     margin-top: 5px;
   }
   
+  /* ========== FILTER GROUP ========== */
   .filter-group {
     display: flex;
     gap: 10px;
@@ -428,7 +616,7 @@
     padding: 12px 16px;
   }
   
-  /* Modal styles với bo góc lớn */
+  /* ========== MODAL STYLES ========== */
   .modal {
     display: none;
     position: fixed;
@@ -441,34 +629,38 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
+    backdrop-filter: blur(4px);
   }
   
   .modal-content {
-    background: white;
+    background: var(--bg-modal);
     border-radius: var(--radius-lg);
     width: 90%;
     max-width: 500px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-lg);
     animation: modalFadeIn 0.3s ease-out;
     max-height: 85vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     position: relative;
+    border: 1px solid var(--border-color);
   }
   
   .modal-header {
     padding: 20px 25px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-color);
     display: flex;
-    justify-content: between;
+    justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: var(--bg-tertiary);
   }
   
   .modal-header h2 {
     font-size: 1.4rem;
+    color: var(--text-primary);
   }
   
   .modal-body {
@@ -481,13 +673,14 @@
   
   .modal-footer {
     padding: 20px 25px;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--border-color);
     display: flex;
     justify-content: flex-end;
     gap: 10px;
     flex-shrink: 0;
     margin-top: auto;
     border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    background: var(--bg-tertiary);
   }
   
   .modal-footer button {
@@ -512,17 +705,18 @@
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    color: var(--gray);
+    color: var(--text-secondary);
     padding: 0;
     width: auto;
+    transition: var(--transition-fast);
   }
   
   .close-modal:hover {
-    color: var(--dark);
-    transform: none;
+    color: var(--text-primary);
+    transform: scale(1.1);
   }
   
-  /* Responsive styles */
+  /* ========== RESPONSIVE STYLES ========== */
   @media (max-width: 768px) {
     body {
       padding: 15px;
@@ -736,7 +930,7 @@
     }
   }
   
-  /* Animation */
+  /* ========== ANIMATIONS ========== */
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -747,37 +941,57 @@
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
   
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
   .fade-in {
     animation: fadeIn 0.4s ease-out;
   }
   
-  /* Badge với bo góc */
+  .slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  /* ========== BADGE STYLES ========== */
   .badge {
     display: inline-block;
     padding: 6px 12px;
     border-radius: var(--radius-xs);
     font-size: 0.8rem;
     font-weight: 600;
+    border: 1px solid transparent;
   }
   
   .badge-primary {
     background-color: var(--primary);
-    color: white;
+    color: var(--text-inverse);
+    border-color: var(--primary-dark);
   }
   
   .badge-secondary {
     background-color: var(--secondary);
-    color: white;
+    color: var(--text-inverse);
+    border-color: var(--secondary-dark);
   }
   
   .badge-warning {
     background-color: var(--warning);
-    color: white;
+    color: var(--text-inverse);
+    border-color: var(--warning-dark);
   }
   
   .badge-danger {
     background-color: var(--danger);
-    color: white;
+    color: var(--text-inverse);
+    border-color: var(--danger-dark);
+  }
+  
+  .badge-info {
+    background-color: var(--info);
+    color: var(--text-inverse);
+    border-color: var(--info);
   }
   
   .action-buttons {
@@ -809,14 +1023,14 @@
     gap: 8px;
   }
   
-  /* Toast với bo góc */
+  /* ========== TOAST STYLES ========== */
   .toast {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) translateY(100px);
     background: var(--primary);
-    color: white;
+    color: var(--text-inverse);
     padding: 16px 24px;
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
@@ -829,6 +1043,7 @@
     min-width: 280px;
     text-align: center;
     justify-content: center;
+    border: 1px solid var(--primary-dark);
   }
 
   .toast.show {
@@ -838,10 +1053,17 @@
   
   .toast.success {
     background: var(--secondary);
+    border-color: var(--secondary-dark);
   }
   
   .toast.error {
     background: var(--danger);
+    border-color: var(--danger-dark);
+  }
+
+  .toast.warning {
+    background: var(--warning);
+    border-color: var(--warning-dark);
   }
 
   .diachi-row {
@@ -864,13 +1086,14 @@
     border-radius: var(--radius-sm);
   }
   
-  /* Thêm style mới cho modal xem nhanh */
+  /* ========== QUICK VIEW MODAL STYLES ========== */
   .quick-view-list {
     max-height: none;
     overflow-y: visible;
     margin-top: 15px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
+    background: var(--bg-card);
   }
   
   .quick-view-item {
@@ -878,7 +1101,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 12px 15px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-color);
     transition: background-color 0.2s ease;
   }
   
@@ -892,7 +1115,7 @@
   }
   
   .quick-view-item:hover {
-    background-color: #f8f9fa;
+    background-color: var(--bg-hover);
   }
   
   .quick-view-item-info {
@@ -902,12 +1125,12 @@
   
   .quick-view-item-name {
     font-weight: 600;
-    color: var(--dark);
+    color: var(--text-primary);
   }
   
   .quick-view-item-address {
     font-size: 0.85rem;
-    color: var(--gray);
+    color: var(--text-secondary);
     margin-top: 3px;
   }
   
@@ -919,15 +1142,15 @@
   
   .quick-view-total {
     padding: 15px;
-    background-color: #f8f9fa;
-    border-top: 1px solid var(--border);
+    background-color: var(--bg-tertiary);
+    border-top: 1px solid var(--border-color);
     font-weight: 700;
     text-align: center;
-    color: var(--dark);
+    color: var(--text-primary);
     border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   }
   
-  /* Style cho ô số tiền khi được tự động điền */
+  /* ========== SPECIAL INPUT STYLES ========== */
   #so_tien {
     transition: var(--transition);
     border-radius: var(--radius-md);
@@ -936,27 +1159,29 @@
   #so_tien:focus {
     border-color: var(--secondary);
     box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.1);
-    background-color: #f8fff9;
+    background-color: var(--bg-input);
   }
   
-  /* Style cho nút lưu vị trí khi đã có GPS */
+  /* ========== LOCATION BUTTON STYLES ========== */
   .btn-location-disabled {
-    background-color: #6c757d !important;
+    background-color: var(--text-muted) !important;
     cursor: not-allowed !important;
+    opacity: var(--opacity-disabled);
   }
   
   .btn-location-disabled:hover {
     transform: none !important;
-    background-color: #6c757d !important;
+    background-color: var(--text-muted) !important;
   }
   
-  /* Style cho modal báo cáo */
+  /* ========== REPORT MODAL STYLES ========== */
   #report-summary {
     border-left: 4px solid var(--primary);
     margin-top: 20px;
     padding: 15px;
-    background: #f8f9fa;
+    background: var(--bg-tertiary);
     border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
   }
   
   #report-details {
@@ -979,7 +1204,7 @@
     border-radius: var(--radius-sm);
   }
   
-  /* Style cho phần chi tiêu */
+  /* ========== EXPENSE STYLES ========== */
   .expense-input-group {
     display: flex;
     gap: 10px;
@@ -1002,13 +1227,14 @@
     align-items: center;
     padding: 12px 15px;
     margin-bottom: 8px;
-    background-color: #f8f9fa;
+    background-color: var(--bg-tertiary);
     border-radius: var(--radius-sm);
     transition: var(--transition);
+    border: 1px solid var(--border-color);
   }
   
   .expense-item:hover {
-    background-color: #e9ecef;
+    background-color: var(--bg-hover);
   }
   
   .expense-item:last-child {
@@ -1022,7 +1248,7 @@
   
   .expense-item-name {
     font-weight: 600;
-    color: var(--dark);
+    color: var(--text-primary);
   }
   
   .expense-item-amount {
@@ -1038,48 +1264,62 @@
     font-size: 1.2rem;
     padding: 5px;
     border-radius: var(--radius-xs);
+    transition: var(--transition-fast);
+  }
+  
+  .expense-item-delete:hover {
+    background: rgba(255, 59, 48, 0.1);
+    transform: scale(1.1);
   }
   
   .expense-total {
     margin-top: 15px;
     padding: 12px 15px;
-    background-color: #f1f3f5;
+    background-color: var(--bg-secondary);
     border-radius: var(--radius-sm);
     font-weight: 700;
     text-align: center;
     color: var(--danger);
+    border: 1px solid var(--border-color);
   }
   
-  /* Scrollbar styling */
+  /* ========== SCROLLBAR STYLING ========== */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
   }
   
   ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--bg-tertiary);
     border-radius: var(--radius-sm);
   }
   
   ::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
+    background: var(--border-dark);
     border-radius: var(--radius-sm);
+    border: 2px solid var(--bg-tertiary);
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+    background: var(--text-secondary);
   }
   
-  /* Nút cuộn về đầu trang với bo góc */
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-dark) var(--bg-tertiary);
+  }
+  
+  /* ========== SCROLL TO TOP BUTTON ========== */
   #scrollTopBtn {
     position: fixed;
     right: 30px;
     bottom: 30px;
     z-index: 999;
     background: var(--primary);
-    color: white;
+    color: var(--text-inverse);
     border: none;
-    border-radius: 50%;
+    border-radius: var(--radius-circle);
     width: 56px;
     height: 56px;
     box-shadow: var(--shadow-lg);
@@ -1089,91 +1329,207 @@
     justify-content: center;
     cursor: pointer;
     transition: var(--transition);
+    border: 2px solid var(--primary-dark);
   }
   
   #scrollTopBtn:hover {
     background: var(--primary-dark);
-    transform: translateY(-5px);
+    transform: translateY(-5px) scale(1.05);
     box-shadow: 0 10px 20px rgba(44, 128, 255, 0.3);
   }
   
-  @media (max-width: 768px) {
-    .diachi-row input {
-      flex: 8 1 0%;
-      border-radius: var(--radius-sm);
-    }
-    .diachi-row button {
-      flex: 2 1 0%;
-      max-width: 90px;
-      font-size: 0.95rem;
-      padding-left: 0.3em;
-      padding-right: 0.3em;
-      border-radius: var(--radius-sm);
+  /* ========== DARK MODE SPECIFIC ADJUSTMENTS ========== */
+  @media (prefers-color-scheme: dark) {
+    /* Điều chỉnh độ tương phản cho các phần tử đặc biệt */
+    .btn-secondary {
+      border-color: var(--border-dark);
     }
     
-    .quick-view-item {
-      padding: 10px 12px;
+    .table-container {
+      border-color: var(--border-dark);
     }
     
-    .recipient-row {
-      flex-direction: column;
+    .stat-card {
+      border-color: var(--border-dark);
     }
     
-    .recipient-row button {
-      width: 100%;
-      border-radius: var(--radius-sm);
+    .quick-view-list {
+      border-color: var(--border-dark);
     }
     
-    .expense-input-group {
-      flex-direction: column;
+    .expense-item {
+      border-color: var(--border-dark);
     }
     
-    .expense-input-group button {
-      width: 100%;
-      border-radius: var(--radius-sm);
+    /* Điều chỉnh màu chữ trong modal cho dễ đọc */
+    .modal-body {
+      color: var(--text-primary);
     }
     
-    #scrollTopBtn {
-      right: 20px;
-      bottom: 20px;
-      width: 50px;
-      height: 50px;
-      font-size: 1.8rem;
+    /* Điều chỉnh màu placeholder */
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--text-muted);
+    }
+    
+    /* Điều chỉnh datalist */
+    datalist option {
+      background: var(--bg-modal);
+      color: var(--text-primary);
+    }
+    
+    /* Điều chỉnh bóng cho card và container */
+    .container {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Điều chỉnh overlay */
+    .overlay {
+      background: rgba(0, 0, 0, 0.7);
+    }
+    
+    /* Điều chỉnh thanh scrollbar trong dark mode */
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--text-muted);
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+    
+    /* Điều chỉnh hover cho table rows */
+    tr:hover {
+      background-color: var(--bg-tertiary);
+    }
+    
+    /* Điều chỉnh màu border cho các phần tử có viền */
+    .card {
+      border-color: var(--border-color);
+    }
+    
+    /* Điều chỉnh màu cho các badge */
+    .badge-primary {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Điều chỉnh màu cho shift info */
+    .shift-info {
+      background: linear-gradient(135deg, var(--night-shift), #2d3748);
     }
   }
   
-  @media (max-width: 480px) {
-    .diachi-row input {
-      flex: 8 1 0%;
-      border-radius: var(--radius-sm);
-    }
-    .diachi-row button {
-      flex: 2 1 0%;
-      max-width: 70px;
-      font-size: 0.9rem;
-      padding-left: 0.2em;
-      padding-right: 0.2em;
-      border-radius: var(--radius-xs);
+  /* ========== LIGHT MODE SPECIFIC ADJUSTMENTS ========== */
+  @media (prefers-color-scheme: light) {
+    /* Tối ưu hiển thị cho light mode */
+    .container {
+      box-shadow: var(--shadow-lg);
     }
     
-    .quick-view-item {
-      padding: 10px 12px;
+    .sidebar {
+      box-shadow: 2px 0 20px rgba(0,0,0,0.1);
     }
     
-    .quick-view-item-name {
-      font-size: 0.95rem;
+    /* Tăng độ tương phản cho text trong light mode */
+    .text-muted {
+      color: var(--text-secondary);
     }
     
-    .quick-view-item-amount {
-      font-size: 1rem;
+    /* Điều chỉnh màu hover nhẹ hơn */
+    tr:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+  }
+  
+  /* ========== HIGH CONTRAST MODE SUPPORT ========== */
+  @media (prefers-contrast: high) {
+    :root {
+      --primary: #0056cc;
+      --primary-dark: #0047ab;
+      --secondary: #008a00;
+      --danger: #c30000;
+      --warning: #cc7a00;
     }
     
-    #scrollTopBtn {
-      right: 15px;
-      bottom: 15px;
-      width: 45px;
-      height: 45px;
-      font-size: 1.5rem;
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary: #4dabff;
+        --primary-dark: #2c7de6;
+        --secondary: #00c700;
+        --danger: #ff5252;
+        --warning: #ffb74d;
+      }
+    }
+  }
+  
+  /* ========== REDUCED MOTION SUPPORT ========== */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
+    .fade-in,
+    .slide-in {
+      animation: none;
+    }
+    
+    .toast {
+      transition: opacity 0.1s;
+    }
+    
+    button:hover,
+    .sidebar-item:hover,
+    .stat-card:hover {
+      transform: none !important;
+    }
+  }
+  
+  /* ========== PRINT STYLES ========== */
+  @media print {
+    body {
+      background: white !important;
+      color: black !important;
+      padding: 0;
+    }
+    
+    .container {
+      box-shadow: none !important;
+      border: 1px solid #ccc !important;
+      border-radius: 0 !important;
+      max-width: 100% !important;
+    }
+    
+    .sidebar,
+    .menu-toggle,
+    .button-group,
+    .action-buttons,
+    .modal,
+    #scrollTopBtn,
+    .overlay {
+      display: none !important;
+    }
+    
+    table {
+      border: 1px solid #ccc;
+    }
+    
+    th, td {
+      color: black !important;
+      border-color: #ccc !important;
+    }
+    
+    .badge {
+      border: 1px solid #ccc !important;
+      color: black !important;
+      background: white !important;
     }
   }
 </style>
@@ -1487,9 +1843,9 @@
           </select>
         </div>
         
-        <div id="batch-status-info" style="margin-top: 15px; padding: 15px; background-color: #f8f9fa; border-radius: var(--radius); display: none;">
+        <div id="batch-status-info" style="margin-top: 15px; padding: 15px; background-color: var(--bg-tertiary); border-radius: var(--radius-sm); display: none;">
           <p id="batch-status-summary"></p>
-          <p id="batch-status-details" style="font-size: 0.9rem; margin-top: 8px; color: var(--gray);"></p>
+          <p id="batch-status-details" style="font-size: 0.9rem; margin-top: 8px; color: var(--text-secondary);"></p>
         </div>
       </div>
       <div class="modal-footer">
