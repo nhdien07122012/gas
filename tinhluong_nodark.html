@@ -11,172 +11,53 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Tính công lương">
 <style>
-  /* ========== CSS VARIABLES FOR LIGHT MODE ========== */
   :root {
-    /* Màu sắc cơ bản */
     --primary: #2c80ff;
     --primary-dark: #1a6de0;
-    --primary-light: #5a9dff;
     --secondary: #34c759;
-    --secondary-dark: #2aa64a;
     --danger: #ff3b30;
-    --danger-dark: #e0352b;
     --warning: #ff9500;
-    --warning-dark: #e08900;
-    --info: #5ac8fa;
-    --success: #34c759;
-    
-    /* Màu nền và văn bản Light Mode */
-    --bg-primary: #ffffff;
-    --bg-secondary: #f5f7fa;
-    --bg-tertiary: #f8f9fa;
-    --bg-card: #ffffff;
-    --bg-sidebar: #ffffff;
-    --bg-modal: #ffffff;
-    --bg-input: #ffffff;
-    --bg-hover: #f8fafc;
-    --bg-active: #e8f0fe;
-    
-    /* Màu văn bản Light Mode */
-    --text-primary: #333333;
-    --text-secondary: #6c757d;
-    --text-tertiary: #868e96;
-    --text-inverse: #ffffff;
-    --text-muted: #adb5bd;
-    
-    /* Màu viền và bóng */
-    --border-color: #dee2e6;
-    --border-light: #e9ecef;
-    --border-dark: #ced4da;
+    --light: #f8f9fa;
+    --dark: #333;
+    --gray: #6c757d;
+    --border: #dee2e6;
     --shadow: 0 2px 10px rgba(0,0,0,0.08);
-    --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
-    --shadow-dark: 0 2px 10px rgba(0,0,0,0.15);
-    
-    /* Border radius */
-    --radius-xl: 28px;
-    --radius-lg: 20px;
-    --radius-md: 16px;
-    --radius-sm: 12px;
-    --radius-xs: 8px;
-    --radius-circle: 50%;
-    
-    /* Hiệu ứng chuyển tiếp */
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-fast: all 0.15s ease;
-    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    /* Độ trong suốt */
-    --opacity-disabled: 0.6;
-    --opacity-hover: 0.9;
-    --opacity-active: 0.8;
+    --radius: 10px;
   }
   
-  /* ========== DARK MODE VARIABLES ========== */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      /* Màu sắc cơ bản */
-      --primary: #3d8eff;
-      --primary-dark: #2c7de6;
-      --primary-light: #5a9dff;
-      --secondary: #30c75a;
-      --secondary-dark: #26a64a;
-      --danger: #ff5252;
-      --danger-dark: #ff3838;
-      --warning: #ffa726;
-      --warning-dark: #ff9800;
-      --info: #42a5f5;
-      --success: #30c75a;
-      
-      /* Màu nền và văn bản Dark Mode */
-      --bg-primary: #121212;
-      --bg-secondary: #1e1e1e;
-      --bg-tertiary: #2d2d2d;
-      --bg-card: #1e1e1e;
-      --bg-sidebar: #1e1e1e;
-      --bg-modal: #252525;
-      --bg-input: #2d2d2d;
-      --bg-hover: #2a2a2a;
-      --bg-active: #2c3e50;
-      
-      /* Màu văn bản Dark Mode */
-      --text-primary: #f5f5f5;
-      --text-secondary: #b0b0b0;
-      --text-tertiary: #8a8a8a;
-      --text-inverse: #121212;
-      --text-muted: #666666;
-      
-      /* Màu viền và bóng Dark Mode */
-      --border-color: #3a3a3a;
-      --border-light: #4a4a4a;
-      --border-dark: #555555;
-      --shadow: 0 2px 10px rgba(0,0,0,0.3);
-      --shadow-lg: 0 8px 25px rgba(0,0,0,0.4);
-      --shadow-dark: 0 2px 10px rgba(0,0,0,0.5);
-    }
-    
-    /* Đảm bảo header có chữ trắng */
-    header {
-      color: #ffffff !important;
-    }
-    
-    header h1,
-    header p {
-      color: #ffffff !important;
-    }
-    
-    /* Đảm bảo link quay về có màu trắng */
-    header a {
-      color: #ffffff !important;
-    }
-    
-    /* Điều chỉnh màu nền cho hiệu ứng tiền rơi */
-    .money-particle {
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    }
-  }
-  
-  /* ========== CSS RESET & BASE STYLES ========== */
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
   
-  html {
-    font-size: 16px;
-    transition: background-color 0.5s ease;
-  }
-  
   body {
-    font-family: 'Segoe UI', 'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg-secondary);
-    color: var(--text-primary);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: var(--dark);
     line-height: 1.6;
     padding: 20px;
     min-height: 100vh;
-    transition: var(--transition-slow);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
   
   .container {
     max-width: 800px;
     margin: 0 auto;
-    background: var(--bg-card);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
     overflow: hidden;
-    transition: var(--transition);
-    border: 1px solid var(--border-color);
+    position: relative;
+    z-index: 1;
   }
   
   header {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: var(--text-inverse);
+    color: white;
     padding: 25px 30px;
     text-align: center;
     position: relative;
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
   
   header h1 {
@@ -195,8 +76,7 @@
   
   .card {
     padding: 25px 30px;
-    border-bottom: 1px solid var(--border-color);
-    transition: var(--transition);
+    border-bottom: 1px solid var(--border);
   }
   
   .card:last-child {
@@ -205,14 +85,13 @@
   
   /* PHẦN TỔNG LƯƠNG TẠM TÍNH Ở ĐẦU */
   .salary-preview {
-    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
-    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: var(--radius);
     padding: 20px;
     margin-bottom: 25px;
     text-align: center;
     border-left: 5px solid var(--secondary);
     display: none;
-    border: 1px solid var(--border-color);
   }
   
   .salary-preview.show {
@@ -222,7 +101,7 @@
   
   .salary-preview h3 {
     font-size: 1rem;
-    color: var(--text-secondary);
+    color: var(--gray);
     margin-bottom: 10px;
     font-weight: 600;
   }
@@ -232,12 +111,11 @@
     font-weight: 800;
     color: var(--secondary);
     margin: 10px 0;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
   
   .preview-time {
     font-size: 0.9rem;
-    color: var(--text-secondary);
+    color: var(--gray);
   }
   
   .form-group {
@@ -248,29 +126,22 @@
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--dark);
   }
   
   input, select {
     width: 100%;
     padding: 14px 16px;
-    background: var(--bg-input);
-    color: var(--text-primary);
-    border: 1.5px solid var(--border-color);
-    border-radius: var(--radius-md);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
     font-size: 1rem;
-    transition: var(--transition);
+    transition: all 0.3s ease;
   }
   
   input:focus, select:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(61, 142, 255, 0.2);
-    background: var(--bg-input);
-  }
-  
-  input::placeholder {
-    color: var(--text-muted);
+    box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
   }
   
   .button-group {
@@ -283,11 +154,11 @@
     flex: 1;
     padding: 16px;
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius);
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -296,7 +167,7 @@
   
   .btn-primary {
     background-color: var(--primary);
-    color: var(--text-inverse);
+    color: white;
   }
   
   .btn-primary:hover {
@@ -306,40 +177,38 @@
   }
   
   .btn-secondary {
-    background-color: var(--bg-tertiary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
+    background-color: #f1f3f5;
+    color: var(--dark);
   }
   
   .btn-secondary:hover {
-    background-color: var(--bg-hover);
-    transform: translateY(-2px);
-    border-color: var(--border-dark);
-  }
-  
-  .btn-success {
-    background-color: var(--secondary);
-    color: var(--text-inverse);
-  }
-  
-  .btn-success:hover {
-    background-color: var(--secondary-dark);
+    background-color: #e9ecef;
     transform: translateY(-2px);
   }
   
   .btn-warning {
     background-color: var(--warning);
-    color: var(--text-inverse);
+    color: white;
   }
   
   .btn-warning:hover {
-    background-color: var(--warning-dark);
+    background-color: #e68a00;
+    transform: translateY(-2px);
+  }
+  
+  .btn-success {
+    background-color: var(--secondary);
+    color: white;
+  }
+  
+  .btn-success:hover {
+    background-color: #30b352;
     transform: translateY(-2px);
   }
   
   .btn-info {
-    background-color: var(--info);
-    color: var(--text-inverse);
+    background-color: #5ac8fa;
+    color: white;
   }
   
   .btn-info:hover {
@@ -357,74 +226,57 @@
   .stat-card {
     flex: 1;
     min-width: 150px;
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-lg);
-    padding: 20px;
+    background: #f8f9fa;
+    border-radius: var(--radius);
+    padding: 15px;
     text-align: center;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-    border: 1px solid var(--border-color);
-  }
-  
-  .stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary-light);
   }
   
   .stat-value {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--primary);
   }
   
   .stat-label {
     font-size: 0.9rem;
-    color: var(--text-secondary);
+    color: var(--gray);
     margin-top: 5px;
   }
   
   .table-container {
     overflow-x: auto;
     margin-top: 10px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
   }
   
   table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 0;
+    margin-top: 5px;
   }
   
   th {
-    background-color: var(--bg-tertiary);
+    background-color: #f8f9fa;
     padding: 16px 12px;
     text-align: left;
     font-weight: 600;
-    color: var(--text-primary);
-    border-bottom: 2px solid var(--border-color);
+    color: var(--dark);
+    border-bottom: 2px solid var(--border);
   }
   
   td {
     padding: 14px 12px;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-primary);
+    border-bottom: 1px solid var(--border);
   }
   
   tr:last-child td {
     border-bottom: none;
   }
   
-  tr:hover {
-    background-color: var(--bg-hover);
-  }
-  
   .empty-state {
     text-align: center;
     padding: 40px 20px;
-    color: var(--text-secondary);
+    color: var(--gray);
   }
   
   .empty-state p {
@@ -432,13 +284,12 @@
   }
   
   .salary-summary {
-    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
-    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: var(--radius);
     padding: 25px;
     margin: 20px 0;
     text-align: center;
     border-left: 5px solid var(--secondary);
-    border: 1px solid var(--border-color);
   }
   
   .salary-amount {
@@ -446,26 +297,15 @@
     font-weight: 800;
     color: var(--secondary);
     margin: 15px 0;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
   
   .salary-breakdown {
     margin-top: 20px;
     padding: 15px;
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
     text-align: left;
-  }
-  
-  .salary-breakdown ul {
-    margin-left: 20px;
-    margin-top: 10px;
-  }
-  
-  .salary-breakdown li {
-    margin-bottom: 8px;
-    color: var(--text-primary);
   }
   
   /* HIỆU ỨNG TIỀN/VÀNG RƠI */
@@ -512,20 +352,19 @@
     left: 50%;
     transform: translate(-50%, -50%) translateY(100px);
     background: var(--primary);
-    color: var(--text-inverse);
+    color: white;
     padding: 16px 24px;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
     z-index: 1002;
     display: flex;
     align-items: center;
     gap: 10px;
     opacity: 0;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     min-width: 280px;
     text-align: center;
     justify-content: center;
-    border: 1px solid var(--primary-dark);
   }
 
   .toast.show {
@@ -535,17 +374,14 @@
   
   .toast.success {
     background: var(--secondary);
-    border-color: var(--secondary-dark);
   }
   
   .toast.error {
     background: var(--danger);
-    border-color: var(--danger-dark);
   }
   
   .toast.warning {
     background: var(--warning);
-    border-color: var(--warning-dark);
   }
   
   @keyframes fadeIn {
@@ -557,202 +393,17 @@
     animation: fadeIn 0.4s ease-out;
   }
   
-  /* ========== SCROLLBAR STYLING ========== */
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-sm);
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: var(--border-dark);
-    border-radius: var(--radius-sm);
-    border: 2px solid var(--bg-tertiary);
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-secondary);
-  }
-  
-  /* Firefox scrollbar */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-dark) var(--bg-tertiary);
-  }
-  
   @media (max-width: 768px) {
-    body {
-      padding: 15px;
-    }
-    
-    header {
-      padding: 20px;
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    }
-    
-    header h1 {
-      font-size: 1.5rem;
-    }
-    
-    .card {
-      padding: 20px;
-    }
-    
-    .button-group {
-      flex-direction: column;
-    }
-    
-    .stats-container {
-      flex-direction: column;
-    }
-    
-    .stat-card {
-      border-radius: var(--radius-md);
-    }
-    
-    .salary-amount {
-      font-size: 2rem;
-    }
-    
-    .preview-amount {
-      font-size: 1.8rem;
-    }
-    
-    th, td {
-      padding: 12px 8px;
-      font-size: 0.9rem;
-    }
-    
-    .money-particle {
-      font-size: 20px;
-    }
-    
-    .table-container {
-      border-radius: var(--radius-sm);
-    }
-    
-    table {
-      min-width: 600px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    body {
-      padding: 10px;
-    }
-    
-    header {
-      padding: 18px 15px;
-      border-radius: var(--radius-md) var(--radius-md) 0 0;
-    }
-    
-    header h1 {
-      font-size: 1.3rem;
-    }
-    
-    .card {
-      padding: 18px 15px;
-    }
-    
-    input, select {
-      padding: 12px 14px;
-      font-size: 16px;
-      border-radius: var(--radius-sm);
-    }
-    
-    button {
-      padding: 14px;
-      min-height: 44px;
-      border-radius: var(--radius-sm);
-    }
-  }
-  
-  /* ========== DARK MODE SPECIFIC ADJUSTMENTS ========== */
-  @media (prefers-color-scheme: dark) {
-    /* Điều chỉnh độ tương phản cho các phần tử đặc biệt */
-    .btn-secondary {
-      border-color: var(--border-dark);
-    }
-    
-    .table-container {
-      border-color: var(--border-dark);
-    }
-    
-    .stat-card {
-      border-color: var(--border-dark);
-    }
-    
-    /* Điều chỉnh màu placeholder */
-    input::placeholder {
-      color: var(--text-muted);
-    }
-    
-    /* Điều chỉnh bóng cho container */
-    .container {
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    }
-    
-    /* Điều chỉnh thanh scrollbar trong dark mode */
-    ::-webkit-scrollbar-track {
-      background: var(--bg-secondary);
-    }
-    
-    ::-webkit-scrollbar-thumb {
-      background: var(--text-muted);
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--text-secondary);
-    }
-    
-    /* Điều chỉnh hover cho table rows */
-    tr:hover {
-      background-color: var(--bg-tertiary);
-    }
-    
-    /* Điều chỉnh màu border cho các phần tử có viền */
-    .card {
-      border-color: var(--border-color);
-    }
-    
-    /* Điều chỉnh màu cho các select option */
-    option {
-      background-color: var(--bg-modal);
-      color: var(--text-primary);
-    }
-  }
-  
-  /* ========== REDUCED MOTION SUPPORT ========== */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
-    
-    .fade-in {
-      animation: none;
-    }
-    
-    .toast {
-      transition: opacity 0.1s;
-    }
-    
-    button:hover,
-    .stat-card:hover {
-      transform: none !important;
-    }
-    
-    .money-particle {
-      display: none !important;
-    }
+    body { padding: 15px; }
+    header { padding: 20px; }
+    header h1 { font-size: 1.5rem; }
+    .card { padding: 20px; }
+    .button-group { flex-direction: column; }
+    .stats-container { flex-direction: column; }
+    .salary-amount { font-size: 2rem; }
+    .preview-amount { font-size: 1.8rem; }
+    th, td { padding: 12px 8px; font-size: 0.9rem; }
+    .money-particle { font-size: 20px; }
   }
 </style>
 </head>
@@ -766,7 +417,7 @@
 
   <div class="container">
     <header>
-      <a href="index.html" style="position: absolute; left: 30px; top: 30px; color: var(--text-inverse); text-decoration: none; font-size: 1.2rem;">←</a>
+      <a href="index.html" style="position: absolute; left: 30px; top: 30px; color: white; text-decoration: none; font-size: 1.2rem;">←</a>
       <h1>💰 Tính công và lương</h1>
       <p>Tính lương dựa trên số ca làm việc thực tế</p>
     </header>
@@ -803,7 +454,7 @@
             <!-- Năm sẽ được thêm bằng JavaScript -->
           </select>
         </div>
-        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 5px;">
+        <p style="font-size: 0.9rem; color: var(--gray); margin-top: 5px;">
           <i>Lương được tính từ ngày X tháng này đến ngày X tháng sau (30 ngày)</i>
         </p>
       </div>
@@ -825,7 +476,7 @@
     </div>
     
     <div class="card">
-      <h2 style="margin-bottom: 15px; color: var(--text-primary);">📊 Kết quả tính lương</h2>
+      <h2 style="margin-bottom: 15px;">📊 Kết quả tính lương</h2>
       
       <div class="stats-container" id="stats-container">
         <!-- Thống kê sẽ được thêm bằng JavaScript -->
@@ -833,13 +484,13 @@
       
       <div id="salary-result" style="display: none;">
         <div class="salary-summary">
-          <h3 style="color: var(--text-primary);">Tổng lương tạm tính</h3>
+          <h3>Tổng lương tạm tính</h3>
           <div class="salary-amount" id="tong-luong">0 VND</div>
-          <p id="thoi-gian-tinh" style="color: var(--text-secondary);">Thời gian tính: </p>
+          <p id="thoi-gian-tinh">Thời gian tính: </p>
         </div>
         
         <div class="salary-breakdown">
-          <h4 style="color: var(--text-primary); margin-bottom: 10px;">📝 Chi tiết tính lương:</h4>
+          <h4>📝 Chi tiết tính lương:</h4>
           <ul id="chi-tiet-luong">
             <!-- Chi tiết sẽ được thêm bằng JavaScript -->
           </ul>
@@ -859,7 +510,7 @@
     </div>
     
     <div class="card">
-      <h2 style="margin-bottom: 15px; color: var(--text-primary);">📅 Chi tiết các ca làm việc</h2>
+      <h2 style="margin-bottom: 15px;">📅 Chi tiết các ca làm việc</h2>
       <div class="table-container">
         <table id="bang-cong">
           <thead>
@@ -883,7 +534,7 @@
     </div>
   </div>
 
-  <a href="index.html" style="position:fixed;right:30px;bottom:30px;z-index:999;background:var(--primary);color:var(--text-inverse);border:none;border-radius:var(--radius-circle);width:56px;height:56px;box-shadow:var(--shadow-lg);font-size:2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition); text-decoration: none; border: 2px solid var(--primary-dark);">
+  <a href="index.html" style="position:fixed;right:30px;bottom:30px;z-index:999;background:#2c80ff;color:white;border:none;border-radius:50%;width:56px;height:56px;box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.3s; text-decoration: none;">
     ←
   </a>
 
@@ -1304,11 +955,11 @@ function displayWorkingDays(caLamViec) {
     tr.innerHTML = `
       <td>${index + 1}</td>
       <td>
-        <div style="font-weight: 600; color: var(--text-primary);">${day}-${month}-${year}</div>
-        <div style="font-size: 0.8rem; color: var(--text-secondary);">Ca ${day}-${month}</div>
+        <div style="font-weight: 600;">${day}-${month}-${year}</div>
+        <div style="font-size: 0.8rem; color: var(--gray);">Ca ${day}-${month}</div>
       </td>
-      <td style="color: var(--text-primary);">${ca.diemGas.length}</td>
-      <td style="color: var(--text-primary);">${formatCurrency(ca.tongTien)}</td>
+      <td>${ca.diemGas.length}</td>
+      <td>${formatCurrency(ca.tongTien)}</td>
       <td>
         <div style="display: flex; flex-direction: column; gap: 2px;">
           <span style="color: var(--secondary); font-size: 0.85rem;">✅ Đã nộp: ${ca.daNopCount}</span>
@@ -1446,12 +1097,12 @@ function displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViec, start
   const luongTheoNgay = luongThang / 30;
   
   chiTietLuong.innerHTML = `
-    <li style="margin-bottom: 8px;">Lương tháng: ${formatCurrency(luongThang)}</li>
-    <li style="margin-bottom: 8px;">Quy ước: 30 ngày công/tháng</li>
-    <li style="margin-bottom: 8px;">Lương mỗi ngày: ${formatCurrency(luongTheoNgay)}</li>
-    <li style="margin-bottom: 8px;">Số ca làm việc thực tế: ${soNgayCong} ca</li>
-    <li style="margin-bottom: 8px;">Tổng tiền thu được: ${formatCurrency(tongTienThu)}</li>
-    <li style="margin-bottom: 8px; font-weight: bold;">Tổng lương tạm tính: ${formatCurrency(tongLuong)}</li>
+    <li>Lương tháng: ${formatCurrency(luongThang)}</li>
+    <li>Quy ước: 30 ngày công/tháng</li>
+    <li>Lương mỗi ngày: ${formatCurrency(luongTheoNgay)}</li>
+    <li>Số ca làm việc thực tế: ${soNgayCong} ca</li>
+    <li>Tổng tiền thu được: ${formatCurrency(tongTienThu)}</li>
+    <li><strong>Tổng lương tạm tính: ${formatCurrency(tongLuong)}</strong></li>
   `;
   
   document.getElementById('salary-result').style.display = 'block';

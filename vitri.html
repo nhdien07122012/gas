@@ -1,320 +1,1006 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý vị trí điểm gas</title>
-  <link rel="icon" type="image/png" href="icon.png">
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý vị trí điểm gas</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-icon-precomposed" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Quản lý vị trí">
+
+<style>
+  /* ========== CSS VARIABLES FOR LIGHT MODE ========== */
+  :root {
+    /* Màu sắc cơ bản */
+    --primary: #2c80ff;
+    --primary-dark: #1a6de0;
+    --primary-light: #5a9dff;
+    --secondary: #34c759;
+    --secondary-dark: #2aa64a;
+    --danger: #ff3b30;
+    --danger-dark: #e0352b;
+    --warning: #ff9500;
+    --warning-dark: #e08900;
+    --info: #5ac8fa;
+    --success: #34c759;
+    
+    /* Màu nền và văn bản Light Mode */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f7fa;
+    --bg-tertiary: #f8f9fa;
+    --bg-card: #ffffff;
+    --bg-sidebar: #ffffff;
+    --bg-modal: #ffffff;
+    --bg-input: #ffffff;
+    --bg-hover: #f8fafc;
+    --bg-active: #e8f0fe;
+    
+    /* Màu văn bản Light Mode */
+    --text-primary: #333333;
+    --text-secondary: #6c757d;
+    --text-tertiary: #868e96;
+    --text-inverse: #ffffff;
+    --text-muted: #adb5bd;
+    
+    /* Màu viền và bóng */
+    --border-color: #dee2e6;
+    --border-light: #e9ecef;
+    --border-dark: #ced4da;
+    --shadow: 0 2px 10px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
+    --shadow-dark: 0 2px 10px rgba(0,0,0,0.15);
+    
+    /* Border radius */
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
+    --radius-circle: 50%;
+    
+    /* Kích thước */
+    --sidebar-width: 280px;
+    --header-height: auto;
+    
+    /* Hiệu ứng chuyển tiếp */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s ease;
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Độ trong suốt */
+    --opacity-disabled: 0.6;
+    --opacity-hover: 0.9;
+    --opacity-active: 0.8;
+  }
+  
+  /* ========== DARK MODE VARIABLES ========== */
+  @media (prefers-color-scheme: dark) {
     :root {
-      --primary: #2c80ff;
-      --primary-dark: #1a6de0;
-      --secondary: #34c759;
-      --danger: #ff3b30;
-      --warning: #ff9500;
-      --light: #f8f9fa;
-      --dark: #333;
-      --gray: #6c757d;
-      --border: #dee2e6;
-      --shadow: 0 2px 10px rgba(0,0,0,0.08);
-      --radius: 10px;
+      /* Màu sắc cơ bản */
+      --primary: #3d8eff;
+      --primary-dark: #2c7de6;
+      --primary-light: #5a9dff;
+      --secondary: #30c75a;
+      --secondary-dark: #26a64a;
+      --danger: #ff5252;
+      --danger-dark: #ff3838;
+      --warning: #ffa726;
+      --warning-dark: #ff9800;
+      --info: #42a5f5;
+      --success: #30c75a;
+      
+      /* Màu nền và văn bản Dark Mode */
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-tertiary: #2d2d2d;
+      --bg-card: #1e1e1e;
+      --bg-sidebar: #1e1e1e;
+      --bg-modal: #252525;
+      --bg-input: #2d2d2d;
+      --bg-hover: #2a2a2a;
+      --bg-active: #2c3e50;
+      
+      /* Màu văn bản Dark Mode */
+      --text-primary: #f5f5f5;
+      --text-secondary: #b0b0b0;
+      --text-tertiary: #8a8a8a;
+      --text-inverse: #121212;
+      --text-muted: #666666;
+      
+      /* Màu viền và bóng Dark Mode */
+      --border-color: #3a3a3a;
+      --border-light: #4a4a4a;
+      --border-dark: #555555;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+      --shadow-lg: 0 8px 25px rgba(0,0,0,0.4);
+      --shadow-dark: 0 2px 10px rgba(0,0,0,0.5);
     }
+    
+    /* Đảm bảo các phần tử chính có chữ trắng */
+    h1, h2, h3, h4 {
+      color: var(--text-primary) !important;
+    }
+    
+    /* Đảm bảo link có màu trắng */
+    .back-button {
+      color: var(--text-inverse) !important;
+    }
+    
+    /* Điều chỉnh màu placeholder */
+    input::placeholder {
+      color: var(--text-muted);
+    }
+  }
+  
+  /* ========== CSS RESET & BASE STYLES ========== */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html {
+    font-size: 16px;
+    transition: background-color 0.5s ease;
+  }
+  
+  body {
+    font-family: 'Segoe UI', 'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+    transition: var(--transition-slow);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* ========== MAIN CONTAINER ========== */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+    padding: 30px;
+  }
+  
+  /* ========== HEADER ========== */
+  h1 {
+    color: var(--primary);
+    margin-bottom: 20px;
+    font-size: 2rem;
+    text-align: center;
+    transition: var(--transition);
+  }
+  
+  /* ========== SEARCH BAR ========== */
+  .search-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  input {
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--border-color);
+    font-size: 1rem;
+    flex: 1;
+    transition: var(--transition);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    min-width: 0;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(61, 142, 255, 0.2);
+    background: var(--bg-input);
+  }
+  
+  input::placeholder {
+    color: var(--text-muted);
+  }
+  
+  /* ========== TABLE STYLES ========== */
+  .table-container {
+    overflow-x: auto;
+    margin-top: 10px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0;
+    min-width: 600px;
+  }
+  
+  th {
+    background-color: var(--bg-tertiary);
+    padding: 16px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    vertical-align: middle;
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  tr:hover {
+    background-color: var(--bg-hover);
+  }
+  
+  /* ========== BADGE STYLES ========== */
+  .badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: var(--radius-xs);
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: var(--secondary);
+    color: var(--text-inverse);
+    border: 1px solid var(--secondary-dark);
+    transition: var(--transition-fast);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+  }
+  
+  .badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(52, 199, 89, 0.3);
+  }
+  
+  /* ========== MAP LINK BUTTON ========== */
+  .map-link {
+    background: var(--primary);
+    color: var(--text-inverse) !important;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    padding: 8px 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 1px solid var(--primary-dark);
+    min-width: 60px;
+  }
+  
+  .map-link:hover {
+    background: var(--primary-dark);
+    box-shadow: 0 4px 16px rgba(44, 128, 255, 0.18);
+    transform: translateY(-2px);
+  }
+  
+  /* ========== EMPTY STATE ========== */
+  #empty-state {
+    text-align: center;
+    color: var(--text-secondary);
+    margin: 30px 0;
+    display: none;
+    padding: 40px 20px;
+    border-radius: var(--radius-md);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+  }
+  
+  #empty-state h3 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+  }
+  
+  #empty-state p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+  }
+  
+  /* ========== BACK BUTTON ========== */
+  .back-button {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    z-index: 999;
+    background: var(--primary);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: var(--radius-circle);
+    width: 56px;
+    height: 56px;
+    box-shadow: var(--shadow-lg);
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    border: 2px solid var(--primary-dark);
+  }
+  
+  .back-button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(44, 128, 255, 0.3);
+  }
+  
+  /* ========== SCROLLBAR STYLING ========== */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-dark);
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--bg-tertiary);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+  }
+  
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-dark) var(--bg-tertiary);
+  }
+  
+  /* ========== ANIMATIONS ========== */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+  
+  /* ========== RESPONSIVE STYLES ========== */
+  @media (max-width: 768px) {
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f5f7fa;
-      color: var(--dark);
-      line-height: 1.6;
-      padding: 20px;
-      min-height: 100vh;
-      transition: margin-left 0.3s ease;
+      padding: 15px;
     }
+    
     .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      background: white;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      transition: all 0.3s ease;
-      padding: 30px;
+      padding: 20px;
+      border-radius: var(--radius-lg);
     }
+    
     h1 {
-      color: var(--primary);
-      margin-bottom: 20px;
-      font-size: 2rem;
-      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
     }
+    
     .search-group {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 8px;
     }
+    
     input {
-      padding: 14px 16px;
-      border-radius: var(--radius);
-      border: 1.5px solid var(--border);
+      padding: 12px 14px;
       font-size: 1rem;
-      flex: 1;
-      transition: all 0.3s ease;
-    }
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
-    }
-    table {
+      border-radius: var(--radius-sm);
       width: 100%;
-      border-collapse: collapse;
-      margin-top: 5px;
-      min-width: 600px;
     }
-    th {
-      background-color: #f8f9fa;
-      padding: 16px 12px;
-      text-align: left;
-      font-weight: 600;
-      color: var(--dark);
-      border-bottom: 2px solid var(--border);
+    
+    .table-container {
+      border-radius: var(--radius-sm);
     }
-    td {
-      padding: 14px 12px;
-      border-bottom: 1px solid var(--border);
+    
+    table {
+      min-width: 500px;
     }
-    tr:last-child td {
-      border-bottom: none;
+    
+    th, td {
+      padding: 12px 8px;
+      font-size: 0.9rem;
     }
-    tr:hover {
-      background-color: #f8fafc;
-    }
+    
     .badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 4px;
+      padding: 5px 10px;
       font-size: 0.8rem;
-      font-weight: 600;
-      background: var(--secondary);
-      color: white;
+      max-width: 150px;
     }
+    
     .map-link {
-      background: var(--primary);
-      color: #fff !important;
-      text-decoration: none;
-      cursor: pointer;
-      font-weight: 600;
-      border-radius: 6px;
-      padding: 8px 16px;
-      display: inline-block;
-      box-shadow: 0 2px 8px rgba(44,128,255,0.08);
-      transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-      border: none;
-      outline: none;
+      padding: 6px 12px;
+      font-size: 0.9rem;
     }
-    .map-link:hover {
-      background: var(--primary-dark);
-      box-shadow: 0 4px 16px rgba(44,128,255,0.18);
-      transform: translateY(-2px) scale(1.04);
-    }
+    
     #empty-state {
-      text-align: center;
-      color: var(--gray);
-      margin: 30px 0;
-      display: none;
-      padding: 40px 20px;
+      padding: 30px 15px;
+      margin: 20px 0;
     }
+    
+    .back-button {
+      right: 20px;
+      bottom: 20px;
+      width: 50px;
+      height: 50px;
+      font-size: 1.6rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    body {
+      padding: 10px;
+    }
+    
+    .container {
+      padding: 15px;
+      border-radius: var(--radius-md);
+    }
+    
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+    }
+    
+    input {
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      border-radius: var(--radius-xs);
+    }
+    
+    table {
+      min-width: 400px;
+    }
+    
+    th, td {
+      padding: 10px 6px;
+      font-size: 0.85rem;
+    }
+    
+    .badge {
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      max-width: 120px;
+    }
+    
+    .map-link {
+      padding: 5px 10px;
+      font-size: 0.85rem;
+      min-width: 50px;
+    }
+    
+    #empty-state {
+      padding: 20px 10px;
+      margin: 15px 0;
+    }
+    
     #empty-state h3 {
-      margin-bottom: 10px;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
     }
+    
     #empty-state p {
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
-    /* Ẩn hoàn toàn cột ghi chú */
-    .col-ghichu { display: none !important; }
-    @media (max-width: 768px) {
-      body {
-        padding: 10px;
-      }
-      .container {
-        padding: 10px;
-      }
-      h1 {
-        font-size: 2rem;
-      }
-      th, td {
-        padding: 12px 8px;
-        font-size: 0.95rem;
-      }
-      table {
-        min-width: 400px;
-      }
-      .search-group {
-        flex-direction: column;
-        gap: 8px;
-      }
-      input {
-        font-size: 1rem;
-        padding: 12px 14px;
-      }
-      #empty-state {
-        padding: 20px 10px;
-      }
+    
+    .back-button {
+      right: 15px;
+      bottom: 15px;
+      width: 45px;
+      height: 45px;
+      font-size: 1.4rem;
     }
-    @media (max-width: 480px) {
-      body {
-        padding: 5px;
-      }
-      .container {
-        padding: 5px;
-      }
-      h1 {
-        font-size: 2rem;
-      }
-      th, td {
-        padding: 10px 6px;
-        font-size: 0.9rem;
-      }
-      table {
-        min-width: 320px;
-      }
-      input {
-        font-size: 0.95rem;
-        padding: 10px 10px;
-      }
-      #empty-state {
-        padding: 10px 2px;
-      }
+  }
+  
+  /* ========== DARK MODE SPECIFIC ADJUSTMENTS ========== */
+  @media (prefers-color-scheme: dark) {
+    /* Điều chỉnh độ tương phản cho các phần tử đặc biệt */
+    .table-container {
+      border-color: var(--border-dark);
     }
-  </style>
+    
+    /* Điều chỉnh thanh scrollbar trong dark mode */
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--text-muted);
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+    
+    /* Điều chỉnh hover cho table rows */
+    tr:hover {
+      background-color: var(--bg-tertiary);
+    }
+    
+    /* Điều chỉnh bóng cho container */
+    .container {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Điều chỉnh màu cho các badge */
+    .badge {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Điều chỉnh màu cho empty state */
+    #empty-state {
+      background: var(--bg-secondary);
+    }
+  }
+  
+  /* ========== REDUCED MOTION SUPPORT ========== */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
+    .fade-in {
+      animation: none;
+    }
+    
+    .badge:hover,
+    .map-link:hover,
+    .back-button:hover {
+      transform: none !important;
+    }
+  }
+  
+  /* ========== PRINT STYLES ========== */
+  @media print {
+    body {
+      background: white !important;
+      color: black !important;
+      padding: 0;
+    }
+    
+    .container {
+      box-shadow: none !important;
+      border: 1px solid #ccc !important;
+      border-radius: 0 !important;
+      max-width: 100% !important;
+      padding: 10px !important;
+    }
+    
+    .back-button,
+    .search-group {
+      display: none !important;
+    }
+    
+    table {
+      border: 1px solid #ccc;
+    }
+    
+    th, td {
+      color: black !important;
+      border-color: #ccc !important;
+    }
+    
+    .badge {
+      border: 1px solid #ccc !important;
+      color: black !important;
+      background: white !important;
+    }
+    
+    .map-link {
+      color: black !important;
+      background: white !important;
+      border: 1px solid #ccc !important;
+    }
+  }
+</style>
 </head>
 <body>
   <div class="container">
-    <h1>📍 Quản lý vị trí</h1>
+    <h1>📍 Quản lý vị trí điểm gas</h1>
+    
     <div class="search-group">
       <input id="search" placeholder="Tìm kiếm tên điểm, địa chỉ hoặc ghi chú...">
     </div>
-    <table id="vitri-table">
-      <thead>
-        <tr>
-          <th>Tên điểm</th>
-          <th>Địa chỉ</th>
-          <!-- Ẩn hoàn toàn cột ghi chú -->
-          <th class="col-ghichu" style="display:none;">Ghi chú</th>
-          <th>Tọa độ</th>
-          <th>Bản đồ</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <div id="empty-state" style="text-align:center;color:#888;margin:30px 0;display:none;">
+    
+    <div class="table-container">
+      <table id="vitri-table">
+        <thead>
+          <tr>
+            <th>Tên điểm</th>
+            <th>Địa chỉ</th>
+            <!-- Ẩn hoàn toàn cột ghi chú -->
+            <th class="col-ghichu" style="display:none;">Ghi chú</th>
+            <th>Tọa độ GPS</th>
+            <th>Mở bản đồ</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+        </tbody>
+      </table>
+    </div>
+    
+    <div id="empty-state">
       <h3>📭 Chưa có vị trí nào được lưu</h3>
-      <p>Hãy sử dụng chức năng lưu vị trí trên trang chính để bắt đầu.</p>
+      <p>Hãy sử dụng chức năng lưu vị trí GPS trên trang chính để bắt đầu.</p>
+      <p style="font-size: 0.9rem; margin-top: 10px;">
+        <em>Lưu ý: Chỉ những điểm gas có tọa độ GPS mới hiển thị ở đây.</em>
+      </p>
     </div>
   </div>
-  <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
-    let allData = [];
-    let vitriData = [];
 
-    // Hàm trích xuất GPS từ ghi chú
-    function extractGPS(note) {
-      if (!note) return null;
+  <!-- Nút quay về trang chính -->
+  <a href="index.html" class="back-button" title="Quay về trang chính" aria-label="Quay về trang chính">
+    ←
+  </a>
+
+<script>
+// Sử dụng cùng URL với file index.html
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
+let allData = [];
+let vitriData = [];
+let currentFilteredData = [];
+
+// Hàm trích xuất GPS từ ghi chú
+function extractGPS(note) {
+  if (!note) return null;
+  
+  // Tìm định dạng [GPS: lat, lng]
+  const match = note.match(/\[GPS:\s*([\d.]+),\s*([\d.]+)\]/);
+  if (match) {
+    const lat = parseFloat(match[1]);
+    const lng = parseFloat(match[2]);
+    if (!isNaN(lat) && !isNaN(lng)) {
+      return { 
+        lat: lat.toFixed(6), 
+        lng: lng.toFixed(6),
+        rawLat: lat,
+        rawLng: lng
+      };
+    }
+  }
+  return null;
+}
+
+// Hàm hiển thị dữ liệu vị trí
+function displayVitri(data) {
+  const tbody = document.getElementById('table-body');
+  const emptyState = document.getElementById('empty-state');
+  
+  if (!data || data.length === 0) {
+    tbody.innerHTML = '';
+    emptyState.style.display = 'block';
+    return;
+  }
+  
+  tbody.innerHTML = '';
+  let count = 0;
+  
+  data.forEach(row => {
+    const gps = extractGPS(row.ghi_chu);
+    if (!gps) return; // Chỉ hiển thị những điểm có GPS
+    
+    count++;
+    const tr = document.createElement('tr');
+    tr.className = 'fade-in';
+    
+    // Định dạng hiển thị tên điểm và địa chỉ
+    const tenDiem = row.ten_diem || 'Chưa có tên';
+    const diaChi = row.dia_chi || 'Chưa có địa chỉ';
+    
+    tr.innerHTML = `
+      <td>
+        <div style="font-weight: 600; color: var(--text-primary);">${tenDiem}</div>
+      </td>
+      <td>
+        <div style="color: var(--text-secondary); font-size: 0.9rem;">${diaChi}</div>
+      </td>
+      <td class="col-ghichu" style="display:none;">${row.ghi_chu || ''}</td>
+      <td>
+        <div class="badge" title="${gps.lat}, ${gps.lng}" onclick="copyToClipboard('${gps.lat}, ${gps.lng}')">
+          ${gps.lat}, ${gps.lng}
+        </div>
+      </td>
+      <td>
+        <a class="map-link" href="https://maps.google.com/?q=${gps.rawLat},${gps.rawLng}" target="_blank" title="Mở Google Maps">
+          🗺️ <span style="font-size: 0.85rem;">Maps</span>
+        </a>
+      </td>
+    `;
+    
+    tbody.appendChild(tr);
+  });
+  
+  if (count === 0) {
+    emptyState.style.display = 'block';
+    emptyState.innerHTML = `
+      <h3>📭 Không tìm thấy vị trí</h3>
+      <p>Không có điểm gas nào có tọa độ GPS trong dữ liệu hiện tại.</p>
+      <p style="font-size: 0.9rem; margin-top: 10px;">
+        <em>Lưu ý: Chỉ những điểm gas có tọa độ GPS mới hiển thị ở đây.</em>
+      </p>
+    `;
+  } else {
+    emptyState.style.display = 'none';
+  }
+  
+  // Cập nhật số lượng kết quả
+  updateResultCount(count);
+}
+
+// Hàm cập nhật số lượng kết quả
+function updateResultCount(count) {
+  const header = document.querySelector('h1');
+  if (header) {
+    const currentText = header.textContent.replace(/\(\d+\)$/, '').trim();
+    header.textContent = count > 0 ? `${currentText} (${count})` : currentText;
+  }
+}
+
+// Hàm lọc dữ liệu theo từ khóa tìm kiếm
+function filterVitri() {
+  const searchInput = document.getElementById('search');
+  const query = searchInput.value.toLowerCase().trim();
+  
+  if (!query) {
+    currentFilteredData = vitriData;
+    displayVitri(vitriData);
+    return;
+  }
+  
+  const filtered = vitriData.filter(row => {
+    // Tìm kiếm trong tên điểm, địa chỉ và ghi chú
+    const searchableText = `
+      ${row.ten_diem || ''}
+      ${row.dia_chi || ''}
+      ${row.ghi_chu || ''}
+    `.toLowerCase();
+    
+    return searchableText.includes(query);
+  });
+  
+  currentFilteredData = filtered;
+  displayVitri(filtered);
+}
+
+// Hàm sao chép vào clipboard
+async function copyToClipboard(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      showToast(`✅ Đã sao chép: ${text}`);
+    } else {
+      // Fallback cho các trình duyệt cũ
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.select();
+      const success = document.execCommand('copy');
+      document.body.removeChild(textArea);
       
-      // Tìm định dạng [GPS: lat, lng]
-      const match = note.match(/\[GPS:\s*([\d.]+),\s*([\d.]+)\]/);
-      if (match) {
-        const lat = parseFloat(match[1]);
-        const lng = parseFloat(match[2]);
-        if (!isNaN(lat) && !isNaN(lng)) {
-          return { lat, lng };
+      if (success) {
+        showToast(`✅ Đã sao chép: ${text}`);
+      } else {
+        showToast('❌ Không thể sao chép vào clipboard', 'error');
+      }
+    }
+  } catch (err) {
+    console.error('Lỗi khi sao chép:', err);
+    showToast('❌ Lỗi khi sao chép', 'error');
+  }
+}
+
+// Hàm hiển thị thông báo toast
+function showToast(message, type = 'success') {
+  // Tạo toast element nếu chưa có
+  let toast = document.getElementById('toast-notification');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast-notification';
+    toast.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: ${type === 'success' ? 'var(--secondary)' : 'var(--danger)'};
+      color: var(--text-inverse);
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 0.3s, transform 0.3s;
+      font-weight: 500;
+      border: 1px solid ${type === 'success' ? 'var(--secondary-dark)' : 'var(--danger-dark)'};
+    `;
+    document.body.appendChild(toast);
+  }
+  
+  toast.textContent = message;
+  toast.style.opacity = '1';
+  toast.style.transform = 'translateY(0)';
+  
+  // Tự động ẩn sau 3 giây
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(-20px)';
+    setTimeout(() => {
+      if (toast.parentNode) {
+        document.body.removeChild(toast);
+      }
+    }, 300);
+  }, 3000);
+}
+
+// Hàm tải dữ liệu từ Google Sheets
+async function taiDuLieu() {
+  try {
+    console.log('Đang tải dữ liệu vị trí từ Google Sheets...');
+    
+    // Thêm timestamp để tránh cache
+    const url = scriptURL + '?t=' + Date.now();
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`Lỗi HTTP! status: ${response.status}`);
+    }
+    
+    const text = await response.text();
+    let data;
+    
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      console.error('Lỗi parse JSON:', parseError);
+      // Thử fix nếu có vấn đề với JSON
+      const fixedText = text.trim();
+      if (fixedText.startsWith('[') && fixedText.endsWith(']')) {
+        data = JSON.parse(fixedText);
+      } else {
+        throw new Error('Dữ liệu không phải JSON hợp lệ');
+      }
+    }
+    
+    if (!Array.isArray(data)) {
+      throw new Error('Dữ liệu không phải là mảng');
+    }
+    
+    allData = data;
+    console.log(`Đã tải được ${allData.length} bản ghi từ Google Sheets`);
+    
+    // Lọc chỉ những điểm có GPS trong ghi chú
+    vitriData = allData.filter(row => {
+      const hasGPS = extractGPS(row.ghi_chu);
+      return hasGPS;
+    });
+    
+    // Loại bỏ các bản ghi trùng lặp (cùng tên điểm và GPS)
+    const uniqueMap = new Map();
+    vitriData.forEach(row => {
+      const gps = extractGPS(row.ghi_chu);
+      if (gps) {
+        const key = `${row.ten_diem || ''}_${gps.lat}_${gps.lng}`;
+        if (!uniqueMap.has(key)) {
+          uniqueMap.set(key, row);
         }
       }
-      return null;
+    });
+    
+    vitriData = Array.from(uniqueMap.values());
+    currentFilteredData = vitriData;
+    
+    console.log(`Tìm thấy ${vitriData.length} điểm gas có tọa độ GPS`);
+    displayVitri(vitriData);
+    
+    if (vitriData.length === 0) {
+      showToast('⚠️ Không có điểm gas nào có tọa độ GPS', 'warning');
+    } else {
+      showToast(`✅ Đã tải ${vitriData.length} vị trí có GPS`);
     }
+    
+  } catch (error) {
+    console.error('Lỗi khi tải dữ liệu:', error);
+    
+    const emptyState = document.getElementById('empty-state');
+    emptyState.style.display = 'block';
+    emptyState.innerHTML = `
+      <h3>❌ Lỗi khi tải dữ liệu</h3>
+      <p>Không thể kết nối đến nguồn dữ liệu. Vui lòng thử lại sau.</p>
+      <p style="font-size: 0.9rem; margin-top: 10px;">
+        <em>Chi tiết lỗi: ${error.message}</em>
+      </p>
+      <button onclick="taiDuLieu()" style="
+        margin-top: 15px;
+        padding: 8px 16px;
+        background: var(--primary);
+        color: var(--text-inverse);
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-weight: 500;
+      ">
+        🔄 Thử lại
+      </button>
+    `;
+    
+    showToast('❌ Không thể tải dữ liệu từ Google Sheets!', 'error');
+  }
+}
 
-    function displayVitri(data) {
-      const tbody = document.querySelector('#vitri-table tbody');
-      tbody.innerHTML = '';
-      let count = 0;
-      
-      data.forEach(row => {
-        const gps = extractGPS(row.ghi_chu);
-        if (!gps) return; // Chỉ hiển thị những điểm có GPS
-        
-        count++;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${row.ten_diem || 'N/A'}</td>
-          <td>${row.dia_chi || 'N/A'}</td>
-          <td class="col-ghichu" style="display:none;">${row.ghi_chu || ''}</td>
-          <td><span class="badge">${gps.lat}, ${gps.lng}</span></td>
-          <td><a class="map-link" href="https://maps.google.com/?q=${gps.lat},${gps.lng}" target="_blank">🗺️</a></td>
-        `;
-        tbody.appendChild(tr);
-      });
-      
-      document.getElementById('empty-state').style.display = count === 0 ? 'block' : 'none';
+// Thêm sự kiện cho ô tìm kiếm
+document.getElementById('search').addEventListener('input', filterVitri);
+
+// Thêm sự kiện Enter để tìm kiếm
+document.getElementById('search').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    filterVitri();
+  }
+});
+
+// Khởi động khi trang được tải
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('=== TRANG QUẢN LÝ VỊ TRÍ ĐANG KHỞI ĐỘNG ===');
+  
+  // Tải dữ liệu ngay khi trang load
+  taiDuLieu();
+  
+  // Thêm sự kiện click cho các hàng trong bảng
+  document.addEventListener('click', function(e) {
+    // Nếu click vào badge tọa độ
+    if (e.target.classList.contains('badge')) {
+      const text = e.target.getAttribute('title') || e.target.textContent;
+      copyToClipboard(text.trim());
     }
-
-    function filterVitri() {
-      const q = document.getElementById('search').value.toLowerCase().trim();
-      
-      if (!q) {
-        displayVitri(vitriData);
-        return;
-      }
-      
-      const filtered = vitriData.filter(row => {
-        // Tìm kiếm trong tên điểm, địa chỉ và ghi chú
-        const searchableText = `
-          ${row.ten_diem || ''}
-          ${row.dia_chi || ''}
-          ${row.ghi_chu || ''}
-        `.toLowerCase();
-        
-        return searchableText.includes(q);
-      });
-      
-      displayVitri(filtered);
+  });
+  
+  // Tự động focus vào ô tìm kiếm
+  setTimeout(() => {
+    const searchInput = document.getElementById('search');
+    if (searchInput) {
+      searchInput.focus();
     }
+  }, 500);
+});
 
-    async function taiDuLieu() {
-      try {
-        console.log('Đang tải dữ liệu từ Google Sheets...');
-        const res = await fetch(scriptURL);
-        
-        if (!res.ok) {
-          throw new Error(`Lỗi HTTP! status: ${res.status}`);
-        }
-        
-        allData = await res.json();
-        console.log('Dữ liệu nhận được:', allData);
-        
-        // Lọc chỉ những điểm có GPS trong ghi chú
-        vitriData = allData.filter(row => {
-          const hasGPS = extractGPS(row.ghi_chu);
-          return hasGPS;
-        });
-        
-        console.log('Dữ liệu có GPS:', vitriData);
-        displayVitri(vitriData);
-        
-      } catch (e) {
-        console.error('Lỗi khi tải dữ liệu:', e);
-        document.getElementById('empty-state').style.display = 'block';
-        document.getElementById('empty-state').innerHTML = `
-          <h3>❌ Lỗi khi tải dữ liệu</h3>
-          <p>Không thể kết nối đến nguồn dữ liệu. Vui lòng thử lại sau.</p>
-          <p><small>Chi tiết lỗi: ${e.message}</small></p>
-        `;
-      }
-    }
-
-    // Sự kiện tìm kiếm
-    document.getElementById('search').addEventListener('input', filterVitri);
-
-    // Khởi động
-    taiDuLieu();
-  </script>
+// Thêm sự kiện cho nút refresh khi online
+window.addEventListener('online', function() {
+  console.log('Kết nối mạng đã được khôi phục, tải lại dữ liệu...');
+  taiDuLieu();
+});
+</script>
 </body>
 </html>
