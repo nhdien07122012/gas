@@ -4,463 +4,792 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Đếm tiền theo mệnh giá - Quản lý điểm gas</title>
+
+<!-- Tải font Roboto từ Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
+  /* ========== CSS VARIABLES FOR LIGHT MODE ========== */
+  :root {
+    /* Màu sắc cơ bản */
+    --primary: #2c80ff;
+    --primary-dark: #1a6de0;
+    --primary-light: #5a9dff;
+    --secondary: #34c759;
+    --secondary-dark: #2aa64a;
+    --danger: #ff3b30;
+    --danger-dark: #e0352b;
+    --warning: #ff9500;
+    --warning-dark: #e08900;
+    --info: #5ac8fa;
+    --success: #34c759;
+    
+    /* Màu nền và văn bản Light Mode */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f7fa;
+    --bg-tertiary: #f8f9fa;
+    --bg-card: #ffffff;
+    --bg-modal: #ffffff;
+    --bg-input: #ffffff;
+    --bg-hover: #f8fafc;
+    --bg-active: #e8f0fe;
+    
+    /* Màu văn bản Light Mode */
+    --text-primary: #333333;
+    --text-secondary: #6c757d;
+    --text-tertiary: #868e96;
+    --text-inverse: #ffffff;
+    --text-muted: #adb5bd;
+    
+    /* Màu viền và bóng */
+    --border-color: #dee2e6;
+    --border-light: #e9ecef;
+    --border-dark: #ced4da;
+    --shadow: 0 2px 10px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
+    --shadow-dark: 0 2px 10px rgba(0,0,0,0.15);
+    
+    /* Border radius */
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
+    --radius-circle: 50%;
+    
+    /* Hiệu ứng chuyển tiếp */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s ease;
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Độ trong suốt */
+    --opacity-disabled: 0.6;
+    --opacity-hover: 0.9;
+    --opacity-active: 0.8;
+    
+    /* Font chữ */
+    --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --font-family-mono: 'Roboto Mono', 'Courier New', monospace;
+  }
+  
+  /* ========== DARK MODE VARIABLES ========== */
+  @media (prefers-color-scheme: dark) {
     :root {
-        --primary: #2c80ff;
-        --primary-dark: #1a6de0;
-        --secondary: #34c759;
-        --danger: #ff3b30;
-        --warning: #ff9500;
-        --info: #5ac8fa;
-        --light: #f8f9fa;
-        --dark: #333;
-        --gray: #6c757d;
-        --border: #dee2e6;
-        --shadow: 0 2px 10px rgba(0,0,0,0.08);
-        --radius: 10px;
+      /* Màu sắc cơ bản */
+      --primary: #3d8eff;
+      --primary-dark: #2c7de6;
+      --primary-light: #5a9dff;
+      --secondary: #30c75a;
+      --secondary-dark: #26a64a;
+      --danger: #ff5252;
+      --danger-dark: #ff3838;
+      --warning: #ffa726;
+      --warning-dark: #ff9800;
+      --info: #42a5f5;
+      --success: #30c75a;
+      
+      /* Màu nền và văn bản Dark Mode */
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-tertiary: #2d2d2d;
+      --bg-card: #1e1e1e;
+      --bg-modal: #252525;
+      --bg-input: #2d2d2d;
+      --bg-hover: #2a2a2a;
+      --bg-active: #2c3e50;
+      
+      /* Màu văn bản Dark Mode */
+      --text-primary: #f5f5f5;
+      --text-secondary: #b0b0b0;
+      --text-tertiary: #8a8a8a;
+      --text-inverse: #121212;
+      --text-muted: #666666;
+      
+      /* Màu viền và bóng Dark Mode */
+      --border-color: #3a3a3a;
+      --border-light: #4a4a4a;
+      --border-dark: #555555;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+      --shadow-lg: 0 8px 25px rgba(0,0,0,0.4);
+      --shadow-dark: 0 2px 10px rgba(0,0,0,0.5);
     }
     
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-    
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f5f7fa;
-        color: var(--dark);
-        line-height: 1.6;
-        padding: 15px;
-        min-height: 100vh;
-    }
-    
-    .container {
-        max-width: 900px;
-        margin: 0 auto;
-        background: white;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        overflow: hidden;
-    }
-    
-    /* Header */
+    /* Đảm bảo header có chữ trắng */
     header {
-        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-        color: white;
-        padding: 20px;
-        position: relative;
+      color: var(--text-inverse) !important;
+    }
+    
+    header h1,
+    header p {
+      color: var(--text-inverse) !important;
+    }
+    
+    /* Đảm bảo nút quay về có màu trắng */
+    .menu-back {
+      color: var(--text-inverse) !important;
+    }
+    
+    /* Điều chỉnh màu nền cho result header */
+    .result-header {
+      background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary)) !important;
+    }
+  }
+  
+  /* ========== CSS RESET & BASE STYLES ========== */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html {
+    font-size: 16px;
+    transition: background-color 0.5s ease;
+    font-family: var(--font-family);
+  }
+  
+  body {
+    font-family: var(--font-family);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 15px;
+    min-height: 100vh;
+    transition: var(--transition-slow);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+  }
+  
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+  }
+  
+  /* Header */
+  header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--text-inverse);
+    padding: 20px;
+    position: relative;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+  
+  header h1 {
+    font-size: 1.6rem;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+    font-family: var(--font-family);
+  }
+  
+  header p {
+    opacity: 0.9;
+    font-size: 0.95rem;
+    text-align: center;
+    font-family: var(--font-family);
+    font-weight: 400;
+  }
+  
+  .menu-back {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: var(--text-inverse);
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    font-family: var(--font-family);
+    font-weight: 500;
+    transition: var(--transition);
+  }
+  
+  .menu-back:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-50%) scale(1.05);
+  }
+  
+  /* Kết quả trên cùng */
+  .result-header {
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+    padding: 20px;
+    border-bottom: 2px solid var(--border-color);
+    display: none;
+  }
+  
+  .total-display {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  .total-amount {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin: 10px 0;
+    font-family: var(--font-family);
+  }
+  
+  .comparison-row {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+  }
+  
+  .comparison-item {
+    text-align: center;
+    min-width: 150px;
+  }
+  
+  .comparison-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+    font-family: var(--font-family);
+    font-weight: 400;
+  }
+  
+  .comparison-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: var(--font-family);
+  }
+  
+  .revenue-total {
+    color: var(--secondary);
+  }
+  
+  .difference {
+    color: var(--warning);
+  }
+  
+  .positive {
+    color: var(--secondary);
+  }
+  
+  .negative {
+    color: var(--danger);
+  }
+  
+  /* Form nhập liệu */
+  .input-section {
+    padding: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-family: var(--font-family);
+  }
+  
+  select {
+    width: 100%;
+    padding: 12px 15px;
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: var(--transition);
+    font-family: var(--font-family);
+    font-weight: 400;
+  }
+  
+  select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.2);
+  }
+  
+  /* Bảng nhập mệnh giá gọn */
+  .denominations-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+  }
+  
+  .denominations-table th {
+    background: var(--bg-tertiary);
+    padding: 16px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+    font-family: var(--font-family);
+  }
+  
+  .denominations-table td {
+    padding: 14px 15px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    font-weight: 400;
+  }
+  
+  .denominations-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .denominations-table tr:hover {
+    background-color: var(--bg-hover);
+  }
+  
+  .denomination-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .denomination-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-circle);
+    background: var(--primary);
+    color: var(--text-inverse);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    font-family: var(--font-family);
+  }
+  
+  .denomination-text {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .denomination-value {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: var(--font-family);
+  }
+  
+  .denomination-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-family: var(--font-family);
+    font-weight: 400;
+  }
+  
+  .input-cell {
+    width: 120px;
+  }
+  
+  .bill-input {
+    width: 100%;
+    padding: 12px;
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1.1rem;
+    text-align: center;
+    transition: var(--transition);
+    font-family: var(--font-family);
+    font-weight: 500;
+  }
+  
+  .bill-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.2);
+  }
+  
+  .amount-cell {
+    text-align: right;
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 1.1rem;
+    font-family: var(--font-family);
+  }
+  
+  /* Nút điều chỉnh nhanh */
+  .quick-controls {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+  }
+  
+  .quick-btn {
+    flex: 1;
+    padding: 6px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: var(--transition-fast);
+    font-family: var(--font-family);
+    font-weight: 500;
+  }
+  
+  .quick-btn:hover {
+    background: var(--primary-light);
+    color: var(--text-inverse);
+    border-color: var(--primary);
+  }
+  
+  /* Nút hành động */
+  .action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+  }
+  
+  .action-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 16px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-family);
+  }
+  
+  .btn-primary {
+    background-color: var(--primary);
+    color: var(--text-inverse);
+    border: 1px solid var(--primary-dark);
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 128, 255, 0.3);
+  }
+  
+  .btn-secondary {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--bg-hover);
+    transform: translateY(-2px);
+    border-color: var(--border-dark);
+  }
+  
+  .btn-success {
+    background-color: var(--secondary);
+    color: var(--text-inverse);
+    border: 1px solid var(--secondary-dark);
+  }
+  
+  .btn-success:hover {
+    background-color: var(--secondary-dark);
+    transform: translateY(-2px);
+  }
+  
+  .btn-warning {
+    background-color: var(--warning);
+    color: var(--text-inverse);
+    border: 1px solid var(--warning-dark);
+  }
+  
+  .btn-warning:hover {
+    background-color: var(--warning-dark);
+    transform: translateY(-2px);
+  }
+  
+  /* Toast */
+  .toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(100px);
+    background: var(--primary);
+    color: var(--text-inverse);
+    padding: 16px 24px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    opacity: 0;
+    transition: var(--transition);
+    min-width: 280px;
+    text-align: center;
+    border: 1px solid var(--primary-dark);
+    font-family: var(--font-family);
+    font-weight: 500;
+  }
+
+  .toast.show {
+    transform: translate(-50%, -50%) translateY(0);
+    opacity: 1;
+  }
+  
+  .toast.success {
+    background: var(--secondary);
+    border-color: var(--secondary-dark);
+  }
+  
+  .toast.error {
+    background: var(--danger);
+    border-color: var(--danger-dark);
+  }
+  
+  /* ========== SCROLLBAR STYLING ========== */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-dark);
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--bg-tertiary);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+  }
+  
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-dark) var(--bg-tertiary);
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    body {
+      padding: 10px;
+    }
+    
+    header {
+      padding: 18px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     }
     
     header h1 {
-        font-size: 1.6rem;
-        margin-bottom: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
-    
-    header p {
-        opacity: 0.9;
-        font-size: 0.95rem;
-        text-align: center;
-    }
-    
-    .menu-back {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(255,255,255,0.2);
-        border: none;
-        color: white;
-        padding: 8px 12px;
-        border-radius: var(--radius);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 0.9rem;
-    }
-    
-    .menu-back:hover {
-        background: rgba(255,255,255,0.3);
-    }
-    
-    /* Kết quả trên cùng */
-    .result-header {
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        padding: 20px;
-        border-bottom: 2px solid var(--border);
-    }
-    
-    .total-display {
-        text-align: center;
-        margin-bottom: 15px;
+      font-size: 1.4rem;
     }
     
     .total-amount {
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: var(--primary);
-        margin: 10px 0;
+      font-size: 1.8rem;
     }
     
     .comparison-row {
-        display: flex;
-        justify-content: center;
-        gap: 30px;
-        flex-wrap: wrap;
-        margin: 15px 0;
+      gap: 15px;
     }
     
     .comparison-item {
-        text-align: center;
-        min-width: 150px;
-    }
-    
-    .comparison-label {
-        font-size: 0.9rem;
-        color: var(--gray);
-        margin-bottom: 5px;
+      min-width: 120px;
     }
     
     .comparison-value {
-        font-size: 1.5rem;
-        font-weight: 700;
+      font-size: 1.3rem;
     }
     
-    .revenue-total {
-        color: var(--secondary);
-    }
-    
-    .difference {
-        color: var(--warning);
-    }
-    
-    .positive {
-        color: var(--secondary);
-    }
-    
-    .negative {
-        color: var(--danger);
-    }
-    
-    /* Form nhập liệu */
-    .input-section {
-        padding: 20px;
-    }
-    
-    .form-group {
-        margin-bottom: 15px;
-    }
-    
-    label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: var(--dark);
-    }
-    
-    select {
-        width: 100%;
-        padding: 12px 15px;
-        border: 1.5px solid var(--border);
-        border-radius: var(--radius);
-        font-size: 1rem;
-        transition: all 0.3s ease;
-    }
-    
-    select:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
-    }
-    
-    /* Bảng nhập mệnh giá gọn */
     .denominations-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        background: white;
-        border-radius: var(--radius);
-        overflow: hidden;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      font-size: 0.9rem;
     }
     
-    .denominations-table th {
-        background: #f8f9fa;
-        padding: 12px 15px;
-        text-align: left;
-        font-weight: 600;
-        color: var(--dark);
-        border-bottom: 2px solid var(--border);
-    }
-    
+    .denominations-table th,
     .denominations-table td {
-        padding: 10px 15px;
-        border-bottom: 1px solid var(--border);
-    }
-    
-    .denominations-table tr:last-child td {
-        border-bottom: none;
-    }
-    
-    .denominations-table tr:hover {
-        background-color: #fafbfc;
-    }
-    
-    .denomination-info {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+      padding: 12px 10px;
     }
     
     .denomination-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: var(--primary);
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 0.9rem;
+      width: 35px;
+      height: 35px;
+      font-size: 0.8rem;
     }
     
-    .denomination-text {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .denomination-value {
-        font-weight: 700;
-        color: var(--dark);
-    }
-    
-    .denomination-label {
-        font-size: 0.85rem;
-        color: var(--gray);
-    }
-    
-    .input-cell {
-        width: 120px;
-    }
-    
-    .bill-input {
-        width: 100%;
-        padding: 10px 12px;
-        border: 1.5px solid var(--border);
-        border-radius: var(--radius);
-        font-size: 1.1rem;
-        text-align: center;
-        transition: all 0.2s ease;
-    }
-    
-    .bill-input:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(44, 128, 255, 0.1);
-    }
-    
-    .amount-cell {
-        text-align: right;
-        font-weight: 600;
-        color: var(--primary);
-        font-size: 1.1rem;
-    }
-    
-    /* Nút điều chỉnh nhanh */
-    .quick-controls {
-        display: flex;
-        gap: 5px;
-        margin-top: 5px;
-    }
-    
-    .quick-btn {
-        flex: 1;
-        padding: 5px;
-        border: 1px solid var(--border);
-        background: white;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        transition: all 0.2s ease;
-    }
-    
-    .quick-btn:hover {
-        background: #f8f9fa;
-        border-color: var(--primary);
-    }
-    
-    /* Nút hành động */
     .action-buttons {
-        display: flex;
-        gap: 10px;
-        margin-top: 25px;
-        flex-wrap: wrap;
+      flex-direction: column;
     }
     
     .action-btn {
-        flex: 1;
-        min-width: 140px;
-        padding: 14px;
-        border: none;
-        border-radius: var(--radius);
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
+      min-width: 100%;
+      padding: 14px;
+      min-height: 44px;
     }
     
-    .btn-primary {
-        background-color: var(--primary);
-        color: white;
+    .input-section {
+      padding: 18px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    body {
+      padding: 8px;
     }
     
-    .btn-primary:hover {
-        background-color: var(--primary-dark);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(44, 128, 255, 0.3);
+    header {
+      padding: 15px;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
     }
     
-    .btn-secondary {
-        background-color: #f1f3f5;
-        color: var(--dark);
+    header h1 {
+      font-size: 1.2rem;
     }
     
-    .btn-secondary:hover {
-        background-color: #e9ecef;
-        transform: translateY(-2px);
+    .denominations-table {
+      display: block;
+      overflow-x: auto;
     }
     
-    .btn-success {
-        background-color: var(--secondary);
-        color: white;
+    .input-cell {
+      width: 100px;
     }
     
-    .btn-success:hover {
-        background-color: #30b352;
-        transform: translateY(-2px);
+    .bill-input {
+      padding: 10px;
+      font-size: 1rem;
     }
     
-    .btn-warning {
-        background-color: var(--warning);
-        color: white;
+    .comparison-row {
+      flex-direction: column;
+      gap: 12px;
     }
     
-    .btn-warning:hover {
-        background-color: #e08900;
-        transform: translateY(-2px);
+    .menu-back {
+      padding: 6px 10px;
+      font-size: 0.85rem;
+    }
+  }
+  
+  /* ========== DARK MODE SPECIFIC ADJUSTMENTS ========== */
+  @media (prefers-color-scheme: dark) {
+    /* Điều chỉnh màu cho các nút quick control */
+    .quick-btn {
+      background: var(--bg-secondary);
+      border-color: var(--border-dark);
     }
     
-    /* Toast */
+    .quick-btn:hover {
+      background: var(--primary);
+    }
+    
+    /* Điều chỉnh màu placeholder */
+    .bill-input::placeholder {
+      color: var(--text-muted);
+    }
+    
+    /* Điều chỉnh bóng cho container */
+    .container {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Điều chỉnh thanh scrollbar trong dark mode */
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--text-muted);
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+    
+    /* Điều chỉnh hover cho table rows */
+    .denominations-table tr:hover {
+      background-color: var(--bg-tertiary);
+    }
+    
+    /* Điều chỉnh màu border cho bảng */
+    .denominations-table {
+      border-color: var(--border-dark);
+    }
+    
+    /* Điều chỉnh màu cho các select option */
+    option {
+      background-color: var(--bg-modal);
+      color: var(--text-primary);
+      font-family: var(--font-family);
+    }
+  }
+  
+  /* ========== REDUCED MOTION SUPPORT ========== */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
     .toast {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) translateY(100px);
-        background: var(--primary);
-        color: white;
-        padding: 16px 24px;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        z-index: 1000;
-        opacity: 0;
-        transition: all 0.3s ease;
-        min-width: 280px;
-        text-align: center;
-    }
-
-    .toast.show {
-        transform: translate(-50%, -50%) translateY(0);
-        opacity: 1;
+      transition: opacity 0.1s;
     }
     
-    .toast.success {
-        background: var(--secondary);
+    button:hover,
+    .menu-back:hover {
+      transform: none !important;
     }
-    
-    .toast.error {
-        background: var(--danger);
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-        body {
-            padding: 10px;
-        }
-        
-        .total-amount {
-            font-size: 1.8rem;
-        }
-        
-        .comparison-row {
-            gap: 15px;
-        }
-        
-        .comparison-item {
-            min-width: 120px;
-        }
-        
-        .comparison-value {
-            font-size: 1.3rem;
-        }
-        
-        .denominations-table {
-            font-size: 0.9rem;
-        }
-        
-        .denominations-table th,
-        .denominations-table td {
-            padding: 8px 10px;
-        }
-        
-        .denomination-icon {
-            width: 35px;
-            height: 35px;
-            font-size: 0.8rem;
-        }
-        
-        .action-buttons {
-            flex-direction: column;
-        }
-        
-        .action-btn {
-            min-width: 100%;
-        }
-    }
-    
-    @media (max-width: 480px) {
-        header h1 {
-            font-size: 1.3rem;
-        }
-        
-        .denominations-table {
-            display: block;
-            overflow-x: auto;
-        }
-        
-        .input-cell {
-            width: 100px;
-        }
-        
-        .bill-input {
-            padding: 8px 10px;
-            font-size: 1rem;
-        }
-        
-        .comparison-row {
-            flex-direction: column;
-            gap: 10px;
-        }
-    }
+  }
+  
+  /* ========== FONT WEIGHT CONSISTENCY ========== */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    font-family: var(--font-family);
+  }
+  
+  strong, b {
+    font-weight: 700;
+    font-family: var(--font-family);
+  }
+  
+  /* ========== ANIMATIONS ========== */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
 </style>
 </head>
 <body>
@@ -506,14 +835,14 @@
                 </select>
             </div>
             
-            <h3 style="margin: 20px 0 15px 0; color: var(--dark);">Nhập số lượng tờ tiền:</h3>
+            <h3 style="margin: 20px 0 15px 0; color: var(--text-primary); font-family: var(--font-family); font-weight: 600;">Nhập số lượng tờ tiền:</h3>
             
             <table class="denominations-table">
                 <thead>
                     <tr>
-                        <th>Mệnh giá</th>
-                        <th>Số tờ</th>
-                        <th>Thành tiền</th>
+                        <th style="font-family: var(--font-family);">Mệnh giá</th>
+                        <th style="font-family: var(--font-family);">Số tờ</th>
+                        <th style="font-family: var(--font-family);">Thành tiền</th>
                     </tr>
                 </thead>
                 <tbody id="denominations-body">
@@ -589,6 +918,7 @@
             
             denominations.forEach((denom, index) => {
                 const row = document.createElement('tr');
+                row.className = 'fade-in';
                 row.innerHTML = `
                     <td>
                         <div class="denomination-info">
@@ -935,6 +1265,7 @@
         
         // Khởi tạo trang
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== TRANG ĐẾM TIỀN ĐANG KHỞI ĐỘNG ===');
             createDenominationTable();
             loadShiftsAndRevenue();
             

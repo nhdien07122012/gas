@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tính công và lương</title>
+
+<!-- Tải font Roboto từ Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="apple-touch-icon-precomposed" href="icon.png">
@@ -11,50 +17,219 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Tính công lương">
 <style>
-  :root {
-    --primary: #2c80ff;
-    --primary-dark: #1a6de0;
-    --secondary: #34c759;
-    --danger: #ff3b30;
-    --warning: #ff9500;
-    --light: #f8f9fa;
-    --dark: #333;
-    --gray: #6c757d;
-    --border: #dee2e6;
-    --shadow: 0 2px 10px rgba(0,0,0,0.08);
-    --radius: 10px;
+  /* ========== ROBOTO FONT LOADING ========== */
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmSU5fCRc4EsA.woff2) format('woff2');
   }
   
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxK.woff2) format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmEU9fCRc4EsA.woff2) format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfCRc4EsA.woff2) format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfCRc4EsA.woff2) format('woff2');
+  }
+  
+  /* ========== CSS VARIABLES FOR LIGHT MODE ========== */
+  :root {
+    /* Màu sắc cơ bản */
+    --primary: #2c80ff;
+    --primary-dark: #1a6de0;
+    --primary-light: #5a9dff;
+    --secondary: #34c759;
+    --secondary-dark: #2aa64a;
+    --danger: #ff3b30;
+    --danger-dark: #e0352b;
+    --warning: #ff9500;
+    --warning-dark: #e08900;
+    --info: #5ac8fa;
+    --success: #34c759;
+    
+    /* Màu nền và văn bản Light Mode */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f7fa;
+    --bg-tertiary: #f8f9fa;
+    --bg-card: #ffffff;
+    --bg-sidebar: #ffffff;
+    --bg-modal: #ffffff;
+    --bg-input: #ffffff;
+    --bg-hover: #f8fafc;
+    --bg-active: #e8f0fe;
+    
+    /* Màu văn bản Light Mode */
+    --text-primary: #333333;
+    --text-secondary: #6c757d;
+    --text-tertiary: #868e96;
+    --text-inverse: #ffffff;
+    --text-muted: #adb5bd;
+    
+    /* Màu viền và bóng */
+    --border-color: #dee2e6;
+    --border-light: #e9ecef;
+    --border-dark: #ced4da;
+    --shadow: 0 2px 10px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
+    --shadow-dark: 0 2px 10px rgba(0,0,0,0.15);
+    
+    /* Border radius */
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
+    --radius-circle: 50%;
+    
+    /* Hiệu ứng chuyển tiếp */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s ease;
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Độ trong suốt */
+    --opacity-disabled: 0.6;
+    --opacity-hover: 0.9;
+    --opacity-active: 0.8;
+    
+    /* Font chữ */
+    --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --font-family-mono: 'Roboto Mono', 'Courier New', monospace;
+  }
+  
+  /* ========== DARK MODE VARIABLES ========== */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Màu sắc cơ bản */
+      --primary: #3d8eff;
+      --primary-dark: #2c7de6;
+      --primary-light: #5a9dff;
+      --secondary: #30c75a;
+      --secondary-dark: #26a64a;
+      --danger: #ff5252;
+      --danger-dark: #ff3838;
+      --warning: #ffa726;
+      --warning-dark: #ff9800;
+      --info: #42a5f5;
+      --success: #30c75a;
+      
+      /* Màu nền và văn bản Dark Mode */
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-tertiary: #2d2d2d;
+      --bg-card: #1e1e1e;
+      --bg-sidebar: #1e1e1e;
+      --bg-modal: #252525;
+      --bg-input: #2d2d2d;
+      --bg-hover: #2a2a2a;
+      --bg-active: #2c3e50;
+      
+      /* Màu văn bản Dark Mode */
+      --text-primary: #f5f5f5;
+      --text-secondary: #b0b0b0;
+      --text-tertiary: #8a8a8a;
+      --text-inverse: #121212;
+      --text-muted: #666666;
+      
+      /* Màu viền và bóng Dark Mode */
+      --border-color: #3a3a3a;
+      --border-light: #4a4a4a;
+      --border-dark: #555555;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+      --shadow-lg: 0 8px 25px rgba(0,0,0,0.4);
+      --shadow-dark: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    
+    /* Đảm bảo header có chữ trắng */
+    header {
+      color: #ffffff !important;
+    }
+    
+    header h1,
+    header p {
+      color: #ffffff !important;
+    }
+    
+    /* Đảm bảo link quay về có màu trắng */
+    header a {
+      color: #ffffff !important;
+    }
+    
+    /* Điều chỉnh màu nền cho hiệu ứng tiền rơi */
+    .money-particle {
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+  }
+  
+  /* ========== CSS RESET & BASE STYLES ========== */
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
   
+  html {
+    font-size: 16px;
+    transition: background-color 0.5s ease;
+    font-family: var(--font-family);
+  }
+  
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f7fa;
-    color: var(--dark);
+    font-family: var(--font-family);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
     line-height: 1.6;
     padding: 20px;
     min-height: 100vh;
+    transition: var(--transition-slow);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
   }
   
   .container {
     max-width: 800px;
     margin: 0 auto;
-    background: white;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
     overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
   }
   
   header {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: white;
+    color: var(--text-inverse);
     padding: 25px 30px;
     text-align: center;
     position: relative;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
   
   header h1 {
@@ -64,20 +239,67 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
+    font-weight: 600;
+    font-family: var(--font-family);
   }
   
   header p {
     opacity: 0.9;
     font-size: 1rem;
+    font-weight: 400;
+    font-family: var(--font-family);
   }
   
   .card {
     padding: 25px 30px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-color);
+    transition: var(--transition);
   }
   
   .card:last-child {
     border-bottom: none;
+  }
+  
+  /* PHẦN TỔNG LƯƠNG TẠM TÍNH Ở ĐẦU */
+  .salary-preview {
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 25px;
+    text-align: center;
+    border-left: 5px solid var(--secondary);
+    display: none;
+    border: 1px solid var(--border-color);
+    font-family: var(--font-family);
+  }
+  
+  .salary-preview.show {
+    display: block;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .salary-preview h3 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-family: var(--font-family);
+  }
+  
+  .preview-amount {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--secondary);
+    margin: 10px 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-family: var(--font-family);
+  }
+  
+  .preview-time {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-family: var(--font-family);
+    font-weight: 400;
   }
   
   .form-group {
@@ -88,22 +310,33 @@
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: var(--dark);
+    color: var(--text-primary);
+    font-family: var(--font-family);
   }
   
   input, select {
     width: 100%;
     padding: 14px 16px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-md);
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: var(--transition);
+    font-family: var(--font-family);
+    font-weight: 400;
   }
   
   input:focus, select:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(61, 142, 255, 0.2);
+    background: var(--bg-input);
+  }
+  
+  input::placeholder {
+    color: var(--text-muted);
+    font-family: var(--font-family);
   }
   
   .button-group {
@@ -116,20 +349,21 @@
     flex: 1;
     padding: 16px;
     border: none;
-    border-radius: var(--radius);
+    border-radius: var(--radius-md);
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    font-family: var(--font-family);
   }
   
   .btn-primary {
     background-color: var(--primary);
-    color: white;
+    color: var(--text-inverse);
   }
   
   .btn-primary:hover {
@@ -139,22 +373,44 @@
   }
   
   .btn-secondary {
-    background-color: #f1f3f5;
-    color: var(--dark);
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
   }
   
   .btn-secondary:hover {
-    background-color: #e9ecef;
+    background-color: var(--bg-hover);
     transform: translateY(-2px);
+    border-color: var(--border-dark);
   }
   
   .btn-success {
     background-color: var(--secondary);
-    color: white;
+    color: var(--text-inverse);
   }
   
   .btn-success:hover {
-    background-color: #30b352;
+    background-color: var(--secondary-dark);
+    transform: translateY(-2px);
+  }
+  
+  .btn-warning {
+    background-color: var(--warning);
+    color: var(--text-inverse);
+  }
+  
+  .btn-warning:hover {
+    background-color: var(--warning-dark);
+    transform: translateY(-2px);
+  }
+  
+  .btn-info {
+    background-color: var(--info);
+    color: var(--text-inverse);
+  }
+  
+  .btn-info:hover {
+    background-color: #4ab8ea;
     transform: translateY(-2px);
   }
   
@@ -168,70 +424,96 @@
   .stat-card {
     flex: 1;
     min-width: 150px;
-    background: #f8f9fa;
-    border-radius: var(--radius);
-    padding: 15px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    padding: 20px;
     text-align: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-light);
   }
   
   .stat-value {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: var(--primary);
+    font-family: var(--font-family);
   }
   
   .stat-label {
     font-size: 0.9rem;
-    color: var(--gray);
+    color: var(--text-secondary);
     margin-top: 5px;
+    font-family: var(--font-family);
+    font-weight: 400;
   }
   
   .table-container {
     overflow-x: auto;
     margin-top: 10px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
   }
   
   table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 5px;
+    margin-top: 0;
   }
   
   th {
-    background-color: #f8f9fa;
+    background-color: var(--bg-tertiary);
     padding: 16px 12px;
     text-align: left;
     font-weight: 600;
-    color: var(--dark);
-    border-bottom: 2px solid var(--border);
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+    font-family: var(--font-family);
   }
   
   td {
     padding: 14px 12px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    font-weight: 400;
   }
   
   tr:last-child td {
     border-bottom: none;
   }
   
+  tr:hover {
+    background-color: var(--bg-hover);
+  }
+  
   .empty-state {
     text-align: center;
     padding: 40px 20px;
-    color: var(--gray);
+    color: var(--text-secondary);
+    font-family: var(--font-family);
   }
   
   .empty-state p {
     margin-top: 10px;
+    font-weight: 400;
   }
   
   .salary-summary {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    border-radius: var(--radius);
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+    border-radius: var(--radius-lg);
     padding: 25px;
     margin: 20px 0;
     text-align: center;
     border-left: 5px solid var(--secondary);
+    border: 1px solid var(--border-color);
   }
   
   .salary-amount {
@@ -239,15 +521,68 @@
     font-weight: 800;
     color: var(--secondary);
     margin: 15px 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-family: var(--font-family);
   }
   
   .salary-breakdown {
     margin-top: 20px;
     padding: 15px;
-    background: white;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
     text-align: left;
+    font-family: var(--font-family);
+  }
+  
+  .salary-breakdown ul {
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+  
+  .salary-breakdown li {
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    font-family: var(--font-family);
+  }
+  
+  /* HIỆU ỨNG TIỀN/VÀNG RƠI */
+  .money-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+  }
+  
+  .money-particle {
+    position: absolute;
+    font-size: 24px;
+    user-select: none;
+    pointer-events: none;
+    opacity: 0;
+    animation: moneyFall linear forwards;
+    font-family: var(--font-family);
+  }
+  
+  @keyframes moneyFall {
+    0% {
+      transform: translateY(-100px) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) rotate(360deg);
+      opacity: 0;
+    }
   }
   
   .toast {
@@ -256,19 +591,22 @@
     left: 50%;
     transform: translate(-50%, -50%) translateY(100px);
     background: var(--primary);
-    color: white;
+    color: var(--text-inverse);
     padding: 16px 24px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
     z-index: 1002;
     display: flex;
     align-items: center;
     gap: 10px;
     opacity: 0;
-    transition: all 0.3s ease;
+    transition: var(--transition);
     min-width: 280px;
     text-align: center;
     justify-content: center;
+    border: 1px solid var(--primary-dark);
+    font-family: var(--font-family);
+    font-weight: 500;
   }
 
   .toast.show {
@@ -278,10 +616,17 @@
   
   .toast.success {
     background: var(--secondary);
+    border-color: var(--secondary-dark);
   }
   
   .toast.error {
     background: var(--danger);
+    border-color: var(--danger-dark);
+  }
+  
+  .toast.warning {
+    background: var(--warning);
+    border-color: var(--warning-dark);
   }
   
   @keyframes fadeIn {
@@ -293,34 +638,262 @@
     animation: fadeIn 0.4s ease-out;
   }
   
+  /* ========== SCROLLBAR STYLING ========== */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-dark);
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--bg-tertiary);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+  }
+  
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-dark) var(--bg-tertiary);
+  }
+  
   @media (max-width: 768px) {
-    body { padding: 15px; }
-    header { padding: 20px; }
-    header h1 { font-size: 1.5rem; }
-    .card { padding: 20px; }
-    .button-group { flex-direction: column; }
-    .stats-container { flex-direction: column; }
-    .salary-amount { font-size: 2rem; }
-    th, td { padding: 12px 8px; font-size: 0.9rem; }
+    body {
+      padding: 15px;
+    }
+    
+    header {
+      padding: 20px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+    
+    header h1 {
+      font-size: 1.5rem;
+    }
+    
+    .card {
+      padding: 20px;
+    }
+    
+    .button-group {
+      flex-direction: column;
+    }
+    
+    .stats-container {
+      flex-direction: column;
+    }
+    
+    .stat-card {
+      border-radius: var(--radius-md);
+    }
+    
+    .salary-amount {
+      font-size: 2rem;
+    }
+    
+    .preview-amount {
+      font-size: 1.8rem;
+    }
+    
+    th, td {
+      padding: 12px 8px;
+      font-size: 0.9rem;
+    }
+    
+    .money-particle {
+      font-size: 20px;
+    }
+    
+    .table-container {
+      border-radius: var(--radius-sm);
+    }
+    
+    table {
+      min-width: 600px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    body {
+      padding: 10px;
+    }
+    
+    header {
+      padding: 18px 15px;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+    }
+    
+    header h1 {
+      font-size: 1.3rem;
+    }
+    
+    .card {
+      padding: 18px 15px;
+    }
+    
+    input, select {
+      padding: 12px 14px;
+      font-size: 16px;
+      border-radius: var(--radius-sm);
+    }
+    
+    button {
+      padding: 14px;
+      min-height: 44px;
+      border-radius: var(--radius-sm);
+    }
+  }
+  
+  /* ========== DARK MODE SPECIFIC ADJUSTMENTS ========== */
+  @media (prefers-color-scheme: dark) {
+    /* Điều chỉnh độ tương phản cho các phần tử đặc biệt */
+    .btn-secondary {
+      border-color: var(--border-dark);
+    }
+    
+    .table-container {
+      border-color: var(--border-dark);
+    }
+    
+    .stat-card {
+      border-color: var(--border-dark);
+    }
+    
+    /* Điều chỉnh màu placeholder */
+    input::placeholder {
+      color: var(--text-muted);
+    }
+    
+    /* Điều chỉnh bóng cho container */
+    .container {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Điều chỉnh thanh scrollbar trong dark mode */
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--text-muted);
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+    
+    /* Điều chỉnh hover cho table rows */
+    tr:hover {
+      background-color: var(--bg-tertiary);
+    }
+    
+    /* Điều chỉnh màu border cho các phần tử có viền */
+    .card {
+      border-color: var(--border-color);
+    }
+    
+    /* Điều chỉnh màu cho các select option */
+    option {
+      background-color: var(--bg-modal);
+      color: var(--text-primary);
+      font-family: var(--font-family);
+    }
+  }
+  
+  /* ========== REDUCED MOTION SUPPORT ========== */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
+    .fade-in {
+      animation: none;
+    }
+    
+    .toast {
+      transition: opacity 0.1s;
+    }
+    
+    button:hover,
+    .stat-card:hover {
+      transform: none !important;
+    }
+    
+    .money-particle {
+      display: none !important;
+    }
+  }
+  
+  /* ========== FONT WEIGHT CONSISTENCY ========== */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    font-family: var(--font-family);
+  }
+  
+  strong, b {
+    font-weight: 700;
+    font-family: var(--font-family);
+  }
+  
+  /* ========== TYPOGRAPHY ENHANCEMENTS ========== */
+  .text-small {
+    font-size: 0.875rem;
+    font-weight: 400;
+    font-family: var(--font-family);
+  }
+  
+  .text-medium {
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: var(--font-family);
+  }
+  
+  .text-large {
+    font-size: 1.125rem;
+    font-weight: 600;
+    font-family: var(--font-family);
   }
 </style>
 </head>
 <body>
+  <!-- Container cho hiệu ứng tiền rơi -->
+  <div class="money-rain" id="money-rain"></div>
+  
   <div class="toast" id="toast">
     <span id="toast-message">Đã sao chép vào clipboard!</span>
   </div>
 
   <div class="container">
     <header>
-      <a href="index.html" style="position: absolute; left: 30px; top: 30px; color: white; text-decoration: none; font-size: 1.2rem;">←</a>
+      <a href="index.html" style="position: absolute; left: 30px; top: 30px; color: var(--text-inverse); text-decoration: none; font-size: 1.2rem; font-family: var(--font-family);">←</a>
       <h1>💰 Tính công và lương</h1>
       <p>Tính lương dựa trên số ca làm việc thực tế</p>
     </header>
     
     <div class="card">
+      <!-- PHẦN TỔNG LƯƠNG TẠM TÍNH - ĐÃ DI CHUYỂN LÊN ĐẦU -->
+      <div class="salary-preview" id="salary-preview">
+        <h3>Tổng lương tạm tính</h3>
+        <div class="preview-amount" id="preview-amount">0 đ</div>
+        <p class="preview-time" id="preview-time">Thời gian tính: </p>
+      </div>
+      
       <div class="form-group">
         <label for="luong-thang">Lương tháng (VND):</label>
-        <input type="number" id="luong-thang" value="5000000" placeholder="Nhập lương tháng">
+        <input type="number" id="luong-thang" value="5500000" placeholder="Nhập lương tháng">
       </div>
       
       <div class="form-group">
@@ -332,6 +905,8 @@
             <option value="10">Ngày 10</option>
             <option value="15">Ngày 15</option>
             <option value="20">Ngày 20</option>
+            <option value="25">Ngày 25</option>
+            <option value="28">Ngày 28</option>
           </select>
           <select id="thang-bat-dau" style="flex: 1;">
             <!-- Tháng sẽ được thêm bằng JavaScript -->
@@ -340,14 +915,17 @@
             <!-- Năm sẽ được thêm bằng JavaScript -->
           </select>
         </div>
-        <p style="font-size: 0.9rem; color: var(--gray); margin-top: 5px;">
-          <i>Lương được tính từ ngày 05 tháng này đến ngày 05 tháng sau (30 ngày)</i>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 5px; font-family: var(--font-family);">
+          <i>Lương được tính từ ngày X tháng này đến ngày X tháng sau (30 ngày)</i>
         </p>
       </div>
       
       <div class="button-group">
         <button class="btn-primary" onclick="tinhLuong()" id="btn-tinh-luong">
           🧮 Tính lương
+        </button>
+        <button class="btn-info" onclick="autoFillLastCycle()">
+          ⚡ Tự động điền
         </button>
         <button class="btn-secondary" onclick="resetForm()">
           🔄 Làm mới
@@ -359,7 +937,7 @@
     </div>
     
     <div class="card">
-      <h2 style="margin-bottom: 15px;">📊 Kết quả tính lương</h2>
+      <h2 style="margin-bottom: 15px; color: var(--text-primary);">📊 Kết quả tính lương</h2>
       
       <div class="stats-container" id="stats-container">
         <!-- Thống kê sẽ được thêm bằng JavaScript -->
@@ -367,13 +945,13 @@
       
       <div id="salary-result" style="display: none;">
         <div class="salary-summary">
-          <h3>Tổng lương tạm tính</h3>
+          <h3 style="color: var(--text-primary);">Tổng lương tạm tính</h3>
           <div class="salary-amount" id="tong-luong">0 VND</div>
-          <p id="thoi-gian-tinh">Thời gian tính: </p>
+          <p id="thoi-gian-tinh" style="color: var(--text-secondary);">Thời gian tính: </p>
         </div>
         
         <div class="salary-breakdown">
-          <h4>📝 Chi tiết tính lương:</h4>
+          <h4 style="color: var(--text-primary); margin-bottom: 10px;">📝 Chi tiết tính lương:</h4>
           <ul id="chi-tiet-luong">
             <!-- Chi tiết sẽ được thêm bằng JavaScript -->
           </ul>
@@ -393,7 +971,7 @@
     </div>
     
     <div class="card">
-      <h2 style="margin-bottom: 15px;">📅 Chi tiết các ca làm việc</h2>
+      <h2 style="margin-bottom: 15px; color: var(--text-primary);">📅 Chi tiết các ca làm việc</h2>
       <div class="table-container">
         <table id="bang-cong">
           <thead>
@@ -417,7 +995,7 @@
     </div>
   </div>
 
-  <a href="index.html" style="position:fixed;right:30px;bottom:30px;z-index:999;background:#2c80ff;color:white;border:none;border-radius:50%;width:56px;height:56px;box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.3s; text-decoration: none;">
+  <a href="index.html" style="position:fixed;right:30px;bottom:30px;z-index:999;background:var(--primary);color:var(--text-inverse);border:none;border-radius:var(--radius-circle);width:56px;height:56px;box-shadow:var(--shadow-lg);font-size:2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition); text-decoration: none; border: 2px solid var(--primary-dark); font-family: var(--font-family);">
     ←
   </a>
 
@@ -440,11 +1018,57 @@ function showToast(message, type = 'success') {
   }, 3000);
 }
 
+// Hàm tạo hiệu ứng tiền/vàng rơi
+function createMoneyRain() {
+  const moneyRain = document.getElementById('money-rain');
+  const moneySymbols = ['💰', '💵', '💸', '🪙', '💎', '💶', '💷', '💴', '🤑', '💳'];
+  
+  // Xóa hiệu ứng cũ nếu có
+  moneyRain.innerHTML = '';
+  
+  // Tạo 30-50 phần tử tiền rơi
+  const particleCount = Math.min(Math.max(window.innerWidth / 20, 30), 50);
+  
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'money-particle';
+    
+    // Chọn ngẫu nhiên biểu tượng tiền
+    const symbol = moneySymbols[Math.floor(Math.random() * moneySymbols.length)];
+    particle.textContent = symbol;
+    
+    // Vị trí ngẫu nhiên
+    const left = Math.random() * 100;
+    particle.style.left = `${left}%`;
+    
+    // Kích thước ngẫu nhiên
+    const size = 20 + Math.random() * 30;
+    particle.style.fontSize = `${size}px`;
+    
+    // Thời gian rơi ngẫu nhiên
+    const duration = 2 + Math.random() * 3;
+    const delay = Math.random() * 2;
+    
+    particle.style.animation = `moneyFall ${duration}s ease-in ${delay}s forwards`;
+    
+    // Thêm vào container
+    moneyRain.appendChild(particle);
+    
+    // Xóa phần tử sau khi animation kết thúc
+    setTimeout(() => {
+      if (particle.parentNode === moneyRain) {
+        moneyRain.removeChild(particle);
+      }
+    }, (duration + delay) * 1000);
+  }
+}
+
 // Hàm định dạng tiền tệ
 function formatCurrency(amount) {
   return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
-    currency: 'VND'
+    currency: 'VND',
+    minimumFractionDigits: 0
   }).format(amount);
 }
 
@@ -454,7 +1078,7 @@ function formatDate(date) {
   const day = String(d.getDate()).padStart(2, '0');
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const year = d.getFullYear();
-  return `${day}-${month}-${year}`;
+  return `${day}/${month}/${year}`;
 }
 
 // Hàm lấy tháng và năm từ dữ liệu
@@ -487,7 +1111,7 @@ function populateMonthYearSelectors() {
     monthSelect.appendChild(option);
   });
   
-  // Thêm các năm
+  // Thêm các năm (từ năm trước đến năm sau)
   for (let year = currentYear - 1; year <= currentYear + 1; year++) {
     const option = document.createElement('option');
     option.value = year;
@@ -497,6 +1121,66 @@ function populateMonthYearSelectors() {
     }
     yearSelect.appendChild(option);
   }
+}
+
+// Hàm tự động điền chu kỳ từ ngày 05 tháng trước đến 05 tháng này - FIXED LOGIC
+function autoFillLastCycle() {
+  const now = new Date();
+  const currentDay = now.getDate();
+  const currentMonth = now.getMonth() + 1;
+  const currentYear = now.getFullYear();
+  
+  const selectedDay = parseInt(document.getElementById('ngay-bat-dau').value) || 5;
+  
+  let startMonth, startYear;
+  let endMonth, endYear;
+  
+  // Logic FIXED: 
+  // 1. Nếu ngày hiện tại >= ngày đã chọn (ví dụ 5): tính từ [ngày] tháng NÀY đến [ngày] tháng SAU
+  // 2. Nếu ngày hiện tại < ngày đã chọn: tính từ [ngày] tháng TRƯỚC đến [ngày] tháng NÀY
+  
+  if (currentDay >= selectedDay) {
+    // Ví dụ: Hôm nay 10/01/2026, ngày chọn 5 -> tính từ 05/01/2026 đến 05/02/2026
+    startMonth = currentMonth;
+    startYear = currentYear;
+    
+    // Tính tháng kết thúc
+    if (currentMonth === 12) {
+      endMonth = 1;
+      endYear = currentYear + 1;
+    } else {
+      endMonth = currentMonth + 1;
+      endYear = currentYear;
+    }
+  } else {
+    // Ví dụ: Hôm nay 03/01/2026, ngày chọn 5 -> tính từ 05/12/2025 đến 05/01/2026
+    if (currentMonth === 1) {
+      startMonth = 12;
+      startYear = currentYear - 1;
+    } else {
+      startMonth = currentMonth - 1;
+      startYear = currentYear;
+    }
+    
+    endMonth = currentMonth;
+    endYear = currentYear;
+  }
+  
+  // Cập nhật form với ngày bắt đầu (tháng và năm)
+  document.getElementById('thang-bat-dau').value = startMonth;
+  document.getElementById('nam-bat-dau').value = startYear;
+  
+  // Hiển thị thông báo với cả ngày bắt đầu và kết thúc
+  showToast(`✅ Đã điền chu kỳ: ${selectedDay}/${startMonth}/${startYear} - ${selectedDay}/${endMonth}/${endYear}`);
+  
+  // Log để debug
+  console.log('Tự động điền chu kỳ:', {
+    selectedDay,
+    currentDate: `${currentDay}/${currentMonth}/${currentYear}`,
+    startDate: `${selectedDay}/${startMonth}/${startYear}`,
+    endDate: `${selectedDay}/${endMonth}/${endYear}`,
+    condition: currentDay >= selectedDay ? 'currentDay >= selectedDay' : 'currentDay < selectedDay'
+  });
 }
 
 // Hàm TEST tải dữ liệu
@@ -553,7 +1237,7 @@ async function testLoadData() {
   }
 }
 
-// Hàm TẢI DỮ LIỆU TỪ GOOGLE SHEETS - PHIÊN BẢN ĐƠN GIẢN
+// Hàm TẢI DỮ LIỆU TỪ GOOGLE SHEETS
 async function taiDuLieu() {
   console.log('Đang tải dữ liệu từ Google Sheets...');
   
@@ -732,15 +1416,15 @@ function displayWorkingDays(caLamViec) {
     tr.innerHTML = `
       <td>${index + 1}</td>
       <td>
-        <div style="font-weight: 600;">${day}-${month}-${year}</div>
-        <div style="font-size: 0.8rem; color: var(--gray);">Ca ${day}-${month}</div>
+        <div style="font-weight: 600; color: var(--text-primary); font-family: var(--font-family);">${day}-${month}-${year}</div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-family);">Ca ${day}-${month}</div>
       </td>
-      <td>${ca.diemGas.length}</td>
-      <td>${formatCurrency(ca.tongTien)}</td>
+      <td style="color: var(--text-primary); font-family: var(--font-family);">${ca.diemGas.length}</td>
+      <td style="color: var(--text-primary); font-family: var(--font-family);">${formatCurrency(ca.tongTien)}</td>
       <td>
         <div style="display: flex; flex-direction: column; gap: 2px;">
-          <span style="color: var(--secondary); font-size: 0.85rem;">✅ Đã nộp: ${ca.daNopCount}</span>
-          <span style="color: var(--warning); font-size: 0.85rem;">⏳ Chưa nộp: ${ca.chuaNopCount}</span>
+          <span style="color: var(--secondary); font-size: 0.85rem; font-family: var(--font-family);">✅ Đã nộp: ${ca.daNopCount}</span>
+          <span style="color: var(--warning); font-size: 0.85rem; font-family: var(--font-family);">⏳ Chưa nộp: ${ca.chuaNopCount}</span>
         </div>
       </td>
     `;
@@ -748,7 +1432,7 @@ function displayWorkingDays(caLamViec) {
   });
 }
 
-// Hàm tính lương - CHÍNH XÁC DỰA TRÊN SỐ CA THỰC TẾ
+// Hàm tính lương - FIXED: Xử lý đúng việc chuyển tháng/năm
 async function tinhLuong() {
   const btn = document.getElementById('btn-tinh-luong');
   const originalText = btn.textContent;
@@ -773,25 +1457,31 @@ async function tinhLuong() {
       await taiDuLieu();
     }
     
-    // 3. Tính ngày bắt đầu và kết thúc chu kỳ
+    // 3. Tính ngày bắt đầu và kết thúc chu kỳ - FIXED: Xử lý chuyển năm
     const ngayBatDauChuKy = new Date(namBatDau, thangBatDau - 1, ngayBatDau);
     
+    // Tính ngày kết thúc (tháng sau, cùng ngày)
     let ngayKetThucChuKy;
     if (thangBatDau === 12) {
+      // Nếu là tháng 12, chuyển sang tháng 1 năm sau
       ngayKetThucChuKy = new Date(namBatDau + 1, 0, ngayBatDau);
     } else {
+      // Các tháng khác
       ngayKetThucChuKy = new Date(namBatDau, thangBatDau, ngayBatDau);
     }
     
+    // Trừ đi 1 mili giây để không tính cả ngày bắt đầu của chu kỳ tiếp theo
+    ngayKetThucChuKy = new Date(ngayKetThucChuKy.getTime() - 1);
+    
     console.log('Chu kỳ lương:', {
-      batDau: ngayBatDauChuKy.toISOString().split('T')[0],
-      ketThuc: ngayKetThucChuKy.toISOString().split('T')[0]
+      batDau: ngayBatDauChuKy.toLocaleDateString('vi-VN'),
+      ketThuc: ngayKetThucChuKy.toLocaleDateString('vi-VN')
     });
     
     // 4. Lọc các ca làm việc trong chu kỳ
     const caLamViecTrongChuKy = caLamViecList.filter(ca => {
       const caDate = new Date(ca.ngay);
-      return caDate >= ngayBatDauChuKy && caDate < ngayKetThucChuKy;
+      return caDate >= ngayBatDauChuKy && caDate <= ngayKetThucChuKy;
     });
     
     console.log('Ca làm việc trong chu kỳ:', caLamViecTrongChuKy.length);
@@ -807,7 +1497,13 @@ async function tinhLuong() {
     // 7. Hiển thị kết quả
     displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViecTrongChuKy, ngayBatDauChuKy, ngayKetThucChuKy);
     
-    showToast('✅ Đã tính lương thành công!');
+    // 8. Kích hoạt hiệu ứng tiền rơi nếu có lương > 0
+    if (tongLuong > 0) {
+      createMoneyRain();
+      showToast('💰 Tính lương thành công! Tiền đang rơi!');
+    } else {
+      showToast('⚠️ Không có ca làm việc trong chu kỳ này!', 'warning');
+    }
     
   } catch (error) {
     console.error('Lỗi khi tính lương:', error);
@@ -818,13 +1514,14 @@ async function tinhLuong() {
   }
 }
 
-// Hàm hiển thị kết quả tính lương
+// Hàm hiển thị kết quả tính lương - FIXED: Hiển thị đúng thông tin
 function displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViec, startDate, endDate) {
   const statsContainer = document.getElementById('stats-container');
   
   // Tính tổng tiền thu được từ các ca làm việc
   const tongTienThu = caLamViec.reduce((sum, ca) => sum + ca.tongTien, 0);
   
+  // Cập nhật thống kê
   statsContainer.innerHTML = `
     <div class="stat-card">
       <div class="stat-value">${soNgayCong}</div>
@@ -840,22 +1537,33 @@ function displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViec, start
     </div>
   `;
   
-  document.getElementById('tong-luong').textContent = formatCurrency(tongLuong);
+  // Cập nhật phần tổng lương tạm tính ở đầu trang
+  const salaryPreview = document.getElementById('salary-preview');
+  const previewAmount = document.getElementById('preview-amount');
+  const previewTime = document.getElementById('preview-time');
   
-  const startStr = formatDate(startDate);
-  const endStr = formatDate(endDate);
+  previewAmount.textContent = formatCurrency(tongLuong);
+  
+  // FIXED: Định dạng ngày tháng đúng cách
+  const startStr = startDate.toLocaleDateString('vi-VN');
+  const endStr = endDate.toLocaleDateString('vi-VN');
+  previewTime.textContent = `Thời gian tính: Từ ${startStr} đến ${endStr}`;
+  salaryPreview.classList.add('show');
+  
+  // Cập nhật phần kết quả chi tiết bên dưới
+  document.getElementById('tong-luong').textContent = formatCurrency(tongLuong);
   document.getElementById('thoi-gian-tinh').textContent = `Thời gian tính: Từ ${startStr} đến ${endStr}`;
   
   const chiTietLuong = document.getElementById('chi-tiet-luong');
   const luongTheoNgay = luongThang / 30;
   
   chiTietLuong.innerHTML = `
-    <li>Lương tháng: ${formatCurrency(luongThang)}</li>
-    <li>Quy ước: 30 ngày công/tháng</li>
-    <li>Lương mỗi ngày: ${formatCurrency(luongTheoNgay)}</li>
-    <li>Số ca làm việc thực tế: ${soNgayCong} ca</li>
-    <li>Tổng tiền thu được: ${formatCurrency(tongTienThu)}</li>
-    <li><strong>Tổng lương tạm tính: ${formatCurrency(tongLuong)}</strong></li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Lương tháng: ${formatCurrency(luongThang)}</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Quy ước: 30 ngày công/tháng</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Lương mỗi ngày: ${formatCurrency(luongTheoNgay)}</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ca làm việc thực tế: ${soNgayCong} ca</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Tổng tiền thu được: ${formatCurrency(tongTienThu)}</li>
+    <li style="margin-bottom: 8px; font-weight: bold; font-family: var(--font-family);">Tổng lương tạm tính: ${formatCurrency(tongLuong)}</li>
   `;
   
   document.getElementById('salary-result').style.display = 'block';
@@ -870,22 +1578,24 @@ async function copySalaryToClipboard() {
   const luongThang = document.getElementById('luong-thang').value;
   const tongLuong = document.getElementById('tong-luong').textContent;
   const thoiGianTinh = document.getElementById('thoi-gian-tinh').textContent;
+  
+  // Tính số ca trong chu kỳ hiện tại
+  const ngayBatDau = parseInt(document.getElementById('ngay-bat-dau').value);
+  const thangBatDau = parseInt(document.getElementById('thang-bat-dau').value);
+  const namBatDau = parseInt(document.getElementById('nam-bat-dau').value);
+  
+  const ngayBatDauChuKy = new Date(namBatDau, thangBatDau - 1, ngayBatDau);
+  let ngayKetThucChuKy;
+  if (thangBatDau === 12) {
+    ngayKetThucChuKy = new Date(namBatDau + 1, 0, ngayBatDau);
+  } else {
+    ngayKetThucChuKy = new Date(namBatDau, thangBatDau, ngayBatDau);
+  }
+  ngayKetThucChuKy = new Date(ngayKetThucChuKy.getTime() - 1);
+  
   const soCa = caLamViecList.filter(ca => {
-    // Lọc các ca trong chu kỳ hiện tại
-    const ngayBatDau = parseInt(document.getElementById('ngay-bat-dau').value);
-    const thangBatDau = parseInt(document.getElementById('thang-bat-dau').value);
-    const namBatDau = parseInt(document.getElementById('nam-bat-dau').value);
-    
-    const ngayBatDauChuKy = new Date(namBatDau, thangBatDau - 1, ngayBatDau);
-    let ngayKetThucChuKy;
-    if (thangBatDau === 12) {
-      ngayKetThucChuKy = new Date(namBatDau + 1, 0, ngayBatDau);
-    } else {
-      ngayKetThucChuKy = new Date(namBatDau, thangBatDau, ngayBatDau);
-    }
-    
     const caDate = new Date(ca.ngay);
-    return caDate >= ngayBatDauChuKy && caDate < ngayKetThucChuKy;
+    return caDate >= ngayBatDauChuKy && caDate <= ngayKetThucChuKy;
   }).length;
   
   const content = `
@@ -908,13 +1618,18 @@ Kết quả tính từ ứng dụng Quản lý điểm gas
 
 // Hàm reset form
 function resetForm() {
-  document.getElementById('luong-thang').value = '5000000';
+  document.getElementById('luong-thang').value = '5500000';
   document.getElementById('ngay-bat-dau').value = '5';
   populateMonthYearSelectors();
   
+  // Ẩn phần tổng lương tạm tính ở đầu
+  document.getElementById('salary-preview').classList.remove('show');
+  
+  // Ẩn phần kết quả chi tiết
   document.getElementById('salary-result').style.display = 'none';
   document.getElementById('empty-state').style.display = 'block';
   
+  // Reset bảng công
   const bangCongBody = document.getElementById('bang-cong-body');
   bangCongBody.innerHTML = '';
   document.getElementById('empty-cong').style.display = 'block';
@@ -928,9 +1643,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // 1. Điền tháng/năm
   populateMonthYearSelectors();
   
-  // 2. Tải dữ liệu ngay khi trang load
+  // 2. Tự động điền chu kỳ gần nhất (từ 05 tháng trước đến 05 tháng này)
+  autoFillLastCycle();
+  
+  // 3. Tải dữ liệu ngay khi trang load
   taiDuLieu().then(() => {
-    // 3. Tự động tính lương sau khi có dữ liệu (nếu có)
+    // 4. Tự động tính lương sau khi có dữ liệu (nếu có)
     if (caLamViecList.length > 0) {
       setTimeout(() => {
         tinhLuong();
@@ -938,7 +1656,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // 4. Thêm sự kiện cho ô nhập lương
+  // 5. Thêm sự kiện cho ô nhập lương
   document.getElementById('luong-thang').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
       tinhLuong();
