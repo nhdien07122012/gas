@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tính công và lương</title>
+
+<!-- Tải font Roboto từ Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="apple-touch-icon-precomposed" href="icon.png">
@@ -11,6 +17,47 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Tính công lương">
 <style>
+  /* ========== ROBOTO FONT LOADING ========== */
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmSU5fCRc4EsA.woff2) format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxK.woff2) format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmEU9fCRc4EsA.woff2) format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfCRc4EsA.woff2) format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfCRc4EsA.woff2) format('woff2');
+  }
+  
   /* ========== CSS VARIABLES FOR LIGHT MODE ========== */
   :root {
     /* Màu sắc cơ bản */
@@ -69,6 +116,10 @@
     --opacity-disabled: 0.6;
     --opacity-hover: 0.9;
     --opacity-active: 0.8;
+    
+    /* Font chữ */
+    --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --font-family-mono: 'Roboto Mono', 'Courier New', monospace;
   }
   
   /* ========== DARK MODE VARIABLES ========== */
@@ -145,10 +196,11 @@
   html {
     font-size: 16px;
     transition: background-color 0.5s ease;
+    font-family: var(--font-family);
   }
   
   body {
-    font-family: 'Segoe UI', 'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--font-family);
     background-color: var(--bg-secondary);
     color: var(--text-primary);
     line-height: 1.6;
@@ -157,6 +209,7 @@
     transition: var(--transition-slow);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
   }
   
   .container {
@@ -186,11 +239,15 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
+    font-weight: 600;
+    font-family: var(--font-family);
   }
   
   header p {
     opacity: 0.9;
     font-size: 1rem;
+    font-weight: 400;
+    font-family: var(--font-family);
   }
   
   .card {
@@ -213,6 +270,7 @@
     border-left: 5px solid var(--secondary);
     display: none;
     border: 1px solid var(--border-color);
+    font-family: var(--font-family);
   }
   
   .salary-preview.show {
@@ -225,6 +283,7 @@
     color: var(--text-secondary);
     margin-bottom: 10px;
     font-weight: 600;
+    font-family: var(--font-family);
   }
   
   .preview-amount {
@@ -233,11 +292,14 @@
     color: var(--secondary);
     margin: 10px 0;
     text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-family: var(--font-family);
   }
   
   .preview-time {
     font-size: 0.9rem;
     color: var(--text-secondary);
+    font-family: var(--font-family);
+    font-weight: 400;
   }
   
   .form-group {
@@ -249,6 +311,7 @@
     margin-bottom: 8px;
     font-weight: 600;
     color: var(--text-primary);
+    font-family: var(--font-family);
   }
   
   input, select {
@@ -260,6 +323,8 @@
     border-radius: var(--radius-md);
     font-size: 1rem;
     transition: var(--transition);
+    font-family: var(--font-family);
+    font-weight: 400;
   }
   
   input:focus, select:focus {
@@ -271,6 +336,7 @@
   
   input::placeholder {
     color: var(--text-muted);
+    font-family: var(--font-family);
   }
   
   .button-group {
@@ -292,6 +358,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    font-family: var(--font-family);
   }
   
   .btn-primary {
@@ -376,12 +443,15 @@
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--primary);
+    font-family: var(--font-family);
   }
   
   .stat-label {
     font-size: 0.9rem;
     color: var(--text-secondary);
     margin-top: 5px;
+    font-family: var(--font-family);
+    font-weight: 400;
   }
   
   .table-container {
@@ -405,12 +475,15 @@
     font-weight: 600;
     color: var(--text-primary);
     border-bottom: 2px solid var(--border-color);
+    font-family: var(--font-family);
   }
   
   td {
     padding: 14px 12px;
     border-bottom: 1px solid var(--border-color);
     color: var(--text-primary);
+    font-family: var(--font-family);
+    font-weight: 400;
   }
   
   tr:last-child td {
@@ -425,10 +498,12 @@
     text-align: center;
     padding: 40px 20px;
     color: var(--text-secondary);
+    font-family: var(--font-family);
   }
   
   .empty-state p {
     margin-top: 10px;
+    font-weight: 400;
   }
   
   .salary-summary {
@@ -447,6 +522,7 @@
     color: var(--secondary);
     margin: 15px 0;
     text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-family: var(--font-family);
   }
   
   .salary-breakdown {
@@ -456,6 +532,7 @@
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
     text-align: left;
+    font-family: var(--font-family);
   }
   
   .salary-breakdown ul {
@@ -466,6 +543,7 @@
   .salary-breakdown li {
     margin-bottom: 8px;
     color: var(--text-primary);
+    font-family: var(--font-family);
   }
   
   /* HIỆU ỨNG TIỀN/VÀNG RƠI */
@@ -487,6 +565,7 @@
     pointer-events: none;
     opacity: 0;
     animation: moneyFall linear forwards;
+    font-family: var(--font-family);
   }
   
   @keyframes moneyFall {
@@ -526,6 +605,8 @@
     text-align: center;
     justify-content: center;
     border: 1px solid var(--primary-dark);
+    font-family: var(--font-family);
+    font-weight: 500;
   }
 
   .toast.show {
@@ -723,6 +804,7 @@
     option {
       background-color: var(--bg-modal);
       color: var(--text-primary);
+      font-family: var(--font-family);
     }
   }
   
@@ -754,6 +836,36 @@
       display: none !important;
     }
   }
+  
+  /* ========== FONT WEIGHT CONSISTENCY ========== */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    font-family: var(--font-family);
+  }
+  
+  strong, b {
+    font-weight: 700;
+    font-family: var(--font-family);
+  }
+  
+  /* ========== TYPOGRAPHY ENHANCEMENTS ========== */
+  .text-small {
+    font-size: 0.875rem;
+    font-weight: 400;
+    font-family: var(--font-family);
+  }
+  
+  .text-medium {
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: var(--font-family);
+  }
+  
+  .text-large {
+    font-size: 1.125rem;
+    font-weight: 600;
+    font-family: var(--font-family);
+  }
 </style>
 </head>
 <body>
@@ -766,7 +878,7 @@
 
   <div class="container">
     <header>
-      <a href="index.html" style="position: absolute; left: 30px; top: 30px; color: var(--text-inverse); text-decoration: none; font-size: 1.2rem;">←</a>
+      <a href="index.html" style="position: absolute; left: 30px; top: 30px; color: var(--text-inverse); text-decoration: none; font-size: 1.2rem; font-family: var(--font-family);">←</a>
       <h1>💰 Tính công và lương</h1>
       <p>Tính lương dựa trên số ca làm việc thực tế</p>
     </header>
@@ -803,7 +915,7 @@
             <!-- Năm sẽ được thêm bằng JavaScript -->
           </select>
         </div>
-        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 5px;">
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 5px; font-family: var(--font-family);">
           <i>Lương được tính từ ngày X tháng này đến ngày X tháng sau (30 ngày)</i>
         </p>
       </div>
@@ -883,7 +995,7 @@
     </div>
   </div>
 
-  <a href="index.html" style="position:fixed;right:30px;bottom:30px;z-index:999;background:var(--primary);color:var(--text-inverse);border:none;border-radius:var(--radius-circle);width:56px;height:56px;box-shadow:var(--shadow-lg);font-size:2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition); text-decoration: none; border: 2px solid var(--primary-dark);">
+  <a href="index.html" style="position:fixed;right:30px;bottom:30px;z-index:999;background:var(--primary);color:var(--text-inverse);border:none;border-radius:var(--radius-circle);width:56px;height:56px;box-shadow:var(--shadow-lg);font-size:2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition); text-decoration: none; border: 2px solid var(--primary-dark); font-family: var(--font-family);">
     ←
   </a>
 
@@ -1304,15 +1416,15 @@ function displayWorkingDays(caLamViec) {
     tr.innerHTML = `
       <td>${index + 1}</td>
       <td>
-        <div style="font-weight: 600; color: var(--text-primary);">${day}-${month}-${year}</div>
-        <div style="font-size: 0.8rem; color: var(--text-secondary);">Ca ${day}-${month}</div>
+        <div style="font-weight: 600; color: var(--text-primary); font-family: var(--font-family);">${day}-${month}-${year}</div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-family);">Ca ${day}-${month}</div>
       </td>
-      <td style="color: var(--text-primary);">${ca.diemGas.length}</td>
-      <td style="color: var(--text-primary);">${formatCurrency(ca.tongTien)}</td>
+      <td style="color: var(--text-primary); font-family: var(--font-family);">${ca.diemGas.length}</td>
+      <td style="color: var(--text-primary); font-family: var(--font-family);">${formatCurrency(ca.tongTien)}</td>
       <td>
         <div style="display: flex; flex-direction: column; gap: 2px;">
-          <span style="color: var(--secondary); font-size: 0.85rem;">✅ Đã nộp: ${ca.daNopCount}</span>
-          <span style="color: var(--warning); font-size: 0.85rem;">⏳ Chưa nộp: ${ca.chuaNopCount}</span>
+          <span style="color: var(--secondary); font-size: 0.85rem; font-family: var(--font-family);">✅ Đã nộp: ${ca.daNopCount}</span>
+          <span style="color: var(--warning); font-size: 0.85rem; font-family: var(--font-family);">⏳ Chưa nộp: ${ca.chuaNopCount}</span>
         </div>
       </td>
     `;
@@ -1446,12 +1558,12 @@ function displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViec, start
   const luongTheoNgay = luongThang / 30;
   
   chiTietLuong.innerHTML = `
-    <li style="margin-bottom: 8px;">Lương tháng: ${formatCurrency(luongThang)}</li>
-    <li style="margin-bottom: 8px;">Quy ước: 30 ngày công/tháng</li>
-    <li style="margin-bottom: 8px;">Lương mỗi ngày: ${formatCurrency(luongTheoNgay)}</li>
-    <li style="margin-bottom: 8px;">Số ca làm việc thực tế: ${soNgayCong} ca</li>
-    <li style="margin-bottom: 8px;">Tổng tiền thu được: ${formatCurrency(tongTienThu)}</li>
-    <li style="margin-bottom: 8px; font-weight: bold;">Tổng lương tạm tính: ${formatCurrency(tongLuong)}</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Lương tháng: ${formatCurrency(luongThang)}</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Quy ước: 30 ngày công/tháng</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Lương mỗi ngày: ${formatCurrency(luongTheoNgay)}</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ca làm việc thực tế: ${soNgayCong} ca</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Tổng tiền thu được: ${formatCurrency(tongTienThu)}</li>
+    <li style="margin-bottom: 8px; font-weight: bold; font-family: var(--font-family);">Tổng lương tạm tính: ${formatCurrency(tongLuong)}</li>
   `;
   
   document.getElementById('salary-result').style.display = 'block';
