@@ -4,12 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quản lý tiền thu điểm gas theo ca</title>
-
-<!-- Tải font Roboto từ Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
 <!-- Thêm các thẻ icon cho web và màn hình chính iPhone -->
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
@@ -19,48 +13,6 @@
 <meta name="apple-mobile-web-app-title" content="Quản lý điểm gas">
 
 <style>
-  /* ========== ROBOTO FONT LOADING ========== */
-  /* Tải font Roboto cục bộ để đảm bảo hiển thị nhanh */
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 300;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmSU5fCRc4EsA.woff2) format('woff2');
-  }
-  
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxK.woff2) format('woff2');
-  }
-  
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmEU9fCRc4EsA.woff2) format('woff2');
-  }
-  
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 600;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfCRc4EsA.woff2) format('woff2');
-  }
-  
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfCRc4EsA.woff2) format('woff2');
-  }
-  
   /* ========== CSS VARIABLES FOR LIGHT MODE ========== */
   :root {
     /* Màu sắc cơ bản */
@@ -127,10 +79,6 @@
     --opacity-disabled: 0.6;
     --opacity-hover: 0.9;
     --opacity-active: 0.8;
-    
-    /* Font chữ */
-    --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-    --font-family-mono: 'Roboto Mono', 'Courier New', monospace;
   }
   
   /* ========== DARK MODE VARIABLES ========== */
@@ -232,11 +180,10 @@
   html {
     font-size: 16px;
     transition: background-color 0.5s ease;
-    font-family: var(--font-family);
   }
   
   body {
-    font-family: var(--font-family);
+    font-family: 'Segoe UI', 'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-secondary);
     color: var(--text-primary);
     line-height: 1.6;
@@ -245,7 +192,6 @@
     transition: var(--transition-slow);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-weight: 400;
   }
   
   /* Container chính với bo góc lớn */
@@ -294,7 +240,6 @@
   
   .sidebar-header h2 {
     font-size: 1.3rem;
-    font-weight: 600;
   }
   
   .close-sidebar {
@@ -306,8 +251,6 @@
     padding: 0;
     width: auto;
     transition: var(--transition-fast);
-    font-family: var(--font-family);
-    font-weight: 500;
   }
   
   .close-sidebar:hover {
@@ -337,7 +280,6 @@
     text-align: left;
     font-size: 1rem;
     font-weight: 500;
-    font-family: var(--font-family);
   }
 
   .sidebar-item:hover {
@@ -361,7 +303,6 @@
     color: var(--text-secondary);
     text-align: center;
     border-radius: 0 0 var(--radius-lg) 0;
-    font-family: var(--font-family);
   }
   
   .overlay {
@@ -390,7 +331,6 @@
     margin-right: 10px;
     transition: var(--transition-fast);
     border-radius: var(--radius-sm);
-    font-family: var(--font-family);
   }
   
   .menu-toggle:hover {
@@ -414,13 +354,11 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    font-weight: 600;
   }
   
   header p {
     opacity: 0.9;
     font-size: 1rem;
-    font-weight: 400;
   }
   
   .shift-info {
@@ -443,7 +381,6 @@
   .shift-info .shift-time {
     font-size: 0.9rem;
     opacity: 0.9;
-    font-weight: 400;
   }
   
   /* ========== CARD STYLES ========== */
@@ -467,7 +404,6 @@
     margin-bottom: 8px;
     font-weight: 600;
     color: var(--text-primary);
-    font-family: var(--font-family);
   }
   
   input, select, textarea {
@@ -479,8 +415,6 @@
     border-radius: var(--radius-md);
     font-size: 1rem;
     transition: var(--transition);
-    font-family: var(--font-family);
-    font-weight: 400;
   }
   
   input:focus, select:focus, textarea:focus {
@@ -492,7 +426,6 @@
   
   input::placeholder, textarea::placeholder {
     color: var(--text-muted);
-    font-family: var(--font-family);
   }
   
   /* ========== BUTTON STYLES ========== */
@@ -515,7 +448,6 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    font-family: var(--font-family);
   }
   
   .btn-primary {
@@ -580,7 +512,6 @@
     padding: 10px 16px;
     font-size: 0.85rem;
     border-radius: var(--radius-sm);
-    font-weight: 500;
   }
   
   /* ========== TABLE STYLES ========== */
@@ -605,15 +536,12 @@
     font-weight: 600;
     color: var(--text-primary);
     border-bottom: 2px solid var(--border-color);
-    font-family: var(--font-family);
   }
   
   td {
     padding: 14px 12px;
     border-bottom: 1px solid var(--border-color);
     color: var(--text-primary);
-    font-family: var(--font-family);
-    font-weight: 400;
   }
   
   tr:last-child td {
@@ -629,12 +557,10 @@
     text-align: center;
     padding: 40px 20px;
     color: var(--text-secondary);
-    font-family: var(--font-family);
   }
   
   .empty-state p {
     margin-top: 10px;
-    font-weight: 400;
   }
   
   /* ========== STAT CARDS ========== */
@@ -667,15 +593,12 @@
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--primary);
-    font-family: var(--font-family);
   }
   
   .stat-label {
     font-size: 0.9rem;
     color: var(--text-secondary);
     margin-top: 5px;
-    font-family: var(--font-family);
-    font-weight: 400;
   }
   
   /* ========== FILTER GROUP ========== */
@@ -691,7 +614,6 @@
     min-width: 200px;
     border-radius: var(--radius-md);
     padding: 12px 16px;
-    font-family: var(--font-family);
   }
   
   /* ========== MODAL STYLES ========== */
@@ -739,8 +661,6 @@
   .modal-header h2 {
     font-size: 1.4rem;
     color: var(--text-primary);
-    font-weight: 600;
-    font-family: var(--font-family);
   }
   
   .modal-body {
@@ -749,7 +669,6 @@
     overflow-y: auto;
     overflow-x: hidden;
     max-height: calc(85vh - 120px);
-    font-family: var(--font-family);
   }
   
   .modal-footer {
@@ -790,7 +709,6 @@
     padding: 0;
     width: auto;
     transition: var(--transition-fast);
-    font-family: var(--font-family);
   }
   
   .close-modal:hover {
@@ -1044,7 +962,6 @@
     font-size: 0.8rem;
     font-weight: 600;
     border: 1px solid transparent;
-    font-family: var(--font-family);
   }
   
   .badge-primary {
@@ -1127,8 +1044,6 @@
     text-align: center;
     justify-content: center;
     border: 1px solid var(--primary-dark);
-    font-family: var(--font-family);
-    font-weight: 500;
   }
 
   .toast.show {
@@ -1188,7 +1103,6 @@
     padding: 12px 15px;
     border-bottom: 1px solid var(--border-color);
     transition: background-color 0.2s ease;
-    font-family: var(--font-family);
   }
   
   .quick-view-item:first-child {
@@ -1218,7 +1132,6 @@
     font-size: 0.85rem;
     color: var(--text-secondary);
     margin-top: 3px;
-    font-weight: 400;
   }
   
   .quick-view-item-amount {
@@ -1235,7 +1148,6 @@
     text-align: center;
     color: var(--text-primary);
     border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-    font-family: var(--font-family);
   }
   
   /* ========== SPECIAL INPUT STYLES ========== */
@@ -1274,7 +1186,6 @@
   
   #report-details {
     line-height: 1.6;
-    font-family: var(--font-family);
   }
   
   .recipient-row {
@@ -1320,7 +1231,6 @@
     border-radius: var(--radius-sm);
     transition: var(--transition);
     border: 1px solid var(--border-color);
-    font-family: var(--font-family);
   }
   
   .expense-item:hover {
@@ -1355,7 +1265,6 @@
     padding: 5px;
     border-radius: var(--radius-xs);
     transition: var(--transition-fast);
-    font-family: var(--font-family);
   }
   
   .expense-item-delete:hover {
@@ -1372,7 +1281,6 @@
     text-align: center;
     color: var(--danger);
     border: 1px solid var(--border-color);
-    font-family: var(--font-family);
   }
   
   /* ========== SCROLLBAR STYLING ========== */
@@ -1422,8 +1330,6 @@
     cursor: pointer;
     transition: var(--transition);
     border: 2px solid var(--primary-dark);
-    font-family: var(--font-family);
-    font-weight: 600;
   }
   
   #scrollTopBtn:hover {
@@ -1592,7 +1498,6 @@
       background: white !important;
       color: black !important;
       padding: 0;
-      font-family: 'Roboto', Arial, sans-serif !important;
     }
     
     .container {
@@ -1626,31 +1531,6 @@
       color: black !important;
       background: white !important;
     }
-  }
-  
-  /* ========== FONT WEIGHT CONSISTENCY ========== */
-  h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
-  }
-  
-  strong, b {
-    font-weight: 700;
-  }
-  
-  /* ========== TYPOGRAPHY ENHANCEMENTS ========== */
-  .text-small {
-    font-size: 0.875rem;
-    font-weight: 400;
-  }
-  
-  .text-medium {
-    font-size: 1rem;
-    font-weight: 500;
-  }
-  
-  .text-large {
-    font-size: 1.125rem;
-    font-weight: 600;
   }
 </style>
 
