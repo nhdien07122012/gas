@@ -425,6 +425,7 @@
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.2);
+    transform: translateY(-1px);
   }
   
   .amount-cell {
@@ -569,6 +570,11 @@
     border-color: var(--danger-dark);
   }
   
+  .toast.info {
+    background: var(--info);
+    border-color: var(--primary);
+  }
+  
   /* ========== SCROLLBAR STYLING ========== */
   ::-webkit-scrollbar {
     width: 10px;
@@ -594,6 +600,33 @@
   * {
     scrollbar-width: thin;
     scrollbar-color: var(--border-dark) var(--bg-tertiary);
+  }
+  
+  /* Input focus animation */
+  @keyframes pulseBorder {
+    0% { box-shadow: 0 0 0 0 rgba(44, 128, 255, 0.7); }
+    70% { box-shadow: 0 0 0 6px rgba(44, 128, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(44, 128, 255, 0); }
+  }
+  
+  .bill-input.navigation-highlight {
+    animation: pulseBorder 1s ease;
+  }
+  
+  /* Keyboard shortcuts hint */
+  .keyboard-hint {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 5px;
+    text-align: center;
+    font-family: var(--font-family);
+    display: none;
+  }
+  
+  @media (min-width: 768px) {
+    .keyboard-hint {
+      display: block;
+    }
   }
   
   /* Responsive */
@@ -837,11 +870,18 @@
             
             <h3 style="margin: 20px 0 15px 0; color: var(--text-primary); font-family: var(--font-family); font-weight: 600;">Nhập số lượng tờ tiền:</h3>
             
+            <p class="keyboard-hint">💡 <strong>Mẹo:</strong> Nhấn <kbd>Enter</kbd> để chuyển ô • <kbd>Ctrl+Enter</kbd> để tính toán • <kbd>ESC</kbd> về ô đầu</p>
+            
             <table class="denominations-table">
                 <thead>
                     <tr>
                         <th style="font-family: var(--font-family);">Mệnh giá</th>
-                        <th style="font-family: var(--font-family);">Số tờ</th>
+                        <th style="font-family: var(--font-family);">
+                            Số tờ 
+                            <span style="font-weight: normal; font-size: 0.85rem; color: var(--text-secondary); display: block;">
+                                (Enter để chuyển ô)
+                            </span>
+                        </th>
                         <th style="font-family: var(--font-family);">Thành tiền</th>
                     </tr>
                 </thead>
@@ -890,6 +930,10 @@
         let selectedShiftRevenue = 0;
         let currentCalculations = [];
         
+        // Biến cho tính năng navigation bằng Enter
+        let currentInputIndex = 0;
+        let inputElements = [];
+        
         // Hàm định dạng tiền tệ
         function formatCurrency(amount) {
             return new Intl.NumberFormat('vi-VN', {
@@ -909,6 +953,163 @@
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
+        }
+        
+        // Hàm khởi tạo navigation bằng phím Enter
+        function initializeEnterNavigation() {
+            // Lấy tất cả các ô input
+            inputElements = Array.from(document.querySelectorAll('.bill-input'));
+            
+            if (inputElements.length === 0) return;
+            
+            // Sắp xếp theo thứ tự trong DOM (từ trên xuống)
+            inputElements.sort((a, b) => {
+                const rectA = a.getBoundingClientRect();
+                const rectB = b.getBoundingClientRect();
+                return rectA.top - rectB.top || rectA.left - rectB.left;
+            });
+            
+            // Thêm sự kiện keydown cho mỗi input
+            inputElements.forEach((input, index) => {
+                // Xóa event listener cũ nếu có
+                input.removeEventListener('keydown', handleEnterNavigation);
+                
+                // Thêm event listener mới
+                input.addEventListener('keydown', handleEnterNavigation);
+                
+                // Thêm attribute để theo dõi
+                input.dataset.inputIndex = index;
+                
+                // Thêm sự kiện focus để cập nhật chỉ số hiện tại
+                input.addEventListener('focus', function() {
+                    currentInputIndex = index;
+                    highlightInput(input);
+                });
+                
+                // Thêm sự kiện blur để xóa highlight
+                input.addEventListener('blur', function() {
+                    setTimeout(() => {
+                        if (document.activeElement !== input) {
+                            input.style.boxShadow = '';
+                            input.style.borderColor = '';
+                        }
+                    }, 100);
+                });
+            });
+            
+            console.log(`Đã khởi tạo navigation cho ${inputElements.length} ô input`);
+        }
+        
+        // Hàm xử lý phím Enter
+        function handleEnterNavigation(event) {
+            // Chỉ xử lý phím Enter (keyCode 13)
+            if (event.key === 'Enter' || event.keyCode === 13) {
+                event.preventDefault(); // Ngăn hành động mặc định
+                
+                // Lấy chỉ số hiện tại
+                const currentIndex = parseInt(this.dataset.inputIndex) || currentInputIndex;
+                
+                // Tính chỉ số tiếp theo
+                let nextIndex = currentIndex + 1;
+                
+                // Nếu là ô cuối cùng, quay lại ô đầu tiên
+                if (nextIndex >= inputElements.length) {
+                    nextIndex = 0;
+                }
+                
+                // Focus vào ô tiếp theo
+                if (inputElements[nextIndex]) {
+                    inputElements[nextIndex].focus();
+                    
+                    // Chọn toàn bộ text trong input để dễ nhập
+                    setTimeout(() => {
+                        inputElements[nextIndex].select();
+                    }, 10);
+                    
+                    // Cập nhật chỉ số hiện tại
+                    currentInputIndex = nextIndex;
+                }
+            }
+        }
+        
+        // Hàm highlight input đang được focus
+        function highlightInput(input) {
+            // Xóa highlight cũ
+            inputElements.forEach(el => {
+                el.classList.remove('navigation-highlight');
+            });
+            
+            // Thêm highlight mới
+            input.classList.add('navigation-highlight');
+        }
+        
+        // Hàm focus vào ô đầu tiên
+        function focusFirstInput() {
+            if (inputElements.length > 0) {
+                inputElements[0].focus();
+                inputElements[0].select();
+                currentInputIndex = 0;
+                highlightInput(inputElements[0]);
+            }
+        }
+        
+        // Hàm focus vào ô theo mệnh giá
+        function focusByDenomination(denomValue) {
+            const inputId = `denom-${denomValue}`;
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.focus();
+                input.select();
+                const index = inputElements.findIndex(el => el.id === inputId);
+                if (index !== -1) currentInputIndex = index;
+                highlightInput(input);
+            }
+        }
+        
+        // Hàm xử lý phím tắt toàn trang
+        function setupGlobalKeyboardShortcuts() {
+            document.addEventListener('keydown', function(event) {
+                // Ctrl + Enter: Tính toán
+                if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+                    event.preventDefault();
+                    calculateTotal(true);
+                    showToast('✅ Đã tính toán (Ctrl+Enter)', 'success');
+                }
+                
+                // ESC: Reset focus về ô đầu tiên
+                if (event.key === 'Escape') {
+                    event.preventDefault();
+                    focusFirstInput();
+                    showToast('📍 Đã chuyển về ô đầu tiên (ESC)', 'info');
+                }
+                
+                // F2: Reset form
+                if (event.key === 'F2') {
+                    event.preventDefault();
+                    resetForm();
+                }
+                
+                // Ctrl + S: Lưu kết quả
+                if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+                    event.preventDefault();
+                    saveCount();
+                }
+                
+                // Ctrl + C: Sao chép (chỉ khi không focus vào input)
+                if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
+                    const activeElement = document.activeElement;
+                    if (!activeElement.classList.contains('bill-input')) {
+                        event.preventDefault();
+                        copyToClipboard();
+                    }
+                }
+                
+                // Ctrl + R: Nhập lại
+                if ((event.ctrlKey || event.metaKey) && event.key === 'r') {
+                    event.preventDefault();
+                    resetForm();
+                }
+            });
         }
         
         // Hàm tạo bảng nhập liệu
@@ -940,12 +1141,13 @@
                             min="0"
                             oninput="calculateSingleRow(${denom.value})"
                             onfocus="this.select()"
+                            title="Nhập số tờ. Enter để chuyển ô"
                         >
                         <div class="quick-controls">
-                            <button class="quick-btn" onclick="quickAdd(${denom.value}, 1)">+1</button>
-                            <button class="quick-btn" onclick="quickAdd(${denom.value}, 5)">+5</button>
-                            <button class="quick-btn" onclick="quickAdd(${denom.value}, 10)">+10</button>
-                            <button class="quick-btn" onclick="quickAdd(${denom.value}, -1)">-1</button>
+                            <button class="quick-btn" onclick="quickAdd(${denom.value}, 1); focusByDenomination(${denom.value})">+1</button>
+                            <button class="quick-btn" onclick="quickAdd(${denom.value}, 5); focusByDenomination(${denom.value})">+5</button>
+                            <button class="quick-btn" onclick="quickAdd(${denom.value}, 10); focusByDenomination(${denom.value})">+10</button>
+                            <button class="quick-btn" onclick="quickAdd(${denom.value}, -1); focusByDenomination(${denom.value})">-1</button>
                         </div>
                     </td>
                     <td class="amount-cell" id="amount-${denom.value}">
@@ -954,6 +1156,11 @@
                 `;
                 tbody.appendChild(row);
             });
+            
+            // Khởi tạo navigation sau khi tạo bảng
+            setTimeout(() => {
+                initializeEnterNavigation();
+            }, 100);
         }
         
         // Hàm thêm nhanh số tờ
@@ -966,6 +1173,11 @@
             
             input.value = newValue;
             calculateSingleRow(denomValue);
+            
+            // Giữ focus và highlight input
+            setTimeout(() => {
+                focusByDenomination(denomValue);
+            }, 10);
         }
         
         // Hàm tính toán một dòng
@@ -979,6 +1191,16 @@
             
             // Tự động tính tổng khi nhập (không cuộn trang)
             setTimeout(() => calculateTotal(false), 100);
+            
+            // Giữ focus nếu đang nhập
+            if (document.activeElement === input) {
+                // Chỉ select text nếu đang ở cuối chuỗi
+                setTimeout(() => {
+                    if (document.activeElement === input) {
+                        input.select();
+                    }
+                }, 50);
+            }
         }
         
         // Hàm tính tổng tiền (với tùy chọn cuộn trang)
@@ -1064,10 +1286,9 @@
             document.getElementById('result-header').style.display = 'none';
             showToast('✅ Đã xóa tất cả số liệu!');
             
-            // Tự động focus vào ô nhập đầu tiên sau khi reset
+            // Focus vào ô đầu tiên sau khi reset
             setTimeout(() => {
-                const firstInput = document.getElementById('denom-500000');
-                if (firstInput) firstInput.focus();
+                focusFirstInput();
             }, 300);
         }
         
@@ -1207,6 +1428,17 @@
                     }
                 });
                 
+                // Tự động chọn ca đầu tiên nếu có
+                if (shifts.length > 0) {
+                    select.value = shifts[0][0];
+                    selectedShiftRevenue = shifts[0][1];
+                    
+                    // Load kết quả đã lưu
+                    setTimeout(() => {
+                        loadSavedCount();
+                    }, 500);
+                }
+                
             } catch (error) {
                 console.log('Không thể tải dữ liệu từ server:', error);
                 createSampleShifts();
@@ -1237,6 +1469,12 @@
                 option.dataset.revenue = sampleRevenue;
                 select.appendChild(option);
             }
+            
+            // Tự động chọn ca đầu tiên
+            if (select.options.length > 1) {
+                select.selectedIndex = 1;
+                selectedShiftRevenue = parseInt(select.options[1].dataset.revenue) || 0;
+            }
         }
         
         // Hàm load kết quả đã lưu
@@ -1263,17 +1501,39 @@
             }
         }
         
+        // Hàm hiển thị hướng dẫn phím tắt
+        function showKeyboardShortcutsHelp() {
+            const shortcuts = `
+📋 **Phím tắt nhanh:**
+• Enter: Chuyển sang ô tiếp theo
+• Ctrl+Enter: Tính toán tổng
+• ESC: Về ô đầu tiên
+• F2: Xóa tất cả
+• Ctrl+S: Lưu kết quả
+• Ctrl+C: Sao chép kết quả
+• Ctrl+R: Nhập lại form
+            `;
+            
+            console.log(shortcuts);
+        }
+        
         // Khởi tạo trang
         document.addEventListener('DOMContentLoaded', function() {
             console.log('=== TRANG ĐẾM TIỀN ĐANG KHỞI ĐỘNG ===');
             createDenominationTable();
             loadShiftsAndRevenue();
+            setupGlobalKeyboardShortcuts();
+            showKeyboardShortcutsHelp();
             
-            // Tự động focus vào ô nhập đầu tiên
+            // Tự động focus vào ô đầu tiên sau khi load
             setTimeout(() => {
-                const firstInput = document.getElementById('denom-500000');
-                if (firstInput) firstInput.focus();
-            }, 500);
+                focusFirstInput();
+                
+                // Hiển thị hint cho người dùng
+                setTimeout(() => {
+                    showToast('💡 Mẹo: Nhấn Enter để chuyển ô, Ctrl+Enter để tính toán', 'info');
+                }, 1000);
+            }, 800);
         });
     </script>
 </body>
