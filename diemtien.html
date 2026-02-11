@@ -955,6 +955,31 @@
             }, 3000);
         }
         
+        // Hàm validate số - chỉ cho phép nhập số
+        function validateNumberInput(input) {
+            // Lấy giá trị hiện tại
+            let value = input.value;
+            
+            // Xóa tất cả ký tự không phải số
+            value = value.replace(/[^\d]/g, '');
+            
+            // Giới hạn tối đa 6 chữ số (999,999 tờ)
+            if (value.length > 6) {
+                value = value.substring(0, 6);
+            }
+            
+            // Xóa số 0 ở đầu (trừ khi là số 0 duy nhất)
+            if (value.length > 1 && value.startsWith('0')) {
+                value = value.replace(/^0+/, '');
+            }
+            
+            // Cập nhật giá trị
+            input.value = value;
+            
+            // Trả về giá trị để tính toán
+            return value;
+        }
+        
         // Hàm khởi tạo navigation bằng phím Enter
         function initializeEnterNavigation() {
             // Lấy tất cả các ô input
@@ -996,8 +1021,6 @@
                     }, 100);
                 });
             });
-            
-            console.log(`Đã khởi tạo navigation cho ${inputElements.length} ô input`);
         }
         
         // Hàm xử lý phím Enter
@@ -1066,9 +1089,23 @@
             }
         }
         
-        // Hàm xử lý phím tắt toàn trang
+        // Hàm xử lý phím tắt toàn trang - ĐÃ ĐƠN GIẢN HÓA
         function setupGlobalKeyboardShortcuts() {
             document.addEventListener('keydown', function(event) {
+                // Chỉ xử lý khi KHÔNG focus vào input
+                const activeElement = document.activeElement;
+                const isInputFocused = activeElement && activeElement.classList.contains('bill-input');
+                
+                if (isInputFocused) {
+                    // Nếu đang focus input, chỉ xử lý ESC
+                    if (event.key === 'Escape') {
+                        event.preventDefault();
+                        focusFirstInput();
+                        showToast('📍 Đã chuyển về ô đầu tiên (ESC)', 'info');
+                    }
+                    return; // Không xử lý phím tắt khác khi đang nhập
+                }
+                
                 // Ctrl + Enter: Tính toán
                 if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
                     event.preventDefault();
@@ -1076,7 +1113,7 @@
                     showToast('✅ Đã tính toán (Ctrl+Enter)', 'success');
                 }
                 
-                // ESC: Reset focus về ô đầu tiên
+                // ESC: Focus vào ô đầu tiên
                 if (event.key === 'Escape') {
                     event.preventDefault();
                     focusFirstInput();
@@ -1088,31 +1125,10 @@
                     event.preventDefault();
                     resetForm();
                 }
-                
-                // Ctrl + S: Lưu kết quả
-                if ((event.ctrlKey || event.metaKey) && event.key === 's') {
-                    event.preventDefault();
-                    saveCount();
-                }
-                
-                // Ctrl + C: Sao chép (chỉ khi không focus vào input)
-                if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
-                    const activeElement = document.activeElement;
-                    if (!activeElement.classList.contains('bill-input')) {
-                        event.preventDefault();
-                        copyToClipboard();
-                    }
-                }
-                
-                // Ctrl + R: Nhập lại
-                if ((event.ctrlKey || event.metaKey) && event.key === 'r') {
-                    event.preventDefault();
-                    resetForm();
-                }
             });
         }
         
-        // Hàm tạo bảng nhập liệu
+        // Hàm tạo bảng nhập liệu - ĐÃ SỬA THÀNH INPUT TEXT
         function createDenominationTable() {
             const tbody = document.getElementById('denominations-body');
             tbody.innerHTML = '';
@@ -1134,20 +1150,21 @@
                     </td>
                     <td class="input-cell">
                         <input 
-                            type="number" 
+                            type="text" 
                             class="bill-input" 
                             id="denom-${denom.value}"
                             placeholder="0"
-                            min="0"
-                            oninput="calculateSingleRow(${denom.value})"
-                            onfocus="this.select()"
+                            oninput="handleInputChange(${denom.value})"
+                            onfocus="this.select(); focusByDenomination(${denom.value})"
                             title="Nhập số tờ. Enter để chuyển ô"
+                            inputmode="numeric"
+                            pattern="[0-9]*"
                         >
                         <div class="quick-controls">
-                            <button class="quick-btn" onclick="quickAdd(${denom.value}, 1); focusByDenomination(${denom.value})">+1</button>
-                            <button class="quick-btn" onclick="quickAdd(${denom.value}, 5); focusByDenomination(${denom.value})">+5</button>
-                            <button class="quick-btn" onclick="quickAdd(${denom.value}, 10); focusByDenomination(${denom.value})">+10</button>
-                            <button class="quick-btn" onclick="quickAdd(${denom.value}, -1); focusByDenomination(${denom.value})">-1</button>
+                            <button type="button" class="quick-btn" onclick="quickAdd(${denom.value}, 1)">+1</button>
+                            <button type="button" class="quick-btn" onclick="quickAdd(${denom.value}, 5)">+5</button>
+                            <button type="button" class="quick-btn" onclick="quickAdd(${denom.value}, 10)">+10</button>
+                            <button type="button" class="quick-btn" onclick="quickAdd(${denom.value}, -1)">-1</button>
                         </div>
                     </td>
                     <td class="amount-cell" id="amount-${denom.value}">
@@ -1163,6 +1180,13 @@
             }, 100);
         }
         
+        // Hàm xử lý thay đổi input
+        function handleInputChange(denomValue) {
+            const input = document.getElementById(`denom-${denomValue}`);
+            const validatedValue = validateNumberInput(input);
+            calculateSingleRow(denomValue, validatedValue);
+        }
+        
         // Hàm thêm nhanh số tờ
         function quickAdd(denomValue, amount) {
             const input = document.getElementById(`denom-${denomValue}`);
@@ -1172,35 +1196,34 @@
             if (newValue < 0) newValue = 0;
             
             input.value = newValue;
-            calculateSingleRow(denomValue);
+            calculateSingleRow(denomValue, newValue.toString());
             
-            // Giữ focus và highlight input
-            setTimeout(() => {
-                focusByDenomination(denomValue);
-            }, 10);
+            // Focus lại input
+            focusByDenomination(denomValue);
         }
         
-        // Hàm tính toán một dòng
-        function calculateSingleRow(denomValue) {
+        // Hàm tính toán một dòng - ĐÃ SỬA
+        function calculateSingleRow(denomValue, inputValue = null) {
             const input = document.getElementById(`denom-${denomValue}`);
             const amountCell = document.getElementById(`amount-${denomValue}`);
-            const quantity = parseInt(input.value) || 0;
+            
+            // Sử dụng giá trị đã validate nếu được truyền vào
+            let quantity = 0;
+            if (inputValue !== null) {
+                quantity = parseInt(inputValue) || 0;
+            } else {
+                quantity = parseInt(validateNumberInput(input)) || 0;
+            }
+            
             const amount = quantity * denomValue;
             
             amountCell.textContent = formatCurrency(amount);
             
-            // Tự động tính tổng khi nhập (không cuộn trang)
-            setTimeout(() => calculateTotal(false), 100);
-            
-            // Giữ focus nếu đang nhập
-            if (document.activeElement === input) {
-                // Chỉ select text nếu đang ở cuối chuỗi
-                setTimeout(() => {
-                    if (document.activeElement === input) {
-                        input.select();
-                    }
-                }, 50);
-            }
+            // Tự động tính tổng sau 100ms (debounce nhẹ)
+            clearTimeout(window.calculateTotalTimeout);
+            window.calculateTotalTimeout = setTimeout(() => {
+                calculateTotal(false);
+            }, 100);
         }
         
         // Hàm tính tổng tiền (với tùy chọn cuộn trang)
@@ -1491,7 +1514,7 @@
                     const input = document.getElementById(`denom-${item.denomination}`);
                     if (input) {
                         input.value = item.quantity;
-                        calculateSingleRow(item.denomination);
+                        calculateSingleRow(item.denomination, item.quantity.toString());
                     }
                 });
                 
@@ -1501,38 +1524,16 @@
             }
         }
         
-        // Hàm hiển thị hướng dẫn phím tắt
-        function showKeyboardShortcutsHelp() {
-            const shortcuts = `
-📋 **Phím tắt nhanh:**
-• Enter: Chuyển sang ô tiếp theo
-• Ctrl+Enter: Tính toán tổng
-• ESC: Về ô đầu tiên
-• F2: Xóa tất cả
-• Ctrl+S: Lưu kết quả
-• Ctrl+C: Sao chép kết quả
-• Ctrl+R: Nhập lại form
-            `;
-            
-            console.log(shortcuts);
-        }
-        
         // Khởi tạo trang
         document.addEventListener('DOMContentLoaded', function() {
             console.log('=== TRANG ĐẾM TIỀN ĐANG KHỞI ĐỘNG ===');
             createDenominationTable();
             loadShiftsAndRevenue();
             setupGlobalKeyboardShortcuts();
-            showKeyboardShortcutsHelp();
             
             // Tự động focus vào ô đầu tiên sau khi load
             setTimeout(() => {
                 focusFirstInput();
-                
-                // Hiển thị hint cho người dùng
-                setTimeout(() => {
-                    showToast('💡 Mẹo: Nhấn Enter để chuyển ô, Ctrl+Enter để tính toán', 'info');
-                }, 1000);
             }, 800);
         });
     </script>
