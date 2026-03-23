@@ -521,12 +521,10 @@
   
   /* ========== DARK MODE SPECIFIC ADJUSTMENTS ========== */
   @media (prefers-color-scheme: dark) {
-    /* Điều chỉnh độ tương phản cho các phần tử đặc biệt */
     .table-container {
       border-color: var(--border-dark);
     }
     
-    /* Điều chỉnh thanh scrollbar trong dark mode */
     ::-webkit-scrollbar-track {
       background: var(--bg-secondary);
     }
@@ -539,22 +537,18 @@
       background: var(--text-secondary);
     }
     
-    /* Điều chỉnh hover cho table rows */
     tr:hover {
       background-color: var(--bg-tertiary);
     }
     
-    /* Điều chỉnh bóng cho container */
     .container {
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
     
-    /* Điều chỉnh màu cho các badge */
     .badge {
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     
-    /* Điều chỉnh màu cho empty state */
     #empty-state {
       background: var(--bg-secondary);
     }
@@ -640,8 +634,7 @@
           <tr>
             <th>Tên điểm</th>
             <th>Địa chỉ</th>
-            <!-- Ẩn hoàn toàn cột ghi chú -->
-            <th class="col-ghichu" style="display:none;">Ghi chú</th>
+            <!-- Cột ghi chú đã bị loại bỏ hoàn toàn để tránh dư thừa -->
             <th>Tọa độ GPS</th>
             <th>Mở bản đồ</th>
           </tr>
@@ -673,12 +666,14 @@ let allData = [];
 let vitriData = [];
 let currentFilteredData = [];
 
-// Hàm trích xuất GPS từ ghi chú
+// Hàm trích xuất GPS từ ghi chú (đã sửa lỗi "match is not a function")
 function extractGPS(note) {
-  if (!note) return null;
+  // Ép kiểu an toàn: nếu note là null/undefined -> chuỗi rỗng, ngược lại ép thành chuỗi
+  const noteStr = (note == null) ? '' : String(note);
+  if (!noteStr.trim()) return null;
   
   // Tìm định dạng [GPS: lat, lng]
-  const match = note.match(/\[GPS:\s*([\d.]+),\s*([\d.]+)\]/);
+  const match = noteStr.match(/\[GPS:\s*([\d.]+),\s*([\d.]+)\]/);
   if (match) {
     const lat = parseFloat(match[1]);
     const lng = parseFloat(match[2]);
@@ -692,6 +687,17 @@ function extractGPS(note) {
     }
   }
   return null;
+}
+
+// Hàm escape HTML để tránh XSS
+function escapeHtml(text) {
+  if (!text) return '';
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 // Hàm hiển thị dữ liệu vị trí
@@ -716,9 +722,12 @@ function displayVitri(data) {
     const tr = document.createElement('tr');
     tr.className = 'fade-in';
     
-    // Định dạng hiển thị tên điểm và địa chỉ
-    const tenDiem = row.ten_diem || 'Chưa có tên';
-    const diaChi = row.dia_chi || 'Chưa có địa chỉ';
+    // Escape dữ liệu để tránh XSS
+    const tenDiem = escapeHtml(row.ten_diem) || 'Chưa có tên';
+    const diaChi = escapeHtml(row.dia_chi) || 'Chưa có địa chỉ';
+    const ghiChuRaw = row.ghi_chu;
+    // Tạo tooltip để hiển thị ghi chú nếu cần (tùy chọn)
+    const titleTooltip = ghiChuRaw ? ` title="${escapeHtml(ghiChuRaw)}"` : '';
     
     tr.innerHTML = `
       <td>
@@ -727,9 +736,8 @@ function displayVitri(data) {
       <td>
         <div style="color: var(--text-secondary); font-size: 0.9rem;">${diaChi}</div>
       </td>
-      <td class="col-ghichu" style="display:none;">${row.ghi_chu || ''}</td>
       <td>
-        <div class="badge" title="${gps.lat}, ${gps.lng}" onclick="copyToClipboard('${gps.lat}, ${gps.lng}')">
+        <div class="badge" data-coords="${gps.lat}, ${gps.lng}" title="Nhấn để sao chép tọa độ">
           ${gps.lat}, ${gps.lng}
         </div>
       </td>
@@ -891,7 +899,7 @@ async function taiDuLieu() {
       if (fixedText.startsWith('[') && fixedText.endsWith(']')) {
         data = JSON.parse(fixedText);
       } else {
-        throw new Error('Dữ liệu không phải JSON hợp lệ');
+        throw new Error('Dữ liệu không phải JSON hợp lệ: ' + text.substring(0, 100));
       }
     }
     
@@ -902,11 +910,8 @@ async function taiDuLieu() {
     allData = data;
     console.log(`Đã tải được ${allData.length} bản ghi từ Google Sheets`);
     
-    // Lọc chỉ những điểm có GPS trong ghi chú
-    vitriData = allData.filter(row => {
-      const hasGPS = extractGPS(row.ghi_chu);
-      return hasGPS;
-    });
+    // Lọc chỉ những điểm có GPS trong ghi chú (đã sửa hàm extractGPS)
+    vitriData = allData.filter(row => extractGPS(row.ghi_chu) !== null);
     
     // Loại bỏ các bản ghi trùng lặp (cùng tên điểm và GPS)
     const uniqueMap = new Map();
@@ -941,7 +946,7 @@ async function taiDuLieu() {
       <h3>❌ Lỗi khi tải dữ liệu</h3>
       <p>Không thể kết nối đến nguồn dữ liệu. Vui lòng thử lại sau.</p>
       <p style="font-size: 0.9rem; margin-top: 10px;">
-        <em>Chi tiết lỗi: ${error.message}</em>
+        <em>Chi tiết lỗi: ${escapeHtml(error.message)}</em>
       </p>
       <button onclick="taiDuLieu()" style="
         margin-top: 15px;
@@ -963,11 +968,20 @@ async function taiDuLieu() {
 
 // Thêm sự kiện cho ô tìm kiếm
 document.getElementById('search').addEventListener('input', filterVitri);
-
-// Thêm sự kiện Enter để tìm kiếm
 document.getElementById('search').addEventListener('keypress', function(e) {
   if (e.key === 'Enter') {
     filterVitri();
+  }
+});
+
+// Xử lý click trên các badge (delegation)
+document.addEventListener('click', function(e) {
+  const badge = e.target.closest('.badge');
+  if (badge) {
+    const coords = badge.getAttribute('data-coords') || badge.textContent.trim();
+    if (coords) {
+      copyToClipboard(coords);
+    }
   }
 });
 
@@ -977,15 +991,6 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Tải dữ liệu ngay khi trang load
   taiDuLieu();
-  
-  // Thêm sự kiện click cho các hàng trong bảng
-  document.addEventListener('click', function(e) {
-    // Nếu click vào badge tọa độ
-    if (e.target.classList.contains('badge')) {
-      const text = e.target.getAttribute('title') || e.target.textContent;
-      copyToClipboard(text.trim());
-    }
-  });
   
   // Tự động focus vào ô tìm kiếm
   setTimeout(() => {
