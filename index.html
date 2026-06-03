@@ -3094,6 +3094,15 @@ function resetForm() {
   resetSaveLocationButton();
 }
 
+function focusNextPointInput() {
+  setTimeout(() => {
+    const pointInput = document.getElementById('chon_diem');
+    if (pointInput) {
+      pointInput.focus();
+    }
+  }, 100);
+}
+
 // HÀM MỚI: Reset trạng thái nút lưu vị trí
 function resetSaveLocationButton() {
   const btn = document.getElementById('btn-save-location');
@@ -3363,7 +3372,8 @@ async function guiDuLieu() {
       showToast(editingId ? '✅ Đã cập nhật thành công!' : '✅ Đã lưu thành công!');
       vibrateSuccess();
       resetForm();
-      taiDuLieu();
+      await taiDuLieu();
+      focusNextPointInput();
     } else {
       showToast('❌ Có lỗi xảy ra khi lưu dữ liệu!', 'error');
       vibrateError();
