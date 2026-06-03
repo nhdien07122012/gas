@@ -3098,7 +3098,9 @@ function focusNextPointInput() {
   setTimeout(() => {
     const pointInput = document.getElementById('chon_diem');
     if (pointInput) {
-      pointInput.focus();
+      const pointGroup = pointInput.closest('.form-group') || pointInput;
+      pointGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => pointInput.focus(), 350);
     }
   }, 100);
 }
