@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dự đoán điểm gas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Dự đoán điểm gas">
+<style>
+  :root {
+    --primary: #2c80ff;
+    --primary-dark: #1a6de0;
+    --primary-light: #5a9dff;
+    --secondary: #34c759;
+    --secondary-dark: #2aa64a;
+    --danger: #ff3b30;
+    --warning: #ff9500;
+    --info: #5ac8fa;
+    --bg-secondary: #f5f7fa;
+    --bg-tertiary: #f8f9fa;
+    --bg-card: #ffffff;
+    --bg-sidebar: #ffffff;
+    --bg-input: #ffffff;
+    --bg-hover: #f8fafc;
+    --text-primary: #333333;
+    --text-secondary: #6c757d;
+    --text-inverse: #ffffff;
+    --border-color: #dee2e6;
+    --border-light: #e9ecef;
+    --border-dark: #ced4da;
+    --shadow: 0 2px 10px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
+    --night-shift: #4a5568;
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
+    --sidebar-width: 280px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --primary: #3d8eff;
+      --primary-dark: #2c7de6;
+      --primary-light: #5a9dff;
+      --secondary: #30c75a;
+      --secondary-dark: #26a64a;
+      --danger: #ff5252;
+      --warning: #ffa726;
+      --info: #42a5f5;
+      --bg-secondary: #1e1e1e;
+      --bg-tertiary: #2d2d2d;
+      --bg-card: #1e1e1e;
+      --bg-sidebar: #1e1e1e;
+      --bg-input: #2d2d2d;
+      --bg-hover: #2a2a2a;
+      --text-primary: #f5f5f5;
+      --text-secondary: #b0b0b0;
+      --text-inverse: #ffffff;
+      --border-color: #3a3a3a;
+      --border-light: #4a4a4a;
+      --border-dark: #555555;
+      --night-shift: #2d3748;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+      --shadow-lg: 0 8px 25px rgba(0,0,0,0.4);
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: var(--font-family);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body.no-scroll {
+    overflow: hidden;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: var(--sidebar-width);
+    height: 100%;
+    background: var(--bg-sidebar);
+    box-shadow: 2px 0 15px rgba(0,0,0,0.2);
+    z-index: 1001;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    border-right: 1px solid var(--border-color);
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .sidebar-header {
+    padding: 20px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--text-inverse);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0 var(--radius-lg) 0 0;
+  }
+
+  .sidebar-header h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  .sidebar-content {
+    padding: 20px;
+    flex: 1;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: var(--radius-md);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    width: 100%;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: var(--font-family);
+  }
+
+  .sidebar-item:hover,
+  .sidebar-item.active {
+    background: var(--primary);
+    color: var(--text-inverse);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: center;
+  }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: none;
+    backdrop-filter: blur(2px);
+  }
+
+  .overlay.active {
+    display: block;
+  }
+
+  button {
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-family);
+  }
+
+  .close-sidebar,
+  .menu-toggle {
+    background: none;
+    color: var(--text-inverse);
+    padding: 5px;
+    width: auto;
+    font-size: 1.5rem;
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--text-inverse);
+    padding: 25px 30px;
+    text-align: center;
+    position: relative;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+  }
+
+  header p {
+    opacity: 0.9;
+  }
+
+  .menu-toggle {
+    position: absolute;
+    left: 20px;
+    top: 22px;
+  }
+
+  .summary-strip {
+    background: var(--night-shift);
+    color: var(--text-inverse);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .card {
+    padding: 25px 30px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .card:last-child {
+    border-bottom: none;
+  }
+
+  .stats-container {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .stat-card {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+  }
+
+  .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 5px;
+  }
+
+  .filter-group {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr auto;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .report-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-family: var(--font-family);
+  }
+
+  input:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(61, 142, 255, 0.2);
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-success {
+    padding: 14px 16px;
+    min-height: 48px;
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: var(--text-inverse);
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+  }
+
+  .btn-success {
+    background: var(--secondary);
+    color: var(--text-inverse);
+  }
+
+  .table-container {
+    overflow-x: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background: var(--bg-tertiary);
+    font-weight: 600;
+  }
+
+  tr:hover {
+    background: var(--bg-hover);
+  }
+
+  .point-name {
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .muted {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: var(--radius-xs);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-inverse);
+    white-space: nowrap;
+  }
+
+  .badge-today { background: var(--secondary); }
+  .badge-overdue { background: var(--danger); }
+  .badge-soon { background: var(--info); }
+  .badge-unknown { background: var(--warning); }
+
+  .confidence {
+    min-width: 120px;
+  }
+
+  .confidence-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--border-light);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .confidence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--warning), var(--secondary));
+    border-radius: 999px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+  }
+
+  .toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(100px);
+    background: var(--primary);
+    color: var(--text-inverse);
+    padding: 16px 24px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 1002;
+    opacity: 0;
+    transition: var(--transition);
+    min-width: 280px;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .toast.show {
+    transform: translate(-50%, -50%) translateY(0);
+    opacity: 1;
+  }
+
+  .toast.error { background: var(--danger); }
+  .toast.success { background: var(--secondary); }
+
+  @media (max-width: 900px) {
+    .stats-container,
+    .filter-group,
+    .report-actions {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    body {
+      padding: 15px;
+    }
+
+    header {
+      padding: 20px 18px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    header h1 {
+      font-size: 1.45rem;
+      padding-left: 36px;
+    }
+
+    .summary-strip,
+    .card {
+      padding: 18px;
+    }
+
+    .stats-container,
+    .filter-group,
+    .report-actions {
+      grid-template-columns: 1fr;
+    }
+
+    table {
+      min-width: 880px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="overlay" id="sidebar-overlay"></div>
+  <div class="toast" id="toast"><span id="toast-message"></span></div>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>MenuBar</h2>
+      <button class="close-sidebar" id="close-sidebar" type="button">&times;</button>
+    </div>
+    <div class="sidebar-content">
+      <button class="sidebar-item" type="button" onclick="window.location.href='index.html'">📋 Quản lý điểm gas</button>
+      <button class="sidebar-item" type="button" onclick="window.location.href='diemtien.html'">💵 Đếm tiền</button>
+      <button class="sidebar-item" type="button" onclick="window.location.href='vitri.html'">📍 Quản lý vị trí</button>
+      <button class="sidebar-item" type="button" onclick="window.location.href='tinhluong.html'">💰 Tính công & lương</button>
+      <button class="sidebar-item" type="button" onclick="window.location.href='tinhgascon.html'">💧 Tính tiền gas còn lại</button>
+      <button class="sidebar-item active" type="button">🔮 Dự đoán điểm gas</button>
+    </div>
+    <div class="sidebar-footer">
+      <p>Quản lý điểm gas &copy; 2026</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <header>
+      <button class="menu-toggle" id="menu-toggle" type="button">☰</button>
+      <h1>🔮 Dự đoán điểm gas</h1>
+      <p>Dựa trên lịch sử lấy gas để dự đoán các điểm có khả năng lấy trong hôm nay</p>
+    </header>
+
+    <div class="summary-strip">
+      <div id="today-label">Hôm nay</div>
+      <div id="last-updated">Đang tải dữ liệu...</div>
+    </div>
+
+    <div class="card">
+      <div class="stats-container" id="stats-container">
+        <div class="stat-card">
+          <div class="stat-value">0</div>
+          <div class="stat-label">Điểm đã phân tích</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">0</div>
+          <div class="stat-label">Có thể dự đoán</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">0</div>
+          <div class="stat-label">Khả năng lấy hôm nay</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">0</div>
+          <div class="stat-label">Quá hạn</div>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <input id="search-input" type="search" placeholder="Tìm tên điểm hoặc địa chỉ...">
+        <select id="status-filter">
+          <option value="all">Tất cả trạng thái</option>
+          <option value="today">Hôm nay có khả năng lấy</option>
+          <option value="overdue">Quá hạn</option>
+          <option value="soon">Sắp tới</option>
+          <option value="unknown">Chưa đủ dữ liệu</option>
+        </select>
+        <select id="sort-select">
+          <option value="priority">Ưu tiên hôm nay/quá hạn</option>
+          <option value="nextDate">Ngày dự đoán gần nhất</option>
+          <option value="confidence">Độ tin cậy cao nhất</option>
+          <option value="name">Tên điểm A-Z</option>
+        </select>
+        <button class="btn-primary" id="reload-btn" type="button">🔄 Tải lại</button>
+      </div>
+
+      <div class="report-actions">
+        <button class="btn-success" id="copy-today-btn" type="button">📋 Sao chép danh sách hôm nay</button>
+        <button class="btn-secondary" id="copy-all-btn" type="button">📄 Sao chép danh sách đang lọc</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Điểm gas</th>
+              <th>Lần lấy gần nhất</th>
+              <th>Chu kỳ</th>
+              <th>Dự đoán tiếp theo</th>
+              <th>Trạng thái</th>
+              <th>Độ tin cậy</th>
+            </tr>
+          </thead>
+          <tbody id="prediction-body"></tbody>
+        </table>
+        <div id="empty-state" class="empty-state" style="display: none;">
+          <h3>Chưa có dữ liệu phù hợp</h3>
+          <p>Hãy thử đổi bộ lọc hoặc tải lại dữ liệu.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
+let rawData = [];
+let predictionData = [];
+let filteredData = [];
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('active');
+  document.body.classList.toggle('no-scroll', sidebar.classList.contains('open'));
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('active');
+  document.body.classList.remove('no-scroll');
+}
+
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  document.getElementById('toast-message').textContent = message;
+  toast.className = `toast ${type} show`;
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function escapeHTML(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function normalizePointName(name) {
+  return String(name || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function startOfDay(date) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function addDays(date, days) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+function diffDays(a, b) {
+  return Math.round((startOfDay(a) - startOfDay(b)) / MS_PER_DAY);
+}
+
+function formatDate(date) {
+  if (!date) return 'Chưa xác định';
+  return new Intl.DateTimeFormat('vi-VN', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  }).format(date);
+}
+
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  }).format(Number(amount) || 0);
+}
+
+function getEntryDate(item) {
+  const source = item.timestamp || item.ngay || item.date || item.created_at;
+  if (!source) return null;
+  const date = new Date(source);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function calculateConfidence(historyLength, intervals) {
+  if (historyLength < 2 || intervals.length === 0) return 0;
+  const sampleScore = Math.min(70, historyLength * 12);
+  const avg = intervals.reduce((sum, item) => sum + item, 0) / intervals.length;
+  const variance = intervals.reduce((sum, item) => sum + Math.pow(item - avg, 2), 0) / intervals.length;
+  const stableScore = Math.max(0, 30 - Math.sqrt(variance) * 4);
+  return Math.max(20, Math.min(100, Math.round(sampleScore + stableScore)));
+}
+
+function analyzePredictions(data) {
+  const pointMap = new Map();
+
+  data.forEach(item => {
+    const key = normalizePointName(item.ten_diem);
+    const date = getEntryDate(item);
+    if (!key || !date) return;
+
+    if (!pointMap.has(key)) {
+      pointMap.set(key, {
+        key,
+        displayName: String(item.ten_diem || '').trim(),
+        entries: []
+      });
+    }
+
+    const point = pointMap.get(key);
+    point.entries.push({ ...item, _date: date });
+    if (item.ten_diem && item.ten_diem.length > point.displayName.length) {
+      point.displayName = item.ten_diem;
+    }
+  });
+
+  const today = startOfDay(new Date());
+  const results = [];
+
+  pointMap.forEach(point => {
+    const entries = point.entries
+      .sort((a, b) => a._date - b._date)
+      .filter((item, index, arr) => {
+        if (index === 0) return true;
+        return startOfDay(item._date).getTime() !== startOfDay(arr[index - 1]._date).getTime();
+      });
+
+    const latest = entries[entries.length - 1];
+    const recentEntries = entries.slice(-6);
+    const intervals = [];
+
+    for (let i = 1; i < recentEntries.length; i++) {
+      const gap = diffDays(recentEntries[i]._date, recentEntries[i - 1]._date);
+      if (gap > 0 && gap <= 120) intervals.push(gap);
+    }
+
+    let status = 'unknown';
+    let statusText = 'Chưa đủ dữ liệu';
+    let nextDate = null;
+    let avgCycle = null;
+    let daysOffset = null;
+
+    if (intervals.length > 0) {
+      avgCycle = Math.max(1, Math.round(intervals.reduce((sum, gap) => sum + gap, 0) / intervals.length));
+      nextDate = startOfDay(addDays(latest._date, avgCycle));
+      daysOffset = diffDays(nextDate, today);
+
+      if (daysOffset === 0) {
+        status = 'today';
+        statusText = 'Hôm nay có khả năng lấy';
+      } else if (daysOffset < 0) {
+        status = 'overdue';
+        statusText = `Quá hạn ${Math.abs(daysOffset)} ngày`;
+      } else {
+        status = 'soon';
+        statusText = `Còn ${daysOffset} ngày`;
+      }
+    }
+
+    results.push({
+      key: point.key,
+      name: point.displayName || latest.ten_diem || point.key,
+      address: latest.dia_chi || '',
+      amount: latest.so_tien || '',
+      latestDate: latest._date,
+      historyCount: entries.length,
+      avgCycle,
+      nextDate,
+      daysOffset,
+      status,
+      statusText,
+      confidence: calculateConfidence(entries.length, intervals)
+    });
+  });
+
+  return results;
+}
+
+function getPriority(item) {
+  if (item.status === 'today') return 0;
+  if (item.status === 'overdue') return 1;
+  if (item.status === 'soon') return 2;
+  return 3;
+}
+
+function applyFilters() {
+  const search = normalizePointName(document.getElementById('search-input').value);
+  const status = document.getElementById('status-filter').value;
+  const sort = document.getElementById('sort-select').value;
+
+  filteredData = predictionData.filter(item => {
+    const matchesSearch = !search ||
+      normalizePointName(item.name).includes(search) ||
+      normalizePointName(item.address).includes(search);
+    const matchesStatus = status === 'all' || item.status === status;
+    return matchesSearch && matchesStatus;
+  });
+
+  filteredData.sort((a, b) => {
+    if (sort === 'nextDate') {
+      return (a.nextDate?.getTime() || Number.MAX_SAFE_INTEGER) - (b.nextDate?.getTime() || Number.MAX_SAFE_INTEGER);
+    }
+    if (sort === 'confidence') {
+      return b.confidence - a.confidence || getPriority(a) - getPriority(b);
+    }
+    if (sort === 'name') {
+      return a.name.localeCompare(b.name, 'vi');
+    }
+    return getPriority(a) - getPriority(b) ||
+      (a.daysOffset ?? Number.MAX_SAFE_INTEGER) - (b.daysOffset ?? Number.MAX_SAFE_INTEGER) ||
+      b.confidence - a.confidence;
+  });
+
+  renderTable(filteredData);
+}
+
+function renderStats() {
+  const predictable = predictionData.filter(item => item.status !== 'unknown').length;
+  const today = predictionData.filter(item => item.status === 'today').length;
+  const overdue = predictionData.filter(item => item.status === 'overdue').length;
+
+  document.getElementById('stats-container').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-value">${predictionData.length}</div>
+      <div class="stat-label">Điểm đã phân tích</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${predictable}</div>
+      <div class="stat-label">Có thể dự đoán</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${today}</div>
+      <div class="stat-label">Khả năng lấy hôm nay</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${overdue}</div>
+      <div class="stat-label">Quá hạn</div>
+    </div>
+  `;
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('prediction-body');
+  const emptyState = document.getElementById('empty-state');
+  tbody.innerHTML = '';
+  emptyState.style.display = data.length ? 'none' : 'block';
+
+  data.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <div class="point-name">${escapeHTML(item.name)}</div>
+        <div class="muted">${escapeHTML(item.address || 'Chưa có địa chỉ')}</div>
+        <div class="muted">${formatCurrency(item.amount)} · ${item.historyCount} lần ghi nhận</div>
+      </td>
+      <td>${formatDate(item.latestDate)}</td>
+      <td>${item.avgCycle ? `${item.avgCycle} ngày/lần` : 'Cần thêm dữ liệu'}</td>
+      <td>${item.nextDate ? formatDate(item.nextDate) : 'Chưa dự đoán'}</td>
+      <td><span class="badge badge-${item.status}">${escapeHTML(item.statusText)}</span></td>
+      <td class="confidence">
+        <strong>${item.confidence}%</strong>
+        <div class="confidence-bar"><div class="confidence-fill" style="width: ${item.confidence}%"></div></div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function buildReport(data, title) {
+  if (!data.length) return `${title}\nKhông có điểm gas phù hợp.`;
+  const lines = data.map((item, index) => {
+    const nextDate = item.nextDate ? formatDate(item.nextDate) : 'chưa dự đoán';
+    const cycle = item.avgCycle ? `${item.avgCycle} ngày/lần` : 'chưa đủ dữ liệu';
+    return `${index + 1}. ${item.name} - ${item.address || 'chưa có địa chỉ'} - gần nhất ${formatDate(item.latestDate)} - chu kỳ ${cycle} - dự đoán ${nextDate} - ${item.statusText}`;
+  });
+  return `${title}\n${lines.join('\n')}`;
+}
+
+async function copyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+    showToast('Đã sao chép báo cáo!');
+  } catch (error) {
+    showToast('Không thể sao chép báo cáo!', 'error');
+  }
+}
+
+async function loadData() {
+  const reloadBtn = document.getElementById('reload-btn');
+  reloadBtn.disabled = true;
+  reloadBtn.textContent = '⏳ Đang tải...';
+  document.getElementById('last-updated').textContent = 'Đang tải dữ liệu...';
+
+  try {
+    const response = await fetch(scriptURL);
+    rawData = await response.json();
+    predictionData = analyzePredictions(Array.isArray(rawData) ? rawData : []);
+    renderStats();
+    applyFilters();
+    document.getElementById('last-updated').textContent = `Cập nhật lúc ${new Date().toLocaleString('vi-VN')}`;
+  } catch (error) {
+    console.error(error);
+    showToast('Có lỗi khi tải dữ liệu dự đoán!', 'error');
+    document.getElementById('last-updated').textContent = 'Tải dữ liệu thất bại';
+  } finally {
+    reloadBtn.disabled = false;
+    reloadBtn.textContent = '🔄 Tải lại';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('today-label').textContent = `Hôm nay: ${formatDate(new Date())}`;
+  document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
+  document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
+  document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
+  document.getElementById('reload-btn').addEventListener('click', loadData);
+  document.getElementById('search-input').addEventListener('input', applyFilters);
+  document.getElementById('status-filter').addEventListener('change', applyFilters);
+  document.getElementById('sort-select').addEventListener('change', applyFilters);
+  document.getElementById('copy-today-btn').addEventListener('click', () => {
+    const todayItems = predictionData.filter(item => item.status === 'today');
+    copyText(buildReport(todayItems, `Dự đoán điểm gas hôm nay (${formatDate(new Date())})`));
+  });
+  document.getElementById('copy-all-btn').addEventListener('click', () => {
+    copyText(buildReport(filteredData, `Danh sách dự đoán điểm gas (${formatDate(new Date())})`));
+  });
+  loadData();
+});
+</script>
+</body>
+</html>
