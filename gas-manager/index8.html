@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý tiền thu điểm gas theo ca</title>
+<style>
+  :root {
+    --primary: #2c80ff;
+    --primary-dark: #1a6de0;
+    --secondary: #34c759;
+    --danger: #ff3b30;
+    --warning: #ff9500;
+    --light: #f8f9fa;
+    --dark: #333;
+    --gray: #6c757d;
+    --border: #dee2e6;
+    --shadow: 0 2px 10px rgba(0,0,0,0.08);
+    --radius: 10px;
+    --night-shift: #4a5568;
+    --day-shift: #f7fafc;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: var(--dark);
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  
+  header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 25px 30px;
+    text-align: center;
+  }
+  
+  header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  header p {
+    opacity: 0.9;
+    font-size: 1rem;
+  }
+  
+  .shift-info {
+    background: var(--night-shift);
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .shift-info .current-shift {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  
+  .shift-info .shift-time {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+  
+  .card {
+    padding: 25px 30px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .card:last-child {
+    border-bottom: none;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+  }
+  
+  button {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .btn-primary {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 128, 255, 0.3);
+  }
+  
+  .btn-secondary {
+    background-color: #f1f3f5;
+    color: var(--dark);
+  }
+  
+  .btn-secondary:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+  }
+  
+  .btn-success {
+    background-color: var(--secondary);
+    color: white;
+  }
+  
+  .btn-success:hover {
+    background-color: #30b352;
+    transform: translateY(-2px);
+  }
+  
+  .btn-warning {
+    background-color: var(--warning);
+    color: white;
+  }
+  
+  .btn-warning:hover {
+    background-color: #e08900;
+    transform: translateY(-2px);
+  }
+  
+  .btn-danger {
+    background-color: var(--danger);
+    color: white;
+  }
+  
+  .btn-danger:hover {
+    background-color: #e0352b;
+    transform: translateY(-2px);
+  }
+  
+  .btn-sm {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    margin-top: 10px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+  }
+  
+  th {
+    background-color: #f8f9fa;
+    padding: 16px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--dark);
+    border-bottom: 2px solid var(--border);
+  }
+  
+  td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  tr:hover {
+    background-color: #f8fafc;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gray);
+  }
+  
+  .empty-state p {
+    margin-top: 10px;
+  }
+  
+  .stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .stat-card {
+    flex: 1;
+    min-width: 150px;
+    background: #f8f9fa;
+    border-radius: var(--radius);
+    padding: 15px;
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin-top: 5px;
+  }
+  
+  .filter-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .filter-group select {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  /* Modal styles */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal-content {
+    background: white;
+    border-radius: var(--radius);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: modalFadeIn 0.3s ease-out;
+  }
+  
+  .modal-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: between;
+    align-items: center;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.4rem;
+  }
+  
+  .modal-body {
+    padding: 25px;
+  }
+  
+  .modal-footer {
+    padding: 20px 25px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--gray);
+    padding: 0;
+    width: auto;
+  }
+  
+  .close-modal:hover {
+    color: var(--dark);
+    transform: none;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    body {
+      padding: 15px;
+    }
+    
+    header {
+      padding: 20px;
+    }
+    
+    header h1 {
+      font-size: 1.5rem;
+    }
+    
+    .shift-info {
+      padding: 15px 20px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+    
+    .card {
+      padding: 20px;
+    }
+    
+    .button-group {
+      flex-direction: column;
+    }
+    
+    .stats-container {
+      flex-direction: column;
+    }
+    
+    .filter-group {
+      flex-direction: column;
+    }
+    
+    .filter-group select {
+      min-width: 100%;
+    }
+    
+    th, td {
+      padding: 12px 8px;
+      font-size: 0.9rem;
+    }
+    
+    table {
+      min-width: 600px;
+    }
+    
+    .modal-content {
+      width: 95%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    body {
+      padding: 10px;
+    }
+    
+    header {
+      padding: 18px 15px;
+    }
+    
+    header h1 {
+      font-size: 1.3rem;
+    }
+    
+    .card {
+      padding: 18px 15px;
+    }
+    
+    input, select {
+      padding: 12px 14px;
+    }
+    
+    button {
+      padding: 14px;
+    }
+  }
+  
+  /* Animation */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+  
+  .badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  
+  .badge-primary {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .badge-secondary {
+    background-color: var(--secondary);
+    color: white;
+  }
+  
+  .badge-warning {
+    background-color: var(--warning);
+    color: white;
+  }
+  
+  .badge-danger {
+    background-color: var(--danger);
+    color: white;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .form-row .form-group {
+    flex: 1;
+  }
+  
+  /* Các style mới cho chức năng thay đổi trạng thái nhanh */
+  .status-toggle {
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .status-toggle:hover {
+    transform: scale(1.05);
+  }
+  
+  .status-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📋 Quản lý tiền thu điểm gas theo ca</h1>
+      <p>Theo dõi và quản lý thu chi tại các điểm gas theo ca làm việc</p>
+    </header>
+    
+    <div class="shift-info">
+      <div class="current-shift" id="current-shift">Đang tải thông tin ca...</div>
+      <div class="shift-time" id="shift-time"></div>
+    </div>
+    
+    <div class="card">
+      <div class="stats-container" id="stats-container">
+        <!-- Thống kê sẽ được thêm bằng JavaScript -->
+      </div>
+      
+      <div class="filter-group">
+        <select id="filter-shift" onchange="filterByShift()">
+          <option value="all">Tất cả các ca</option>
+          <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
+        </select>
+        <select id="filter-diem" onchange="filterByDiem()">
+          <option value="all">Tất cả điểm gas</option>
+          <!-- Các tùy chọn điểm sẽ được thêm bằng JavaScript -->
+        </select>
+        <select id="filter-trangthai" onchange="filterByTrangThai()">
+          <option value="all">Tất cả trạng thái</option>
+          <option value="Chưa nộp">Chưa nộp</option>
+          <option value="Đã nộp">Đã nộp</option>
+        </select>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="chon_diem">Chọn điểm:</label>
+          <select id="chon_diem" onchange="chonDiem()">
+            <option value="">-- Chọn điểm --</option>
+            <option value="new">➕ Thêm điểm mới...</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="trang_thai">Trạng thái nộp tiền:</label>
+          <select id="trang_thai">
+            <option value="Chưa nộp">Chưa nộp</option>
+            <option value="Đã nộp">Đã nộp</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="ten_diem">Tên điểm:</label>
+        <input id="ten_diem" placeholder="Nhập tên điểm (nếu thêm mới)">
+      </div>
+      
+      <div class="form-group">
+        <label for="so_tien">Số tiền:</label>
+        <input id="so_tien" type="number" placeholder="Nhập số tiền">
+      </div>
+      
+      <div class="form-group">
+        <label for="dia_chi">Địa chỉ:</label>
+        <input id="dia_chi" placeholder="Nhập địa chỉ">
+      </div>
+      
+      <div class="form-group">
+        <label for="ghi_chu">Ghi chú:</label>
+        <input id="ghi_chu" placeholder="Nhập ghi chú (nếu có)">
+      </div>
+      
+      <div class="button-group">
+        <button class="btn-primary" onclick="guiDuLieu()" id="btn-submit">
+          💾 Lưu thông tin
+        </button>
+        <button class="btn-secondary" onclick="taiDuLieu()">
+          🔄 Tải lại
+        </button>
+        <button class="btn-warning" onclick="resetForm()" id="btn-cancel" style="display: none;">
+          ❌ Hủy
+        </button>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2 style="margin-bottom: 15px;">📊 Danh sách điểm gas theo ca</h2>
+      <div class="table-container">
+        <table id="bang">
+          <thead>
+            <tr>
+              <th>Tên điểm</th>
+              <th>Số tiền</th>
+              <th>Địa chỉ</th>
+              <th>Trạng thái</th>
+              <th>Ca</th>
+              <th>Thời gian</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+          </tbody>
+        </table>
+        <div id="empty-state" class="empty-state" style="display: none;">
+          <h3>📭 Chưa có dữ liệu</h3>
+          <p>Hãy thêm điểm gas đầu tiên để bắt đầu quản lý</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal xác nhận xóa -->
+  <div class="modal" id="delete-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Xác nhận xóa</h2>
+        <button class="close-modal" onclick="closeModal('delete-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc chắn muốn xóa điểm gas này?</p>
+        <p id="delete-item-info" style="font-weight: bold; margin-top: 10px;"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('delete-modal')">Hủy</button>
+        <button class="btn-danger" onclick="confirmDelete()">Xóa</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
+let cacheDiem = {};
+let allData = [];
+let currentShift = '';
+let editingId = null;
+let itemToDelete = null;
+
+// Xử lý nhập nhanh số tiền hàng ngàn
+document.getElementById('so_tien').addEventListener('blur', function() {
+  let value = this.value.trim();
+  
+  // Nếu giá trị nhập vào là số và có ít hơn 4 chữ số
+  if (/^\d+$/.test(value) && value.length > 0 && value.length <= 3) {
+    // Thêm "000" vào cuối
+    this.value = value + '000';
+  }
+});
+
+// Hàm xác định ca hiện tại (18h30 hôm nay đến 6h30 sáng hôm sau)
+function getCurrentShift() {
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinutes = now.getMinutes();
+  
+  // Tính toán thời gian bắt đầu và kết thúc ca
+  let shiftStart = new Date(now);
+  let shiftEnd = new Date(now);
+  
+  // Nếu trước 6h30, ca thuộc về ngày hôm trước
+  if (currentHour < 6 || (currentHour === 6 && currentMinutes < 30)) {
+    shiftStart.setDate(shiftStart.getDate() - 1);
+    shiftStart.setHours(18, 30, 0, 0);
+    shiftEnd.setHours(6, 30, 0, 0);
+  } 
+  // Nếu sau 18h30, ca thuộc về ngày hôm nay
+  else if (currentHour > 18 || (currentHour === 18 && currentMinutes >= 30)) {
+    shiftStart.setHours(18, 30, 0, 0);
+    shiftEnd.setDate(shiftEnd.getDate() + 1);
+    shiftEnd.setHours(6, 30, 0, 0);
+  }
+  // Nếu trong khoảng 6h30 đến 18h30, không thuộc ca nào
+  else {
+    return {
+      shift: 'Ngoài ca làm việc',
+      start: null,
+      end: null
+    };
+  }
+  
+  // Định dạng ngày tháng
+  const formatDate = (date) => {
+    return date.toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+  
+  const shiftKey = shiftStart.toISOString().split('T')[0];
+  
+  return {
+    shift: `Ca ${formatDate(shiftStart).split(' ')[0]}`,
+    shiftKey: shiftKey,
+    start: formatDate(shiftStart),
+    end: formatDate(shiftEnd)
+  };
+}
+
+// Cập nhật thông tin ca hiện tại
+function updateShiftInfo() {
+  const shiftInfo = getCurrentShift();
+  currentShift = shiftInfo.shiftKey;
+  
+  document.getElementById('current-shift').textContent = shiftInfo.shift;
+  
+  if (shiftInfo.start && shiftInfo.end) {
+    document.getElementById('shift-time').textContent = 
+      `⏰ ${shiftInfo.start} - ${shiftInfo.end}`;
+  } else {
+    document.getElementById('shift-time').textContent = 
+      '⏰ Hiện tại không trong ca làm việc';
+  }
+}
+
+// Định dạng tiền tệ
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  }).format(amount);
+}
+
+// Tính toán thống kê
+function calculateStats(data) {
+  const stats = {
+    total: 0,
+    count: data.length,
+    shifts: new Set(),
+    diem: new Set(),
+    daNop: 0,
+    chuaNop: 0
+  };
+  
+  data.forEach(item => {
+    stats.total += parseInt(item.so_tien) || 0;
+    if (item.ca) stats.shifts.add(item.ca);
+    if (item.ten_diem) stats.diem.add(item.ten_diem);
+    if (item.trang_thai === 'Đã nộp') {
+      stats.daNop++;
+    } else {
+      stats.chuaNop++;
+    }
+  });
+  
+  return stats;
+}
+
+// Hiển thị thống kê
+function displayStats(stats) {
+  const container = document.getElementById('stats-container');
+  
+  container.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-value">${stats.count}</div>
+      <div class="stat-label">Số giao dịch</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${formatCurrency(stats.total)}</div>
+      <div class="stat-label">Tổng tiền</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${stats.daNop}/${stats.chuaNop}</div>
+      <div class="stat-label">Đã nộp/Chưa nộp</div>
+    </div>
+  `;
+}
+
+// Lọc dữ liệu theo ca
+function filterByShift() {
+  filterData();
+}
+
+// Lọc dữ liệu theo điểm
+function filterByDiem() {
+  filterData();
+}
+
+// Lọc dữ liệu theo trạng thái
+function filterByTrangThai() {
+  filterData();
+}
+
+// Lọc và hiển thị dữ liệu
+function filterData() {
+  const shiftFilter = document.getElementById('filter-shift').value;
+  const diemFilter = document.getElementById('filter-diem').value;
+  const trangThaiFilter = document.getElementById('filter-trangthai').value;
+  
+  let filteredData = allData;
+  
+  if (shiftFilter !== 'all') {
+    filteredData = filteredData.filter(item => item.ca === shiftFilter);
+  }
+  
+  if (diemFilter !== 'all') {
+    filteredData = filteredData.filter(item => item.ten_diem === diemFilter);
+  }
+  
+  if (trangThaiFilter !== 'all') {
+    filteredData = filteredData.filter(item => item.trang_thai === trangThaiFilter);
+  }
+
+  // Nếu đang chọn ca hiện tại và không có dữ liệu, hiển thị thông báo đặc biệt
+  const shiftInfo = getCurrentShift();
+  if (shiftFilter === shiftInfo.shiftKey && shiftInfo.start && filteredData.length === 0) {
+    document.getElementById('empty-state').style.display = 'block';
+    document.getElementById('empty-state').innerHTML = '<h3>📭 Chưa có điểm nào trong ca hiện tại</h3><p>Hãy thêm điểm gas đầu tiên để bắt đầu quản lý</p>';
+  } else {
+    document.getElementById('empty-state').innerHTML = '<h3>📭 Chưa có dữ liệu</h3><p>Hãy thêm điểm gas đầu tiên để bắt đầu quản lý</p>';
+  }
+
+  displayData(filteredData);
+  displayStats(calculateStats(filteredData));
+}
+
+// Hiển thị dữ liệu trong bảng
+function displayData(data) {
+  const tbody = document.querySelector('#bang tbody');
+  tbody.innerHTML = '';
+  
+  // Hiển thị thông báo nếu không có dữ liệu
+  const emptyState = document.getElementById('empty-state');
+  if (data.length === 0) {
+    emptyState.style.display = 'block';
+  } else {
+    emptyState.style.display = 'none';
+  }
+  
+  data.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.className = 'fade-in';
+    
+    // Xác định badge class dựa trên trạng thái
+    let badgeClass = 'badge-warning';
+    if (row.trang_thai === 'Đã nộp') {
+      badgeClass = 'badge-secondary';
+    }
+    
+    tr.innerHTML = `
+      <td data-label="Tên điểm">${row.ten_diem}</td>
+      <td data-label="Số tiền">${formatCurrency(row.so_tien)}</td>
+      <td data-label="Địa chỉ">${row.dia_chi}</td>
+      <td data-label="Trạng thái">
+        <div class="status-toggle-wrapper">
+          <span class="badge ${badgeClass} status-toggle" onclick="toggleTrangThai('${row.id}')">${row.trang_thai || 'Chưa nộp'}</span>
+        </div>
+      </td>
+      <td data-label="Ca"><span class="badge badge-primary">${row.ca || 'Không xác định'}</span></td>
+      <td data-label="Thời gian">${row.timestamp ? new Date(row.timestamp).toLocaleString('vi-VN') : 'Không xác định'}</td>
+      <td data-label="Thao tác">
+        <div class="action-buttons">
+          <button class="btn-secondary btn-sm" onclick="editItem('${row.id}')">✏️ Sửa</button>
+          <button class="btn-danger btn-sm" onclick="deleteItem('${row.id}')">🗑️ Xóa</button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Hàm thay đổi trạng thái nhanh
+function toggleTrangThai(id) {
+  const item = allData.find(item => item.id === id);
+  if (!item) return;
+
+  const newTrangThai = item.trang_thai === 'Đã nộp' ? 'Chưa nộp' : 'Đã nộp';
+
+  // Tạo một bản sao của item và cập nhật trạng thái mới
+  const updatedItem = { ...item, trang_thai: newTrangThai };
+
+  // Gửi toàn bộ dữ liệu của mục đó để cập nhật
+  const data = {
+    action: 'update',
+    ...updatedItem
+  };
+
+  fetch(scriptURL, {
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.result === 'success') {
+      alert('✅ Đã cập nhật trạng thái!');
+      taiDuLieu();
+    } else {
+      alert('❌ Có lỗi xảy ra khi cập nhật trạng thái!');
+    }
+  })
+  .catch(error => {
+    alert('❌ Có lỗi xảy ra khi cập nhật trạng thái!');
+    console.error(error);
+  });
+}
+
+// Cập nhật bộ lọc
+function updateFilters(data) {
+  const shifts = new Set();
+  const diems = new Set();
+  
+  data.forEach(item => {
+    if (item.ca) shifts.add(item.ca);
+    if (item.ten_diem) diems.add(item.ten_diem);
+  });
+  
+  // Cập nhật bộ lọc ca
+  const shiftFilter = document.getElementById('filter-shift');
+  shiftFilter.innerHTML = '<option value="all">Tất cả các ca</option>';
+  
+  Array.from(shifts).sort().reverse().forEach(shift => {
+    const option = document.createElement('option');
+    option.value = shift;
+    option.textContent = `Ca ${shift}`;
+    shiftFilter.appendChild(option);
+  });
+  
+  // Cập nhật bộ lọc điểm
+  const diemFilter = document.getElementById('filter-diem');
+  diemFilter.innerHTML = '<option value="all">Tất cả điểm gas</option>';
+  
+  Array.from(diems).sort().forEach(diem => {
+    const option = document.createElement('option');
+    option.value = diem;
+    option.textContent = diem;
+    diemFilter.appendChild(option);
+  });
+}
+
+// Reset form
+function resetForm() {
+  editingId = null;
+  document.getElementById('chon_diem').value = '';
+  document.getElementById('ten_diem').value = '';
+  document.getElementById('ten_diem').disabled = false;
+  document.getElementById('so_tien').value = '';
+  document.getElementById('dia_chi').value = '';
+  document.getElementById('ghi_chu').value = '';
+  document.getElementById('trang_thai').value = 'Chưa nộp';
+  document.getElementById('btn-submit').textContent = '💾 Lưu thông tin';
+  document.getElementById('btn-cancel').style.display = 'none';
+}
+
+// Chỉnh sửa item
+function editItem(id) {
+  const item = allData.find(item => item.id === id);
+  if (!item) return;
+  
+  editingId = id;
+  
+  // Điền dữ liệu vào form
+  document.getElementById('chon_diem').value = item.ten_diem;
+  document.getElementById('ten_diem').value = item.ten_diem;
+  document.getElementById('ten_diem').disabled = true;
+  document.getElementById('so_tien').value = item.so_tien;
+  document.getElementById('dia_chi').value = item.dia_chi;
+  document.getElementById('ghi_chu').value = item.ghi_chu || '';
+  document.getElementById('trang_thai').value = item.trang_thai || 'Chưa nộp';
+  
+  // Thay đổi nút thành cập nhật
+  document.getElementById('btn-submit').textContent = '💾 Cập nhật';
+  document.getElementById('btn-cancel').style.display = 'block';
+  
+  // Cuộn lên đầu form
+  document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Xóa item
+function deleteItem(id) {
+  const item = allData.find(item => item.id === id);
+  if (!item) return;
+  
+  itemToDelete = id;
+  document.getElementById('delete-item-info').textContent = 
+    `${item.ten_diem} - ${formatCurrency(item.so_tien)} - ${item.dia_chi}`;
+  
+  openModal('delete-modal');
+}
+
+// Xác nhận xóa
+function confirmDelete() {
+  if (!itemToDelete) return;
+  
+  const data = { 
+    action: 'delete',
+    id: itemToDelete
+  };
+
+  fetch(scriptURL, {
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.result === 'success') {
+      alert('✅ Đã xóa thành công!');
+      closeModal('delete-modal');
+      taiDuLieu();
+    } else {
+      alert('❌ Có lỗi xảy ra khi xóa!');
+    }
+  })
+  .catch(error => {
+    alert('❌ Có lỗi xảy ra khi xóa!');
+    console.error(error);
+  });
+}
+
+// Mở modal
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = 'flex';
+}
+
+// Đóng modal
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+async function guiDuLieu() {
+  const ten_diem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
+  const so_tien = document.getElementById('so_tien').value;
+  const dia_chi = document.getElementById('dia_chi').value;
+  const ghi_chu = document.getElementById('ghi_chu').value;
+  const trang_thai = document.getElementById('trang_thai').value;
+
+  if (!ten_diem || !so_tien || !dia_chi) {
+    alert('⚠️ Vui lòng nhập đầy đủ thông tin!');
+    return;
+  }
+
+  // Kiểm tra xem có đang trong ca làm việc không (chỉ kiểm tra khi thêm mới)
+  if (!editingId) {
+    const shiftInfo = getCurrentShift();
+    if (!shiftInfo.start) {
+      alert('⚠️ Hiện tại không trong ca làm việc! Ca làm việc từ 18:30 đến 6:30 sáng hôm sau.');
+      return;
+    }
+  }
+
+  const data = { 
+    ten_diem, 
+    so_tien, 
+    dia_chi,
+    ghi_chu,
+    trang_thai,
+    ca: editingId ? undefined : getCurrentShift().shiftKey, // Giữ nguyên ca cũ khi chỉnh sửa
+    timestamp: editingId ? undefined : new Date().toISOString(), // Giữ nguyên timestamp khi chỉnh sửa
+    id: editingId || undefined // Gửi ID nếu đang chỉnh sửa
+  };
+
+  // Thêm action để xác định hành động
+  if (editingId) {
+    data.action = 'update';
+  }
+
+  try {
+    const response = await fetch(scriptURL, {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+    const result = await response.json();
+    
+    if (result.result === 'success') {
+      alert(editingId ? '✅ Đã cập nhật thành công!' : '✅ Đã lưu thành công!');
+      resetForm();
+      taiDuLieu();
+    } else {
+      alert('❌ Có lỗi xảy ra khi lưu dữ liệu!');
+    }
+  } catch (error) {
+    alert('❌ Có lỗi xảy ra khi lưu dữ liệu!');
+    console.error(error);
+  }
+}
+
+async function taiDuLieu() {
+  try {
+    const res = await fetch(scriptURL);
+    const data = await res.json();
+    allData = data;
+    
+    const select = document.getElementById('chon_diem');
+    select.innerHTML = '<option value="">-- Chọn điểm --</option><option value="new">➕ Thêm điểm mới...</option>';
+    cacheDiem = {};
+
+    data.forEach(row => {
+      const ten = row.ten_diem;
+      const diachi = row.dia_chi;
+      cacheDiem[ten] = diachi;
+
+      // Thêm vào danh sách chọn nếu chưa có
+      if (![...select.options].some(o => o.value === ten)) {
+        const opt = document.createElement('option');
+        opt.value = ten;
+        opt.textContent = ten;
+        select.appendChild(opt);
+      }
+    });
+
+    // Hiển thị dữ liệu
+    displayData(data);
+    displayStats(calculateStats(data));
+    updateFilters(data);
+    
+  } catch (error) {
+    alert('❌ Có lỗi xảy ra khi tải dữ liệu!');
+    console.error(error);
+  }
+}
+
+function chonDiem() {
+  const val = document.getElementById('chon_diem').value;
+  const tenDiemInput = document.getElementById('ten_diem');
+  const diaChiInput = document.getElementById('dia_chi');
+  
+  if (val === 'new' || val === '') {
+    tenDiemInput.value = '';
+    diaChiInput.value = '';
+    tenDiemInput.disabled = false;
+    tenDiemInput.placeholder = "Nhập tên điểm (nếu thêm mới)";
+  } else {
+    tenDiemInput.value = val;
+    diaChiInput.value = cacheDiem[val] || '';
+    tenDiemInput.disabled = true;
+    tenDiemInput.placeholder = "Tên điểm đã chọn";
+  }
+}
+
+// Khởi tạo
+// Khi load trang, mặc định chọn ca hiện tại nếu có, nếu không thì chọn "Tất cả các ca"
+document.addEventListener('DOMContentLoaded', function() {
+  updateShiftInfo();
+  taiDuLieu().then(() => {
+    const shiftInfo = getCurrentShift();
+    const shiftFilter = document.getElementById('filter-shift');
+    if (shiftInfo.start) {
+      // Nếu đang trong ca, chọn ca hiện tại
+      shiftFilter.value = shiftInfo.shiftKey;
+    } else {
+      // Nếu không trong ca, chọn tất cả các ca
+      shiftFilter.value = 'all';
+    }
+    filterData();
+  });
+  // Cập nhật thông tin ca mỗi phút
+  setInterval(updateShiftInfo, 60000);
+});
+</script>
+</body>
+</html>

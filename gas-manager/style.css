@@ -1,0 +1,619 @@
+/* Common Styles */
+body {
+    font-family: 'Roboto Mono', monospace; /* Use Copilot font */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--font-color);
+
+}
+
+/* Thêm hiệu ứng shadow cho sidebar */
+.sidebar {
+    width: 40px; /* Chiều rộng mặc định */
+    background-color: #005ae0; /* Màu nền sidebar */
+    color: white;
+    padding: 10px;
+    flex-shrink: 0;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transition: width 0.3s ease, left 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3); /* Thêm shadow cho sidebar */
+}
+
+.sidebar.active {
+    width: 150px; /* Chiều rộng khi sidebar mở */
+    left: 0; /* Căn trái */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); /* Tăng độ đậm của shadow khi sidebar mở */
+}
+
+/* Tắt shadow trên màn hình nhỏ khi sidebar ẩn */
+@media (max-width: 767px) {
+    .sidebar {
+        box-shadow: none; /* Luôn tắt shadow trên điện thoại */
+    }
+}
+
+.sidebar .profile {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.sidebar .profile img {
+    width: 45px; /* Suitable size */
+    height: 45px; /* Suitable size */
+    border-radius: 50%;
+    border: 2px solid #ffffff83;
+}
+
+.sidebar nav ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+
+.sidebar nav ul li {
+    margin-bottom: 20px; /* Tăng khoảng cách giữa các chức năng */
+    display: flex;
+    justify-content: center; /* Căn giữa theo chiều ngang */
+}
+
+.sidebar nav ul li a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+.sidebar nav ul li a i {
+    font-size: 24px; /* Suitable size */
+}
+
+.sidebar nav ul li a .nav-text {
+    display: none;
+    margin-top: 8px;
+}
+
+.sidebar.active .nav-text {
+    display: block;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 60px; /* Suitable size */
+    transition: margin-left 0.3s ease;
+}
+
+.main-content.active {
+    margin-left: 200px; /* Suitable size */
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+header button#menu-toggle {
+    display: block; /* Always visible */
+    font-size: 24px;
+    background-color: #005ae0; /* Blue background color */
+    color: white; /* White text color */
+    border: none; /* Remove border */
+    border-radius: 8px; /* Round border */
+    padding: 10px 20px; /* Padding */
+    cursor: pointer; /* Change cursor to pointer */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transition effects */
+}
+
+
+
+header button#menu-toggle:hover {
+    background-color: #0056b3; /* Change background color on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+header button#menu-toggle:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5); /* Add shadow on focus */
+}
+
+.personal-profile .cover-photo {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 20px;
+}
+
+.personal-profile .cover-photo img {
+    width: 100%;
+    height: 340px;
+    object-fit: cover; /* Ensure image covers entire frame */
+    object-position: center;
+}
+
+.personal-profile .avatar {
+    width: 150px; /* Suitable size */
+    height: 150px; /* Suitable size */
+    border-radius: 50%;
+    overflow: hidden;
+    margin: -75px auto 20px; /* Suitable position */
+    position: relative;
+    border: 5px solid #fff;
+    z-index: 1;
+    background-color: #fff;
+}
+
+.personal-profile .avatar img {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* Ensure avatar fits frame */
+}
+
+.personal-profile .info-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.personal-profile .personal-info {
+    text-align: left; /* Align text to left */
+    flex: 1;
+}
+
+.personal-profile .personal-info h1 {
+    margin: 0;
+    padding: 0;
+}
+
+.personal-profile .personal-info p {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+
+.personal-profile .personal-info p i {
+    margin-right: 10px; /* Suitable gap */
+}
+
+.personal-profile .qr-code {
+    display: flex; /* Use flexbox to center */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin-top: 20px;
+    width: 100%; /* Ensure QR code does not overflow */
+    height: 100%; /* Ensure enough space */
+}
+
+.personal-profile .qr-code img {
+    width: 100%; /* Chiều rộng linh hoạt, chiếm toàn bộ khung chứa */
+    max-width: 350px; /* Giới hạn kích thước tối đa */
+    height: auto; /* Tự điều chỉnh chiều cao để giữ tỷ lệ ảnh */
+    object-fit: contain; /* Giữ tỷ lệ hình ảnh nguyên gốc */
+    border: 3px solid #007bff; /* Thêm viền màu giống button sidebar */
+    border-radius: 10px; /* Thêm bo tròn cho viền */
+}
+
+@media (max-width: 767px) {
+    .personal-profile .qr-code img {
+        max-width: 200px; /* Giảm kích thước tối đa trên màn hình nhỏ */
+        margin-top: 10px; /* Tăng khoảng cách phía trên nếu cần */
+    }
+}
+
+.sidebar {
+    width: 40px; /* Chiều rộng mặc định */
+    transition: width 0.3s ease;
+}
+
+.sidebar.active {
+    width: 100px; /* Chiều rộng phù hợp khi sidebar mở */
+}
+
+.main-content {
+    margin-left: 60px; /* Lề bên trái mặc định */
+    transition: margin-left 0.3s ease;
+}
+
+.main-content.active {
+    margin-left: 120px; /* Điều chỉnh lề khi sidebar mở */
+}
+
+@media (max-width: 767px) {
+    .sidebar {
+        left: -60px; /* Ẩn sidebar trên màn hình nhỏ */
+    }
+    .sidebar.active {
+        left: 0; /* Hiển thị sidebar khi active */
+        width: 80px; /* Chiều rộng nhỏ hơn */
+    }
+    .main-content {
+        margin-left: 0; /* Loại bỏ lề trái để mở rộng nội dung */
+    }
+    .main-content.active {
+        margin-left: 80px; /* Tăng lề khi sidebar mở */
+    }
+    .sidebar {
+        box-shadow: none; /* Luôn tắt shadow trên điện thoại */
+    }
+}
+
+
+@media (max-width: 767px) {
+    .sidebar {
+        left: -60px;
+    }
+    .sidebar.active {
+        left: 0;
+    }
+  
+    .personal-profile .cover-photo {
+        height: 250px;
+        width: auto;
+    }
+    .personal-profile .avatar {
+        width: 100px;
+        height: 100px;
+        margin: -50px auto 10px;
+    }
+    .personal-profile .personal-info h1,
+    .personal-profile .personal-info p {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 8px;
+        margin-left: 0 !important;
+    }
+    .personal-profile .cover-photo {
+        height: 160px;
+        border-radius: 10px;
+    }
+    .personal-profile .avatar {
+        width: 70px;
+        height: 70px;
+        margin: -35px auto 10px;
+    }
+    .personal-profile .info-section {
+        padding: 0 5px;
+        width: 100%;
+        align-items: center;
+    }
+    .info-table {
+        font-size: 12px;
+        max-width: 100%;
+        margin: 10px auto;
+        border-radius: 6px;
+    }
+    .info-table th, .info-table td {
+        padding: 6px 4px;
+    }
+    .personal-profile .qr-code {
+        margin-top: 10px;
+    }
+    .personal-profile .qr-code img {
+        max-width: 220px;
+        border-width: 2px;
+    }
+    .contact-us {
+        padding: 10px 8px;
+        max-width: 100%;
+        border-radius: 6px;
+    }
+    label, input, textarea {
+        font-size: 12px;
+    }
+    button {
+        padding: 0 10px;
+        font-size: 12px;
+    }
+}
+
+/* Preloader container */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff; /* Màu nền */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Đảm bảo preloader nằm trên nội dung */
+}
+
+/* Spinner hiệu ứng xoay */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3; /* Viền nhạt */
+    border-top: 5px solid #007bff; /* Viền chính */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Keyframes cho hiệu ứng xoay */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Ẩn nội dung trang khi preloader chạy */
+body.hidden #main-content {
+    display: none;
+}
+
+/* Hiển thị nội dung khi preloader kết thúc */
+body.visible #main-content {
+    display: block;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+}
+
+/* Hiệu ứng mờ dần */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* CSS form liên hệ*/
+@import url('https://fonts.googleapis.com/css?family=Spartan&display=swap');
+        
+        /* Biến màu và kích thước */
+        :root {
+            --form-bg: #00000000;
+            --form-border: #005ae0;
+            --form-shadow: #dfae4b;
+            --form-focus: #6bd4b1;
+            --font-size: 12pt;
+            --font-face: 'Spartan';
+            --font-color: #2A293E;
+        }
+
+        /* Reset */
+        .contact-us{
+            margin: 30px auto;
+            box-sizing: border-box;
+        }
+
+
+        .contact-us {
+            background: var(--form-bg);
+            padding: 20px 50px;
+            border-top: 10px solid var(--form-border);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
+        label, input, textarea {
+            display: block;
+            width: 100%;
+            font-size: 14px;
+            line-height: calc(var(--font-size) * 2);
+            font-family: 'Roboto Mono', monospace; /* Use Copilot font */
+            margin-top: 10px;
+        }
+
+        input, textarea {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            background: var(--form-bg);
+            padding: 5px;
+            outline: none;
+        }
+
+        input:focus, textarea:focus {
+            border: 1px solid var(--form-focus);
+        }
+
+        h3 {
+            font-weight: normal;
+            font-size: 10pt;
+            line-height: calc(var(--font-size) * 2);
+            font-style: italic;
+            margin: 0 0 10px 0;
+        }
+
+        em {
+            color: var(--form-border);
+            font-weight: bold;
+        }
+
+        button {
+            margin-top: 20px;
+            line-height: calc(var(--font-size) * 2);
+            padding: 0 20px;
+            border: none;
+            background: var(--form-border);
+            color: white;
+            letter-spacing: 2px;
+            transition: .2s all ease-in-out;
+            border-bottom: 2px solid transparent;
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: inherit;
+            color: var(--form-border);
+            border-bottom: 2px solid var(--form-border);
+        }
+
+        span {
+            font-size: 10pt;
+        }
+
+        ::selection {
+            background: rgb(255, 199, 184);
+        }
+
+/* Material Design Enhancements */
+
+body {
+    background: #f5f5f5;
+    font-family: 'Roboto', 'Arial', sans-serif;
+    color: #222;
+}
+
+.card, .main-content, .contact-us, .info-table {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(60,60,60,0.08), 0 1.5px 6px rgba(60,60,60,0.06);
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: box-shadow 0.2s;
+}
+.card:hover, .main-content:hover, .contact-us:hover, .info-table:hover {
+    box-shadow: 0 6px 24px rgba(60,60,60,0.13), 0 2px 8px rgba(60,60,60,0.09);
+}
+
+.sidebar {
+    background: #1976d2;
+    box-shadow: 2px 0 8px rgba(60,60,60,0.13);
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+.sidebar .profile img {
+    box-shadow: 0 2px 8px rgba(60,60,60,0.13);
+    border: 3px solid #fff;
+}
+.sidebar nav ul li a {
+    border-radius: 8px;
+    padding: 8px 0;
+    transition: background 0.2s, color 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+.sidebar nav ul li a:hover {
+    background: #1565c0;
+    color: #ffe082;
+}
+
+/* Ripple effect for buttons */
+button, .sidebar nav ul li a {
+    position: relative;
+    overflow: hidden;
+}
+button:active::after, .sidebar nav ul li a:active::after {
+    content: '';
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 0; height: 0;
+    background: rgba(255,255,255,0.4);
+    border-radius: 100%;
+    transform: translate(-50%, -50%);
+    animation: ripple 0.5s linear;
+}
+@keyframes ripple {
+    to {
+        width: 200%; height: 200%; opacity: 0;
+    }
+}
+
+button {
+    background: #1976d2;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(60,60,60,0.10);
+    font-weight: 500;
+    letter-spacing: 1px;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+button:hover {
+    background: #1565c0;
+    box-shadow: 0 4px 12px rgba(60,60,60,0.13);
+}
+
+/* Floating label input */
+.material-input {
+    position: relative;
+    margin-bottom: 24px;
+}
+.material-input input, .material-input textarea {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #bdbdbd;
+    background: transparent;
+    padding: 8px 0 6px 0;
+    font-size: 16px;
+    transition: border-color 0.2s;
+    outline: none;
+}
+.material-input input:focus, .material-input textarea:focus {
+    border-bottom: 2px solid #1976d2;
+}
+.material-input label {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    color: #757575;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.2s ease all;
+}
+.material-input input:focus ~ label,
+.material-input input:not(:placeholder-shown) ~ label,
+.material-input textarea:focus ~ label,
+.material-input textarea:not(:placeholder-shown) ~ label {
+    top: -14px;
+    font-size: 13px;
+    color: #1976d2;
+    background: #fff;
+    padding: 0 4px;
+}
+
+/* Avatar shadow */
+.personal-profile .avatar {
+    box-shadow: 0 4px 16px rgba(60,60,60,0.13);
+    border: 4px solid #fff;
+}
+
+/* Table Material style */
+.info-table {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(60,60,60,0.08);
+    overflow: hidden;
+}
+.info-table th {
+    background: #1976d2;
+    color: #fff;
+    font-weight: 500;
+}
+.info-table td {
+    background: #fafafa;
+}

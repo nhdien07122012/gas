@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý Thu nợ</title>
+<!-- Thêm các thẻ icon -->
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-icon-precomposed" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Thu nợ">
+<style>
+  :root {
+    --primary: #2c80ff;
+    --primary-dark: #1a6de0;
+    --secondary: #34c759;
+    --danger: #ff3b30;
+    --warning: #ff9500;
+    --light: #f8f9fa;
+    --dark: #333;
+    --gray: #6c757d;
+    --border: #dee2e6;
+    --shadow: 0 2px 10px rgba(0,0,0,0.08);
+    --radius: 10px;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: var(--dark);
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  
+  header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 25px 30px;
+    text-align: center;
+    position: relative;
+  }
+  
+  header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  header p {
+    opacity: 0.9;
+    font-size: 1rem;
+  }
+  
+  .back-button {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+  }
+  
+  .back-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .card {
+    padding: 25px 30px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .card:last-child {
+    border-bottom: none;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+  }
+  
+  button {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .btn-primary {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 128, 255, 0.3);
+  }
+  
+  .btn-secondary {
+    background-color: #f1f3f5;
+    color: var(--dark);
+  }
+  
+  .btn-secondary:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+  }
+  
+  .btn-success {
+    background-color: var(--secondary);
+    color: white;
+  }
+  
+  .btn-success:hover {
+    background-color: #30b352;
+    transform: translateY(-2px);
+  }
+  
+  .btn-warning {
+    background-color: var(--warning);
+    color: white;
+  }
+  
+  .btn-warning:hover {
+    background-color: #e08900;
+    transform: translateY(-2px);
+  }
+  
+  .btn-danger {
+    background-color: var(--danger);
+    color: white;
+  }
+  
+  .btn-danger:hover {
+    background-color: #e0352b;
+    transform: translateY(-2px);
+  }
+  
+  .btn-sm {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    margin-top: 10px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+  }
+  
+  th {
+    background-color: #f8f9fa;
+    padding: 16px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--dark);
+    border-bottom: 2px solid var(--border);
+  }
+  
+  td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  tr:hover {
+    background-color: #f8fafc;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gray);
+  }
+  
+  .empty-state p {
+    margin-top: 10px;
+  }
+  
+  .stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .stat-card {
+    flex: 1;
+    min-width: 150px;
+    background: #f8f9fa;
+    border-radius: var(--radius);
+    padding: 15px;
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin-top: 5px;
+  }
+  
+  .filter-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .filter-group select {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  /* Modal styles */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .modal-content {
+    background: white;
+    border-radius: var(--radius);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: modalFadeIn 0.3s ease-out;
+    max-height: 85vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.4rem;
+  }
+  
+  .modal-body {
+    padding: 25px;
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  .modal-footer {
+    padding: 20px 25px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--gray);
+  }
+  
+  .close-modal:hover {
+    color: var(--dark);
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    body {
+      padding: 15px;
+    }
+    
+    header {
+      padding: 20px;
+    }
+    
+    header h1 {
+      font-size: 1.5rem;
+    }
+    
+    .card {
+      padding: 20px;
+    }
+    
+    .button-group {
+      flex-direction: column;
+    }
+    
+    .stats-container {
+      flex-direction: column;
+    }
+    
+    .filter-group {
+      flex-direction: column;
+    }
+    
+    .filter-group select {
+      min-width: 100%;
+    }
+    
+    th, td {
+      padding: 12px 8px;
+      font-size: 0.9rem;
+    }
+    
+    table {
+      min-width: 600px;
+    }
+    
+    .modal {
+      padding: 10px;
+    }
+    
+    .modal-content {
+      width: 95%;
+    }
+    
+    .modal-header, .modal-body, .modal-footer {
+      padding: 15px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    body {
+      padding: 10px;
+    }
+    
+    header {
+      padding: 18px 15px;
+    }
+    
+    header h1 {
+      font-size: 1.3rem;
+    }
+    
+    .card {
+      padding: 18px 15px;
+    }
+    
+    input, select {
+      padding: 12px 14px;
+      font-size: 16px;
+    }
+    
+    button {
+      padding: 14px;
+    }
+  }
+  
+  /* Animation */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+  
+  .badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  
+  .badge-primary {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .badge-secondary {
+    background-color: var(--secondary);
+    color: white;
+  }
+  
+  .badge-warning {
+    background-color: var(--warning);
+    color: white;
+  }
+  
+  .badge-danger {
+    background-color: var(--danger);
+    color: white;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .form-row .form-group {
+    flex: 1;
+  }
+  
+  /* Toast notification */
+  .toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(100px);
+    background: var(--primary);
+    color: white;
+    padding: 16px 24px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    z-index: 1002;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    min-width: 280px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .toast.show {
+    transform: translate(-50%, -50%) translateY(0);
+    opacity: 1;
+  }
+  
+  .toast.success {
+    background: var(--secondary);
+  }
+  
+  .toast.error {
+    background: var(--danger);
+  }
+  
+  /* Style cho danh sách thu nợ */
+  .debt-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    background-color: #f8f9fa;
+    border-radius: var(--radius);
+    border-left: 4px solid var(--warning);
+  }
+  
+  .debt-item.success {
+    border-left-color: var(--secondary);
+  }
+  
+  .debt-item.pending {
+    border-left-color: var(--warning);
+  }
+  
+  .debt-item.failed {
+    border-left-color: var(--danger);
+  }
+  
+  .debt-item-info {
+    flex: 1;
+  }
+  
+  .debt-item-name {
+    font-weight: 600;
+    color: var(--dark);
+  }
+  
+  .debt-item-amount {
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 3px;
+  }
+  
+  .debt-item-note {
+    font-size: 0.85rem;
+    color: var(--gray);
+    margin-top: 2px;
+  }
+  
+  .debt-item-actions {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .debt-status-select {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  
+  .debt-summary {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f1f3f5;
+    border-radius: var(--radius);
+  }
+  
+  .debt-summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  
+  .debt-total {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--primary);
+    border-top: 2px solid var(--border);
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+  
+  /* Style cho nút thêm nhanh */
+  .quick-add-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .quick-add-btn {
+    padding: 8px 12px;
+    background-color: #e9ecef;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
+  
+  .quick-add-btn:hover {
+    background-color: #dee2e6;
+  }
+  
+  /* Style cho phần import/export */
+  .import-export-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .import-export-buttons button {
+    flex: 1;
+  }
+  
+  /* Style cho modal chọn ca */
+  .shift-option {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .shift-option:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .shift-option.selected {
+    background-color: rgba(44, 128, 255, 0.1);
+    border-color: var(--primary);
+  }
+  
+  .shift-option input {
+    width: auto;
+    margin-right: 10px;
+  }
+  
+  .shift-option label {
+    flex: 1;
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+</style>
+</head>
+<body>
+  <!-- Toast notification -->
+  <div class="toast" id="toast">
+    <span id="toast-message">Đã sao chép vào clipboard!</span>
+  </div>
+
+  <div class="container">
+    <header>
+      <button class="back-button" onclick="window.location.href='index.html'">
+        ← Trang chính
+      </button>
+      <h1>💳 Quản lý Thu nợ</h1>
+      <p>Theo dõi và quản lý thu nợ tại các điểm gas theo ca</p>
+    </header>
+    
+    <div class="card">
+      <h2 style="margin-bottom: 15px;">📋 Tạo danh sách thu nợ</h2>
+      
+      <div class="form-group">
+        <label for="debt-shift">Chọn ca thu nợ:</label>
+        <select id="debt-shift" onchange="updateDebtListDisplay()">
+          <option value="">-- Chọn ca --</option>
+          <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
+        </select>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="debt-diem">Chọn điểm:</label>
+          <input id="debt-diem" list="debt-diem-list" placeholder="Nhập hoặc chọn điểm..." autocomplete="off">
+          <datalist id="debt-diem-list">
+            <!-- Danh sách điểm sẽ được thêm bằng JavaScript -->
+          </datalist>
+          
+          <div class="quick-add-buttons" id="quick-add-buttons">
+            <!-- Nút thêm nhanh sẽ được thêm bằng JavaScript -->
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="debt-so-tien">Số tiền (VNĐ):</label>
+          <input id="debt-so-tien" type="number" placeholder="Nhập số tiền" autocomplete="off">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="debt-ghi-chu">Ghi chú:</label>
+        <input id="debt-ghi-chu" placeholder="Nhập ghi chú (nếu có)" autocomplete="off">
+      </div>
+      
+      <div class="button-group">
+        <button class="btn-primary" onclick="addToDebtList()" id="btn-add-debt">
+          ➕ Thêm vào danh sách thu nợ
+        </button>
+        <button class="btn-secondary" onclick="clearDebtForm()">
+          ❌ Xóa form
+        </button>
+      </div>
+      
+      <div class="import-export-buttons">
+        <button class="btn-warning" onclick="importFromMainData()">
+          📥 Import từ dữ liệu chính
+        </button>
+        <button class="btn-success" onclick="exportDebtList()">
+          📤 Xuất danh sách thu nợ
+        </button>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="stats-container" id="stats-container">
+        <!-- Thống kê sẽ được thêm bằng JavaScript -->
+      </div>
+      
+      <div class="filter-group">
+        <select id="filter-debt-status" onchange="filterDebtList()">
+          <option value="all">Tất cả trạng thái</option>
+          <option value="pending">Chưa thu</option>
+          <option value="success">Đã thu</option>
+          <option value="failed">Hẹn lại</option>
+        </select>
+        
+        <select id="filter-debt-shift" onchange="filterDebtList()">
+          <option value="all">Tất cả các ca</option>
+          <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
+        </select>
+      </div>
+      
+      <h2 style="margin-bottom: 15px;">📊 Danh sách thu nợ</h2>
+      
+      <div id="debt-list-container">
+        <div id="debt-list">
+          <!-- Danh sách thu nợ sẽ được thêm bằng JavaScript -->
+        </div>
+        
+        <div id="empty-debt-state" class="empty-state">
+          <h3>📭 Chưa có khoản nợ nào</h3>
+          <p>Hãy thêm khoản nợ đầu tiên để bắt đầu quản lý</p>
+        </div>
+      </div>
+      
+      <div class="button-group" style="margin-top: 20px;">
+        <button class="btn-success" onclick="showShiftSelectionModal()" id="btn-process-debt">
+          ✅ Hoàn tất & Chuyển thành điểm
+        </button>
+        <button class="btn-danger" onclick="clearAllDebts()">
+          🗑️ Xóa tất cả
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal xác nhận -->
+  <div class="modal" id="confirm-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Xác nhận</h2>
+        <button class="close-modal" onclick="closeModal('confirm-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-message"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('confirm-modal')">Hủy</button>
+        <button class="btn-primary" id="confirm-action-btn">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal import dữ liệu -->
+  <div class="modal" id="import-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📥 Import từ dữ liệu chính</h2>
+        <button class="close-modal" onclick="closeModal('import-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="import-shift">Chọn ca để import:</label>
+          <select id="import-shift">
+            <option value="">-- Chọn ca --</option>
+            <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="import-status">Chọn trạng thái:</label>
+          <select id="import-status">
+            <option value="all">Tất cả</option>
+            <option value="Chưa nộp">Chưa nộp</option>
+            <option value="Đã nộp">Đã nộp</option>
+          </select>
+        </div>
+        
+        <div id="import-preview" style="margin-top: 15px; max-height: 200px; overflow-y: auto; display: none;">
+          <h4>Danh sách sẽ import:</h4>
+          <div id="import-preview-list"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('import-modal')">Hủy</button>
+        <button class="btn-primary" onclick="confirmImport()">Import</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal chọn ca để chuyển đổi -->
+  <div class="modal" id="shift-selection-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📊 Chọn ca để chuyển đổi</h2>
+        <button class="close-modal" onclick="closeModal('shift-selection-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="shift-selection-list">
+          <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
+        </div>
+        <div id="no-successful-debts" style="display: none;">
+          <p class="empty-state">Không có khoản nợ nào đã thu thành công!</p>
+          <p>Vui lòng đánh dấu trạng thái "Đã thu" cho các khoản nợ trước khi chuyển đổi.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('shift-selection-modal')">Hủy</button>
+        <button class="btn-primary" onclick="processSelectedShiftDebts()" id="btn-process-selected-shift">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
+let debtList = [];
+let allMainData = [];
+let cacheDiem = {};
+let selectedShiftForProcessing = null;
+
+// Hàm hiển thị thông báo toast
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toast-message');
+  
+  toastMessage.textContent = message;
+  toast.className = `toast ${type} show`;
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+// Định dạng tiền tệ
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  }).format(amount);
+}
+
+// Định dạng số không có ký hiệu tiền tệ
+function formatNumber(amount) {
+  return new Intl.NumberFormat('vi-VN').format(amount);
+}
+
+// Lấy dữ liệu từ trang chính
+async function loadMainData() {
+  try {
+    const res = await fetch(scriptURL);
+    const data = await res.json();
+    allMainData = data;
+    
+    // Cập nhật cacheDiem
+    cacheDiem = {};
+    data.forEach(item => {
+      if (item.ten_diem && item.dia_chi) {
+        cacheDiem[item.ten_diem] = item.dia_chi;
+      }
+    });
+    
+    updateShiftOptions();
+    updateDiemOptions();
+    updateQuickAddButtons();
+    
+    // Load danh sách nợ từ localStorage
+    loadDebtListFromStorage();
+    
+    return data;
+  } catch (error) {
+    console.error('Lỗi khi tải dữ liệu chính:', error);
+    showToast('❌ Lỗi khi tải dữ liệu từ server!', 'error');
+    return [];
+  }
+}
+
+// Cập nhật các tùy chọn ca
+function updateShiftOptions() {
+  const shifts = new Set();
+  allMainData.forEach(item => {
+    if (item.ca) shifts.add(item.ca);
+  });
+  
+  // Cập nhật cho select ca thu nợ
+  const debtShiftSelect = document.getElementById('debt-shift');
+  const currentValue = debtShiftSelect.value;
+  debtShiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
+  
+  // Thêm ca hiện tại (nếu có)
+  const currentShift = getCurrentShift();
+  if (currentShift.shiftKey) {
+    const option = document.createElement('option');
+    option.value = currentShift.shiftKey;
+    option.textContent = `Ca hiện tại (${formatShiftName(currentShift.shiftKey)})`;
+    debtShiftSelect.appendChild(option);
+  }
+  
+  // Thêm các ca khác
+  Array.from(shifts).sort().reverse().forEach(shift => {
+    const option = document.createElement('option');
+    option.value = shift;
+    option.textContent = formatShiftName(shift);
+    debtShiftSelect.appendChild(option);
+  });
+  
+  // Khôi phục giá trị đã chọn
+  if (currentValue) {
+    debtShiftSelect.value = currentValue;
+  }
+  
+  // Cập nhật cho bộ lọc ca
+  const filterShiftSelect = document.getElementById('filter-debt-shift');
+  filterShiftSelect.innerHTML = '<option value="all">Tất cả các ca</option>';
+  
+  if (currentShift.shiftKey) {
+    const option = document.createElement('option');
+    option.value = currentShift.shiftKey;
+    option.textContent = `Ca hiện tại (${formatShiftName(currentShift.shiftKey)})`;
+    filterShiftSelect.appendChild(option);
+  }
+  
+  Array.from(shifts).sort().reverse().forEach(shift => {
+    const option = document.createElement('option');
+    option.value = shift;
+    option.textContent = formatShiftName(shift);
+    filterShiftSelect.appendChild(option);
+  });
+  
+  // Cập nhật cho modal import
+  const importShiftSelect = document.getElementById('import-shift');
+  importShiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
+  
+  Array.from(shifts).sort().reverse().forEach(shift => {
+    const option = document.createElement('option');
+    option.value = shift;
+    option.textContent = formatShiftName(shift);
+    importShiftSelect.appendChild(option);
+  });
+}
+
+// Định dạng tên ca
+function formatShiftName(shiftKey) {
+  if (/^\d{4}-\d{2}-\d{2}/.test(shiftKey)) {
+    const d = new Date(shiftKey);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+  return shiftKey;
+}
+
+// Xác định ca hiện tại (18h30 hôm nay đến 6h30 sáng hôm sau)
+function getCurrentShift() {
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinutes = now.getMinutes();
+
+  let shiftStart = new Date(now);
+  let shiftEnd = new Date(now);
+
+  if (currentHour < 6 || (currentHour === 6 && currentMinutes < 30)) {
+    shiftStart.setDate(shiftStart.getDate() - 1);
+    shiftStart.setHours(18, 30, 0, 0);
+    shiftEnd.setHours(6, 30, 0, 0);
+  } 
+  else if (currentHour > 18 || (currentHour === 18 && currentMinutes >= 30)) {
+    shiftStart.setHours(18, 30, 0, 0);
+    shiftEnd.setDate(shiftEnd.getDate() + 1);
+    shiftEnd.setHours(6, 30, 0, 0);
+  }
+  else {
+    return {
+      shift: 'Ngoài ca làm việc',
+      shiftKey: null,
+      start: null,
+      end: null
+    };
+  }
+
+  const shiftKey = `${shiftStart.getFullYear()}-${String(shiftStart.getMonth() + 1).padStart(2, '0')}-${String(shiftStart.getDate()).padStart(2, '0')}`;
+  
+  return {
+    shift: `Ca ${formatShiftName(shiftKey)}`,
+    shiftKey: shiftKey,
+    start: shiftStart,
+    end: shiftEnd
+  };
+}
+
+// Cập nhật danh sách điểm
+function updateDiemOptions() {
+  const diemList = document.getElementById('debt-diem-list');
+  diemList.innerHTML = '';
+  
+  const uniqueDiems = new Set();
+  allMainData.forEach(item => {
+    if (item.ten_diem && !uniqueDiems.has(item.ten_diem)) {
+      const opt = document.createElement('option');
+      opt.value = item.ten_diem;
+      diemList.appendChild(opt);
+      uniqueDiems.add(item.ten_diem);
+    }
+  });
+}
+
+// Cập nhật nút thêm nhanh (5 điểm gas thường xuyên nhất)
+function updateQuickAddButtons() {
+  const quickAddContainer = document.getElementById('quick-add-buttons');
+  quickAddContainer.innerHTML = '';
+  
+  // Đếm tần suất xuất hiện của các điểm gas
+  const diemCount = {};
+  allMainData.forEach(item => {
+    if (item.ten_diem) {
+      diemCount[item.ten_diem] = (diemCount[item.ten_diem] || 0) + 1;
+    }
+  });
+  
+  // Sắp xếp theo tần suất giảm dần và lấy 5 điểm đầu
+  const topDiems = Object.entries(diemCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(item => item[0]);
+  
+  // Tạo nút thêm nhanh
+  topDiems.forEach(diem => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'quick-add-btn';
+    button.textContent = diem;
+    button.onclick = () => {
+      document.getElementById('debt-diem').value = diem;
+      // Tự động điền số tiền của lần gần nhất
+      const latestEntry = findLatestEntryForDiem(diem);
+      if (latestEntry) {
+        document.getElementById('debt-so-tien').value = latestEntry.so_tien;
+        document.getElementById('debt-so-tien').focus();
+      }
+    };
+    quickAddContainer.appendChild(button);
+  });
+}
+
+// Tìm bản ghi gần nhất cho một điểm gas
+function findLatestEntryForDiem(diemName) {
+  const diemEntries = allMainData.filter(item => item.ten_diem === diemName);
+  
+  if (diemEntries.length === 0) {
+    return null;
+  }
+  
+  diemEntries.sort((a, b) => {
+    const timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+    const timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+    return timeB - timeA;
+  });
+  
+  return diemEntries[0];
+}
+
+// Thêm vào danh sách thu nợ
+function addToDebtList() {
+  const diem = document.getElementById('debt-diem').value.trim();
+  const soTien = document.getElementById('debt-so-tien').value.trim();
+  const ghiChu = document.getElementById('debt-ghi-chu').value.trim();
+  const shift = document.getElementById('debt-shift').value;
+  
+  if (!diem || !soTien || !shift) {
+    showToast('⚠️ Vui lòng điền đầy đủ thông tin và chọn ca!', 'error');
+    return;
+  }
+  
+  const amount = parseInt(soTien);
+  if (isNaN(amount) || amount <= 0) {
+    showToast('⚠️ Số tiền không hợp lệ!', 'error');
+    return;
+  }
+  
+  // Lấy địa chỉ từ cache
+  const diaChi = cacheDiem[diem] || '';
+  
+  // Thêm vào danh sách
+  debtList.push({
+    id: Date.now() + Math.random(),
+    ten_diem: diem,
+    so_tien: amount,
+    dia_chi: diaChi,
+    ghi_chu: ghiChu,
+    trang_thai_thu: 'pending', // pending, success, failed
+    trang_thai_hien_thi: 'Chưa thu',
+    ca: shift,
+    timestamp: new Date().toISOString()
+  });
+  
+  // Lưu vào localStorage
+  saveDebtListToStorage();
+  
+  // Reset form
+  clearDebtForm();
+  
+  // Cập nhật hiển thị
+  updateDebtListDisplay();
+  
+  showToast('✅ Đã thêm vào danh sách thu nợ!');
+}
+
+// Xóa form
+function clearDebtForm() {
+  document.getElementById('debt-diem').value = '';
+  document.getElementById('debt-so-tien').value = '';
+  document.getElementById('debt-ghi-chu').value = '';
+  document.getElementById('debt-diem').focus();
+}
+
+// Cập nhật hiển thị danh sách thu nợ
+function updateDebtListDisplay() {
+  const container = document.getElementById('debt-list');
+  const emptyState = document.getElementById('empty-debt-state');
+  const statsContainer = document.getElementById('stats-container');
+  
+  // Lọc theo ca đã chọn (nếu có)
+  const selectedShift = document.getElementById('debt-shift').value;
+  let filteredDebtList = debtList;
+  
+  if (selectedShift) {
+    filteredDebtList = debtList.filter(item => item.ca === selectedShift);
+  }
+  
+  // Lọc theo trạng thái (nếu có)
+  const filterStatus = document.getElementById('filter-debt-status').value;
+  const filterShift = document.getElementById('filter-debt-shift').value;
+  
+  if (filterStatus !== 'all') {
+    filteredDebtList = filteredDebtList.filter(item => item.trang_thai_thu === filterStatus);
+  }
+  
+  if (filterShift !== 'all') {
+    filteredDebtList = filteredDebtList.filter(item => item.ca === filterShift);
+  }
+  
+  if (filteredDebtList.length === 0) {
+    container.innerHTML = '';
+    emptyState.style.display = 'block';
+    updateStats([]);
+    return;
+  }
+  
+  emptyState.style.display = 'none';
+  
+  let html = '';
+  let totalAmount = 0;
+  let successCount = 0;
+  let pendingCount = 0;
+  let failedCount = 0;
+  
+  // Sắp xếp theo thời gian (mới nhất đầu tiên)
+  filteredDebtList.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  
+  filteredDebtList.forEach((item, index) => {
+    totalAmount += item.so_tien;
+    
+    switch(item.trang_thai_thu) {
+      case 'success': successCount++; break;
+      case 'pending': pendingCount++; break;
+      case 'failed': failedCount++; break;
+    }
+    
+    const statusClass = item.trang_thai_thu === 'success' ? 'success' : 
+                       item.trang_thai_thu === 'failed' ? 'failed' : 'pending';
+    
+    html += `
+      <div class="debt-item ${statusClass} fade-in">
+        <div class="debt-item-info">
+          <div class="debt-item-name">${item.ten_diem}</div>
+          <div class="debt-item-amount">${formatCurrency(item.so_tien)}</div>
+          ${item.dia_chi ? `<div class="debt-item-note">${item.dia_chi}</div>` : ''}
+          ${item.ghi_chu ? `<div class="debt-item-note">${item.ghi_chu}</div>` : ''}
+          <div class="debt-item-note">Ca: ${formatShiftName(item.ca)}</div>
+        </div>
+        <div class="debt-item-actions">
+          <select class="debt-status-select" onchange="updateDebtStatus('${item.id}', this.value)">
+            <option value="pending" ${item.trang_thai_thu === 'pending' ? 'selected' : ''}>Chưa thu</option>
+            <option value="success" ${item.trang_thai_thu === 'success' ? 'selected' : ''}>Đã thu</option>
+            <option value="failed" ${item.trang_thai_thu === 'failed' ? 'selected' : ''}>Hẹn lại</option>
+          </select>
+          <button class="btn-danger btn-sm" onclick="removeFromDebtList('${item.id}')">×</button>
+        </div>
+      </div>
+    `;
+  });
+  
+  // Thêm tổng kết
+  html += `
+    <div class="debt-summary">
+      <div class="debt-summary-item">
+        <span>Tổng số điểm:</span>
+        <span>${filteredDebtList.length}</span>
+      </div>
+      <div class="debt-summary-item">
+        <span>Đã thu:</span>
+        <span>${successCount}</span>
+      </div>
+      <div class="debt-summary-item">
+        <span>Chưa thu:</span>
+        <span>${pendingCount}</span>
+      </div>
+      <div class="debt-summary-item">
+        <span>Hẹn lại:</span>
+        <span>${failedCount}</span>
+      </div>
+      <div class="debt-total">
+        <span>Tổng tiền:</span>
+        <span>${formatCurrency(totalAmount)}</span>
+      </div>
+    </div>
+  `;
+  
+  container.innerHTML = html;
+  updateStats(filteredDebtList);
+}
+
+// Cập nhật thống kê
+function updateStats(data) {
+  const statsContainer = document.getElementById('stats-container');
+  
+  if (data.length === 0) {
+    statsContainer.innerHTML = `
+      <div class="stat-card">
+        <div class="stat-value">0</div>
+        <div class="stat-label">Số khoản nợ</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">0₫</div>
+        <div class="stat-label">Tổng tiền</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">0/0/0</div>
+        <div class="stat-label">Đã thu/Chưa/Hẹn</div>
+      </div>
+    `;
+    return;
+  }
+  
+  const totalAmount = data.reduce((sum, item) => sum + item.so_tien, 0);
+  const successCount = data.filter(item => item.trang_thai_thu === 'success').length;
+  const pendingCount = data.filter(item => item.trang_thai_thu === 'pending').length;
+  const failedCount = data.filter(item => item.trang_thai_thu === 'failed').length;
+  
+  statsContainer.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-value">${data.length}</div>
+      <div class="stat-label">Số khoản nợ</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${formatCurrency(totalAmount)}</div>
+      <div class="stat-label">Tổng tiền</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${successCount}/${pendingCount}/${failedCount}</div>
+      <div class="stat-label">Đã thu/Chưa/Hẹn</div>
+    </div>
+  `;
+}
+
+// Cập nhật trạng thái thu nợ
+function updateDebtStatus(id, status) {
+  const itemIndex = debtList.findIndex(item => item.id === id);
+  
+  if (itemIndex !== -1) {
+    debtList[itemIndex].trang_thai_thu = status;
+    debtList[itemIndex].trang_thai_hien_thi = 
+      status === 'success' ? 'Đã thu' : 
+      status === 'failed' ? 'Hẹn lại' : 'Chưa thu';
+    
+    // Lưu vào localStorage
+    saveDebtListToStorage();
+    
+    updateDebtListDisplay();
+  }
+}
+
+// Xóa khỏi danh sách thu nợ
+function removeFromDebtList(id) {
+  debtList = debtList.filter(item => item.id !== id);
+  saveDebtListToStorage();
+  updateDebtListDisplay();
+  showToast('✅ Đã xóa khỏi danh sách thu nợ');
+}
+
+// Lọc danh sách thu nợ
+function filterDebtList() {
+  updateDebtListDisplay();
+}
+
+// Hiển thị modal chọn ca để chuyển đổi
+function showShiftSelectionModal() {
+  // Lấy tất cả khoản nợ đã thu thành công
+  const successfulDebts = debtList.filter(item => item.trang_thai_thu === 'success');
+  
+  if (successfulDebts.length === 0) {
+    // Hiển thị modal thông báo không có khoản nợ đã thu
+    openModal('shift-selection-modal');
+    document.getElementById('no-successful-debts').style.display = 'block';
+    document.getElementById('shift-selection-list').style.display = 'none';
+    document.getElementById('btn-process-selected-shift').style.display = 'none';
+    return;
+  }
+  
+  // Nhóm khoản nợ theo ca
+  const debtsByShift = {};
+  successfulDebts.forEach(debt => {
+    if (!debtsByShift[debt.ca]) {
+      debtsByShift[debt.ca] = [];
+    }
+    debtsByShift[debt.ca].push(debt);
+  });
+  
+  // Hiển thị các tùy chọn ca
+  const shiftSelectionList = document.getElementById('shift-selection-list');
+  shiftSelectionList.innerHTML = '';
+  
+  for (const shift in debtsByShift) {
+    const shiftDebts = debtsByShift[shift];
+    const totalAmount = shiftDebts.reduce((sum, debt) => sum + debt.so_tien, 0);
+    
+    const shiftOption = document.createElement('div');
+    shiftOption.className = 'shift-option';
+    shiftOption.innerHTML = `
+      <input type="radio" name="selectedShift" id="shift-${shift}" value="${shift}">
+      <label for="shift-${shift}">
+        <strong>Ca ${formatShiftName(shift)}</strong><br>
+        <small>Số khoản: ${shiftDebts.length} | Tổng tiền: ${formatCurrency(totalAmount)}</small>
+      </label>
+    `;
+    
+    shiftOption.addEventListener('click', function() {
+      // Bỏ chọn tất cả
+      document.querySelectorAll('.shift-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      
+      // Chọn option này
+      this.classList.add('selected');
+      const radio = this.querySelector('input[type="radio"]');
+      radio.checked = true;
+      selectedShiftForProcessing = shift;
+      
+      // Kích hoạt nút xác nhận
+      document.getElementById('btn-process-selected-shift').disabled = false;
+    });
+    
+    shiftSelectionList.appendChild(shiftOption);
+  }
+  
+  // Đặt option đầu tiên là mặc định
+  const firstOption = shiftSelectionList.querySelector('.shift-option');
+  if (firstOption) {
+    firstOption.click();
+  }
+  
+  // Reset modal state
+  document.getElementById('no-successful-debts').style.display = 'none';
+  document.getElementById('shift-selection-list').style.display = 'block';
+  document.getElementById('btn-process-selected-shift').style.display = 'block';
+  document.getElementById('btn-process-selected-shift').disabled = true;
+  
+  openModal('shift-selection-modal');
+}
+
+// Xử lý các khoản nợ đã thu trong ca đã chọn
+async function processSelectedShiftDebts() {
+  if (!selectedShiftForProcessing) {
+    showToast('⚠️ Vui lòng chọn một ca!', 'error');
+    return;
+  }
+  
+  // Lấy các khoản nợ đã thu trong ca đã chọn
+  const successfulDebtsInShift = debtList.filter(item => 
+    item.trang_thai_thu === 'success' && item.ca === selectedShiftForProcessing
+  );
+  
+  if (successfulDebtsInShift.length === 0) {
+    showToast('⚠️ Không có khoản nợ nào đã thu trong ca này!', 'error');
+    return;
+  }
+  
+  const totalAmount = successfulDebtsInShift.reduce((sum, debt) => sum + debt.so_tien, 0);
+  
+  showConfirmModal(
+    `Xác nhận chuyển ${successfulDebtsInShift.length} khoản nợ đã thu trong ca ${formatShiftName(selectedShiftForProcessing)} thành điểm gas?<br><br>
+    Tổng tiền: ${formatCurrency(totalAmount)}`,
+    async () => {
+      await processDebtCollectionForShift(successfulDebtsInShift, selectedShiftForProcessing);
+    }
+  );
+}
+
+// Xử lý chuyển đổi khoản nợ cho một ca cụ thể
+async function processDebtCollectionForShift(successfulDebts, shift) {
+  const btnProcess = document.getElementById('btn-process-selected-shift');
+  const originalText = btnProcess.textContent;
+  btnProcess.textContent = '⏳ Đang xử lý...';
+  btnProcess.disabled = true;
+  
+  let successCount = 0;
+  let errorCount = 0;
+  
+  // Xử lý từng khoản nợ
+  for (const debt of successfulDebts) {
+    try {
+      const data = {
+        ten_diem: debt.ten_diem,
+        so_tien: debt.so_tien,
+        dia_chi: debt.dia_chi,
+        ghi_chu: (debt.ghi_chu || '') + ' [Thu nợ]',
+        trang_thai: 'Đã nộp',
+        ca: debt.ca,
+        timestamp: new Date().toISOString()
+      };
+      
+      const response = await fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify(data)
+      });
+      
+      const result = await response.json();
+      
+      if (result.result === 'success') {
+        successCount++;
+        // Xóa khỏi danh sách thu nợ
+        debtList = debtList.filter(item => item.id !== debt.id);
+      } else {
+        errorCount++;
+      }
+    } catch (error) {
+      errorCount++;
+      console.error('Lỗi khi thêm điểm thu nợ:', error);
+    }
+  }
+  
+  // Lưu danh sách đã cập nhật
+  saveDebtListToStorage();
+  
+  // Hiển thị kết quả
+  if (errorCount === 0) {
+    showToast(`✅ Đã chuyển ${successCount} khoản nợ thành điểm gas trong ca ${formatShiftName(shift)}!`);
+  } else {
+    showToast(`⚠️ Đã chuyển ${successCount} khoản, ${errorCount} khoản lỗi!`, 'error');
+  }
+  
+  // Đóng modal và cập nhật giao diện
+  closeModal('shift-selection-modal');
+  updateDebtListDisplay();
+  
+  // Tải lại dữ liệu chính để cập nhật cache
+  await loadMainData();
+  
+  // Reset nút
+  btnProcess.textContent = originalText;
+  btnProcess.disabled = false;
+  selectedShiftForProcessing = null;
+}
+
+// Xóa tất cả khoản nợ
+function clearAllDebts() {
+  if (debtList.length === 0) {
+    showToast('📭 Danh sách thu nợ đã trống!');
+    return;
+  }
+  
+  showConfirmModal(`Bạn có chắc chắn muốn xóa tất cả ${debtList.length} khoản nợ?`, () => {
+    debtList = [];
+    saveDebtListToStorage();
+    updateDebtListDisplay();
+    showToast('✅ Đã xóa tất cả khoản nợ!');
+  });
+}
+
+// Lưu danh sách thu nợ vào localStorage
+function saveDebtListToStorage() {
+  localStorage.setItem('debtList', JSON.stringify(debtList));
+}
+
+// Tải danh sách thu nợ từ localStorage
+function loadDebtListFromStorage() {
+  const savedDebtList = localStorage.getItem('debtList');
+  if (savedDebtList) {
+    try {
+      debtList = JSON.parse(savedDebtList);
+      updateDebtListDisplay();
+    } catch (error) {
+      console.error('Lỗi khi tải danh sách thu nợ:', error);
+      debtList = [];
+    }
+  }
+}
+
+// Import từ dữ liệu chính
+function importFromMainData() {
+  openModal('import-modal');
+  updateImportPreview();
+}
+
+// Cập nhật preview import
+function updateImportPreview() {
+  const importShift = document.getElementById('import-shift').value;
+  const importStatus = document.getElementById('import-status').value;
+  const previewContainer = document.getElementById('import-preview');
+  const previewList = document.getElementById('import-preview-list');
+  
+  if (!importShift) {
+    previewContainer.style.display = 'none';
+    return;
+  }
+  
+  // Lọc dữ liệu theo ca và trạng thái
+  let filteredData = allMainData.filter(item => item.ca === importShift);
+  
+  if (importStatus !== 'all') {
+    filteredData = filteredData.filter(item => item.trang_thai === importStatus);
+  }
+  
+  if (filteredData.length === 0) {
+    previewList.innerHTML = '<p>Không có dữ liệu để import</p>';
+    previewContainer.style.display = 'block';
+    return;
+  }
+  
+  let html = '';
+  filteredData.slice(0, 10).forEach((item, index) => {
+    html += `<div>${index + 1}. ${item.ten_diem} - ${formatCurrency(item.so_tien)}</div>`;
+  });
+  
+  if (filteredData.length > 10) {
+    html += `<div>... và ${filteredData.length - 10} điểm khác</div>`;
+  }
+  
+  previewList.innerHTML = html;
+  previewContainer.style.display = 'block';
+}
+
+// Xác nhận import
+function confirmImport() {
+  const importShift = document.getElementById('import-shift').value;
+  const importStatus = document.getElementById('import-status').value;
+  
+  if (!importShift) {
+    showToast('⚠️ Vui lòng chọn ca!', 'error');
+    return;
+  }
+  
+  // Lọc dữ liệu theo ca và trạng thái
+  let filteredData = allMainData.filter(item => item.ca === importShift);
+  
+  if (importStatus !== 'all') {
+    filteredData = filteredData.filter(item => item.trang_thai === importStatus);
+  }
+  
+  if (filteredData.length === 0) {
+    showToast('⚠️ Không có dữ liệu để import!', 'error');
+    return;
+  }
+  
+  // Thêm vào danh sách thu nợ
+  let addedCount = 0;
+  filteredData.forEach(item => {
+    // Kiểm tra xem đã có trong danh sách thu nợ chưa
+    const existingDebt = debtList.find(debt => 
+      debt.ten_diem === item.ten_diem && 
+      debt.ca === item.ca &&
+      debt.so_tien === item.so_tien
+    );
+    
+    if (!existingDebt) {
+      debtList.push({
+        id: Date.now() + Math.random(),
+        ten_diem: item.ten_diem,
+        so_tien: item.so_tien,
+        dia_chi: item.dia_chi,
+        ghi_chu: item.ghi_chu || '',
+        trang_thai_thu: 'pending',
+        trang_thai_hien_thi: 'Chưa thu',
+        ca: item.ca,
+        timestamp: new Date().toISOString()
+      });
+      addedCount++;
+    }
+  });
+  
+  // Lưu vào localStorage
+  saveDebtListToStorage();
+  
+  // Cập nhật hiển thị
+  updateDebtListDisplay();
+  
+  // Đóng modal
+  closeModal('import-modal');
+  
+  showToast(`✅ Đã import ${addedCount} khoản nợ từ dữ liệu chính!`);
+}
+
+// Xuất danh sách thu nợ
+async function exportDebtList() {
+  if (debtList.length === 0) {
+    showToast('❌ Không có dữ liệu để xuất!', 'error');
+    return;
+  }
+  
+  let content = 'DANH SÁCH THU NỢ\n';
+  content += '==================\n\n';
+  
+  // Nhóm theo ca
+  const debtByShift = {};
+  debtList.forEach(debt => {
+    if (!debtByShift[debt.ca]) {
+      debtByShift[debt.ca] = [];
+    }
+    debtByShift[debt.ca].push(debt);
+  });
+  
+  for (const shift in debtByShift) {
+    content += `CA: ${formatShiftName(shift)}\n`;
+    content += '------------------------\n';
+    
+    let shiftTotal = 0;
+    debtByShift[shift].forEach((debt, index) => {
+      shiftTotal += debt.so_tien;
+      content += `${index + 1}. ${debt.ten_diem}: ${formatNumber(debt.so_tien)} VND`;
+      content += ` - ${debt.trang_thai_hien_thi}`;
+      if (debt.ghi_chu) content += ` (${debt.ghi_chu})`;
+      content += '\n';
+    });
+    
+    content += `Tổng: ${formatNumber(shiftTotal)} VND\n\n`;
+  }
+  
+  // Tổng kết
+  content += 'TỔNG KẾT:\n';
+  content += '==========\n';
+  
+  const totalAll = debtList.reduce((sum, debt) => sum + debt.so_tien, 0);
+  const successCount = debtList.filter(item => item.trang_thai_thu === 'success').length;
+  const pendingCount = debtList.filter(item => item.trang_thai_thu === 'pending').length;
+  const failedCount = debtList.filter(item => item.trang_thai_thu === 'failed').length;
+  
+  content += `Tổng số khoản nợ: ${debtList.length}\n`;
+  content += `Đã thu: ${successCount}\n`;
+  content += `Chưa thu: ${pendingCount}\n`;
+  content += `Hẹn lại: ${failedCount}\n`;
+  content += `Tổng tiền: ${formatNumber(totalAll)} VND\n`;
+  
+  // Tạo file và download
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const link = document.createElement('a');
+  const fileName = `thu_no_${new Date().toISOString().slice(0,10)}.txt`;
+  
+  link.download = fileName;
+  link.href = URL.createObjectURL(blob);
+  link.click();
+  
+  URL.revokeObjectURL(link.href);
+  
+  // Copy vào clipboard
+  try {
+    await navigator.clipboard.writeText(content);
+    showToast('✅ Đã xuất danh sách thu nợ và sao chép vào clipboard!');
+  } catch (error) {
+    showToast('✅ Đã xuất danh sách thu nợ!');
+  }
+}
+
+// Modal functions
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+function showConfirmModal(message, confirmCallback) {
+  const modal = document.getElementById('confirm-modal');
+  const messageElement = document.getElementById('confirm-message');
+  const confirmButton = document.getElementById('confirm-action-btn');
+  
+  messageElement.innerHTML = message;
+  
+  // Đặt lại sự kiện onclick
+  confirmButton.onclick = function() {
+    closeModal('confirm-modal');
+    if (confirmCallback) confirmCallback();
+  };
+  
+  openModal('confirm-modal');
+}
+
+// Xử lý nhập nhanh số tiền hàng ngàn
+document.getElementById('debt-so-tien').addEventListener('blur', function() {
+  let value = this.value.trim();
+  
+  if (/^\d+$/.test(value) && value.length > 0 && value.length <= 3) {
+    this.value = value + '000';
+  }
+});
+
+// Khởi tạo
+document.addEventListener('DOMContentLoaded', async function() {
+  // Tải dữ liệu chính
+  await loadMainData();
+  
+  // Thêm sự kiện cho các select trong modal import
+  document.getElementById('import-shift').addEventListener('change', updateImportPreview);
+  document.getElementById('import-status').addEventListener('change', updateImportPreview);
+  
+  // Thêm sự kiện cho ô nhập điểm để tự động điền số tiền
+  document.getElementById('debt-diem').addEventListener('change', function() {
+    const diem = this.value.trim();
+    if (diem) {
+      const latestEntry = findLatestEntryForDiem(diem);
+      if (latestEntry) {
+        document.getElementById('debt-so-tien').value = latestEntry.so_tien;
+        document.getElementById('debt-so-tien').focus();
+        document.getElementById('debt-so-tien').select();
+      }
+    }
+  });
+  
+  // Thêm sự kiện cho phím Enter để thêm nhanh
+  document.getElementById('debt-so-tien').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      addToDebtList();
+    }
+  });
+  
+  // Thêm sự kiện cho phím Enter trong ô điểm
+  document.getElementById('debt-diem').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      document.getElementById('debt-so-tien').focus();
+    }
+  });
+  
+  // Thêm sự kiện cho phím Enter trong ô ghi chú
+  document.getElementById('debt-ghi-chu').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      addToDebtList();
+    }
+    
+  });
+});
+</script>
+</body>
+</html>
