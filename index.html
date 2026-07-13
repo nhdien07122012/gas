@@ -1974,6 +1974,10 @@ let editingId = null;
 let itemToDelete = null;
 let currentFilteredData = [];
 let selectedOutOfHoursShift = null;
+const OFFLINE_DATA_KEY = 'gas_point_recent_transactions_v1';
+const OFFLINE_POINT_KEY = 'gas_point_directory_v1';
+const OFFLINE_DATA_LIMIT = 300;
+let pointDirectory = {};
 
 // Biến toàn cục để lưu danh sách người nhận
 let recipientList = [];
@@ -2113,6 +2117,107 @@ function closeSidebar() {
 /* ========== KẾT THÚC SỬA LỖI ========== */
 
 // HÀM MỚI: Mở modal báo cáo cuối ca
+function readOfflineJSON(key, fallbackValue) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallbackValue;
+  } catch (error) {
+    console.warn('Khong the doc cache offline:', key, error);
+    return fallbackValue;
+  }
+}
+
+function writeOfflineJSON(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.warn('Khong the luu cache offline:', key, error);
+  }
+}
+
+function getItemTime(item) {
+  if (!item) return 0;
+  const time = item.timestamp ? new Date(item.timestamp).getTime() : 0;
+  return Number.isFinite(time) ? time : 0;
+}
+
+function sortByNewest(data) {
+  return [...data].sort((a, b) => getItemTime(b) - getItemTime(a));
+}
+
+function getRecentTransactions(data, limit = OFFLINE_DATA_LIMIT) {
+  return sortByNewest(data).slice(0, limit);
+}
+
+function buildPointDirectory(data) {
+  const directory = {};
+  sortByNewest(data).forEach(item => {
+    if (!item || !item.ten_diem) return;
+    const current = directory[item.ten_diem] || {};
+    directory[item.ten_diem] = {
+      ten_diem: item.ten_diem,
+      dia_chi: current.dia_chi || item.dia_chi || '',
+      so_tien: current.so_tien || item.so_tien || '',
+      ghi_chu: current.ghi_chu || item.ghi_chu || '',
+      hasGPS: current.hasGPS || Boolean(item.ghi_chu && item.ghi_chu.includes('[GPS:')),
+      timestamp: current.timestamp || item.timestamp || ''
+    };
+  });
+  return directory;
+}
+
+function updateDiemDatalist(pointNames) {
+  const diemList = document.getElementById('diem-list');
+  if (!diemList) return;
+  diemList.innerHTML = '';
+  [...new Set(pointNames.filter(Boolean))].sort().forEach(ten => {
+    const opt = document.createElement('option');
+    opt.value = ten;
+    diemList.appendChild(opt);
+  });
+}
+
+function applyPointDirectory(directory) {
+  pointDirectory = directory || {};
+  cacheDiem = {};
+  Object.keys(pointDirectory).forEach(name => {
+    if (pointDirectory[name].dia_chi) {
+      cacheDiem[name] = pointDirectory[name].dia_chi;
+    }
+  });
+  updateDiemDatalist(Object.keys(pointDirectory));
+}
+
+function saveOfflineCache(data) {
+  writeOfflineJSON(OFFLINE_DATA_KEY, {
+    savedAt: new Date().toISOString(),
+    data: getRecentTransactions(data)
+  });
+  writeOfflineJSON(
+    OFFLINE_POINT_KEY,
+    Object.keys(pointDirectory).length > 0 ? pointDirectory : buildPointDirectory(data)
+  );
+}
+
+function loadOfflineCache() {
+  applyPointDirectory(readOfflineJSON(OFFLINE_POINT_KEY, {}));
+  const cachedTransactions = readOfflineJSON(OFFLINE_DATA_KEY, null);
+  if (cachedTransactions && Array.isArray(cachedTransactions.data)) {
+    return cachedTransactions.data;
+  }
+  return [];
+}
+
+function applyLoadedData(data, options = {}) {
+  const rows = Array.isArray(data) ? data : [];
+  allData = rows;
+  currentFilteredData = rows;
+  updateCacheDiem({ save: !options.fromCache });
+  displayData(rows);
+  displayStats(calculateStats(rows));
+  updateFilters(rows);
+}
+
 function openReportModal() {
   closeSidebar();
   vibrateShort();
@@ -2506,13 +2611,13 @@ async function confirmBatchStatusUpdate() {
 }
 
 // HÀM MỚI: Cập nhật cacheDiem từ allData
-function updateCacheDiem() {
-  cacheDiem = {};
-  allData.forEach(item => {
-    if (item.ten_diem && item.dia_chi) {
-      cacheDiem[item.ten_diem] = item.dia_chi;
-    }
-  });
+function updateCacheDiem(options = {}) {
+  const shouldSave = options.save !== false;
+  const directory = { ...pointDirectory, ...buildPointDirectory(allData) };
+  applyPointDirectory(directory);
+  if (shouldSave) {
+    saveOfflineCache(allData);
+  }
 }
 
 // HÀM MỚI: Kiểm tra xem điểm gas đã có vị trí GPS chưa
@@ -2523,7 +2628,7 @@ function hasExistingGPSLocation(diemName) {
       return true;
     }
   }
-  return false;
+  return Boolean(pointDirectory[diemName] && pointDirectory[diemName].hasGPS);
 }
 
 // Hàm hiển thị thông báo toast
@@ -3050,8 +3155,13 @@ function updateFilters(data) {
     if (item.ca) shifts.add(item.ca);
     if (item.ten_diem) diems.add(item.ten_diem);
   });
+  const activeShiftInfo = getCurrentShift();
+  if (activeShiftInfo.start && activeShiftInfo.shiftKey) {
+    shifts.add(activeShiftInfo.shiftKey);
+  }
 
   const shiftFilter = document.getElementById('filter-shift');
+  const previousShift = shiftFilter.value;
   shiftFilter.innerHTML = '<option value="all">Tất cả các ca</option>';
 
   Array.from(shifts).sort().reverse().forEach(shift => {
@@ -3070,8 +3180,12 @@ function updateFilters(data) {
     option.textContent = shiftLabel;
     shiftFilter.appendChild(option);
   });
+  if ([...shiftFilter.options].some(option => option.value === previousShift)) {
+    shiftFilter.value = previousShift;
+  }
 
   const diemFilter = document.getElementById('filter-diem');
+  const previousDiem = diemFilter.value;
   diemFilter.innerHTML = '<option value="all">Tất cả điểm gas</option>';
 
   Array.from(diems).sort().forEach(diem => {
@@ -3080,6 +3194,9 @@ function updateFilters(data) {
     option.textContent = diem;
     diemFilter.appendChild(option);
   });
+  if ([...diemFilter.options].some(option => option.value === previousDiem)) {
+    diemFilter.value = previousDiem;
+  }
 }
 
 // Reset form
@@ -3122,7 +3239,9 @@ function resetSaveLocationButton() {
 // HÀM MỚI: Tìm bản ghi gần nhất cho một điểm gas cụ thể
 function findLatestEntryForDiem(diemName) {
   const diemEntries = allData.filter(item => item.ten_diem === diemName);
-  if (diemEntries.length === 0) return null;
+  if (diemEntries.length === 0) {
+    return pointDirectory[diemName] || null;
+  }
   diemEntries.sort((a, b) => {
     const timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
     const timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
@@ -3396,34 +3515,36 @@ async function guiDuLieu() {
   }
 }
 
-async function taiDuLieu() {
+async function taiDuLieu(options = {}) {
+  const { useCache = true, silent = false } = options;
   closeSidebar();
-  vibrateShort();
+  if (!silent) vibrateShort();
+
+  if (useCache) {
+    const cachedData = loadOfflineCache();
+    if (cachedData.length > 0) {
+      applyLoadedData(cachedData, { fromCache: true });
+      const shiftInfo = getCurrentShift();
+      const shiftFilter = document.getElementById('filter-shift');
+      if (shiftFilter && shiftInfo.start) {
+        shiftFilter.value = shiftInfo.start ? shiftInfo.shiftKey : 'all';
+      }
+      filterData();
+    }
+  }
   try {
     const res = await fetch(scriptURL);
     const data = await res.json();
-    allData = data;
-    currentFilteredData = data;
-    updateCacheDiem();
-    
-    const diemList = document.getElementById('diem-list');
-    diemList.innerHTML = '';
-    const uniqueDiems = new Set();
-    data.forEach(row => {
-      const ten = row.ten_diem;
-      if (!uniqueDiems.has(ten)) {
-        const opt = document.createElement('option');
-        opt.value = ten;
-        diemList.appendChild(opt);
-        uniqueDiems.add(ten);
-      }
-    });
-
-    displayData(data);
-    displayStats(calculateStats(data));
-    updateFilters(data);
+    applyLoadedData(data);
     
   } catch (error) {
+    if (useCache && allData.length > 0) {
+      if (!silent) {
+        showToast('Dang dung du lieu offline, se cap nhat khi co mang.', 'error');
+      }
+      console.error(error);
+      return;
+    }
     showToast('❌ Có lỗi xảy ra khi tải dữ liệu!', 'error');
     vibrateError();
     console.error(error);
@@ -3464,6 +3585,11 @@ document.getElementById('scrollTopBtn').onclick = function() {
 document.addEventListener('DOMContentLoaded', function() {
   initAudio();
   updateShiftInfo();
+  const initialShiftInfo = getCurrentShift();
+  const initialShiftFilter = document.getElementById('filter-shift');
+  if (initialShiftFilter) {
+    initialShiftFilter.value = initialShiftInfo.start ? initialShiftInfo.shiftKey : 'all';
+  }
   taiDuLieu().then(() => {
     const shiftInfo = getCurrentShift();
     const shiftFilter = document.getElementById('filter-shift');
