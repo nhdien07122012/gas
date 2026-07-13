@@ -1,16 +1,16 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quản lý tiền thu điểm gas theo ca</title>
-<!-- Thêm các thẻ icon cho web và màn hình chính iPhone -->
+<title>Quáº£n lÃ½ tiá»n thu Ä‘iá»ƒm gas theo ca</title>
+<!-- ThÃªm cÃ¡c tháº» icon cho web vÃ  mÃ n hÃ¬nh chÃ­nh iPhone -->
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="apple-touch-icon-precomposed" href="icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Quản lý điểm gas">
+<meta name="apple-mobile-web-app-title" content="Quáº£n lÃ½ Ä‘iá»ƒm gas">
 <style>
   :root {
     --primary: #007AFF;
@@ -317,7 +317,7 @@
     background: #FFFFFF;
   }
   
-  /* NÚT LIQUID GLASS STYLES */
+  /* NÃšT LIQUID GLASS STYLES */
   button {
     flex: 1;
     padding: 18px 24px;
@@ -355,7 +355,7 @@
     opacity: 1;
   }
   
-  /* Nút chính - Primary */
+  /* NÃºt chÃ­nh - Primary */
   .btn-primary {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     color: white;
@@ -373,7 +373,7 @@
     box-shadow: 0 2px 10px rgba(0, 122, 255, 0.2);
   }
   
-  /* Nút phụ - Secondary */
+  /* NÃºt phá»¥ - Secondary */
   .btn-secondary {
     background: linear-gradient(135deg, #F2F2F7 0%, #E5E5EA 100%);
     color: var(--dark);
@@ -386,7 +386,7 @@
     box-shadow: 0 8px 25px rgba(142, 142, 147, 0.15);
   }
   
-  /* Nút thành công - Success */
+  /* NÃºt thÃ nh cÃ´ng - Success */
   .btn-success {
     background: linear-gradient(135deg, var(--secondary) 0%, #4CD964 100%);
     color: white;
@@ -399,7 +399,7 @@
     box-shadow: 0 8px 25px rgba(52, 199, 89, 0.35);
   }
   
-  /* Nút cảnh báo - Warning */
+  /* NÃºt cáº£nh bÃ¡o - Warning */
   .btn-warning {
     background: linear-gradient(135deg, var(--warning) 0%, #FFB323 100%);
     color: white;
@@ -412,7 +412,7 @@
     box-shadow: 0 8px 25px rgba(255, 149, 0, 0.35);
   }
   
-  /* Nút nguy hiểm - Danger */
+  /* NÃºt nguy hiá»ƒm - Danger */
   .btn-danger {
     background: linear-gradient(135deg, var(--danger) 0%, #FF6961 100%);
     color: white;
@@ -425,7 +425,7 @@
     box-shadow: 0 8px 25px rgba(255, 59, 48, 0.35);
   }
   
-  /* Nút nhỏ */
+  /* NÃºt nhá» */
   .btn-sm {
     padding: 12px 20px;
     font-size: 0.9rem;
@@ -926,7 +926,7 @@
     border-radius: var(--radius-pill);
   }
   
-  /* Thêm style mới cho modal xem nhanh */
+  /* ThÃªm style má»›i cho modal xem nhanh */
   .quick-view-list {
     max-height: none;
     overflow-y: visible;
@@ -988,7 +988,7 @@
     border-radius: 0 0 var(--radius) var(--radius);
   }
   
-  /* Style cho ô số tiền khi được tự động điền */
+  /* Style cho Ã´ sá»‘ tiá»n khi Ä‘Æ°á»£c tá»± Ä‘á»™ng Ä‘iá»n */
   #so_tien {
     transition: all 0.3s ease;
   }
@@ -999,7 +999,7 @@
     background-color: #FFFFFF;
   }
   
-  /* Style cho nút lưu vị trí khi đã có GPS */
+  /* Style cho nÃºt lÆ°u vá»‹ trÃ­ khi Ä‘Ã£ cÃ³ GPS */
   .btn-location-disabled {
     background: linear-gradient(135deg, #8E8E93 0%, #6C6C70 100%) !important;
     cursor: not-allowed !important;
@@ -1010,7 +1010,7 @@
     background: linear-gradient(135deg, #8E8E93 0%, #6C6C70 100%) !important;
   }
   
-  /* Style cho modal báo cáo */
+  /* Style cho modal bÃ¡o cÃ¡o */
   #report-summary {
     border-left: 4px solid var(--primary);
     margin-top: 20px;
@@ -1039,7 +1039,7 @@
     border-radius: var(--radius-pill);
   }
   
-  /* Style cho phần chi tiêu */
+  /* Style cho pháº§n chi tiÃªu */
   .expense-input-group {
     display: flex;
     gap: 12px;
@@ -1126,7 +1126,7 @@
     border: 1px solid rgba(255, 59, 48, 0.2);
   }
   
-  /* Nút cuộn về đầu trang */
+  /* NÃºt cuá»™n vá» Ä‘áº§u trang */
   #scrollTopBtn {
     position: fixed;
     right: 30px;
@@ -1234,7 +1234,7 @@
   
   <!-- Toast notification -->
   <div class="toast" id="toast">
-    <span id="toast-message">Đã sao chép vào clipboard!</span>
+    <span id="toast-message">ÄÃ£ sao chÃ©p vÃ o clipboard!</span>
   </div>
   
   <!-- Sidebar -->
@@ -1245,294 +1245,295 @@
     </div>
     <div class="sidebar-content">
       <button class="sidebar-item" onclick="exportToText()">
-        📄 Xuất dữ liệu văn bản
+        ðŸ“„ Xuáº¥t dá»¯ liá»‡u vÄƒn báº£n
       </button>
-      <!-- Thêm vào sidebar-content trong index.html -->
+      <!-- ThÃªm vÃ o sidebar-content trong index.html -->
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='diemtien.html'">
-          💵 Đếm tiền
+          ðŸ’µ Äáº¿m tiá»n
       </button>
       <button class="sidebar-item" onclick="openOutOfHoursModal()">
-        ⏰ Thêm điểm ngoài ca
+        â° ThÃªm Ä‘iá»ƒm ngoÃ i ca
       </button>
       <button class="sidebar-item" onclick="openBatchStatusModal()">
-        🔄 Chuyển trạng thái
+        ðŸ”„ Chuyá»ƒn tráº¡ng thÃ¡i
       </button>
-      <!-- THÊM NÚT MỚI: BÁO CÁO CUỐI CA -->
+      <!-- THÃŠM NÃšT Má»šI: BÃO CÃO CUá»I CA -->
       <button class="sidebar-item" onclick="openReportModal()">
-        📊 Báo cáo cuối ca
+        ðŸ“Š BÃ¡o cÃ¡o cuá»‘i ca
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='vitri.html'">
-        📍 Quản lý vị trí
+        ðŸ“ Quáº£n lÃ½ vá»‹ trÃ­
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='tinhluong.html'">
-        💰 Tính công & lương
+        ðŸ’° TÃ­nh cÃ´ng & lÆ°Æ¡ng
       </button>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='dudoandiemgas.html'">         🔮 Dự đoán điểm gas       </button>       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='tinhgascon.html'">         💧 Tính tiền gas còn lại       </button>
        <button class="sidebar-item" onclick="openQuickViewModal()">
-        👁️ Xem nhanh điểm (ca)
+        ðŸ‘ï¸ Xem nhanh Ä‘iá»ƒm (ca)
       </button>
       <button class="sidebar-item" onclick="openModal('help-modal')">
-        ❓ Trợ giúp
+        â“ Trá»£ giÃºp
       </button>
       <button class="sidebar-item" onclick="resetForm()">
-        ❌ Đóng
+        âŒ ÄÃ³ng
       </button>
     </div>
     <div class="sidebar-footer">
-      <p>Quản lý điểm gas &copy; 2025</p>
+      <p>Quáº£n lÃ½ Ä‘iá»ƒm gas &copy; 2025</p>
     </div>
   </div>
 
   <div class="container">
     <header>
-      <button class="menu-toggle" id="menu-toggle">☰</button>
-      <h1>📋 Quản lý tiền điểm gas</h1>
-      <p>Theo dõi và quản lý thu chi tại các điểm gas theo ca làm việc</p>
+      <button class="menu-toggle" id="menu-toggle">â˜°</button>
+      <h1>ðŸ“‹ Quáº£n lÃ½ tiá»n Ä‘iá»ƒm gas</h1>
+      <p>Theo dÃµi vÃ  quáº£n lÃ½ thu chi táº¡i cÃ¡c Ä‘iá»ƒm gas theo ca lÃ m viá»‡c</p>
     </header>
     
     <div class="shift-info">
-      <div class="current-shift" id="current-shift">Đang tải thông tin ca...</div>
+      <div class="current-shift" id="current-shift">Äang táº£i thÃ´ng tin ca...</div>
       <div class="shift-time" id="shift-time"></div>
     </div>
     
     <div class="card">
       <div class="stats-container" id="stats-container">
-        <!-- Thống kê sẽ được thêm bằng JavaScript -->
+        <!-- Thá»‘ng kÃª sáº½ Ä‘Æ°á»£c thÃªm báº±ng JavaScript -->
       </div>
       
       <div class="filter-group">
         <select id="filter-shift" onchange="filterByShift()">
-          <option value="all">Tất cả các ca</option>
-          <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
+          <option value="all">Táº¥t cáº£ cÃ¡c ca</option>
+          <!-- CÃ¡c tÃ¹y chá»n ca sáº½ Ä‘Æ°á»£c thÃªm báº±ng JavaScript -->
         </select>
         <select id="filter-diem" onchange="filterByDiem()">
-          <option value="all">Tất cả điểm gas</option>
-          <!-- Các tùy chọn điểm sẽ được thêm bằng JavaScript -->
+          <option value="all">Táº¥t cáº£ Ä‘iá»ƒm gas</option>
+          <!-- CÃ¡c tÃ¹y chá»n Ä‘iá»ƒm sáº½ Ä‘Æ°á»£c thÃªm báº±ng JavaScript -->
         </select>
         <select id="filter-trangthai" onchange="filterByTrangThai()">
-          <option value="all">Tất cả trạng thái</option>
-          <option value="Chưa nộp">Chưa nộp</option>
-          <option value="Đã nộp">Đã nộp</option>
+          <option value="all">Táº¥t cáº£ tráº¡ng thÃ¡i</option>
+          <option value="ChÆ°a ná»™p">ChÆ°a ná»™p</option>
+          <option value="ÄÃ£ ná»™p">ÄÃ£ ná»™p</option>
         </select>
       </div>
       
       <div class="form-row">
         <div class="form-group">
-          <label for="chon_diem">Chọn điểm:</label>
-          <input id="chon_diem" list="diem-list" placeholder="Nhập hoặc chọn điểm..." oninput="chonDiem()">
+          <label for="chon_diem">Chá»n Ä‘iá»ƒm:</label>
+          <input id="chon_diem" list="diem-list" placeholder="Nháº­p hoáº·c chá»n Ä‘iá»ƒm..." oninput="chonDiem()">
           <datalist id="diem-list"></datalist>
         </div>
         
         <div class="form-group">
-          <label for="trang_thai">Trạng thái:</label>
+          <label for="trang_thai">Tráº¡ng thÃ¡i:</label>
           <select id="trang_thai">
-            <option value="Chưa nộp">Chưa nộp</option>
-            <option value="Đã nộp">Đã nộp</option>
+            <option value="ChÆ°a ná»™p">ChÆ°a ná»™p</option>
+            <option value="ÄÃ£ ná»™p">ÄÃ£ ná»™p</option>
           </select>
         </div>
       </div>
       
       <div class="form-group">
-        <label for="ten_diem">Tên điểm:</label>
-        <input id="ten_diem" placeholder="Nhập tên điểm (nếu thêm mới)">
+        <label for="ten_diem">TÃªn Ä‘iá»ƒm:</label>
+        <input id="ten_diem" placeholder="Nháº­p tÃªn Ä‘iá»ƒm (náº¿u thÃªm má»›i)">
       </div>
       
       <div class="form-group">
-        <label for="so_tien">Số tiền:</label>
-        <input id="so_tien" type="number" placeholder="Nhập số tiền">
+        <label for="so_tien">Sá»‘ tiá»n:</label>
+        <input id="so_tien" type="number" placeholder="Nháº­p sá»‘ tiá»n">
       </div>
       
       <div class="form-group">
-        <label for="dia_chi">Địa chỉ:</label>
+        <label for="dia_chi">Äá»‹a chá»‰:</label>
         <div class="diachi-row">
-          <input id="dia_chi" placeholder="Nhập địa chỉ">
-          <button class="btn-success btn-sm" type="button" id="btn-save-location" title="Lưu vị trí GPS">Lưu</button>
+          <input id="dia_chi" placeholder="Nháº­p Ä‘á»‹a chá»‰">
+          <button class="btn-success btn-sm" type="button" id="btn-save-location" title="LÆ°u vá»‹ trÃ­ GPS">LÆ°u</button>
         </div>
       </div>
       
       <div class="form-group">
-        <label for="ghi_chu">Ghi chú:</label>
-        <input id="ghi_chu" placeholder="Nhập ghi chú (nếu có)">
+        <label for="ghi_chu">Ghi chÃº:</label>
+        <input id="ghi_chu" placeholder="Nháº­p ghi chÃº (náº¿u cÃ³)">
       </div>
       
       <div class="button-group">
         <button class="btn-primary" onclick="guiDuLieu()" id="btn-submit">
-          💾 Lưu thông tin
+          ðŸ’¾ LÆ°u thÃ´ng tin
         </button>
         <button class="btn-secondary" onclick="taiDuLieu()">
-          🔄 Tải lại
+          ðŸ”„ Táº£i láº¡i
         </button>
         <button class="btn-warning" onclick="resetForm()" id="btn-cancel" style="display: none;">
-          ❌ Hủy
+          âŒ Há»§y
         </button>
       </div>
     </div>
     
     <div class="card">
-      <h2 style="margin-bottom: 20px; font-size: 1.4rem; color: var(--dark);">📊 Danh sách điểm gas theo ca</h2>
+      <h2 style="margin-bottom: 20px; font-size: 1.4rem; color: var(--dark);">ðŸ“Š Danh sÃ¡ch Ä‘iá»ƒm gas theo ca</h2>
       <div class="table-container">
         <table id="bang">
           <thead>
             <tr>
-              <th>Tên điểm</th>
-              <th>Số tiền</th>
-              <th>Địa chỉ</th>
-              <th>Trạng thái</th>
+              <th>TÃªn Ä‘iá»ƒm</th>
+              <th>Sá»‘ tiá»n</th>
+              <th>Äá»‹a chá»‰</th>
+              <th>Tráº¡ng thÃ¡i</th>
               <th>Ca</th>
-              <th>Thời gian</th>
-              <th>Thao tác</th>
+              <th>Thá»i gian</th>
+              <th>Thao tÃ¡c</th>
             </tr>
           </thead>
           <tbody>
-            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+            <!-- Dá»¯ liá»‡u sáº½ Ä‘Æ°á»£c thÃªm báº±ng JavaScript -->
           </tbody>
         </table>
         <div id="empty-state" class="empty-state" style="display: none;">
-          <h3>📭 Chưa có dữ liệu</h3>
-          <p>Hãy thêm điểm gas đầu tiên để bắt đầu quản lý</p>
+          <h3>ðŸ“­ ChÆ°a cÃ³ dá»¯ liá»‡u</h3>
+          <p>HÃ£y thÃªm Ä‘iá»ƒm gas Ä‘áº§u tiÃªn Ä‘á»ƒ báº¯t Ä‘áº§u quáº£n lÃ½</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Nút cuộn về đầu trang -->
+  <!-- NÃºt cuá»™n vá» Ä‘áº§u trang -->
   <button id="scrollTopBtn" style="display: none;">
-    ↑
+    â†‘
   </button>
 
-  <!-- Modal xác nhận xóa -->
+  <!-- Modal xÃ¡c nháº­n xÃ³a -->
   <div class="modal" id="delete-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Xác nhận xóa</h2>
+        <h2>XÃ¡c nháº­n xÃ³a</h2>
         <button class="close-modal" onclick="closeModal('delete-modal')">&times;</button>
       </div>
       <div class="modal-body">
-        <p>Bạn có chắc chắn muốn xóa điểm gas này?</p>
+        <p>Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a Ä‘iá»ƒm gas nÃ y?</p>
         <p id="delete-item-info" style="font-weight: bold; margin-top: 10px; padding: 12px; background: linear-gradient(135deg, #F8F9FA 0%, #F2F2F7 100%); border-radius: var(--radius-sm);"></p>
       </div>
       <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeModal('delete-modal')">Hủy</button>
-        <button class="btn-danger" onclick="confirmDelete()">Xóa</button>
+        <button class="btn-secondary" onclick="closeModal('delete-modal')">Há»§y</button>
+        <button class="btn-danger" onclick="confirmDelete()">XÃ³a</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal trợ giúp -->
+  <!-- Modal trá»£ giÃºp -->
   <div class="modal" id="help-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Trợ giúp</h2>
+        <h2>Trá»£ giÃºp</h2>
         <button class="close-modal" onclick="closeModal('help-modal')">&times;</button>
       </div>
       <div class="modal-body">
-        <h3>Cách sử dụng:</h3>
+        <h3>CÃ¡ch sá»­ dá»¥ng:</h3>
         <ul style="margin-left: 20px; margin-top: 15px; line-height: 1.8;">
-          <li>Chọn điểm gas từ danh sách hoặc thêm mới</li>
-          <li>Nhập số tiền thu được (có thể nhập số và thêm '000' tự động)</li>
-          <li>Chọn trạng thái đã nộp hoặc chưa nộp</li>
-          <li>Nhấn "Lưu thông tin" để lưu dữ liệu</li>
-          <li>Xuất dữ liệu văn bản từ menu để chia sẻ hoặc in ấn</li>
+          <li>Chá»n Ä‘iá»ƒm gas tá»« danh sÃ¡ch hoáº·c thÃªm má»›i</li>
+          <li>Nháº­p sá»‘ tiá»n thu Ä‘Æ°á»£c (cÃ³ thá»ƒ nháº­p sá»‘ vÃ  thÃªm '000' tá»± Ä‘á»™ng)</li>
+          <li>Chá»n tráº¡ng thÃ¡i Ä‘Ã£ ná»™p hoáº·c chÆ°a ná»™p</li>
+          <li>Nháº¥n "LÆ°u thÃ´ng tin" Ä‘á»ƒ lÆ°u dá»¯ liá»‡u</li>
+          <li>Xuáº¥t dá»¯ liá»‡u vÄƒn báº£n tá»« menu Ä‘á»ƒ chia sáº» hoáº·c in áº¥n</li>
         </ul>
       </div>
       <div class="modal-footer">
-        <button class="btn-primary" onclick="closeModal('help-modal')">Đóng</button>
+        <button class="btn-primary" onclick="closeModal('help-modal')">ÄÃ³ng</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal xem nhanh điểm trong ca -->
+  <!-- Modal xem nhanh Ä‘iá»ƒm trong ca -->
   <div class="modal" id="quick-view-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>👁️ Xem nhanh KQ</h2>
+        <h2>ðŸ‘ï¸ Xem nhanh KQ</h2>
         <button class="close-modal" onclick="closeModal('quick-view-modal')">&times;</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label for="quick-view-shift">Chọn ca:</label>
+          <label for="quick-view-shift">Chá»n ca:</label>
           <select id="quick-view-shift" onchange="updateQuickViewList()">
-            <option value="">-- Chọn ca --</option>
-            <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
+            <option value="">-- Chá»n ca --</option>
+            <!-- CÃ¡c tÃ¹y chá»n ca sáº½ Ä‘Æ°á»£c thÃªm báº±ng JavaScript -->
           </select>
         </div>
         
         <div id="quick-view-empty" class="empty-state" style="display: none;">
-          <p>📭 Không có dữ liệu cho ca này</p>
+          <p>ðŸ“­ KhÃ´ng cÃ³ dá»¯ liá»‡u cho ca nÃ y</p>
         </div>
         
         <div class="quick-view-list" id="quick-view-list" style="display: none;">
-          <!-- Danh sách điểm sẽ được thêm bằng JavaScript -->
+          <!-- Danh sÃ¡ch Ä‘iá»ƒm sáº½ Ä‘Æ°á»£c thÃªm báº±ng JavaScript -->
         </div>
         
         <div class="quick-view-total" id="quick-view-total" style="display: none;">
-          <!-- Tổng tiền sẽ được thêm bằng JavaScript -->
+          <!-- Tá»•ng tiá»n sáº½ Ä‘Æ°á»£c thÃªm báº±ng JavaScript -->
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-primary" onclick="closeModal('quick-view-modal')">Đóng</button>
+        <button class="btn-primary" onclick="closeModal('quick-view-modal')">ÄÃ³ng</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal thêm điểm ngoài ca -->
+  <!-- Modal thÃªm Ä‘iá»ƒm ngoÃ i ca -->
   <div class="modal" id="out-of-hours-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>⏰ Thêm điểm ngoài ca</h2>
+        <h2>â° ThÃªm Ä‘iá»ƒm ngoÃ i ca</h2>
         <button class="close-modal" onclick="closeModal('out-of-hours-modal')">&times;</button>
       </div>
       <div class="modal-body">
-        <p>Hiện tại bạn đang ngoài giờ làm việc (6:30 - 18:30). Vui lòng chọn ca để thêm điểm:</p>
+        <p>Hiá»‡n táº¡i báº¡n Ä‘ang ngoÃ i giá» lÃ m viá»‡c (6:30 - 18:30). Vui lÃ²ng chá»n ca Ä‘á»ƒ thÃªm Ä‘iá»ƒm:</p>
         
         <div class="form-group">
-          <label for="out-of-hours-shift">Chọn ca:</label>
+          <label for="out-of-hours-shift">Chá»n ca:</label>
           <select id="out-of-hours-shift">
-            <option value="">-- Chọn ca --</option>
-            <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
+            <option value="">-- Chá»n ca --</option>
+            <!-- CÃ¡c tÃ¹y chá»n ca sáº½ Ä‘Æ°á»£c thÃªm báº±ng JavaScript -->
           </select>
         </div>
         
         <div class="form-group">
-          <label for="custom-shift-date">Hoặc chọn ngày khác:</label>
+          <label for="custom-shift-date">Hoáº·c chá»n ngÃ y khÃ¡c:</label>
           <input type="date" id="custom-shift-date">
         </div>
         
         <div class="form-group">
           <button class="btn-primary" onclick="useCustomShift()" style="width: 100%;">
-            Sử dụng ngày đã chọn
+            Sá»­ dá»¥ng ngÃ y Ä‘Ã£ chá»n
           </button>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeModal('out-of-hours-modal')">Hủy</button>
-        <button class="btn-primary" onclick="confirmOutOfHoursShift()">Xác nhận</button>
+        <button class="btn-secondary" onclick="closeModal('out-of-hours-modal')">Há»§y</button>
+        <button class="btn-primary" onclick="confirmOutOfHoursShift()">XÃ¡c nháº­n</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal chuyển trạng thái đồng loạt -->
+  <!-- Modal chuyá»ƒn tráº¡ng thÃ¡i Ä‘á»“ng loáº¡t -->
   <div class="modal" id="batch-status-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>🔄 Chuyển trạng thái đồng loạt</h2>
+        <h2>ðŸ”„ Chuyá»ƒn tráº¡ng thÃ¡i Ä‘á»“ng loáº¡t</h2>
         <button class="close-modal" onclick="closeModal('batch-status-modal')">&times;</button>
       </div>
       <div class="modal-body">
-        <p>Chọn ca và trạng thái mới để chuyển đổi đồng loạt tất cả điểm gas trong ca đó:</p>
+        <p>Chá»n ca vÃ  tráº¡ng thÃ¡i má»›i Ä‘á»ƒ chuyá»ƒn Ä‘á»•i Ä‘á»“ng loáº¡t táº¥t cáº£ Ä‘iá»ƒm gas trong ca Ä‘Ã³:</p>
         
         <div class="form-group">
-          <label for="batch-status-shift">Chọn ca:</label>
+          <label for="batch-status-shift">Chá»n ca:</label>
           <select id="batch-status-shift">
-            <option value="">-- Chọn ca --</option>
-            <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
+            <option value="">-- Chá»n ca --</option>
+            <!-- CÃ¡c tÃ¹y chá»n ca sáº½ Ä‘Æ°á»£c thÃªm báº±ng JavaScript -->
           </select>
         </div>
         
         <div class="form-group">
-          <label for="batch-status-new-status">Trạng thái mới:</label>
+          <label for="batch-status-new-status">Tráº¡ng thÃ¡i má»›i:</label>
           <select id="batch-status-new-status">
-            <option value="Đã nộp">Đã nộp</option>
-            <option value="Chưa nộp">Chưa nộp</option>
+            <option value="ÄÃ£ ná»™p">ÄÃ£ ná»™p</option>
+            <option value="ChÆ°a ná»™p">ChÆ°a ná»™p</option>
           </select>
         </div>
         
@@ -1542,65 +1543,65 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeModal('batch-status-modal')">Hủy</button>
-        <button class="btn-primary" id="batch-status-confirm" onclick="confirmBatchStatusUpdate()" disabled>Xác nhận</button>
+        <button class="btn-secondary" onclick="closeModal('batch-status-modal')">Há»§y</button>
+        <button class="btn-primary" id="batch-status-confirm" onclick="confirmBatchStatusUpdate()" disabled>XÃ¡c nháº­n</button>
       </div>
     </div>
   </div>
 
-  <!-- THÊM MODAL MỚI: BÁO CÁO CUỐI CA -->
+  <!-- THÃŠM MODAL Má»šI: BÃO CÃO CUá»I CA -->
   <div class="modal" id="report-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>📊 Báo cáo cuối ca</h2>
+        <h2>ðŸ“Š BÃ¡o cÃ¡o cuá»‘i ca</h2>
         <button class="close-modal" onclick="closeModal('report-modal')">&times;</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label for="report-shift">Chọn ca cần báo cáo:</label>
+          <label for="report-shift">Chá»n ca cáº§n bÃ¡o cÃ¡o:</label>
           <select id="report-shift">
-            <option value="">-- Chọn ca --</option>
-            <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
+            <option value="">-- Chá»n ca --</option>
+            <!-- CÃ¡c tÃ¹y chá»n ca sáº½ Ä‘Æ°á»£c thÃªm báº±ng JavaScript -->
           </select>
         </div>
         
         <div class="form-group">
-          <label for="report-recipient">Người nhận báo cáo:</label>
+          <label for="report-recipient">NgÆ°á»i nháº­n bÃ¡o cÃ¡o:</label>
           <div class="recipient-row">
-            <input id="report-recipient" list="recipient-list" placeholder="Chọn hoặc nhập tên người nhận">
-            <button class="btn-success btn-sm" onclick="saveRecipient()">Lưu</button>
+            <input id="report-recipient" list="recipient-list" placeholder="Chá»n hoáº·c nháº­p tÃªn ngÆ°á»i nháº­n">
+            <button class="btn-success btn-sm" onclick="saveRecipient()">LÆ°u</button>
           </div>
           <datalist id="recipient-list">
-            <!-- Danh sách người nhận sẽ được thêm bằng JavaScript -->
+            <!-- Danh sÃ¡ch ngÆ°á»i nháº­n sáº½ Ä‘Æ°á»£c thÃªm báº±ng JavaScript -->
           </datalist>
         </div>
         
-        <!-- THÊM PHẦN NHẬP CHI TIÊU -->
+        <!-- THÃŠM PHáº¦N NHáº¬P CHI TIÃŠU -->
         <div class="form-group">
-          <label for="expense-name">Chi tiêu trong ca:</label>
+          <label for="expense-name">Chi tiÃªu trong ca:</label>
           <div class="expense-input-group">
-            <input id="expense-name" list="expense-templates-list" placeholder="Chọn hoặc nhập tên chi tiêu">
-            <input id="expense-amount" type="number" placeholder="Số tiền">
-            <button class="btn-warning btn-sm" onclick="addExpense()">Thêm</button>
+            <input id="expense-name" list="expense-templates-list" placeholder="Chá»n hoáº·c nháº­p tÃªn chi tiÃªu">
+            <input id="expense-amount" type="number" placeholder="Sá»‘ tiá»n">
+            <button class="btn-warning btn-sm" onclick="addExpense()">ThÃªm</button>
           </div>
           <datalist id="expense-templates-list">
-            <!-- Danh sách chi tiêu mẫu sẽ được thêm bằng JavaScript -->
+            <!-- Danh sÃ¡ch chi tiÃªu máº«u sáº½ Ä‘Æ°á»£c thÃªm báº±ng JavaScript -->
           </datalist>
         </div>
         
         <div id="expenses-list">
-          <!-- Danh sách chi tiêu sẽ được thêm bằng JavaScript -->
+          <!-- Danh sÃ¡ch chi tiÃªu sáº½ Ä‘Æ°á»£c thÃªm báº±ng JavaScript -->
         </div>
         
         <div id="report-summary" style="display: none;">
-          <h4>📈 Tổng kết ca:</h4>
+          <h4>ðŸ“ˆ Tá»•ng káº¿t ca:</h4>
           <p id="report-details" style="margin: 10px 0;"></p>
           <p style="font-weight: bold; color: var(--primary);" id="report-total"></p>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeModal('report-modal')">Hủy</button>
-        <button class="btn-primary" id="btn-generate-report" onclick="generateReport()" disabled>Tạo báo cáo</button>
+        <button class="btn-secondary" onclick="closeModal('report-modal')">Há»§y</button>
+        <button class="btn-primary" id="btn-generate-report" onclick="generateReport()" disabled>Táº¡o bÃ¡o cÃ¡o</button>
       </div>
     </div>
   </div>
@@ -1615,37 +1616,37 @@ let itemToDelete = null;
 let currentFilteredData = [];
 let selectedOutOfHoursShift = null;
 
-// Biến toàn cục để lưu danh sách người nhận
+// Biáº¿n toÃ n cá»¥c Ä‘á»ƒ lÆ°u danh sÃ¡ch ngÆ°á»i nháº­n
 let recipientList = [];
 
-// Biến toàn cục để lưu danh sách chi tiêu mẫu (tương tự người nhận)
+// Biáº¿n toÃ n cá»¥c Ä‘á»ƒ lÆ°u danh sÃ¡ch chi tiÃªu máº«u (tÆ°Æ¡ng tá»± ngÆ°á»i nháº­n)
 let expenseTemplateList = [];
 
-// Biến toàn cục để lưu danh sách chi tiêu của ca hiện tại
+// Biáº¿n toÃ n cá»¥c Ä‘á»ƒ lÆ°u danh sÃ¡ch chi tiÃªu cá»§a ca hiá»‡n táº¡i
 let currentExpenses = [];
 
-// HÀM MỚI: Mở modal báo cáo cuối ca
+// HÃ€M Má»šI: Má»Ÿ modal bÃ¡o cÃ¡o cuá»‘i ca
 function openReportModal() {
   closeSidebar();
   
-  // Load danh sách người nhận từ localStorage
+  // Load danh sÃ¡ch ngÆ°á»i nháº­n tá»« localStorage
   loadRecipients();
   
-  // Load danh sách chi tiêu mẫu từ localStorage
+  // Load danh sÃ¡ch chi tiÃªu máº«u tá»« localStorage
   loadExpenseTemplates();
   
-  // Reset danh sách chi tiêu của ca hiện tại
+  // Reset danh sÃ¡ch chi tiÃªu cá»§a ca hiá»‡n táº¡i
   currentExpenses = [];
   updateExpensesList();
   
-  // Điền danh sách ca
+  // Äiá»n danh sÃ¡ch ca
   const shifts = new Set();
   allData.forEach(item => {
     if (item.ca) shifts.add(item.ca);
   });
   
   const shiftSelect = document.getElementById('report-shift');
-  shiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
+  shiftSelect.innerHTML = '<option value="">-- Chá»n ca --</option>';
   
   Array.from(shifts).sort().reverse().forEach(shift => {
     let shiftLabel = shift;
@@ -1663,24 +1664,24 @@ function openReportModal() {
     shiftSelect.appendChild(option);
   });
   
-  // Reset thông tin
+  // Reset thÃ´ng tin
   document.getElementById('report-summary').style.display = 'none';
   document.getElementById('btn-generate-report').disabled = true;
   
   openModal('report-modal');
 }
 
-// HÀM MỚI: Tải danh sách người nhận từ localStorage
+// HÃ€M Má»šI: Táº£i danh sÃ¡ch ngÆ°á»i nháº­n tá»« localStorage
 function loadRecipients() {
   const savedRecipients = localStorage.getItem('gas_point_recipients');
   if (savedRecipients) {
     recipientList = JSON.parse(savedRecipients);
   } else {
-    // Danh sách mặc định nếu chưa có
-    recipientList = ['anh út', 'phước'];
+    // Danh sÃ¡ch máº·c Ä‘á»‹nh náº¿u chÆ°a cÃ³
+    recipientList = ['anh Ãºt', 'phÆ°á»›c'];
   }
   
-  // Cập nhật datalist
+  // Cáº­p nháº­t datalist
   const recipientDatalist = document.getElementById('recipient-list');
   recipientDatalist.innerHTML = '';
   recipientList.forEach(recipient => {
@@ -1690,24 +1691,24 @@ function loadRecipients() {
   });
 }
 
-// HÀM MỚI: Tải danh sách chi tiêu mẫu từ localStorage
+// HÃ€M Má»šI: Táº£i danh sÃ¡ch chi tiÃªu máº«u tá»« localStorage
 function loadExpenseTemplates() {
   const savedExpenses = localStorage.getItem('gas_point_expense_templates');
   if (savedExpenses) {
     expenseTemplateList = JSON.parse(savedExpenses);
   } else {
-    // Danh sách mẫu mặc định nếu chưa có
+    // Danh sÃ¡ch máº«u máº·c Ä‘á»‹nh náº¿u chÆ°a cÃ³
     expenseTemplateList = [
-      { name: 'xăng', amount: 0 }   
+      { name: 'xÄƒng', amount: 0 }   
     ];
     localStorage.setItem('gas_point_expense_templates', JSON.stringify(expenseTemplateList));
   }
   
-  // Cập nhật datalist cho chi tiêu
+  // Cáº­p nháº­t datalist cho chi tiÃªu
   updateExpenseTemplatesDatalist();
 }
 
-// HÀM MỚI: Cập nhật datalist cho chi tiêu mẫu
+// HÃ€M Má»šI: Cáº­p nháº­t datalist cho chi tiÃªu máº«u
 function updateExpenseTemplatesDatalist() {
   const expenseDatalist = document.getElementById('expense-templates-list');
   expenseDatalist.innerHTML = '';
@@ -1719,82 +1720,82 @@ function updateExpenseTemplatesDatalist() {
   });
 }
 
-// HÀM MỚI: Lưu người nhận mới
+// HÃ€M Má»šI: LÆ°u ngÆ°á»i nháº­n má»›i
 function saveRecipient() {
   const recipientInput = document.getElementById('report-recipient');
   const recipient = recipientInput.value.trim();
   
   if (!recipient) {
-    showToast('⚠️ Vui lòng nhập tên người nhận!', 'error');
+    showToast('âš ï¸ Vui lÃ²ng nháº­p tÃªn ngÆ°á»i nháº­n!', 'error');
     return;
   }
   
-  // Kiểm tra nếu chưa có trong danh sách thì thêm vào
+  // Kiá»ƒm tra náº¿u chÆ°a cÃ³ trong danh sÃ¡ch thÃ¬ thÃªm vÃ o
   if (!recipientList.includes(recipient)) {
     recipientList.push(recipient);
     localStorage.setItem('gas_point_recipients', JSON.stringify(recipientList));
     
-    // Cập nhật lại datalist
+    // Cáº­p nháº­t láº¡i datalist
     loadRecipients();
     
-    showToast('✅ Đã lưu người nhận mới!');
+    showToast('âœ… ÄÃ£ lÆ°u ngÆ°á»i nháº­n má»›i!');
   } else {
-    showToast('ℹ️ Người nhận đã có trong danh sách!');
+    showToast('â„¹ï¸ NgÆ°á»i nháº­n Ä‘Ã£ cÃ³ trong danh sÃ¡ch!');
   }
   
-  // Cập nhật thông tin báo cáo
+  // Cáº­p nháº­t thÃ´ng tin bÃ¡o cÃ¡o
   updateReportSummary();
 }
 
-// HÀM MỚI: Thêm chi tiêu vào danh sách - ĐÃ CẬP NHẬT LOGIC
+// HÃ€M Má»šI: ThÃªm chi tiÃªu vÃ o danh sÃ¡ch - ÄÃƒ Cáº¬P NHáº¬T LOGIC
 function addExpense() {
   const expenseName = document.getElementById('expense-name').value.trim();
   const expenseAmount = document.getElementById('expense-amount').value.trim();
   
   if (!expenseName || !expenseAmount) {
-    showToast('⚠️ Vui lòng nhập đầy đủ mô tả và số tiền chi tiêu!', 'error');
+    showToast('âš ï¸ Vui lÃ²ng nháº­p Ä‘áº§y Ä‘á»§ mÃ´ táº£ vÃ  sá»‘ tiá»n chi tiÃªu!', 'error');
     return;
   }
   
   const amount = parseInt(expenseAmount);
   if (isNaN(amount) || amount <= 0) {
-    showToast('⚠️ Số tiền chi tiêu không hợp lệ!', 'error');
+    showToast('âš ï¸ Sá»‘ tiá»n chi tiÃªu khÃ´ng há»£p lá»‡!', 'error');
     return;
   }
   
-  // Thêm chi tiêu vào danh sách hiện tại
+  // ThÃªm chi tiÃªu vÃ o danh sÃ¡ch hiá»‡n táº¡i
   currentExpenses.push({
     name: expenseName,
     amount: amount
   });
   
-  // Kiểm tra nếu tên chi tiêu chưa có trong danh sách mẫu thì hỏi người dùng
+  // Kiá»ƒm tra náº¿u tÃªn chi tiÃªu chÆ°a cÃ³ trong danh sÃ¡ch máº«u thÃ¬ há»i ngÆ°á»i dÃ¹ng
   const existingTemplate = expenseTemplateList.find(template => template.name.toLowerCase() === expenseName.toLowerCase());
   if (!existingTemplate) {
-    // Hỏi người dùng có muốn lưu làm mẫu không
-    if (confirm(`Bạn có muốn lưu "${expenseName}" vào danh sách chi tiêu mẫu không?`)) {
+    // Há»i ngÆ°á»i dÃ¹ng cÃ³ muá»‘n lÆ°u lÃ m máº«u khÃ´ng
+    if (confirm(`Báº¡n cÃ³ muá»‘n lÆ°u "${expenseName}" vÃ o danh sÃ¡ch chi tiÃªu máº«u khÃ´ng?`)) {
       expenseTemplateList.push({
         name: expenseName,
-        amount: amount // Lưu cả số tiền mẫu
+        amount: amount // LÆ°u cáº£ sá»‘ tiá»n máº«u
       });
       localStorage.setItem('gas_point_expense_templates', JSON.stringify(expenseTemplateList));
       updateExpenseTemplatesDatalist();
-      showToast('✅ Đã lưu vào danh sách chi tiêu mẫu!');
+      showToast('âœ… ÄÃ£ lÆ°u vÃ o danh sÃ¡ch chi tiÃªu máº«u!');
     }
   }
   
-  // Cập nhật danh sách hiển thị
+  // Cáº­p nháº­t danh sÃ¡ch hiá»ƒn thá»‹
   updateExpensesList();
   
   // Reset input
   document.getElementById('expense-name').value = '';
   document.getElementById('expense-amount').value = '';
   
-  // Cập nhật thông tin báo cáo
+  // Cáº­p nháº­t thÃ´ng tin bÃ¡o cÃ¡o
   updateReportSummary();
 }
 
-// HÀM MỚI: Cập nhật danh sách chi tiêu hiển thị
+// HÃ€M Má»šI: Cáº­p nháº­t danh sÃ¡ch chi tiÃªu hiá»ƒn thá»‹
 function updateExpensesList() {
   const expensesList = document.getElementById('expenses-list');
   
@@ -1803,7 +1804,7 @@ function updateExpensesList() {
     return;
   }
   
-  let html = '<h4>📝 Chi tiêu trong ca:</h4>';
+  let html = '<h4>ðŸ“ Chi tiÃªu trong ca:</h4>';
   
   currentExpenses.forEach((expense, index) => {
     html += `
@@ -1812,26 +1813,26 @@ function updateExpensesList() {
           <div class="expense-item-name">${expense.name}</div>
         </div>
         <div class="expense-item-amount">-${formatCurrency(expense.amount)}</div>
-        <button class="expense-item-delete" onclick="removeExpense(${index})">×</button>
+        <button class="expense-item-delete" onclick="removeExpense(${index})">Ã—</button>
       </div>
     `;
   });
   
-  // Tính tổng chi tiêu
+  // TÃ­nh tá»•ng chi tiÃªu
   const totalExpense = currentExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-  html += `<div class="expense-total">Tổng chi tiêu: -${formatCurrency(totalExpense)}</div>`;
+  html += `<div class="expense-total">Tá»•ng chi tiÃªu: -${formatCurrency(totalExpense)}</div>`;
   
   expensesList.innerHTML = html;
 }
 
-// HÀM MỚI: Xóa chi tiêu khỏi danh sách
+// HÃ€M Má»šI: XÃ³a chi tiÃªu khá»i danh sÃ¡ch
 function removeExpense(index) {
   currentExpenses.splice(index, 1);
   updateExpensesList();
   updateReportSummary();
 }
 
-// HÀM MỚI: Cập nhật thông tin báo cáo khi chọn ca
+// HÃ€M Má»šI: Cáº­p nháº­t thÃ´ng tin bÃ¡o cÃ¡o khi chá»n ca
 function updateReportSummary() {
   const selectedShift = document.getElementById('report-shift').value;
   const recipient = document.getElementById('report-recipient').value;
@@ -1849,96 +1850,96 @@ function updateReportSummary() {
   const shiftData = allData.filter(item => item.ca === selectedShift);
   
   if (shiftData.length === 0) {
-    detailsP.textContent = 'Không có dữ liệu cho ca này';
+    detailsP.textContent = 'KhÃ´ng cÃ³ dá»¯ liá»‡u cho ca nÃ y';
     totalP.textContent = '';
     summaryDiv.style.display = 'block';
     generateBtn.disabled = true;
     return;
   }
   
-  // Tính tổng tiền doanh thu
+  // TÃ­nh tá»•ng tiá»n doanh thu
   const totalRevenue = shiftData.reduce((sum, item) => sum + (parseInt(item.so_tien) || 0), 0);
   
-  // Tính tổng chi tiêu
+  // TÃ­nh tá»•ng chi tiÃªu
   const totalExpense = currentExpenses.reduce((sum, expense) => sum + expense.amount, 0);
   
-  // Tính số tiền thực tế (doanh thu - chi tiêu)
+  // TÃ­nh sá»‘ tiá»n thá»±c táº¿ (doanh thu - chi tiÃªu)
   const actualAmount = totalRevenue - totalExpense;
   
-  // Thống kê
-  const daNopCount = shiftData.filter(item => item.trang_thai === 'Đã nộp').length;
+  // Thá»‘ng kÃª
+  const daNopCount = shiftData.filter(item => item.trang_thai === 'ÄÃ£ ná»™p').length;
   const chuaNopCount = shiftData.length - daNopCount;
   
   detailsP.innerHTML = `
-    Số điểm gas: <strong>${shiftData.length}</strong><br>
-    Đã nộp: <strong>${daNopCount}</strong> | Chưa nộp: <strong>${chuaNopCount}</strong><br>
-    Tổng doanh thu: <strong>${formatCurrency(totalRevenue)}</strong><br>
-    Tổng chi tiêu: <strong>-${formatCurrency(totalExpense)}</strong>
+    Sá»‘ Ä‘iá»ƒm gas: <strong>${shiftData.length}</strong><br>
+    ÄÃ£ ná»™p: <strong>${daNopCount}</strong> | ChÆ°a ná»™p: <strong>${chuaNopCount}</strong><br>
+    Tá»•ng doanh thu: <strong>${formatCurrency(totalRevenue)}</strong><br>
+    Tá»•ng chi tiÃªu: <strong>-${formatCurrency(totalExpense)}</strong>
   `;
   
-  totalP.innerHTML = `Số tiền thực tế: <span style="color: ${actualAmount >= 0 ? 'var(--primary)' : 'var(--danger)'}">${formatCurrency(actualAmount)}</span>`;
+  totalP.innerHTML = `Sá»‘ tiá»n thá»±c táº¿: <span style="color: ${actualAmount >= 0 ? 'var(--primary)' : 'var(--danger)'}">${formatCurrency(actualAmount)}</span>`;
   summaryDiv.style.display = 'block';
   generateBtn.disabled = false;
 }
 
-// HÀM MỚI: Tạo báo cáo và copy vào clipboard
+// HÃ€M Má»šI: Táº¡o bÃ¡o cÃ¡o vÃ  copy vÃ o clipboard
 async function generateReport() {
   const selectedShift = document.getElementById('report-shift').value;
   const recipient = document.getElementById('report-recipient').value;
   
   if (!selectedShift || !recipient) {
-    showToast('⚠️ Vui lòng chọn ca và người nhận!', 'error');
+    showToast('âš ï¸ Vui lÃ²ng chá»n ca vÃ  ngÆ°á»i nháº­n!', 'error');
     return;
   }
   
   const shiftData = allData.filter(item => item.ca === selectedShift);
   
   if (shiftData.length === 0) {
-    showToast('❌ Không có dữ liệu cho ca này!', 'error');
+    showToast('âŒ KhÃ´ng cÃ³ dá»¯ liá»‡u cho ca nÃ y!', 'error');
     return;
   }
   
-  // Tính tổng tiền doanh thu
+  // TÃ­nh tá»•ng tiá»n doanh thu
   const totalRevenue = shiftData.reduce((sum, item) => sum + (parseInt(item.so_tien) || 0), 0);
   
-  // Tính tổng chi tiêu
+  // TÃ­nh tá»•ng chi tiÃªu
   const totalExpense = currentExpenses.reduce((sum, expense) => sum + expense.amount, 0);
   
-  // Tạo nội dung báo cáo theo logic mới
+  // Táº¡o ná»™i dung bÃ¡o cÃ¡o theo logic má»›i
   let reportContent;
   
   if (currentExpenses.length > 0) {
-    // Nếu có chi tiêu: "Giao [người nhận] [tổng doanh thu] (Trừ [mô tả chi tiêu 1] [số tiền 1], [mô tả chi tiêu 2] [số tiền 2], ...)"
+    // Náº¿u cÃ³ chi tiÃªu: "Giao [ngÆ°á»i nháº­n] [tá»•ng doanh thu] (Trá»« [mÃ´ táº£ chi tiÃªu 1] [sá»‘ tiá»n 1], [mÃ´ táº£ chi tiÃªu 2] [sá»‘ tiá»n 2], ...)"
     const expenseString = currentExpenses.map(expense => 
       `${expense.name} ${formatNumber(expense.amount)}`
     ).join(', ');
     
-    reportContent = `Giao ${recipient} ${formatNumber(totalRevenue)} (Trừ ${expenseString})`;
+    reportContent = `Giao ${recipient} ${formatNumber(totalRevenue)} (Trá»« ${expenseString})`;
   } else {
-    // Nếu không có chi tiêu: "Giao [người nhận] [tổng doanh thu]"
+    // Náº¿u khÃ´ng cÃ³ chi tiÃªu: "Giao [ngÆ°á»i nháº­n] [tá»•ng doanh thu]"
     reportContent = `Giao ${recipient} ${formatNumber(totalRevenue)}`;
   }
   
-  // Copy vào clipboard
+  // Copy vÃ o clipboard
   const copySuccess = await copyToClipboard(reportContent);
   
   if (copySuccess) {
-    showToast('✅ Đã sao chép báo cáo vào clipboard!');
+    showToast('âœ… ÄÃ£ sao chÃ©p bÃ¡o cÃ¡o vÃ o clipboard!');
     closeModal('report-modal');
     
-    // Hiển thị nội dung đã copy (tùy chọn)
-    console.log('Nội dung báo cáo:', reportContent);
+    // Hiá»ƒn thá»‹ ná»™i dung Ä‘Ã£ copy (tÃ¹y chá»n)
+    console.log('Ná»™i dung bÃ¡o cÃ¡o:', reportContent);
   } else {
-    showToast('❌ Không thể sao chép vào clipboard!', 'error');
+    showToast('âŒ KhÃ´ng thá»ƒ sao chÃ©p vÃ o clipboard!', 'error');
   }
 }
 
-// HÀM MỚI: Định dạng số tiền không có ký hiệu tiền tệ
+// HÃ€M Má»šI: Äá»‹nh dáº¡ng sá»‘ tiá»n khÃ´ng cÃ³ kÃ½ hiá»‡u tiá»n tá»‡
 function formatNumber(amount) {
   return new Intl.NumberFormat('vi-VN').format(amount);
 }
 
-// HÀM MỚI: Mở modal chuyển trạng thái đồng loạt
+// HÃ€M Má»šI: Má»Ÿ modal chuyá»ƒn tráº¡ng thÃ¡i Ä‘á»“ng loáº¡t
 function openBatchStatusModal() {
   closeSidebar();
   
@@ -1948,7 +1949,7 @@ function openBatchStatusModal() {
   });
   
   const shiftSelect = document.getElementById('batch-status-shift');
-  shiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
+  shiftSelect.innerHTML = '<option value="">-- Chá»n ca --</option>';
   
   Array.from(shifts).sort().reverse().forEach(shift => {
     let shiftLabel = shift;
@@ -1966,14 +1967,14 @@ function openBatchStatusModal() {
     shiftSelect.appendChild(option);
   });
   
-  // Reset thông tin
+  // Reset thÃ´ng tin
   document.getElementById('batch-status-info').style.display = 'none';
   document.getElementById('batch-status-confirm').disabled = true;
   
   openModal('batch-status-modal');
 }
 
-// HÀM MỚI: Cập nhật thông tin khi chọn ca trong modal chuyển trạng thái
+// HÃ€M Má»šI: Cáº­p nháº­t thÃ´ng tin khi chá»n ca trong modal chuyá»ƒn tráº¡ng thÃ¡i
 function updateBatchStatusInfo() {
   const selectedShift = document.getElementById('batch-status-shift').value;
   const newStatus = document.getElementById('batch-status-new-status').value;
@@ -1991,7 +1992,7 @@ function updateBatchStatusInfo() {
   const shiftData = allData.filter(item => item.ca === selectedShift);
   
   if (shiftData.length === 0) {
-    summary.innerHTML = '❌ Không có điểm gas nào trong ca này';
+    summary.innerHTML = 'âŒ KhÃ´ng cÃ³ Ä‘iá»ƒm gas nÃ o trong ca nÃ y';
     details.innerHTML = '';
     infoDiv.style.display = 'block';
     confirmBtn.disabled = true;
@@ -2002,46 +2003,46 @@ function updateBatchStatusInfo() {
   const needUpdateCount = shiftData.length - currentStatusCount;
   
   if (needUpdateCount === 0) {
-    summary.innerHTML = `✅ Tất cả ${shiftData.length} điểm gas đã ở trạng thái "${newStatus}"`;
-    details.innerHTML = `Không có điểm gas nào cần chuyển đổi`;
+    summary.innerHTML = `âœ… Táº¥t cáº£ ${shiftData.length} Ä‘iá»ƒm gas Ä‘Ã£ á»Ÿ tráº¡ng thÃ¡i "${newStatus}"`;
+    details.innerHTML = `KhÃ´ng cÃ³ Ä‘iá»ƒm gas nÃ o cáº§n chuyá»ƒn Ä‘á»•i`;
     infoDiv.style.display = 'block';
     confirmBtn.disabled = true;
   } else {
-    summary.innerHTML = `🔄 Sẽ chuyển ${needUpdateCount}/${shiftData.length} điểm gas sang "${newStatus}"`;
-    details.innerHTML = `${currentStatusCount} điểm đã ở trạng thái này, ${needUpdateCount} điểm sẽ được cập nhật`;
+    summary.innerHTML = `ðŸ”„ Sáº½ chuyá»ƒn ${needUpdateCount}/${shiftData.length} Ä‘iá»ƒm gas sang "${newStatus}"`;
+    details.innerHTML = `${currentStatusCount} Ä‘iá»ƒm Ä‘Ã£ á»Ÿ tráº¡ng thÃ¡i nÃ y, ${needUpdateCount} Ä‘iá»ƒm sáº½ Ä‘Æ°á»£c cáº­p nháº­t`;
     infoDiv.style.display = 'block';
     confirmBtn.disabled = false;
   }
 }
 
-// HÀM MỚI: Xác nhận chuyển trạng thái đồng loạt - ĐÃ SỬA LỖI
+// HÃ€M Má»šI: XÃ¡c nháº­n chuyá»ƒn tráº¡ng thÃ¡i Ä‘á»“ng loáº¡t - ÄÃƒ Sá»¬A Lá»–I
 async function confirmBatchStatusUpdate() {
   const selectedShift = document.getElementById('batch-status-shift').value;
   const newStatus = document.getElementById('batch-status-new-status').value;
   
   if (!selectedShift) {
-    showToast('⚠️ Vui lòng chọn một ca!', 'error');
+    showToast('âš ï¸ Vui lÃ²ng chá»n má»™t ca!', 'error');
     return;
   }
   
   const shiftData = allData.filter(item => item.ca === selectedShift && item.trang_thai !== newStatus);
   
   if (shiftData.length === 0) {
-    showToast('✅ Không có điểm gas nào cần chuyển đổi!');
+    showToast('âœ… KhÃ´ng cÃ³ Ä‘iá»ƒm gas nÃ o cáº§n chuyá»ƒn Ä‘á»•i!');
     return;
   }
   
   const confirmBtn = document.getElementById('batch-status-confirm');
-  confirmBtn.textContent = '⏳ Đang xử lý...';
+  confirmBtn.textContent = 'â³ Äang xá»­ lÃ½...';
   confirmBtn.disabled = true;
   
   let successCount = 0;
   let errorCount = 0;
   
-  // Cập nhật từng bản ghi
+  // Cáº­p nháº­t tá»«ng báº£n ghi
   for (const item of shiftData) {
     try {
-      // Tạo bản sao của item để tránh thay đổi dữ liệu gốc
+      // Táº¡o báº£n sao cá»§a item Ä‘á»ƒ trÃ¡nh thay Ä‘á»•i dá»¯ liá»‡u gá»‘c
       const updatedItem = { ...item, trang_thai: newStatus };
       
       const data = {
@@ -2058,7 +2059,7 @@ async function confirmBatchStatusUpdate() {
       
       if (result.result === 'success') {
         successCount++;
-        // Cập nhật dữ liệu cục bộ - ĐÃ SỬA: Cập nhật toàn bộ thông tin item
+        // Cáº­p nháº­t dá»¯ liá»‡u cá»¥c bá»™ - ÄÃƒ Sá»¬A: Cáº­p nháº­t toÃ n bá»™ thÃ´ng tin item
         const index = allData.findIndex(d => d.id === item.id);
         if (index !== -1) {
           allData[index] = updatedItem;
@@ -2068,32 +2069,32 @@ async function confirmBatchStatusUpdate() {
       }
     } catch (error) {
       errorCount++;
-      console.error('Lỗi khi cập nhật:', error);
+      console.error('Lá»—i khi cáº­p nháº­t:', error);
     }
   }
   
-  // Hiển thị kết quả
+  // Hiá»ƒn thá»‹ káº¿t quáº£
   if (errorCount === 0) {
-    showToast(`✅ Đã chuyển thành công ${successCount} điểm gas sang "${newStatus}"`);
+    showToast(`âœ… ÄÃ£ chuyá»ƒn thÃ nh cÃ´ng ${successCount} Ä‘iá»ƒm gas sang "${newStatus}"`);
   } else {
-    showToast(`⚠️ Đã chuyển ${successCount} điểm, ${errorCount} điểm lỗi`, 'error');
+    showToast(`âš ï¸ ÄÃ£ chuyá»ƒn ${successCount} Ä‘iá»ƒm, ${errorCount} Ä‘iá»ƒm lá»—i`, 'error');
   }
   
-  // Đóng modal và cập nhật giao diện - ĐÃ SỬA: Gọi filterData() thay vì taiDuLieu()
+  // ÄÃ³ng modal vÃ  cáº­p nháº­t giao diá»‡n - ÄÃƒ Sá»¬A: Gá»i filterData() thay vÃ¬ taiDuLieu()
   closeModal('batch-status-modal');
   
-  // Cập nhật cacheDiem để đảm bảo dữ liệu nhất quán
+  // Cáº­p nháº­t cacheDiem Ä‘á»ƒ Ä‘áº£m báº£o dá»¯ liá»‡u nháº¥t quÃ¡n
   updateCacheDiem();
   
-  // Cập nhật giao diện với dữ liệu cục bộ đã được cập nhật
+  // Cáº­p nháº­t giao diá»‡n vá»›i dá»¯ liá»‡u cá»¥c bá»™ Ä‘Ã£ Ä‘Æ°á»£c cáº­p nháº­t
   filterData();
   
-  // Reset nút xác nhận
-  confirmBtn.textContent = 'Xác nhận';
+  // Reset nÃºt xÃ¡c nháº­n
+  confirmBtn.textContent = 'XÃ¡c nháº­n';
   confirmBtn.disabled = false;
 }
 
-// HÀM MỚI: Cập nhật cacheDiem từ allData
+// HÃ€M Má»šI: Cáº­p nháº­t cacheDiem tá»« allData
 function updateCacheDiem() {
   cacheDiem = {};
   allData.forEach(item => {
@@ -2103,12 +2104,12 @@ function updateCacheDiem() {
   });
 }
 
-// HÀM MỚI: Kiểm tra xem điểm gas đã có vị trí GPS chưa
+// HÃ€M Má»šI: Kiá»ƒm tra xem Ä‘iá»ƒm gas Ä‘Ã£ cÃ³ vá»‹ trÃ­ GPS chÆ°a
 function hasExistingGPSLocation(diemName) {
-  // Tìm tất cả các bản ghi của điểm gas này
+  // TÃ¬m táº¥t cáº£ cÃ¡c báº£n ghi cá»§a Ä‘iá»ƒm gas nÃ y
   const diemEntries = allData.filter(item => item.ten_diem === diemName);
   
-  // Kiểm tra xem có bản ghi nào đã có GPS không
+  // Kiá»ƒm tra xem cÃ³ báº£n ghi nÃ o Ä‘Ã£ cÃ³ GPS khÃ´ng
   for (let i = 0; i < diemEntries.length; i++) {
     if (diemEntries[i].ghi_chu && diemEntries[i].ghi_chu.includes('[GPS:')) {
       return true;
@@ -2117,7 +2118,7 @@ function hasExistingGPSLocation(diemName) {
   return false;
 }
 
-// Hàm hiển thị thông báo toast
+// HÃ m hiá»ƒn thá»‹ thÃ´ng bÃ¡o toast
 function showToast(message, type = 'success') {
   const toast = document.getElementById('toast');
   const toastMessage = document.getElementById('toast-message');
@@ -2130,7 +2131,7 @@ function showToast(message, type = 'success') {
   }, 3000);
 }
 
-// Hàm sao chép vào clipboard
+// HÃ m sao chÃ©p vÃ o clipboard
 async function copyToClipboard(text) {
   try {
     if (navigator.clipboard && window.isSecureContext) {
@@ -2148,12 +2149,12 @@ async function copyToClipboard(text) {
       return success;
     }
   } catch (err) {
-    console.error('Lỗi khi sao chép vào clipboard: ', err);
+    console.error('Lá»—i khi sao chÃ©p vÃ o clipboard: ', err);
     return false;
   }
 }
 
-// Hàm mở/đóng sidebar
+// HÃ m má»Ÿ/Ä‘Ã³ng sidebar
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
@@ -2162,7 +2163,7 @@ function toggleSidebar() {
   overlay.classList.toggle('active');
 }
 
-// Đóng sidebar
+// ÄÃ³ng sidebar
 function closeSidebar() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
@@ -2171,14 +2172,14 @@ function closeSidebar() {
   overlay.classList.remove('active');
 }
 
-// Hàm xuất dữ liệu dạng văn bản
+// HÃ m xuáº¥t dá»¯ liá»‡u dáº¡ng vÄƒn báº£n
 async function exportToText() {
   closeSidebar();
   
   const dataToExport = currentFilteredData.length > 0 ? currentFilteredData : allData;
   
   if (dataToExport.length === 0) {
-    showToast('❌ Không có dữ liệu để xuất!', 'error');
+    showToast('âŒ KhÃ´ng cÃ³ dá»¯ liá»‡u Ä‘á»ƒ xuáº¥t!', 'error');
     return;
   }
   
@@ -2202,19 +2203,19 @@ async function exportToText() {
   const copySuccess = await copyToClipboard(content);
   
   if (copySuccess) {
-    showToast('✅ Đã xuất dữ liệu và sao chép vào clipboard!');
+    showToast('âœ… ÄÃ£ xuáº¥t dá»¯ liá»‡u vÃ  sao chÃ©p vÃ o clipboard!');
   } else {
-    showToast('✅ Đã xuất dữ liệu, nhưng không thể sao chép vào clipboard', 'error');
+    showToast('âœ… ÄÃ£ xuáº¥t dá»¯ liá»‡u, nhÆ°ng khÃ´ng thá»ƒ sao chÃ©p vÃ o clipboard', 'error');
   }
 }
 
-// THÊM HÀM MỚI: Mở modal thêm điểm ngoài ca
+// THÃŠM HÃ€M Má»šI: Má»Ÿ modal thÃªm Ä‘iá»ƒm ngoÃ i ca
 function openOutOfHoursModal() {
   closeSidebar();
   
   const shiftInfo = getCurrentShift();
   if (shiftInfo.start) {
-    showToast('⚠️ Bạn đang trong ca làm việc, hãy sử dụng chức năng thêm điểm bình thường!', 'error');
+    showToast('âš ï¸ Báº¡n Ä‘ang trong ca lÃ m viá»‡c, hÃ£y sá»­ dá»¥ng chá»©c nÄƒng thÃªm Ä‘iá»ƒm bÃ¬nh thÆ°á»ng!', 'error');
     return;
   }
   
@@ -2224,7 +2225,7 @@ function openOutOfHoursModal() {
   });
   
   const shiftSelect = document.getElementById('out-of-hours-shift');
-  shiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
+  shiftSelect.innerHTML = '<option value="">-- Chá»n ca --</option>';
   
   Array.from(shifts).sort().reverse().forEach(shift => {
     let shiftLabel = shift;
@@ -2250,11 +2251,11 @@ function openOutOfHoursModal() {
   openModal('out-of-hours-modal');
 }
 
-// THÊM HÀM MỚI: Sử dụng ngày tùy chỉnh
+// THÃŠM HÃ€M Má»šI: Sá»­ dá»¥ng ngÃ y tÃ¹y chá»‰nh
 function useCustomShift() {
   const customDate = document.getElementById('custom-shift-date').value;
   if (!customDate) {
-    showToast('⚠️ Vui lòng chọn ngày!', 'error');
+    showToast('âš ï¸ Vui lÃ²ng chá»n ngÃ y!', 'error');
     return;
   }
   
@@ -2266,28 +2267,28 @@ function useCustomShift() {
   
   document.getElementById('out-of-hours-shift').value = selectedOutOfHoursShift;
   
-  showToast(`✅ Đã chọn ca ngày ${day}-${month}-${year}`);
+  showToast(`âœ… ÄÃ£ chá»n ca ngÃ y ${day}-${month}-${year}`);
 }
 
-// THÊM HÀM MỚI: Xác nhận ca khi thêm ngoài giờ
+// THÃŠM HÃ€M Má»šI: XÃ¡c nháº­n ca khi thÃªm ngoÃ i giá»
 function confirmOutOfHoursShift() {
   const shiftSelect = document.getElementById('out-of-hours-shift');
   const selectedShift = shiftSelect.value;
   
   if (!selectedShift) {
-    showToast('⚠️ Vui lòng chọn một ca!', 'error');
+    showToast('âš ï¸ Vui lÃ²ng chá»n má»™t ca!', 'error');
     return;
   }
   
   selectedOutOfHoursShift = selectedShift;
   closeModal('out-of-hours-modal');
   
-  showToast(`✅ Đã chọn ca: ${formatShiftName(selectedShift)}. Bạn có thể thêm điểm gas bây giờ.`);
+  showToast(`âœ… ÄÃ£ chá»n ca: ${formatShiftName(selectedShift)}. Báº¡n cÃ³ thá»ƒ thÃªm Ä‘iá»ƒm gas bÃ¢y giá».`);
   
   document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
 }
 
-// THÊM HÀM MỚI: Định dạng tên ca
+// THÃŠM HÃ€M Má»šI: Äá»‹nh dáº¡ng tÃªn ca
 function formatShiftName(shiftKey) {
   if (/^\d{4}-\d{2}-\d{2}/.test(shiftKey)) {
     const d = new Date(shiftKey);
@@ -2299,7 +2300,7 @@ function formatShiftName(shiftKey) {
   return shiftKey;
 }
 
-// THÊM HÀM MỚI: Mở modal xem nhanh
+// THÃŠM HÃ€M Má»šI: Má»Ÿ modal xem nhanh
 function openQuickViewModal() {
   closeSidebar();
   
@@ -2309,7 +2310,7 @@ function openQuickViewModal() {
   });
   
   const shiftSelect = document.getElementById('quick-view-shift');
-  shiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
+  shiftSelect.innerHTML = '<option value="">-- Chá»n ca --</option>';
   
   Array.from(shifts).sort().reverse().forEach(shift => {
     let shiftLabel = shift;
@@ -2336,7 +2337,7 @@ function openQuickViewModal() {
   openModal('quick-view-modal');
 }
 
-// THÊM HÀM MỚI: Cập nhật danh sách xem nhanh
+// THÃŠM HÃ€M Má»šI: Cáº­p nháº­t danh sÃ¡ch xem nhanh
 function updateQuickViewList() {
   const selectedShift = document.getElementById('quick-view-shift').value;
   const listContainer = document.getElementById('quick-view-list');
@@ -2349,7 +2350,7 @@ function updateQuickViewList() {
   
   if (!selectedShift) {
     emptyState.style.display = 'block';
-    emptyState.innerHTML = '<p>📭 Vui lòng chọn một ca</p>';
+    emptyState.innerHTML = '<p>ðŸ“­ Vui lÃ²ng chá»n má»™t ca</p>';
     return;
   }
   
@@ -2357,7 +2358,7 @@ function updateQuickViewList() {
   
   if (shiftData.length === 0) {
     emptyState.style.display = 'block';
-    emptyState.innerHTML = '<p>📭 Không có dữ liệu cho ca này</p>';
+    emptyState.innerHTML = '<p>ðŸ“­ KhÃ´ng cÃ³ dá»¯ liá»‡u cho ca nÃ y</p>';
     return;
   }
   
@@ -2380,7 +2381,7 @@ function updateQuickViewList() {
     listContainer.appendChild(itemElement);
   });
   
-  totalContainer.innerHTML = `Tổng tiền: <strong>${formatCurrency(totalAmount)}</strong>`;
+  totalContainer.innerHTML = `Tá»•ng tiá»n: <strong>${formatCurrency(totalAmount)}</strong>`;
   totalContainer.style.display = 'block';
   
   listContainer.style.display = 'block';
@@ -2391,7 +2392,7 @@ function updateQuickViewList() {
   }
 }
 
-// Xử lý nhập nhanh số tiền hàng ngàn
+// Xá»­ lÃ½ nháº­p nhanh sá»‘ tiá»n hÃ ng ngÃ n
 document.getElementById('so_tien').addEventListener('blur', function() {
   let value = this.value.trim();
   
@@ -2400,7 +2401,7 @@ document.getElementById('so_tien').addEventListener('blur', function() {
   }
 });
 
-// Hàm xác định ca hiện tại (18h30 hôm nay đến 6h30 sáng hôm sau)
+// HÃ m xÃ¡c Ä‘á»‹nh ca hiá»‡n táº¡i (18h30 hÃ´m nay Ä‘áº¿n 6h30 sÃ¡ng hÃ´m sau)
 function getCurrentShift() {
   const now = new Date();
   const currentHour = now.getHours();
@@ -2421,7 +2422,7 @@ function getCurrentShift() {
   }
   else {
     return {
-      shift: 'Ngoài ca làm việc',
+      shift: 'NgoÃ i ca lÃ m viá»‡c',
       start: null,
       end: null
     };
@@ -2448,7 +2449,7 @@ function getCurrentShift() {
   };
 }
 
-// Cập nhật thông tin ca hiện tại
+// Cáº­p nháº­t thÃ´ng tin ca hiá»‡n táº¡i
 function updateShiftInfo() {
   const shiftInfo = getCurrentShift();
   currentShift = shiftInfo.shiftKey;
@@ -2457,14 +2458,14 @@ function updateShiftInfo() {
   
   if (shiftInfo.start && shiftInfo.end) {
     document.getElementById('shift-time').textContent = 
-      `⏰ ${shiftInfo.start} - ${shiftInfo.end}`;
+      `â° ${shiftInfo.start} - ${shiftInfo.end}`;
   } else {
     document.getElementById('shift-time').textContent = 
-      '⏰ Hiện tại không trong ca làm việc';
+      'â° Hiá»‡n táº¡i khÃ´ng trong ca lÃ m viá»‡c';
   }
 }
 
-// Định dạng tiền tệ
+// Äá»‹nh dáº¡ng tiá»n tá»‡
 function formatCurrency(amount) {
   return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
@@ -2472,7 +2473,7 @@ function formatCurrency(amount) {
   }).format(amount);
 }
 
-// Tính toán thống kê
+// TÃ­nh toÃ¡n thá»‘ng kÃª
 function calculateStats(data) {
   const stats = {
     total: 0,
@@ -2487,7 +2488,7 @@ function calculateStats(data) {
     stats.total += parseInt(item.so_tien) || 0;
     if (item.ca) stats.shifts.add(item.ca);
     if (item.ten_diem) stats.diem.add(item.ten_diem);
-    if (item.trang_thai === 'Đã nộp') {
+    if (item.trang_thai === 'ÄÃ£ ná»™p') {
       stats.daNop++;
     } else {
       stats.chuaNop++;
@@ -2497,42 +2498,42 @@ function calculateStats(data) {
   return stats;
 }
 
-// Hiển thị thống kê
+// Hiá»ƒn thá»‹ thá»‘ng kÃª
 function displayStats(stats) {
   const container = document.getElementById('stats-container');
   
   container.innerHTML = `
     <div class="stat-card">
       <div class="stat-value">${stats.count}</div>
-      <div class="stat-label">Số giao dịch</div>
+      <div class="stat-label">Sá»‘ giao dá»‹ch</div>
     </div>
     <div class="stat-card">
       <div class="stat-value">${formatCurrency(stats.total)}</div>
-      <div class="stat-label">Tổng tiền</div>
+      <div class="stat-label">Tá»•ng tiá»n</div>
     </div>
     <div class="stat-card">
       <div class="stat-value">${stats.daNop}/${stats.chuaNop}</div>
-      <div class="stat-label">Đã nộp/Chưa nộp</div>
+      <div class="stat-label">ÄÃ£ ná»™p/ChÆ°a ná»™p</div>
     </div>
   `;
 }
 
-// Lọc dữ liệu theo ca
+// Lá»c dá»¯ liá»‡u theo ca
 function filterByShift() {
   filterData();
 }
 
-// Lọc dữ liệu theo điểm
+// Lá»c dá»¯ liá»‡u theo Ä‘iá»ƒm
 function filterByDiem() {
   filterData();
 }
 
-// Lọc dữ liệu theo trạng thái
+// Lá»c dá»¯ liá»‡u theo tráº¡ng thÃ¡i
 function filterByTrangThai() {
   filterData();
 }
 
-// Lọc và hiển thị dữ liệu
+// Lá»c vÃ  hiá»ƒn thá»‹ dá»¯ liá»‡u
 function filterData() {
   const shiftFilter = document.getElementById('filter-shift').value;
   const diemFilter = document.getElementById('filter-diem').value;
@@ -2557,16 +2558,16 @@ function filterData() {
   const shiftInfo = getCurrentShift();
   if (shiftFilter === shiftInfo.shiftKey && shiftInfo.start && filteredData.length === 0) {
     document.getElementById('empty-state').style.display = 'block';
-    document.getElementById('empty-state').innerHTML = '<h3>📭 Chưa có điểm nào trong ca hiện tại</h3><p>Hãy thêm điểm gas đầu tiên để bắt đầu quản lý</p>';
+    document.getElementById('empty-state').innerHTML = '<h3>ðŸ“­ ChÆ°a cÃ³ Ä‘iá»ƒm nÃ o trong ca hiá»‡n táº¡i</h3><p>HÃ£y thÃªm Ä‘iá»ƒm gas Ä‘áº§u tiÃªn Ä‘á»ƒ báº¯t Ä‘áº§u quáº£n lÃ½</p>';
   } else {
-    document.getElementById('empty-state').innerHTML = '<h3>📭 Chưa có dữ liệu</h3><p>Hãy thêm điểm gas đầu tiên để bắt đầu quản lý</p>';
+    document.getElementById('empty-state').innerHTML = '<h3>ðŸ“­ ChÆ°a cÃ³ dá»¯ liá»‡u</h3><p>HÃ£y thÃªm Ä‘iá»ƒm gas Ä‘áº§u tiÃªn Ä‘á»ƒ báº¯t Ä‘áº§u quáº£n lÃ½</p>';
   }
 
   displayData(filteredData);
   displayStats(calculateStats(filteredData));
 }
 
-// Hiển thị dữ liệu trong bảng
+// Hiá»ƒn thá»‹ dá»¯ liá»‡u trong báº£ng
 function displayData(data) {
   const tbody = document.querySelector('#bang tbody');
   tbody.innerHTML = '';
@@ -2583,11 +2584,11 @@ function displayData(data) {
     tr.className = 'fade-in';
     
     let badgeClass = 'badge-warning';
-    if (row.trang_thai === 'Đã nộp') {
+    if (row.trang_thai === 'ÄÃ£ ná»™p') {
       badgeClass = 'badge-secondary';
     }
 
-    let caLabel = row.ca || 'Không xác định';
+    let caLabel = row.ca || 'KhÃ´ng xÃ¡c Ä‘á»‹nh';
     if (/^\d{4}-\d{2}-\d{2}/.test(row.ca)) {
       const d = new Date(row.ca);
       const day = String(d.getDate()).padStart(2, '0');
@@ -2597,20 +2598,20 @@ function displayData(data) {
     }
     
     tr.innerHTML = `
-      <td data-label="Tên điểm">${row.ten_diem}</td>
-      <td data-label="Số tiền">${formatCurrency(row.so_tien)}</td>
-      <td data-label="Địa chỉ">${row.dia_chi}</td>
-      <td data-label="Trạng thái">
+      <td data-label="TÃªn Ä‘iá»ƒm">${row.ten_diem}</td>
+      <td data-label="Sá»‘ tiá»n">${formatCurrency(row.so_tien)}</td>
+      <td data-label="Äá»‹a chá»‰">${row.dia_chi}</td>
+      <td data-label="Tráº¡ng thÃ¡i">
         <div class="status-toggle-wrapper">
-          <span class="badge ${badgeClass} status-toggle" onclick="toggleTrangThai('${row.id}')">${row.trang_thai || 'Chưa nộp'}</span>
+          <span class="badge ${badgeClass} status-toggle" onclick="toggleTrangThai('${row.id}')">${row.trang_thai || 'ChÆ°a ná»™p'}</span>
         </div>
       </td>
       <td data-label="Ca"><span class="badge badge-primary">${caLabel}</span></td>
-      <td data-label="Thời gian">${row.timestamp ? new Date(row.timestamp).toLocaleString('vi-VN') : 'Không xác định'}</td>
-      <td data-label="Thao tác">
+      <td data-label="Thá»i gian">${row.timestamp ? new Date(row.timestamp).toLocaleString('vi-VN') : 'KhÃ´ng xÃ¡c Ä‘á»‹nh'}</td>
+      <td data-label="Thao tÃ¡c">
         <div class="action-buttons">
-          <button class="btn-secondary btn-sm" onclick="editItem('${row.id}')">✏️ Sửa</button>
-          <button class="btn-danger btn-sm" onclick="deleteItem('${row.id}')">🗑️ Xóa</button>
+          <button class="btn-secondary btn-sm" onclick="editItem('${row.id}')">âœï¸ Sá»­a</button>
+          <button class="btn-danger btn-sm" onclick="deleteItem('${row.id}')">ðŸ—‘ï¸ XÃ³a</button>
         </div>
       </td>
     `;
@@ -2618,17 +2619,17 @@ function displayData(data) {
   });
 }
 
-// Hàm thay đổi trạng thái nhanh
+// HÃ m thay Ä‘á»•i tráº¡ng thÃ¡i nhanh
 function toggleTrangThai(id) {
   const item = allData.find(item => item.id === id);
   if (!item) return;
 
-  const newTrangThai = item.trang_thai === 'Đã nộp' ? 'Chưa nộp' : 'Đã nộp';
+  const newTrangThai = item.trang_thai === 'ÄÃ£ ná»™p' ? 'ChÆ°a ná»™p' : 'ÄÃ£ ná»™p';
 
   const badgeElement = document.querySelector(`[onclick="toggleTrangThai('${id}')"]`);
   if (badgeElement) {
     badgeElement.textContent = newTrangThai;
-    badgeElement.className = `badge ${newTrangThai === 'Đã nộp' ? 'badge-secondary' : 'badge-warning'} status-toggle`;
+    badgeElement.className = `badge ${newTrangThai === 'ÄÃ£ ná»™p' ? 'badge-secondary' : 'badge-warning'} status-toggle`;
   }
 
   const updatedItem = { ...item, trang_thai: newTrangThai };
@@ -2645,27 +2646,27 @@ function toggleTrangThai(id) {
   .then(response => response.json())
   .then(result => {
     if (result.result === 'success') {
-      showToast('✅ Đã cập nhật trạng thái!');
+      showToast('âœ… ÄÃ£ cáº­p nháº­t tráº¡ng thÃ¡i!');
       const index = allData.findIndex(item => item.id === id);
       if (index !== -1) {
         allData[index] = updatedItem;
       }
-      // Cập nhật cacheDiem
+      // Cáº­p nháº­t cacheDiem
       updateCacheDiem();
       filterData();
     } else {
-      showToast('❌ Có lỗi xảy ra khi cập nhật trạng thái!', 'error');
+      showToast('âŒ CÃ³ lá»—i xáº£y ra khi cáº­p nháº­t tráº¡ng thÃ¡i!', 'error');
       taiDuLieu();
     }
   })
   .catch(error => {
-    showToast('❌ Có lỗi xảy ra khi cập nhật trạng thái!', 'error');
+    showToast('âŒ CÃ³ lá»—i xáº£y ra khi cáº­p nháº­t tráº¡ng thÃ¡i!', 'error');
     console.error(error);
     taiDuLieu();
   });
 }
 
-// Cập nhật bộ lọc
+// Cáº­p nháº­t bá»™ lá»c
 function updateFilters(data) {
   const shifts = new Set();
   const diems = new Set();
@@ -2676,7 +2677,7 @@ function updateFilters(data) {
   });
 
   const shiftFilter = document.getElementById('filter-shift');
-  shiftFilter.innerHTML = '<option value="all">Tất cả các ca</option>';
+  shiftFilter.innerHTML = '<option value="all">Táº¥t cáº£ cÃ¡c ca</option>';
 
   Array.from(shifts).sort().reverse().forEach(shift => {
     let shiftLabel = shift;
@@ -2696,7 +2697,7 @@ function updateFilters(data) {
   });
 
   const diemFilter = document.getElementById('filter-diem');
-  diemFilter.innerHTML = '<option value="all">Tất cả điểm gas</option>';
+  diemFilter.innerHTML = '<option value="all">Táº¥t cáº£ Ä‘iá»ƒm gas</option>';
 
   Array.from(diems).sort().forEach(diem => {
     const option = document.createElement('option');
@@ -2717,50 +2718,50 @@ function resetForm() {
   document.getElementById('so_tien').value = '';
   document.getElementById('dia_chi').value = '';
   document.getElementById('ghi_chu').value = '';
-  document.getElementById('trang_thai').value = 'Chưa nộp';
-  document.getElementById('btn-submit').textContent = '💾 Lưu thông tin';
+  document.getElementById('trang_thai').value = 'ChÆ°a ná»™p';
+  document.getElementById('btn-submit').textContent = 'ðŸ’¾ LÆ°u thÃ´ng tin';
   document.getElementById('btn-cancel').style.display = 'none';
   
-  // Reset nút lưu vị trí
+  // Reset nÃºt lÆ°u vá»‹ trÃ­
   resetSaveLocationButton();
 }
 
-// HÀM MỚI: Reset trạng thái nút lưu vị trí
+// HÃ€M Má»šI: Reset tráº¡ng thÃ¡i nÃºt lÆ°u vá»‹ trÃ­
 function resetSaveLocationButton() {
   const btn = document.getElementById('btn-save-location');
-  btn.textContent = '📍 Lưu vị trí';
+  btn.textContent = 'ðŸ“ LÆ°u vá»‹ trÃ­';
   btn.disabled = false;
   btn.className = 'btn-success btn-sm';
 }
 
-// HÀM MỚI: Tìm bản ghi gần nhất cho một điểm gas cụ thể
+// HÃ€M Má»šI: TÃ¬m báº£n ghi gáº§n nháº¥t cho má»™t Ä‘iá»ƒm gas cá»¥ thá»ƒ
 function findLatestEntryForDiem(diemName) {
-  // Lọc tất cả các bản ghi của điểm gas này
+  // Lá»c táº¥t cáº£ cÃ¡c báº£n ghi cá»§a Ä‘iá»ƒm gas nÃ y
   const diemEntries = allData.filter(item => item.ten_diem === diemName);
   
   if (diemEntries.length === 0) {
     return null;
   }
   
-  // Sắp xếp theo thời gian giảm dần (mới nhất đầu tiên)
+  // Sáº¯p xáº¿p theo thá»i gian giáº£m dáº§n (má»›i nháº¥t Ä‘áº§u tiÃªn)
   diemEntries.sort((a, b) => {
     const timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
     const timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
     return timeB - timeA;
   });
   
-  // Trả về bản ghi mới nhất
+  // Tráº£ vá» báº£n ghi má»›i nháº¥t
   return diemEntries[0];
 }
 
-// HÀM CẬP NHẬT: Chọn điểm gas (tự động điền địa chỉ và số tiền của lần gần nhất)
+// HÃ€M Cáº¬P NHáº¬T: Chá»n Ä‘iá»ƒm gas (tá»± Ä‘á»™ng Ä‘iá»n Ä‘á»‹a chá»‰ vÃ  sá»‘ tiá»n cá»§a láº§n gáº§n nháº¥t)
 function chonDiem() {
   const val = document.getElementById('chon_diem').value;
   const tenDiemInput = document.getElementById('ten_diem');
   const diaChiInput = document.getElementById('dia_chi');
   const soTienInput = document.getElementById('so_tien');
   
-  // Reset nút lưu vị trí khi thay đổi điểm gas
+  // Reset nÃºt lÆ°u vá»‹ trÃ­ khi thay Ä‘á»•i Ä‘iá»ƒm gas
   resetSaveLocationButton();
   
   if (!val) {
@@ -2768,58 +2769,58 @@ function chonDiem() {
     diaChiInput.value = '';
     soTienInput.value = '';
     tenDiemInput.disabled = false;
-    tenDiemInput.placeholder = "Nhập tên điểm (nếu thêm mới)";
+    tenDiemInput.placeholder = "Nháº­p tÃªn Ä‘iá»ƒm (náº¿u thÃªm má»›i)";
   } else {
     tenDiemInput.value = val;
     diaChiInput.value = cacheDiem[val] || '';
     tenDiemInput.disabled = true;
-    tenDiemInput.placeholder = "Tên điểm đã chọn";
+    tenDiemInput.placeholder = "TÃªn Ä‘iá»ƒm Ä‘Ã£ chá»n";
     
-    // Tìm số tiền của lần gần nhất cho điểm gas này
+    // TÃ¬m sá»‘ tiá»n cá»§a láº§n gáº§n nháº¥t cho Ä‘iá»ƒm gas nÃ y
     const latestEntry = findLatestEntryForDiem(val);
     if (latestEntry) {
       soTienInput.value = latestEntry.so_tien;
-      // Thêm focus để người dùng có thể dễ dàng sửa nếu muốn
+      // ThÃªm focus Ä‘á»ƒ ngÆ°á»i dÃ¹ng cÃ³ thá»ƒ dá»… dÃ ng sá»­a náº¿u muá»‘n
       setTimeout(() => {
         soTienInput.focus();
         soTienInput.select();
       }, 100);
     }
     
-    // Kiểm tra và cập nhật trạng thái nút lưu vị trí nếu điểm đã có GPS
+    // Kiá»ƒm tra vÃ  cáº­p nháº­t tráº¡ng thÃ¡i nÃºt lÆ°u vá»‹ trÃ­ náº¿u Ä‘iá»ƒm Ä‘Ã£ cÃ³ GPS
     if (hasExistingGPSLocation(val)) {
       const btn = document.getElementById('btn-save-location');
-      btn.textContent = 'Đã có';
+      btn.textContent = 'ÄÃ£ cÃ³';
       btn.disabled = true;
       btn.className = 'btn-location-disabled btn-sm';
     }
   }
 }
 
-// Xử lý nút lưu vị trí GPS - ĐÃ CẬP NHẬT
+// Xá»­ lÃ½ nÃºt lÆ°u vá»‹ trÃ­ GPS - ÄÃƒ Cáº¬P NHáº¬T
 function saveLocation() {
   const tenDiem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
   
-  // Kiểm tra xem đã chọn điểm gas chưa
+  // Kiá»ƒm tra xem Ä‘Ã£ chá»n Ä‘iá»ƒm gas chÆ°a
   if (!tenDiem) {
-    showToast('⚠️ Vui lòng chọn điểm gas trước khi lưu vị trí!', 'error');
+    showToast('âš ï¸ Vui lÃ²ng chá»n Ä‘iá»ƒm gas trÆ°á»›c khi lÆ°u vá»‹ trÃ­!', 'error');
     return;
   }
   
-  // Kiểm tra xem điểm gas này đã có vị trí GPS chưa
+  // Kiá»ƒm tra xem Ä‘iá»ƒm gas nÃ y Ä‘Ã£ cÃ³ vá»‹ trÃ­ GPS chÆ°a
   if (hasExistingGPSLocation(tenDiem)) {
-    showToast('❌ Điểm gas này đã được lưu vị trí GPS trước đó!', 'error');
+    showToast('âŒ Äiá»ƒm gas nÃ y Ä‘Ã£ Ä‘Æ°á»£c lÆ°u vá»‹ trÃ­ GPS trÆ°á»›c Ä‘Ã³!', 'error');
     return;
   }
   
   if (!navigator.geolocation) {
-    showToast('❌ Thiết bị không hỗ trợ GPS!', 'error');
+    showToast('âŒ Thiáº¿t bá»‹ khÃ´ng há»— trá»£ GPS!', 'error');
     return;
   }
   
   const btn = document.getElementById('btn-save-location');
   btn.disabled = true;
-  btn.textContent = '⏳ Đang lấy vị trí...';
+  btn.textContent = 'â³ Äang láº¥y vá»‹ trÃ­...';
   
   navigator.geolocation.getCurrentPosition(
     function(pos) {
@@ -2827,21 +2828,21 @@ function saveLocation() {
       const lng = pos.coords.longitude.toFixed(6);
       let ghiChuInput = document.getElementById('ghi_chu');
       
-      // Xóa GPS cũ nếu có và thêm GPS mới
+      // XÃ³a GPS cÅ© náº¿u cÃ³ vÃ  thÃªm GPS má»›i
       let ghiChu = ghiChuInput.value.replace(/\s*\[GPS: [\d.-]+, [\d.-]+\]/, '');
       ghiChuInput.value = ghiChu + ` [GPS: ${lat}, ${lng}]`;
       
-      showToast('✅ Đã lưu vị trí GPS thực tế!');
-      btn.textContent = '📍 Đã lưu vị trí';
+      showToast('âœ… ÄÃ£ lÆ°u vá»‹ trÃ­ GPS thá»±c táº¿!');
+      btn.textContent = 'ðŸ“ ÄÃ£ lÆ°u vá»‹ trÃ­';
       btn.disabled = false;
       
-      // Đổi màu nút để thể hiện đã lưu thành công
+      // Äá»•i mÃ u nÃºt Ä‘á»ƒ thá»ƒ hiá»‡n Ä‘Ã£ lÆ°u thÃ nh cÃ´ng
       btn.className = 'btn-success btn-sm';
       btn.style.backgroundColor = '#34c759';
     }, 
     function(err) {
-      showToast('❌ Không thể lấy vị trí: ' + err.message, 'error');
-      btn.textContent = '📍 Lưu vị trí';
+      showToast('âŒ KhÃ´ng thá»ƒ láº¥y vá»‹ trÃ­: ' + err.message, 'error');
+      btn.textContent = 'ðŸ“ LÆ°u vá»‹ trÃ­';
       btn.disabled = false;
       btn.className = 'btn-success btn-sm';
     }, 
@@ -2853,41 +2854,41 @@ function saveLocation() {
   );
 }
 
-// Chỉnh sửa item
+// Chá»‰nh sá»­a item
 function editItem(id) {
   const item = allData.find(item => item.id === id);
   if (!item) return;
   
   editingId = id;
   
-  // Điền dữ liệu vào form
+  // Äiá»n dá»¯ liá»‡u vÃ o form
   document.getElementById('chon_diem').value = item.ten_diem;
   document.getElementById('ten_diem').value = item.ten_diem;
   document.getElementById('ten_diem').disabled = true;
   document.getElementById('so_tien').value = item.so_tien;
   document.getElementById('dia_chi').value = item.dia_chi;
   document.getElementById('ghi_chu').value = item.ghi_chu || '';
-  document.getElementById('trang_thai').value = item.trang_thai || 'Chưa nộp';
+  document.getElementById('trang_thai').value = item.trang_thai || 'ChÆ°a ná»™p';
   
-  // Thay đổi nút thành cập nhật
-  document.getElementById('btn-submit').textContent = '💾 Cập nhật';
+  // Thay Ä‘á»•i nÃºt thÃ nh cáº­p nháº­t
+  document.getElementById('btn-submit').textContent = 'ðŸ’¾ Cáº­p nháº­t';
   document.getElementById('btn-cancel').style.display = 'block';
   
-  // Kiểm tra và cập nhật trạng thái nút lưu vị trí
+  // Kiá»ƒm tra vÃ  cáº­p nháº­t tráº¡ng thÃ¡i nÃºt lÆ°u vá»‹ trÃ­
   if (hasExistingGPSLocation(item.ten_diem)) {
     const btn = document.getElementById('btn-save-location');
-    btn.textContent = '📍 Đã có vị trí';
+    btn.textContent = 'ðŸ“ ÄÃ£ cÃ³ vá»‹ trÃ­';
     btn.disabled = true;
     btn.className = 'btn-location-disabled btn-sm';
   } else {
     resetSaveLocationButton();
   }
   
-  // Cuộn lên đầu form
+  // Cuá»™n lÃªn Ä‘áº§u form
   document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
 }
 
-// Xóa item
+// XÃ³a item
 function deleteItem(id) {
   const item = allData.find(item => item.id === id);
   if (!item) return;
@@ -2899,7 +2900,7 @@ function deleteItem(id) {
   openModal('delete-modal');
 }
 
-// Xác nhận xóa
+// XÃ¡c nháº­n xÃ³a
 function confirmDelete() {
   if (!itemToDelete) return;
   
@@ -2915,20 +2916,20 @@ function confirmDelete() {
   .then(response => response.json())
   .then(result => {
     if (result.result === 'success') {
-      showToast('✅ Đã xóa thành công!');
+      showToast('âœ… ÄÃ£ xÃ³a thÃ nh cÃ´ng!');
       closeModal('delete-modal');
       taiDuLieu();
     } else {
-      showToast('❌ Có lỗi xảy ra khi xóa!', 'error');
+      showToast('âŒ CÃ³ lá»—i xáº£y ra khi xÃ³a!', 'error');
     }
   })
   .catch(error => {
-    showToast('❌ Có lỗi xảy ra khi xóa!', 'error');
+    showToast('âŒ CÃ³ lá»—i xáº£y ra khi xÃ³a!', 'error');
     console.error(error);
   });
 }
 
-// Mở modal
+// Má»Ÿ modal
 function openModal(modalId) {
   closeSidebar();
   const modal = document.getElementById(modalId);
@@ -2938,7 +2939,7 @@ function openModal(modalId) {
   }
 }
 
-// Đóng modal
+// ÄÃ³ng modal
 function closeModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
@@ -2947,7 +2948,7 @@ function closeModal(modalId) {
   }
 }
 
-// Cập nhật sự kiện click cho nút lưu vị trí
+// Cáº­p nháº­t sá»± kiá»‡n click cho nÃºt lÆ°u vá»‹ trÃ­
 document.getElementById('btn-save-location').addEventListener('click', saveLocation);
 
 async function guiDuLieu() {
@@ -2961,7 +2962,7 @@ async function guiDuLieu() {
   const trang_thai = document.getElementById('trang_thai').value;
 
   if (!ten_diem || !so_tien || !dia_chi) {
-    showToast('⚠️ Vui lòng nhập đầy đủ thông tin!', 'error');
+    showToast('âš ï¸ Vui lÃ²ng nháº­p Ä‘áº§y Ä‘á»§ thÃ´ng tin!', 'error');
     return;
   }
 
@@ -2969,12 +2970,12 @@ async function guiDuLieu() {
     const shiftInfo = getCurrentShift();
     
     if (!selectedOutOfHoursShift && !shiftInfo.start) {
-      showToast('⚠️ Hiện tại không trong ca làm việc! Vui lòng sử dụng chức năng "Thêm điểm ngoài ca" từ menu.', 'error');
+      showToast('âš ï¸ Hiá»‡n táº¡i khÃ´ng trong ca lÃ m viá»‡c! Vui lÃ²ng sá»­ dá»¥ng chá»©c nÄƒng "ThÃªm Ä‘iá»ƒm ngoÃ i ca" tá»« menu.', 'error');
       return;
     }
   }
 
-  btnSubmit.textContent = '⏳ Đang lưu...';
+  btnSubmit.textContent = 'â³ Äang lÆ°u...';
   btnSubmit.disabled = true;
 
   let shiftToUse = selectedOutOfHoursShift;
@@ -3005,17 +3006,17 @@ async function guiDuLieu() {
     const result = await response.json();
     
     if (result.result === 'success') {
-      showToast(editingId ? '✅ Đã cập nhật thành công!' : '✅ Đã lưu thành công!');
+      showToast(editingId ? 'âœ… ÄÃ£ cáº­p nháº­t thÃ nh cÃ´ng!' : 'âœ… ÄÃ£ lÆ°u thÃ nh cÃ´ng!');
       resetForm();
       taiDuLieu();
     } else {
-      showToast('❌ Có lỗi xảy ra khi lưu dữ liệu!', 'error');
+      showToast('âŒ CÃ³ lá»—i xáº£y ra khi lÆ°u dá»¯ liá»‡u!', 'error');
     }
   } catch (error) {
-    showToast('❌ Có lỗi xảy ra khi lưu dữ liệu!', 'error');
+    showToast('âŒ CÃ³ lá»—i xáº£y ra khi lÆ°u dá»¯ liá»‡u!', 'error');
     console.error(error);
   } finally {
-    btnSubmit.textContent = editingId ? '💾 Cập nhật' : '💾 Lưu thông tin';
+    btnSubmit.textContent = editingId ? 'ðŸ’¾ Cáº­p nháº­t' : 'ðŸ’¾ LÆ°u thÃ´ng tin';
     btnSubmit.disabled = false;
   }
 }
@@ -3028,7 +3029,7 @@ async function taiDuLieu() {
     allData = data;
     currentFilteredData = data;
     
-    // Cập nhật cacheDiem từ dữ liệu mới
+    // Cáº­p nháº­t cacheDiem tá»« dá»¯ liá»‡u má»›i
     updateCacheDiem();
     
     const diemList = document.getElementById('diem-list');
@@ -3049,12 +3050,12 @@ async function taiDuLieu() {
     updateFilters(data);
     
   } catch (error) {
-    showToast('❌ Có lỗi xảy ra khi tải dữ liệu!', 'error');
+    showToast('âŒ CÃ³ lá»—i xáº£y ra khi táº£i dá»¯ liá»‡u!', 'error');
     console.error(error);
   }
 }
 
-// Thêm hàm để xử lý đóng modal khi chạm ra ngoài
+// ThÃªm hÃ m Ä‘á»ƒ xá»­ lÃ½ Ä‘Ã³ng modal khi cháº¡m ra ngoÃ i
 function setupModalCloseOnOutsideClick() {
   const modals = document.querySelectorAll('.modal');
   modals.forEach(modal => {
@@ -3066,7 +3067,7 @@ function setupModalCloseOnOutsideClick() {
   });
 }
 
-// Hiển thị/ẩn nút cuộn về đầu trang khi cuộn
+// Hiá»ƒn thá»‹/áº©n nÃºt cuá»™n vá» Ä‘áº§u trang khi cuá»™n
 window.addEventListener('scroll', function() {
   const btn = document.getElementById('scrollTopBtn');
   if (window.scrollY > 200) {
@@ -3078,12 +3079,12 @@ window.addEventListener('scroll', function() {
   }
 });
 
-// Xử lý sự kiện cuộn về đầu trang
+// Xá»­ lÃ½ sá»± kiá»‡n cuá»™n vá» Ä‘áº§u trang
 document.getElementById('scrollTopBtn').onclick = function() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-// Khởi tạo
+// Khá»Ÿi táº¡o
 document.addEventListener('DOMContentLoaded', function() {
   updateShiftInfo();
   taiDuLieu().then(() => {
@@ -3103,27 +3104,27 @@ document.addEventListener('DOMContentLoaded', function() {
   
   setupModalCloseOnOutsideClick();
   
-  // Thêm sự kiện cho modal chuyển trạng thái đồng loạt
+  // ThÃªm sá»± kiá»‡n cho modal chuyá»ƒn tráº¡ng thÃ¡i Ä‘á»“ng loáº¡t
   document.getElementById('batch-status-shift').addEventListener('change', updateBatchStatusInfo);
   document.getElementById('batch-status-new-status').addEventListener('change', updateBatchStatusInfo);
   
-  // Thêm sự kiện cho modal báo cáo cuối ca
+  // ThÃªm sá»± kiá»‡n cho modal bÃ¡o cÃ¡o cuá»‘i ca
   document.getElementById('report-shift').addEventListener('change', updateReportSummary);
   document.getElementById('report-recipient').addEventListener('input', updateReportSummary);
   
-  // Thêm sự kiện cho ô nhập tên chi tiêu (tự động điền số tiền từ mẫu)
+  // ThÃªm sá»± kiá»‡n cho Ã´ nháº­p tÃªn chi tiÃªu (tá»± Ä‘á»™ng Ä‘iá»n sá»‘ tiá»n tá»« máº«u)
   document.getElementById('expense-name').addEventListener('change', function() {
     const expenseName = this.value.trim();
     if (!expenseName) return;
     
-    // Tìm trong danh sách mẫu
+    // TÃ¬m trong danh sÃ¡ch máº«u
     const template = expenseTemplateList.find(t => t.name === expenseName);
     if (template && template.amount > 0) {
       document.getElementById('expense-amount').value = template.amount;
     }
   });
   
-  // Thêm sự kiện cho ô nhập số tiền chi tiêu
+  // ThÃªm sá»± kiá»‡n cho Ã´ nháº­p sá»‘ tiá»n chi tiÃªu
   document.getElementById('expense-amount').addEventListener('blur', function() {
     let value = this.value.trim();
     if (/^\d+$/.test(value) && value.length > 0 && value.length <= 3) {
