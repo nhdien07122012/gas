@@ -246,6 +246,19 @@
     color: var(--primary);
     margin: 10px 0;
     font-family: var(--font-family);
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    display: inline-block;
+  }
+  
+  .total-amount:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+  
+  .total-amount:active {
+    transform: scale(0.98);
   }
   
   .comparison-row {
@@ -838,7 +851,7 @@
         <!-- KẾT QUẢ TRÊN CÙNG -->
         <div class="result-header" id="result-header" style="display: none;">
             <div class="total-display">
-                <div class="total-amount" id="total-amount">0 ₫</div>
+                <div class="total-amount" id="total-amount" onclick="copyTotalOnly()" title="Nhấp để sao chép số tiền">0 ₫</div>
                 <div>Tổng tiền đếm được</div>
             </div>
             
@@ -1384,6 +1397,25 @@
             try {
                 await navigator.clipboard.writeText(text);
                 showToast('✅ Đã sao chép kết quả vào clipboard!');
+            } catch (err) {
+                showToast('❌ Lỗi khi sao chép!', 'error');
+                console.error(err);
+            }
+        }
+        
+        // Hàm chỉ sao chép số tiền tổng
+        async function copyTotalOnly() {
+            const total = calculateTotal(false);
+            
+            if (total === 0) {
+                showToast('⚠️ Chưa có số liệu để sao chép!', 'error');
+                return;
+            }
+            
+            try {
+                const formatted = formatCurrency(total);
+                await navigator.clipboard.writeText(formatted);
+                showToast(`✅ Đã sao chép số tiền: ${formatted}!`);
             } catch (err) {
                 showToast('❌ Lỗi khi sao chép!', 'error');
                 console.error(err);
