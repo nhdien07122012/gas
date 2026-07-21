@@ -192,47 +192,99 @@
     color: var(--text-muted);
   }
   
-  .table-container {
-    overflow-x: auto;
-    margin-top: 10px;
+  /* ========== LOCATION CARD GRID STYLES ========== */
+  .location-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-top: 15px;
+  }
+  
+  .location-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    transition: var(--transition);
+    position: relative;
+  }
+  
+  .location-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-light);
+  }
+  
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--bg-tertiary);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color);
+  }
+  
+  .card-info {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin-bottom: 5px;
+    word-break: break-word;
+  }
+  
+  .card-address {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    word-break: break-word;
+  }
+  
+  .card-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: var(--bg-tertiary);
+    padding: 10px 14px;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
-    background: var(--bg-card);
   }
   
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 0;
-    min-width: 600px;
+  .gps-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
   
-  th {
-    background-color: var(--bg-tertiary);
-    padding: 16px 12px;
-    text-align: left;
-    font-weight: 600;
-    color: var(--text-primary);
-    border-bottom: 2px solid var(--border-color);
-  }
-  
-  td {
-    padding: 14px 12px;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-primary);
-    vertical-align: middle;
-  }
-  
-  tr:last-child td {
-    border-bottom: none;
-  }
-  
-  tr:hover {
-    background-color: var(--bg-hover);
-  }
-  
-  .badge {
-    display: inline-block;
+  .badge-gps {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     padding: 6px 12px;
     border-radius: var(--radius-xs);
     font-size: 0.85rem;
@@ -240,41 +292,51 @@
     background: var(--secondary);
     color: var(--text-inverse);
     border: 1px solid var(--secondary-dark);
-    transition: var(--transition-fast);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px;
     cursor: pointer;
+    transition: var(--transition-fast);
+    user-select: none;
   }
   
-  .badge:hover {
-    transform: scale(1.05);
+  .badge-gps:hover {
+    transform: scale(1.04);
     box-shadow: 0 2px 8px rgba(52, 199, 89, 0.3);
   }
   
-  .map-link {
-    background: var(--primary);
-    color: var(--text-inverse) !important;
-    text-decoration: none;
-    cursor: pointer;
-    font-weight: 600;
-    border-radius: var(--radius-sm);
-    padding: 8px 16px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-    border: 1px solid var(--primary-dark);
-    min-width: 60px;
+  .badge-gps:active {
+    transform: scale(0.96);
   }
   
-  .map-link:hover {
-    background: var(--primary-dark);
-    box-shadow: 0 4px 16px rgba(44, 128, 255, 0.18);
+  /* PROMINENT GOOGLE MAPS ACTION BUTTON */
+  .btn-maps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--text-inverse) !important;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 14px 20px;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 14px rgba(44, 128, 255, 0.3);
+    transition: var(--transition);
+    border: 1px solid var(--primary-dark);
+    width: 100%;
+    min-height: 52px;
+    text-align: center;
+    user-select: none;
+  }
+  
+  .btn-maps:hover {
+    box-shadow: 0 6px 20px rgba(44, 128, 255, 0.45);
     transform: translateY(-2px);
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+  }
+  
+  .btn-maps:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(44, 128, 255, 0.3);
   }
   
   #empty-state {
@@ -437,19 +499,7 @@
       <input id="search" placeholder="Tìm kiếm tên điểm, địa chỉ hoặc ghi chú...">
     </div>
     
-    <div class="table-container">
-      <table id="vitri-table">
-        <thead>
-          <tr>
-            <th>Tên điểm</th>
-            <th>Địa chỉ</th>
-            <th>Tọa độ GPS</th>
-            <th>Mở bản đồ</th>
-          </tr>
-        </thead>
-        <tbody id="table-body">
-        </tbody>
-      </table>
+    <div id="location-grid" class="location-grid">
     </div>
     
     <div id="empty-state">
@@ -506,18 +556,18 @@ function escapeHtml(text) {
     .replace(/'/g, '&#39;');
 }
 
-// Hiển thị danh sách vị trí
+// Hiển thị danh sách vị trí dưới dạng Thẻ (Card Layout)
 function displayVitri(data) {
-  const tbody = document.getElementById('table-body');
+  const gridContainer = document.getElementById('location-grid');
   const emptyState = document.getElementById('empty-state');
   
   if (!data || data.length === 0) {
-    tbody.innerHTML = '';
-    emptyState.style.display = 'block';
+    if (gridContainer) gridContainer.innerHTML = '';
+    if (emptyState) emptyState.style.display = 'block';
     return;
   }
   
-  tbody.innerHTML = '';
+  if (gridContainer) gridContainer.innerHTML = '';
   let count = 0;
   
   data.forEach(row => {
@@ -525,42 +575,51 @@ function displayVitri(data) {
     if (!gps) return;
     
     count++;
-    const tr = document.createElement('tr');
-    tr.className = 'fade-in';
+    const card = document.createElement('div');
+    card.className = 'location-card fade-in';
     
-    // Đảm bảo mọi giá trị được xử lý an toàn
     const tenDiem = escapeHtml(row.ten_diem) || 'Chưa có tên';
     const diaChi = escapeHtml(row.dia_chi) || 'Chưa có địa chỉ';
     
-    tr.innerHTML = `
-       <td><div style="font-weight: 600; color: var(--text-primary);">${tenDiem}</div></td>
-       <td><div style="color: var(--text-secondary); font-size: 0.9rem;">${diaChi}</div></td>
-       <td>
-         <div class="badge" data-coords="${gps.lat}, ${gps.lng}" title="Nhấn để sao chép tọa độ">
-           ${gps.lat}, ${gps.lng}
-         </div>
-       </td>
-       <td>
-         <a class="map-link" href="https://maps.google.com/?q=${gps.rawLat},${gps.rawLng}" target="_blank" title="Mở Google Maps">
-           🗺️ <span style="font-size: 0.85rem;">Maps</span>
-         </a>
-       </td>
+    card.innerHTML = `
+      <div>
+        <div class="card-header">
+          <div class="card-icon">🏪</div>
+          <div class="card-info">
+            <div class="card-title">${tenDiem}</div>
+            <div class="card-address">📍 ${diaChi}</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card-details">
+        <span class="gps-label">🧭 Tọa độ GPS:</span>
+        <div class="badge-gps badge" data-coords="${gps.lat}, ${gps.lng}" title="Nhấn để sao chép tọa độ">
+          📋 ${gps.lat}, ${gps.lng}
+        </div>
+      </div>
+      
+      <a class="btn-maps" href="https://maps.google.com/?q=${gps.rawLat},${gps.rawLng}" target="_blank" title="Mở Google Maps dẫn đường">
+        🗺️ Mở Google Maps
+      </a>
     `;
     
-    tbody.appendChild(tr);
+    if (gridContainer) gridContainer.appendChild(card);
   });
   
   if (count === 0) {
-    emptyState.style.display = 'block';
-    emptyState.innerHTML = `
-      <h3>📭 Không tìm thấy vị trí</h3>
-      <p>Không có điểm gas nào có tọa độ GPS trong dữ liệu hiện tại.</p>
-      <p style="font-size: 0.9rem; margin-top: 10px;">
-        <em>Lưu ý: Chỉ những điểm gas có tọa độ GPS mới hiển thị ở đây.</em>
-      </p>
-    `;
+    if (emptyState) {
+      emptyState.style.display = 'block';
+      emptyState.innerHTML = `
+        <h3>📭 Không tìm thấy vị trí</h3>
+        <p>Không có điểm gas nào có tọa độ GPS trong dữ liệu hiện tại.</p>
+        <p style="font-size: 0.9rem; margin-top: 10px;">
+          <em>Lưu ý: Chỉ những điểm gas có tọa độ GPS mới hiển thị ở đây.</em>
+        </p>
+      `;
+    }
   } else {
-    emptyState.style.display = 'none';
+    if (emptyState) emptyState.style.display = 'none';
   }
   
   updateResultCount(count);
