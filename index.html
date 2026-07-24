@@ -1050,6 +1050,34 @@
     border-color: var(--info);
   }
   
+  .progress-bar-wrapper {
+    margin-top: 12px;
+    display: none;
+  }
+  
+  .progress-bar-track {
+    width: 100%;
+    height: 10px;
+    background: var(--bg-tertiary);
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+  }
+  
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary), var(--info));
+    transition: width 0.25s ease;
+    border-radius: inherit;
+  }
+  
+  .progress-bar-text {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+  
   .action-buttons {
     display: flex;
     gap: 5px;
@@ -1611,7 +1639,7 @@
         ⏰ Thêm điểm ngoài ca
       </button>
       <button class="sidebar-item" onclick="openBatchStatusModal()">
-        🔄 Chuyển trạng thái
+        🔄 Chuyển tất cả chưa nộp
       </button>
       <button class="sidebar-item" onclick="openReportModal()">
         📊 Báo cáo cuối ca
@@ -1875,31 +1903,22 @@
   <div class="modal" id="batch-status-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>🔄 Chuyển trạng thái đồng loạt</h2>
+        <h2>🔄 Chuyển tất cả chưa nộp</h2>
         <button class="close-modal" onclick="closeModal('batch-status-modal')">&times;</button>
       </div>
       <div class="modal-body">
-        <p>Chọn ca và trạng thái mới để chuyển đổi đồng loạt tất cả điểm gas trong ca đó:</p>
-        
-        <div class="form-group">
-          <label for="batch-status-shift">Chọn ca:</label>
-          <select id="batch-status-shift">
-            <option value="">-- Chọn ca --</option>
-            <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label for="batch-status-new-status">Trạng thái mới:</label>
-          <select id="batch-status-new-status">
-            <option value="Đã nộp">Đã nộp</option>
-            <option value="Chưa nộp">Chưa nộp</option>
-          </select>
-        </div>
+        <p>Hành động này sẽ chuyển toàn bộ điểm gas có trạng thái "Chưa nộp" trong database sang "Đã nộp".</p>
         
         <div id="batch-status-info" style="margin-top: 15px; padding: 15px; background-color: var(--bg-tertiary); border-radius: var(--radius-sm); display: none;">
           <p id="batch-status-summary"></p>
           <p id="batch-status-details" style="font-size: 0.9rem; margin-top: 8px; color: var(--text-secondary);"></p>
+        </div>
+
+        <div id="batch-status-progress" class="progress-bar-wrapper">
+          <div class="progress-bar-track">
+            <div id="batch-status-progress-fill" class="progress-bar-fill"></div>
+          </div>
+          <div id="batch-status-progress-text" class="progress-bar-text">Đang chuẩn bị...</div>
         </div>
       </div>
       <div class="modal-footer">
@@ -2366,90 +2385,61 @@ function formatNumber(amount) {
 function openBatchStatusModal() {
   closeSidebar();
   vibrateShort();
-  const shifts = new Set();
-  allData.forEach(item => {
-    if (item.ca) shifts.add(item.ca);
-  });
-  const shiftSelect = document.getElementById('batch-status-shift');
-  shiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
-  Array.from(shifts).sort().reverse().forEach(shift => {
-    const option = document.createElement('option');
-    option.value = shift;
-    option.textContent = formatShiftDayLabel(shift);
-    shiftSelect.appendChild(option);
-  });
-  document.getElementById('batch-status-info').style.display = 'none';
+  document.getElementById('batch-status-info').style.display = 'block';
   document.getElementById('batch-status-confirm').disabled = true;
+  updateBatchStatusInfo();
   openModal('batch-status-modal');
 }
 
-// HÀM MỚI: Cập nhật thông tin khi chọn ca trong modal chuyển trạng thái
+// HÀM MỚI: Cập nhật thông tin trước khi chuyển toàn bộ trạng thái chưa nộp
 function updateBatchStatusInfo() {
   vibrateShort();
-  const selectedShift = document.getElementById('batch-status-shift').value;
-  const newStatus = document.getElementById('batch-status-new-status').value;
   const infoDiv = document.getElementById('batch-status-info');
   const summary = document.getElementById('batch-status-summary');
   const details = document.getElementById('batch-status-details');
   const confirmBtn = document.getElementById('batch-status-confirm');
   
-  if (!selectedShift) {
-    infoDiv.style.display = 'none';
-    confirmBtn.disabled = true;
-    return;
-  }
-  
-  const shiftData = allData.filter(item => item.ca === selectedShift);
-  if (shiftData.length === 0) {
-    summary.innerHTML = '❌ Không có điểm gas nào trong ca này';
-    details.innerHTML = '';
+  const pendingItems = allData.filter(item => item.trang_thai === 'Chưa nộp');
+  if (pendingItems.length === 0) {
+    summary.innerHTML = '✅ Không có điểm gas nào ở trạng thái "Chưa nộp"';
+    details.innerHTML = 'Tất cả dữ liệu hiện tại đã được chuyển sang "Đã nộp".';
     infoDiv.style.display = 'block';
     confirmBtn.disabled = true;
     return;
   }
   
-  const currentStatusCount = shiftData.filter(item => item.trang_thai === newStatus).length;
-  const needUpdateCount = shiftData.length - currentStatusCount;
-  
-  if (needUpdateCount === 0) {
-    summary.innerHTML = `✅ Tất cả ${shiftData.length} điểm gas đã ở trạng thái "${newStatus}"`;
-    details.innerHTML = `Không có điểm gas nào cần chuyển đổi`;
-    infoDiv.style.display = 'block';
-    confirmBtn.disabled = true;
-  } else {
-    summary.innerHTML = `🔄 Sẽ chuyển ${needUpdateCount}/${shiftData.length} điểm gas sang "${newStatus}"`;
-    details.innerHTML = `${currentStatusCount} điểm đã ở trạng thái này, ${needUpdateCount} điểm sẽ được cập nhật`;
-    infoDiv.style.display = 'block';
-    confirmBtn.disabled = false;
-  }
+  summary.innerHTML = `🔄 Sẽ chuyển ${pendingItems.length} điểm gas sang "Đã nộp"`;
+  details.innerHTML = 'Hành động này chỉ ảnh hưởng đến các bản ghi có trạng thái "Chưa nộp".';
+  infoDiv.style.display = 'block';
+  confirmBtn.disabled = false;
 }
 
-// HÀM MỚI: Xác nhận chuyển trạng thái đồng loạt
+// HÀM MỚI: Xác nhận chuyển toàn bộ trạng thái chưa nộp sang đã nộp
 async function confirmBatchStatusUpdate() {
   vibrateLong();
-  const selectedShift = document.getElementById('batch-status-shift').value;
-  const newStatus = document.getElementById('batch-status-new-status').value;
-  if (!selectedShift) {
-    showToast('⚠️ Vui lòng chọn một ca!', 'error');
-    vibrateError();
-    return;
-  }
-  const shiftData = allData.filter(item => item.ca === selectedShift && item.trang_thai !== newStatus);
-  if (shiftData.length === 0) {
-    showToast('✅ Không có điểm gas nào cần chuyển đổi!');
+  const pendingItems = allData.filter(item => item.trang_thai === 'Chưa nộp');
+  if (pendingItems.length === 0) {
+    showToast('✅ Không có điểm gas nào ở trạng thái "Chưa nộp"!', 'info');
     vibrateShort();
     return;
   }
+  
   const confirmBtn = document.getElementById('batch-status-confirm');
+  const progressWrapper = document.getElementById('batch-status-progress');
+  const progressFill = document.getElementById('batch-status-progress-fill');
+  const progressText = document.getElementById('batch-status-progress-text');
   confirmBtn.textContent = '⏳ Đang xử lý...';
   confirmBtn.disabled = true;
+  progressWrapper.style.display = 'block';
+  progressFill.style.width = '0%';
+  progressText.textContent = 'Đang chuẩn bị...';
   
   let successCount = 0;
   let errorCount = 0;
   
-  for (const item of shiftData) {
+  for (const [index, item] of pendingItems.entries()) {
     try {
-      const updatedItem = { ...item, trang_thai: newStatus };
+      const updatedItem = { ...item, trang_thai: 'Đã nộp' };
       const data = {
         action: 'update',
         ...updatedItem
@@ -2472,10 +2462,17 @@ async function confirmBatchStatusUpdate() {
       errorCount++;
       console.error('Lỗi khi cập nhật:', error);
     }
+
+    const percent = Math.round(((index + 1) / pendingItems.length) * 100);
+    progressFill.style.width = `${percent}%`;
+    progressText.textContent = `Đã xử lý ${index + 1}/${pendingItems.length} bản ghi`;
   }
   
+  progressFill.style.width = '100%';
+  progressText.textContent = `Hoàn tất: ${successCount} thành công, ${errorCount} lỗi`;
+  
   if (errorCount === 0) {
-    showToast(`✅ Đã chuyển thành công ${successCount} điểm gas sang "${newStatus}"`);
+    showToast(`✅ Đã chuyển thành công ${successCount} điểm gas sang "Đã nộp"`);
     vibrateSuccess();
   } else {
     showToast(`⚠️ Đã chuyển ${successCount} điểm, ${errorCount} điểm lỗi`, 'error');
@@ -3511,9 +3508,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
   
   setupModalCloseOnOutsideClick();
-  
-  document.getElementById('batch-status-shift').addEventListener('change', updateBatchStatusInfo);
-  document.getElementById('batch-status-new-status').addEventListener('change', updateBatchStatusInfo);
   
   document.getElementById('report-shift').addEventListener('change', updateReportSummary);
   document.getElementById('report-recipient').addEventListener('input', updateReportSummary);
