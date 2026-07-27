@@ -588,6 +588,13 @@
     font-family: var(--font-family);
     font-weight: 400;
   }
+
+  .revenue-cell {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.05rem;
+    white-space: nowrap;
+  }
   
   tr:last-child td {
     border-bottom: none;
@@ -804,13 +811,22 @@
     
     .stats-container {
       display: grid;
-      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      grid-template-columns: repeat(2, minmax(140px, 1fr));
       gap: 10px;
+      width: 100%;
+    }
+    .stat-card-status {
+      display: none;
+    }
+    
+    .status-toggle-wrapper {
+      justify-content: flex-start;
     }
     
     .stat-card {
       border-radius: var(--radius-md);
       min-width: 0;
+      width: 100%;
       padding: 16px 12px;
     }
     
@@ -845,7 +861,9 @@
     }
     
     table {
-      min-width: 600px;
+      min-width: auto;
+      width: 100%;
+      table-layout: auto;
     }
     
     .modal {
@@ -901,10 +919,13 @@
     
     .table-container {
       border-radius: var(--radius-sm);
+      width: 100%;
     }
     
     table {
-      min-width: 700px;
+      min-width: auto;
+      width: 100%;
+      table-layout: auto;
     }
     
     .action-buttons {
@@ -947,6 +968,16 @@
       padding: 12px 14px;
       font-size: 16px;
       border-radius: var(--radius-sm);
+    }
+    
+    .stats-container {
+      grid-template-columns: repeat(2, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    
+    th, td {
+      white-space: normal;
+      word-break: break-word;
     }
     
     button {
@@ -1783,11 +1814,7 @@
           <thead>
             <tr>
               <th>Tên điểm</th>
-              <th>Số tiền</th>
-              <th>Địa chỉ</th>
-              <th>Trạng thái</th>
-              <th>Ca</th>
-              <th>Thời gian</th>
+              <th>Doanh thu</th>
               <th>Thao tác</th>
             </tr>
           </thead>
@@ -2971,7 +2998,7 @@ function displayStats(stats) {
       <div class="stat-value">${formatCurrencyCompact(stats.total)}</div>
       <div class="stat-label">Tổng tiền</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card stat-card-status">
       <div class="stat-value">${stats.daNop}/${stats.chuaNop}</div>
       <div class="stat-label">Đã nộp/Chưa nộp</div>
     </div>
@@ -3056,15 +3083,7 @@ function displayData(data) {
     
     tr.innerHTML = `
       <td data-label="Tên điểm">${escapeHTML(row.ten_diem)}</td>
-      <td data-label="Số tiền">${formatCurrency(row.so_tien)}</td>
-      <td data-label="Địa chỉ">${escapeHTML(row.dia_chi)}</td>
-      <td data-label="Trạng thái">
-        <div class="status-toggle-wrapper">
-          <span class="badge ${badgeClass} status-toggle" onclick="toggleTrangThai('${row.id}')" onmousedown="vibrateShort()">${escapeHTML(row.trang_thai || 'Chưa nộp')}</span>
-        </div>
-      </td>
-      <td data-label="Ca"><span class="badge badge-primary">${escapeHTML(caLabel)}</span></td>
-      <td data-label="Thời gian">${row.timestamp ? new Date(row.timestamp).toLocaleString('vi-VN') : 'Không xác định'}</td>
+      <td data-label="Doanh thu" class="revenue-cell">${formatCurrency(row.so_tien)}</td>
       <td data-label="Thao tác">
         <div class="action-buttons">
           <button class="btn-secondary btn-sm" onclick="editItem('${row.id}')" onmousedown="vibrateShort()">✏️ Sửa</button>
