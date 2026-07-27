@@ -704,6 +704,46 @@
   }
   
   /* ========== FILTER GROUP ========== */
+  .filter-header {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .filter-toggle {
+    appearance: none;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: var(--font-family);
+    font-weight: 600;
+    transition: var(--transition);
+  }
+
+  .filter-toggle:hover {
+    background: var(--bg-hover);
+  }
+
+  .filter-toggle span#filter-toggle-icon {
+    display: inline-flex;
+    width: 18px;
+    justify-content: center;
+    transform: rotate(0deg);
+    transition: transform 0.2s ease;
+  }
+
+  .filter-toggle[aria-expanded="true"] span#filter-toggle-icon {
+    transform: rotate(90deg);
+  }
+
   .filter-group {
     display: flex;
     gap: 10px;
@@ -717,6 +757,14 @@
     border-radius: var(--radius-md);
     padding: 12px 16px;
     font-family: var(--font-family);
+  }
+
+  .filter-group-advanced {
+    display: none;
+  }
+
+  .filter-group-advanced.show {
+    display: flex;
   }
   
   /* ========== MODAL STYLES ========== */
@@ -1790,11 +1838,17 @@
         <!-- Thống kê sẽ được thêm bằng JavaScript -->
       </div>
       
-      <div class="filter-group">
+      <div class="filter-header">
         <select id="filter-shift" onchange="filterByShift()">
           <option value="all">Tất cả các ca</option>
           <!-- Các tùy chọn ca sẽ được thêm bằng JavaScript -->
         </select>
+        <button class="filter-toggle" type="button" onclick="toggleAdvancedFilters()" aria-expanded="false">
+          <span id="filter-toggle-icon">▸</span>
+          <span class="filter-toggle-text">Lọc thêm</span>
+        </button>
+      </div>
+      <div class="filter-group filter-group-advanced" id="advanced-filters">
         <select id="filter-diem" onchange="filterByDiem()">
           <option value="all">Tất cả điểm gas</option>
           <!-- Các tùy chọn điểm sẽ được thêm bằng JavaScript -->
@@ -3055,8 +3109,8 @@ function displayStats(stats) {
     </div>
     <div class="stat-card stat-card-actions">
       <div class="action-buttons-quick">
-        <button class="btn-primary" type="button" onclick="exportToText();">📄 Xuất dữ liệu văn bản</button>
-        <button class="btn-report" type="button" onclick="openReportModal();">📊 Báo cáo cuối ca</button>
+        <button class="btn-primary" type="button" onclick="exportToText();">📄 Xuất data</button>
+        <button class="btn-report" type="button" onclick="openReportModal();">📊 Báo cáo</button>
       </div>
     </div>
   `;
@@ -3066,6 +3120,20 @@ function displayStats(stats) {
 function filterByShift() {
   vibrateShort();
   filterData();
+}
+
+function toggleAdvancedFilters() {
+  const advanced = document.getElementById('advanced-filters');
+  const toggleBtn = document.querySelector('.filter-toggle');
+  const icon = document.getElementById('filter-toggle-icon');
+  const text = document.querySelector('.filter-toggle-text');
+  const isOpen = advanced.classList.toggle('show');
+  toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  if (isOpen) {
+    text.textContent = 'Ẩn bộ lọc';
+  } else {
+    text.textContent = 'Lọc thêm';
+  }
 }
 
 // Lọc dữ liệu theo điểm
