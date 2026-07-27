@@ -649,6 +649,51 @@
     color: var(--primary);
     font-family: var(--font-family);
   }
+
+  .stat-card-actions {
+    display: none;
+  }
+
+  .stat-card-actions .action-buttons-quick {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .stat-card-actions .action-buttons-quick button {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 0.98rem;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    transition: var(--transition-fast);
+  }
+
+  .stat-card-actions .action-buttons-quick .btn-primary {
+    background-color: var(--primary);
+    color: var(--text-inverse);
+  }
+
+  .stat-card-actions .action-buttons-quick .btn-secondary {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+  }
+
+  .stat-card-actions .action-buttons-quick .btn-report {
+    background: linear-gradient(135deg, #ffb300, #ffca28);
+    color: #1a1a1a;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 18px rgba(255, 179, 0, 0.18);
+  }
+
+  .stat-card-actions .action-buttons-quick .btn-report:hover {
+    background: linear-gradient(135deg, #ffca28, #ffd54f);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(255, 179, 0, 0.24);
+  }
   
   .stat-label {
     font-size: 0.9rem;
@@ -818,6 +863,9 @@
     .stat-card-status {
       display: none;
     }
+    .stat-card-actions {
+      display: flex;
+    }
     
     .status-toggle-wrapper {
       justify-content: flex-start;
@@ -973,6 +1021,9 @@
     .stats-container {
       grid-template-columns: repeat(2, minmax(140px, 1fr));
       gap: 12px;
+    }
+    .stat-card-actions {
+      display: flex;
     }
     
     th, td {
@@ -3001,6 +3052,12 @@ function displayStats(stats) {
     <div class="stat-card stat-card-status">
       <div class="stat-value">${stats.daNop}/${stats.chuaNop}</div>
       <div class="stat-label">Đã nộp/Chưa nộp</div>
+    </div>
+    <div class="stat-card stat-card-actions">
+      <div class="action-buttons-quick">
+        <button class="btn-primary" type="button" onclick="exportToText();">📄 Xuất dữ liệu văn bản</button>
+        <button class="btn-report" type="button" onclick="openReportModal();">📊 Báo cáo cuối ca</button>
+      </div>
     </div>
   `;
 }
