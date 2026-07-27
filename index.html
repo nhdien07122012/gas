@@ -803,11 +803,31 @@
     }
     
     .stats-container {
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 10px;
     }
     
     .stat-card {
       border-radius: var(--radius-md);
+      min-width: 0;
+      padding: 16px 12px;
+    }
+    
+    .stat-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.2;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    
+    .stat-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
     
     .filter-group {
@@ -2329,10 +2349,10 @@ function updateReportSummary() {
   detailsP.innerHTML = `
     Số điểm gas: <strong>${shiftData.length}</strong><br>
     Đã nộp: <strong>${daNopCount}</strong> | Chưa nộp: <strong>${chuaNopCount}</strong><br>
-    Tổng doanh thu: <strong>${formatCurrency(totalRevenue)}</strong><br>
-    Tổng chi tiêu: <strong>-${formatCurrency(totalExpense)}</strong>
+    Tổng doanh thu: <strong>${formatCurrencyCompact(totalRevenue)}</strong><br>
+    Tổng chi tiêu: <strong>-${formatCurrencyCompact(totalExpense)}</strong>
   `;
-  totalP.innerHTML = `Số tiền thực tế: <span style="color: ${actualAmount >= 0 ? 'var(--primary)' : 'var(--danger)'}">${formatCurrency(actualAmount)}</span>`;
+  totalP.innerHTML = `Số tiền thực tế: <span style="color: ${actualAmount >= 0 ? 'var(--primary)' : 'var(--danger)'}">${formatCurrencyCompact(actualAmount)}</span>`;
   summaryDiv.style.display = 'block';
   generateBtn.disabled = false;
 }
@@ -2799,7 +2819,7 @@ function updateQuickViewList() {
     `;
     listContainer.appendChild(itemElement);
   });
-  totalContainer.innerHTML = `Tổng tiền: <strong>${formatCurrency(totalAmount)}</strong>`;
+  totalContainer.innerHTML = `Tổng tiền: <strong>${formatCurrencyCompact(totalAmount)}</strong>`;
   totalContainer.style.display = 'block';
   listContainer.style.display = 'block';
   const modalBody = document.querySelector('#quick-view-modal .modal-body');
@@ -2898,6 +2918,24 @@ function formatCurrency(amount) {
   }).format(amount);
 }
 
+function formatCurrencyCompact(amount) {
+  const sign = amount < 0 ? '-' : '';
+  const absAmount = Math.abs(parseInt(amount, 10)) || 0;
+  const millions = Math.floor(absAmount / 1000000);
+  const thousands = Math.floor((absAmount % 1000000) / 1000);
+
+  if (absAmount === 0) {
+    return '0 đ';
+  }
+  if (millions > 0 && thousands > 0) {
+    return `${sign}${millions}tr${String(thousands).replace(/^0+/, '')} ngàn`;
+  }
+  if (millions > 0) {
+    return `${sign}${millions}tr`;
+  }
+  return `${sign}${Math.floor(absAmount / 1000)} ngàn`;
+}
+
 // Tính toán thống kê
 function calculateStats(data) {
   const stats = {
@@ -2930,7 +2968,7 @@ function displayStats(stats) {
       <div class="stat-label">Số giao dịch</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">${formatCurrency(stats.total)}</div>
+      <div class="stat-value">${formatCurrencyCompact(stats.total)}</div>
       <div class="stat-label">Tổng tiền</div>
     </div>
     <div class="stat-card">
