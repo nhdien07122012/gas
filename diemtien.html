@@ -204,27 +204,33 @@
   
   .menu-back {
     position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255,255,255,0.2);
-    border: none;
+    left: 18px;
+    top: 18px;
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.35);
     color: var(--text-inverse);
-    padding: 8px 12px;
-    border-radius: var(--radius-md);
+    border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-size: 0.9rem;
+    justify-content: center;
+    font-size: 1.3rem;
     font-family: var(--font-family);
-    font-weight: 500;
+    font-weight: 600;
     transition: var(--transition);
+    z-index: 2;
   }
   
   .menu-back:hover {
-    background: rgba(255,255,255,0.3);
-    transform: translateY(-50%) scale(1.05);
+    background: rgba(255,255,255,0.28);
+    transform: scale(1.05);
+  }
+  
+  .menu-back-icon {
+    display: inline-block;
+    line-height: 1;
   }
   
   /* Kết quả trên cùng */
@@ -439,14 +445,6 @@
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.2);
     transform: translateY(-1px);
-  }
-  
-  .amount-cell {
-    text-align: right;
-    font-weight: 600;
-    color: var(--primary);
-    font-size: 1.1rem;
-    font-family: var(--font-family);
   }
   
   /* Nút điều chỉnh nhanh */
@@ -841,11 +839,11 @@
 <body>
     <div class="container">
         <header>
-            <button class="menu-back" onclick="window.location.href='index.html'">
-                ← Quay lại
+            <button class="menu-back" onclick="window.location.href='index.html'" aria-label="Quay lại">
+                <span class="menu-back-icon">←</span>
             </button>
             <h1>💰 Đếm tiền theo mệnh giá</h1>
-            <p>Nhập số lượng tờ tiền để tính tổng nhanh chóng</p>
+            <p> Trang điếm tiền cuối ca</p>
         </header>
         
         <!-- KẾT QUẢ TRÊN CÙNG -->
@@ -895,7 +893,6 @@
                                 (Enter để chuyển ô)
                             </span>
                         </th>
-                        <th style="font-family: var(--font-family);">Thành tiền</th>
                     </tr>
                 </thead>
                 <tbody id="denominations-body">
@@ -1180,9 +1177,6 @@
                             <button type="button" class="quick-btn" onclick="quickAdd(${denom.value}, -1)">-1</button>
                         </div>
                     </td>
-                    <td class="amount-cell" id="amount-${denom.value}">
-                        0 ₫
-                    </td>
                 `;
                 tbody.appendChild(row);
             });
@@ -1218,7 +1212,6 @@
         // Hàm tính toán một dòng - ĐÃ SỬA
         function calculateSingleRow(denomValue, inputValue = null) {
             const input = document.getElementById(`denom-${denomValue}`);
-            const amountCell = document.getElementById(`amount-${denomValue}`);
             
             // Sử dụng giá trị đã validate nếu được truyền vào
             let quantity = 0;
@@ -1228,9 +1221,7 @@
                 quantity = parseInt(validateNumberInput(input)) || 0;
             }
             
-            const amount = quantity * denomValue;
-            
-            amountCell.textContent = formatCurrency(amount);
+            input.value = quantity;
             
             // Tự động tính tổng sau 100ms (debounce nhẹ)
             clearTimeout(window.calculateTotalTimeout);
@@ -1316,7 +1307,6 @@
             denominations.forEach(denom => {
                 const input = document.getElementById(`denom-${denom.value}`);
                 input.value = '';
-                document.getElementById(`amount-${denom.value}`).textContent = '0 ₫';
             });
             
             document.getElementById('result-header').style.display = 'none';
