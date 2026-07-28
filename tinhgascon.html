@@ -698,9 +698,9 @@
 
   <div class="container">
     <header>
-      <button class="menu-toggle" id="menu-toggle">☰</button>
+      <button class="menu-toggle" id="menu-toggle">彡</button>
       <div>
-        <h1>💧 Tính tiền gas còn lại</h1>
+        <h1> Tính tiền gas còn lại</h1>
         <p>Tính toán số tiền cần trừ dựa trên khối lượng gas còn lại</p>
       </div>
     </header>
@@ -894,6 +894,20 @@ function formatCurrency(value) {
   }).format(value);
 }
 
+function formatKText(value) {
+  const roundedK = Math.round(value / 1000);
+  return `${roundedK}k`;
+}
+
+async function copyTextToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (error) {
+    showToast('⚠️ Không thể sao chép clipboard.', 'warning');
+    console.error('Clipboard error:', error);
+  }
+}
+
 // ========== HÀM TÍNH TIỀN GAS ==========
 function tinhTienGas() {
   const giaBinh = parseFloat(document.getElementById('gia_binh').value);
@@ -955,7 +969,10 @@ function tinhTienGas() {
     khongTruItem.style.display = 'none';
     document.getElementById('khach-tra-item').style.display = 'flex';
     
-    showToast('✅ Tính toán thành công!', 'success');
+    const copyText = `Trừ ${kgGasConRounded}kg = ${formatKText(tienRounded)}`;
+    copyTextToClipboard(copyText);
+    
+    showToast('✅ Tính toán thành công! Text đã được sao chép.', 'success');
   } else {
     dieuKienEl.textContent = '❌ Không đạt điều kiện (≤ 2kg)';
     dieuKienEl.className = 'result-value warning';
