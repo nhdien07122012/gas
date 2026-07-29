@@ -1,4 +1,4 @@
-up#!/bin/bash
+upup#!/bin/bash
 
 # Thoát nếu có lỗi
 set -e

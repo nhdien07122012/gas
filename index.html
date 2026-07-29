@@ -19,49 +19,16 @@
 <meta name="apple-mobile-web-app-title" content="Quản lý điểm gas">
 
 <style>
-  /* ========== ROBOTO FONT LOADING ========== */
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 300;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmSU5fCRc4EsA.woff2) format('woff2');
-  }
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxK.woff2) format('woff2');
-  }
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmEU9fCRc4EsA.woff2) format('woff2');
-  }
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 600;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfCRc4EsA.woff2) format('woff2');
-  }
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfCRc4EsA.woff2) format('woff2');
-  }
+  /* Roboto loaded via Google Fonts link above. Avoid duplicating @font-face here
+     to prevent double downloads and reduce render-blocking requests. */
   
   /* ========== CSS VARIABLES FOR LIGHT MODE ========== */
   :root {
-    --primary: #2c80ff;
-    --primary-dark: #1a6de0;
-    --primary-light: #5a9dff;
-    --secondary: #34c759;
+    /* Updated color scheme to match provided image (green primary) */
+    --primary: #0f9d58; /* main green */
+    --primary-dark: #0b7d45; /* darker for gradients */
+    --primary-light: #4cd67f; /* lighter accent */
+    --secondary: #34c759; /* success/positive */
     --secondary-dark: #2aa64a;
     --danger: #ff3b30;
     --danger-dark: #e0352b;
@@ -71,29 +38,29 @@
     --success: #34c759;
     
     --bg-primary: #ffffff;
-    --bg-secondary: #f5f7fa;
-    --bg-tertiary: #f8f9fa;
+    --bg-secondary: #f3f7f2; /* very light greenish background like image */
+    --bg-tertiary: #f7faf7; /* card subtle off-white */
     --bg-card: #ffffff;
     --bg-sidebar: #ffffff;
     --bg-modal: #ffffff;
     --bg-input: #ffffff;
-    --bg-hover: #f8fafc;
-    --bg-active: #e8f0fe;
+    --bg-hover: #eef7ec;
+    --bg-active: #e8f8ea;
     
-    --text-primary: #333333;
-    --text-secondary: #6c757d;
-    --text-tertiary: #868e96;
+    --text-primary: #0b3b2a; /* dark green for main text */
+    --text-secondary: #576a5f; /* muted green/gray */
+    --text-tertiary: #7a9184;
     --text-inverse: #ffffff;
     --text-muted: #adb5bd;
     
-    --border-color: #dee2e6;
-    --border-light: #e9ecef;
-    --border-dark: #ced4da;
+    --border-color: #e6efe8;
+    --border-light: #eef6ed;
+    --border-dark: #cfded0;
     --shadow: 0 2px 10px rgba(0,0,0,0.08);
     --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
     --shadow-dark: 0 2px 10px rgba(0,0,0,0.15);
     
-    --night-shift: #4a5568;
+    --night-shift: #0b7d45; /* darker green bar under header */
     --day-shift: #f7fafc;
     
     --radius-xl: 28px;
@@ -106,9 +73,15 @@
     --sidebar-width: 280px;
     --header-height: auto;
     
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-fast: all 0.15s ease;
-    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+     /* Avoid `all` in transitions for better performance; target composited
+       properties only (transform/opacity/background-color/box-shadow). */
+     --transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.25s ease,
+              background-color 0.25s ease,
+              box-shadow 0.25s ease,
+              color 0.25s ease;
+     --transition-fast: transform 0.12s ease, opacity 0.12s ease;
+     --transition-slow: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s ease;
     
     --opacity-disabled: 0.6;
     --opacity-hover: 0.9;
@@ -121,10 +94,11 @@
   /* ========== DARK MODE VARIABLES ========== */
   @media (prefers-color-scheme: dark) {
     :root {
-      --primary: #3d8eff;
-      --primary-dark: #2c7de6;
-      --primary-light: #5a9dff;
-      --secondary: #30c75a;
+      /* Dark theme variables aligned with green primary */
+      --primary: #23b66a;
+      --primary-dark: #0b7d45;
+      --primary-light: #4cd67f;
+      --secondary: #34c759;
       --secondary-dark: #26a64a;
       --danger: #ff5252;
       --danger-dark: #ff3838;
@@ -132,62 +106,66 @@
       --warning-dark: #ff9800;
       --info: #42a5f5;
       --success: #30c75a;
-      
-      --bg-primary: #121212;
-      --bg-secondary: #1e1e1e;
-      --bg-tertiary: #2d2d2d;
-      --bg-card: #1e1e1e;
-      --bg-sidebar: #1e1e1e;
-      --bg-modal: #252525;
-      --bg-input: #2d2d2d;
-      --bg-hover: #2a2a2a;
-      --bg-active: #2c3e50;
-      
-      --text-primary: #f5f5f5;
-      --text-secondary: #b0b0b0;
-      --text-tertiary: #8a8a8a;
-      --text-inverse: #121212;
-      --text-muted: #666666;
-      
-      --border-color: #3a3a3a;
-      --border-light: #4a4a4a;
-      --border-dark: #555555;
-      --shadow: 0 2px 10px rgba(0,0,0,0.3);
-      --shadow-lg: 0 8px 25px rgba(0,0,0,0.4);
-      --shadow-dark: 0 2px 10px rgba(0,0,0,0.5);
-      
-      --night-shift: #2d3748;
-      --day-shift: #2d3748;
+
+      --bg-primary: #07140e;
+      --bg-secondary: #0b1a12;
+      --bg-tertiary: #0f231a;
+      --bg-card: #0b1410;
+      --bg-sidebar: #07140e;
+      --bg-modal: #0b1410;
+      --bg-input: #0b1410;
+      --bg-hover: #082116;
+      --bg-active: #12321f;
+
+      --text-primary: #e9f8ee;
+      --text-secondary: #bfe7cf;
+      --text-tertiary: #98c9aa;
+      --text-inverse: #06130d;
+      --text-muted: #8aa892;
+
+      --border-color: #123926;
+      --border-light: #0e2b1e;
+      --border-dark: #0a2a18;
+      --shadow: 0 2px 10px rgba(0,0,0,0.5);
+      --shadow-lg: 0 8px 25px rgba(0,0,0,0.55);
+      --shadow-dark: 0 2px 10px rgba(0,0,0,0.6);
+
+      --night-shift: #0b7d45;
+      --day-shift: #0b7d45;
     }
-    
+
+    /* Use variables consistently instead of hard-coded colors */
     header {
-      color: #ffffff !important;
+      color: var(--text-inverse) !important;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     }
     header h1,
     header p {
-      color: #ffffff !important;
+      color: var(--text-inverse) !important;
     }
     .menu-toggle {
-      color: #ffffff !important;
+      color: var(--text-inverse) !important;
     }
     .shift-info {
-      color: #ffffff !important;
+      color: var(--text-inverse) !important;
+      background: linear-gradient(135deg, var(--night-shift), #0b7d45) !important;
     }
     .shift-info .current-shift,
     .shift-info .shift-time {
-      color: #ffffff !important;
+      color: var(--text-inverse) !important;
     }
     .sidebar-header h2 {
-      color: #ffffff !important;
+      color: var(--text-inverse) !important;
     }
     .close-sidebar {
-      color: #ffffff !important;
+      color: var(--text-inverse) !important;
     }
     .sidebar-item {
-      color: #ffffff !important;
+      color: var(--text-primary) !important;
+      background: transparent;
     }
     .sidebar-footer p {
-      color: rgba(255, 255, 255, 0.8) !important;
+      color: rgba(233, 248, 238, 0.9) !important;
     }
   }
   
@@ -346,7 +324,6 @@
     background: rgba(0,0,0,0.5);
     z-index: 1000;
     display: none;
-    backdrop-filter: blur(2px);
   }
   
   .overlay.active {
@@ -499,7 +476,7 @@
   .btn-primary:hover {
     background-color: var(--primary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(44, 128, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(15,157,88,0.28);
   }
   
   .btn-secondary {
@@ -684,9 +661,9 @@
 
   .stat-card-actions .action-buttons-quick .btn-report {
     background: linear-gradient(135deg, #ffb300, #ffca28);
-    color: #1a1a1a;
+    color: #111111;
     border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 8px 18px rgba(255, 179, 0, 0.18);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
   }
 
   .stat-card-actions .action-buttons-quick .btn-report:hover {
@@ -780,7 +757,6 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
-    backdrop-filter: blur(4px);
   }
   
   .modal-content {
@@ -1547,7 +1523,7 @@
     background: var(--text-secondary);
   }
   
-  * {
+  html {
     scrollbar-width: thin;
     scrollbar-color: var(--border-dark) var(--bg-tertiary);
   }
@@ -1579,7 +1555,7 @@
   #scrollTopBtn:hover {
     background: var(--primary-dark);
     transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 10px 20px rgba(44, 128, 255, 0.3);
+    box-shadow: 0 10px 20px rgba(15,157,88,0.28);
   }
   
   /* ========== DARK MODE SPECIFIC ADJUSTMENTS ========== */
@@ -1635,7 +1611,33 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     .shift-info {
-      background: linear-gradient(135deg, var(--night-shift), #2d3748);
+      background: linear-gradient(135deg, var(--night-shift), var(--primary-dark));
+    }
+    /* Improve contrast inside cards and stat values */
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), var(--bg-card));
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+    }
+    .stat-value {
+      color: var(--primary-light);
+      font-weight: 700;
+    }
+    .badge-primary {
+      background: var(--primary);
+      color: var(--text-inverse);
+      border-color: var(--primary-dark);
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--text-inverse);
+      border-color: var(--primary-dark);
+    }
+    .stat-card-actions .action-buttons-quick .btn-report {
+      box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+      border: 1px solid rgba(0,0,0,0.25);
+      color: #111111;
     }
   }
   
@@ -1936,9 +1938,7 @@
   </div>
 
   <!-- Nút cuộn về đầu trang -->
-  <button id="scrollTopBtn" style="position:fixed;right:30px;bottom:30px;z-index:999;background:#2c80ff;color:white;border:none;border-radius:50%;width:56px;height:56px;box-shadow:0 2px 8px rgba(0,0,0,0.15);font-size:2rem;display:none;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.3s;">
-    ↑
-  </button>
+  <button id="scrollTopBtn">↑</button>
 
   <!-- Modal xác nhận xóa -->
   <div class="modal" id="delete-modal">
