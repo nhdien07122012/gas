@@ -2735,6 +2735,27 @@ function getLatestShiftKey(data) {
   return sortedShifts[0].key;
 }
 
+function getPreferredShiftKey(data) {
+  const shiftFilter = document.getElementById('filter-shift');
+  const selectedShift = shiftFilter?.value || 'all';
+  const shiftKeys = Array.from(new Set(
+    data.map(item => getShiftDateKey(item.ca)).filter(Boolean)
+  ));
+
+  if (shiftKeys.length === 0) return 'all';
+
+  const currentShiftInfo = getCurrentShift();
+  if (currentShiftInfo.start && currentShiftInfo.shiftKey && shiftKeys.includes(currentShiftInfo.shiftKey)) {
+    return currentShiftInfo.shiftKey;
+  }
+
+  if (selectedShift !== 'all' && shiftKeys.includes(selectedShift)) {
+    return selectedShift;
+  }
+
+  return getLatestShiftKey(data);
+}
+
 // HÀM MỚI: Kiểm tra xem điểm gas đã có vị trí GPS chưa
 function hasExistingGPSLocation(diemName) {
   const diemEntries = allData.filter(item => item.ten_diem === diemName);
@@ -3631,12 +3652,15 @@ async function taiDuLieu() {
 
     updateFilters(data);
 
-    const initialShift = getLatestShiftKey(data);
+    const shiftInfo = getCurrentShift();
+    currentShift = shiftInfo.shiftKey;
+
+    const preferredShift = getPreferredShiftKey(data);
     const shiftFilter = document.getElementById('filter-shift');
     if (shiftFilter) {
-      const optionExists = Array.from(shiftFilter.options).some(opt => opt.value === initialShift);
+      const optionExists = Array.from(shiftFilter.options).some(opt => opt.value === preferredShift);
       if (optionExists) {
-        shiftFilter.value = initialShift;
+        shiftFilter.value = preferredShift;
       } else {
         shiftFilter.value = 'all';
       }
