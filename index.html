@@ -199,6 +199,48 @@
   body.no-scroll {
     overflow: hidden;
   }
+
+  .pull-refresh-indicator {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    z-index: 1100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 190px;
+    padding: 10px 16px;
+    border-radius: 0 0 16px 16px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--text-inverse);
+    box-shadow: var(--shadow-lg);
+    font-weight: 600;
+    font-size: 0.95rem;
+    opacity: 0;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    pointer-events: none;
+  }
+
+  .pull-refresh-indicator.show {
+    display: flex;
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .pull-refresh-indicator.loading {
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+  }
+
+  .pull-refresh-indicator .pull-refresh-icon {
+    font-size: 1.05rem;
+    transition: transform 0.2s ease;
+  }
+
+  .pull-refresh-indicator.loading .pull-refresh-icon {
+    animation: pullRefreshSpin 0.8s linear infinite;
+  }
   
   .container {
     max-width: 1200px;
@@ -1772,6 +1814,11 @@
   <!-- Toast notification -->
   <div class="toast" id="toast">
     <span id="toast-message">Đã sao chép vào clipboard!</span>
+  </div>
+
+  <div class="pull-refresh-indicator" id="pull-refresh-indicator" aria-hidden="true">
+    <span class="pull-refresh-icon" id="pull-refresh-icon">⇣</span>
+    <span id="pull-refresh-text">Kéo xuống để tải lại</span>
   </div>
   
   <!-- Sidebar -->
@@ -3673,6 +3720,106 @@ async function taiDuLieu() {
   }
 }
 
+function setupPullToRefresh() {
+  const indicator = document.getElementById('pull-refresh-indicator');
+  const icon = document.getElementById('pull-refresh-icon');
+  const text = document.getElementById('pull-refresh-text');
+  if (!indicator || !icon || !text) return;
+
+  let startY = 0;
+  let currentY = 0;
+  let isDragging = false;
+  let hasTriggered = false;
+
+  function resetIndicator() {
+    indicator.classList.remove('show', 'loading');
+    indicator.style.opacity = '0';
+    indicator.style.transform = 'translate(-50%, -100%)';
+    icon.style.transform = 'rotate(0deg)';
+    text.textContent = 'Kéo xuống để tải lại';
+  }
+
+  function updateIndicator(progress) {
+    if (progress <= 0) {
+      resetIndicator();
+      return;
+    }
+
+    const safeProgress = Math.min(progress, 1);
+    indicator.classList.add('show');
+    indicator.style.opacity = '1';
+    indicator.style.transform = `translate(-50%, ${Math.min(safeProgress * 40, 40)}px)`;
+    icon.style.transform = `rotate(${safeProgress * 180}deg)`;
+    text.textContent = safeProgress >= 1 ? 'Thả để tải lại' : 'Kéo xuống để tải lại';
+  }
+
+  function handleTouchStart(event) {
+    if (window.innerWidth > 768 || window.scrollY > 0) return;
+    if (document.querySelector('.modal[style*="display: flex"]') || document.getElementById('sidebar').classList.contains('open')) {
+      return;
+    }
+
+    const target = event.target;
+    if (target && (target.closest('input, textarea, select, button, a, .modal-content') || target.isContentEditable)) {
+      return;
+    }
+
+    startY = event.touches[0].clientY;
+    currentY = startY;
+    isDragging = false;
+    hasTriggered = false;
+    resetIndicator();
+  }
+
+  function handleTouchMove(event) {
+    if (window.innerWidth > 768 || window.scrollY > 0) return;
+    if (startY === 0) return;
+    if (document.querySelector('.modal[style*="display: flex"]') || document.getElementById('sidebar').classList.contains('open')) {
+      return;
+    }
+
+    const deltaY = event.touches[0].clientY - startY;
+    if (deltaY <= 0) {
+      return;
+    }
+
+    currentY = event.touches[0].clientY;
+    isDragging = true;
+    event.preventDefault();
+    const progress = Math.min(deltaY / 95, 1);
+    updateIndicator(progress);
+  }
+
+  function handleTouchEnd() {
+    if (window.innerWidth > 768 || startY === 0) return;
+    const deltaY = currentY - startY;
+    if (isDragging && deltaY >= 95 && !hasTriggered) {
+      hasTriggered = true;
+      indicator.classList.add('loading');
+      indicator.classList.add('show');
+      indicator.style.opacity = '1';
+      indicator.style.transform = 'translate(-50%, 0)';
+      icon.style.transform = 'rotate(0deg)';
+      text.textContent = 'Đang tải lại...';
+      vibrateShort();
+      setTimeout(() => {
+        window.location.reload();
+      }, 350);
+    } else {
+      resetIndicator();
+    }
+
+    startY = 0;
+    currentY = 0;
+    isDragging = false;
+  }
+
+  window.addEventListener('touchstart', handleTouchStart, { passive: true });
+  window.addEventListener('touchmove', handleTouchMove, { passive: false });
+  window.addEventListener('touchend', handleTouchEnd);
+  window.addEventListener('touchcancel', handleTouchEnd);
+}
+
 // Thêm hàm để xử lý đóng modal khi chạm ra ngoài
 function setupModalCloseOnOutsideClick() {
   const modals = document.querySelectorAll('.modal');
@@ -3713,6 +3860,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
   document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
   
+  setupPullToRefresh();
   setupModalCloseOnOutsideClick();
   
   document.getElementById('report-shift').addEventListener('change', updateReportSummary);
