@@ -2427,10 +2427,10 @@ function saveLastReportRecipient(recipient) {
   localStorage.setItem('gas_point_last_report_recipient', recipient);
 }
 
-function getSavedCountForCurrentShift() {
+function getSavedCountForCurrentShift(shiftKey = null) {
   try {
     const savedCounts = JSON.parse(localStorage.getItem('money_counts') || '[]');
-    const selectedShift = document.getElementById('report-shift')?.value;
+    const selectedShift = shiftKey || document.getElementById('report-shift')?.value;
     if (!selectedShift) return null;
 
     const savedData = savedCounts.find(item => item.shift === selectedShift);
@@ -2543,8 +2543,8 @@ function removeExpense(index) {
 function updateReportSummary() {
   const selectedShift = document.getElementById('report-shift').value;
   const actualCountInput = document.getElementById('report-actual-count');
-  if (selectedShift && actualCountInput.value === '' && !document.activeElement?.id === 'report-actual-count') {
-    const savedCountValue = getSavedCountForCurrentShift();
+  if (selectedShift && actualCountInput.value === '') {
+    const savedCountValue = getSavedCountForCurrentShift(selectedShift);
     if (savedCountValue !== null) {
       actualCountInput.value = savedCountValue;
     }
