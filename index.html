@@ -2165,6 +2165,11 @@
             <!-- Danh sách chi tiêu mẫu sẽ được thêm bằng JavaScript -->
           </datalist>
         </div>
+
+        <div class="form-group">
+          <label for="report-actual-count">💵 Số tiền thực tế đã đếm được:</label>
+          <input id="report-actual-count" type="number" placeholder="Nhập số tiền thực tế đã đếm">
+        </div>
         
         <div id="expenses-list">
           <!-- Danh sách chi tiêu sẽ được thêm bằng JavaScript -->
@@ -2338,6 +2343,21 @@ function openReportModal() {
   loadExpenseTemplates();
   currentExpenses = [];
   updateExpensesList();
+
+  const lastRecipient = localStorage.getItem('gas_point_last_report_recipient') || '';
+  const recipientInput = document.getElementById('report-recipient');
+  if (lastRecipient) {
+    recipientInput.value = lastRecipient;
+  } else {
+    recipientInput.value = '';
+  }
+
+  const actualCountInput = document.getElementById('report-actual-count');
+  actualCountInput.value = '';
+  const savedCountValue = getSavedCountForCurrentShift();
+  if (savedCountValue !== null) {
+    actualCountInput.value = savedCountValue;
+  }
   
   const shifts = new Set();
   allData.forEach(item => {
@@ -2402,6 +2422,29 @@ function updateExpenseTemplatesDatalist() {
 }
 
 // HÀM MỚI: Lưu người nhận mới
+function saveLastReportRecipient(recipient) {
+  if (!recipient) return;
+  localStorage.setItem('gas_point_last_report_recipient', recipient);
+}
+
+function getSavedCountForCurrentShift() {
+  try {
+    const savedCounts = JSON.parse(localStorage.getItem('money_counts') || '[]');
+    const selectedShift = document.getElementById('report-shift')?.value;
+    if (!selectedShift) return null;
+
+    const savedData = savedCounts.find(item => item.shift === selectedShift);
+    if (!savedData || typeof savedData.total !== 'number') {
+      return null;
+    }
+
+    return String(savedData.total);
+  } catch (error) {
+    console.error('Lỗi khi đọc dữ liệu đếm tiền:', error);
+    return null;
+  }
+}
+
 function saveRecipient() {
   vibrateShort();
   const recipientInput = document.getElementById('report-recipient');
@@ -2421,6 +2464,7 @@ function saveRecipient() {
     showToast('ℹ️ Người nhận đã có trong danh sách!');
     vibrateShort();
   }
+  saveLastReportRecipient(recipient);
   updateReportSummary();
 }
 
@@ -2498,7 +2542,15 @@ function removeExpense(index) {
 // HÀM MỚI: Cập nhật thông tin báo cáo khi chọn ca
 function updateReportSummary() {
   const selectedShift = document.getElementById('report-shift').value;
-  const recipient = document.getElementById('report-recipient').value;
+  const actualCountInput = document.getElementById('report-actual-count');
+  if (selectedShift && actualCountInput.value === '' && !document.activeElement?.id === 'report-actual-count') {
+    const savedCountValue = getSavedCountForCurrentShift();
+    if (savedCountValue !== null) {
+      actualCountInput.value = savedCountValue;
+    }
+  }
+  const recipientInput = document.getElementById('report-recipient');
+  const recipient = recipientInput.value.trim();
   const summaryDiv = document.getElementById('report-summary');
   const detailsP = document.getElementById('report-details');
   const totalP = document.getElementById('report-total');
@@ -2520,18 +2572,21 @@ function updateReportSummary() {
   }
   
   const totalRevenue = shiftData.reduce((sum, item) => sum + (parseInt(item.so_tien) || 0), 0);
+  const actualCountedAmount = actualCountInput.value.trim() !== ''
+    ? (parseInt(actualCountInput.value, 10) || 0)
+    : totalRevenue;
+  const difference = actualCountedAmount - totalRevenue;
+  const estimatedExpense = Math.max(0, -difference);
   const totalExpense = currentExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-  const actualAmount = totalRevenue - totalExpense;
-  const daNopCount = shiftData.filter(item => item.trang_thai === 'Đã nộp').length;
-  const chuaNopCount = shiftData.length - daNopCount;
+  const isMatched = totalExpense >= estimatedExpense;
   
   detailsP.innerHTML = `
-    Số điểm gas: <strong>${shiftData.length}</strong><br>
-    Đã nộp: <strong>${daNopCount}</strong> | Chưa nộp: <strong>${chuaNopCount}</strong><br>
-    Tổng doanh thu: <strong>${formatCurrencyCompact(totalRevenue)}</strong><br>
-    Tổng chi tiêu: <strong>-${formatCurrencyCompact(totalExpense)}</strong>
+    Tổng doanh thu ca: <strong>${formatCurrencyCompact(totalRevenue)}</strong><br>
+    Số tiền thực tế đã đếm được: <strong>${formatCurrencyCompact(actualCountedAmount)}</strong><br>
+    Chênh lệch: <strong style="color: ${difference >= 0 ? 'var(--primary)' : 'var(--danger)'}">${difference >= 0 ? '+' : '-'}${formatCurrencyCompact(Math.abs(difference))}</strong><br>
+    Ước tính chi tiêu: <strong>${formatCurrencyCompact(estimatedExpense)}</strong>
   `;
-  totalP.innerHTML = `Số tiền thực tế: <span style="color: ${actualAmount >= 0 ? 'var(--primary)' : 'var(--danger)'}">${formatCurrencyCompact(actualAmount)}</span>`;
+  totalP.innerHTML = `Trạng thái: <span style="color: ${isMatched ? 'var(--primary)' : 'var(--danger)'}">${isMatched ? 'Khớp ✅' : 'Chưa khớp ⚠️'}</span>`;
   summaryDiv.style.display = 'block';
   generateBtn.disabled = false;
 }
@@ -3864,7 +3919,11 @@ document.addEventListener('DOMContentLoaded', function() {
   setupModalCloseOnOutsideClick();
   
   document.getElementById('report-shift').addEventListener('change', updateReportSummary);
-  document.getElementById('report-recipient').addEventListener('input', updateReportSummary);
+  document.getElementById('report-recipient').addEventListener('input', function() {
+    saveLastReportRecipient(this.value.trim());
+    updateReportSummary();
+  });
+  document.getElementById('report-actual-count').addEventListener('input', updateReportSummary);
   
   document.getElementById('expense-name').addEventListener('change', function() {
     vibrateShort();
