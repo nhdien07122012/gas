@@ -2197,6 +2197,11 @@ let editingId = null;
 let itemToDelete = null;
 let currentFilteredData = [];
 let selectedOutOfHoursShift = null;
+const INITIAL_VISIBLE_ROWS = 200;
+const ROW_LOAD_STEP = 100;
+let isLoadingData = false;
+const DATA_CACHE_KEY = 'gas_point_cached_data_v2';
+const DATA_CACHE_TTL_MS = 10 * 60 * 1000;
 
 // Biến toàn cục để lưu danh sách người nhận
 let recipientList = [];
@@ -2869,6 +2874,70 @@ function hasExistingGPSLocation(diemName) {
   return false;
 }
 
+function getCachedData() {
+  try {
+    const raw = localStorage.getItem(DATA_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed?.data)) return null;
+    if (parsed.timestamp && Date.now() - parsed.timestamp < DATA_CACHE_TTL_MS) {
+      return parsed.data;
+    }
+  } catch (error) {
+    console.warn('Không dùng được cache dữ liệu:', error);
+  }
+  return null;
+}
+
+function saveCachedData(data) {
+  try {
+    localStorage.setItem(DATA_CACHE_KEY, JSON.stringify({
+      data,
+      timestamp: Date.now()
+    }));
+  } catch (error) {
+    console.warn('Không lưu được cache dữ liệu:', error);
+  }
+}
+
+function applyDataToView(data) {
+  allData = Array.isArray(data) ? data : [];
+  currentFilteredData = allData;
+  updateCacheDiem();
+
+  const diemList = document.getElementById('diem-list');
+  if (diemList) {
+    diemList.innerHTML = '';
+    const uniqueDiems = new Set();
+    allData.forEach(row => {
+      const ten = row.ten_diem;
+      if (!uniqueDiems.has(ten)) {
+        const opt = document.createElement('option');
+        opt.value = ten;
+        diemList.appendChild(opt);
+        uniqueDiems.add(ten);
+      }
+    });
+  }
+
+  updateFilters(allData);
+
+  const shiftInfo = getCurrentShift();
+  currentShift = shiftInfo.shiftKey;
+
+  const preferredShift = getPreferredShiftKey(allData);
+  const shiftFilter = document.getElementById('filter-shift');
+  if (shiftFilter) {
+    const optionExists = Array.from(shiftFilter.options).some(opt => opt.value === preferredShift);
+    if (optionExists) {
+      shiftFilter.value = preferredShift;
+    } else {
+      shiftFilter.value = 'all';
+    }
+  }
+  filterData();
+}
+
 // Hàm hiển thị thông báo toast
 function showToast(message, type = 'success') {
   const toast = document.getElementById('toast');
@@ -3303,6 +3372,31 @@ function filterData() {
   displayStats(calculateStats(filteredData));
 }
 
+function appendRowsToTable(data, startIndex, endIndex) {
+  const tbody = document.querySelector('#bang tbody');
+  const fragment = document.createDocumentFragment();
+
+  for (let i = startIndex; i < endIndex; i++) {
+    const row = data[i];
+    const tr = document.createElement('tr');
+    tr.className = 'fade-in';
+
+    tr.innerHTML = `
+      <td data-label="Tên điểm">${escapeHTML(row.ten_diem)}</td>
+      <td data-label="Doanh thu" class="revenue-cell">${formatCurrency(row.so_tien)}</td>
+      <td data-label="Thao tác">
+        <div class="action-buttons">
+          <button class="btn-secondary btn-sm" onclick="editItem('${row.id}')" onmousedown="vibrateShort()">✏️</button>
+          <button class="btn-danger btn-sm" onclick="deleteItem('${row.id}')" onmousedown="vibrateShort()">🗑️</button>
+        </div>
+      </td>
+    `;
+    fragment.appendChild(tr);
+  }
+
+  tbody.appendChild(fragment);
+}
+
 // Hiển thị dữ liệu trong bảng
 function displayData(data) {
   const tbody = document.querySelector('#bang tbody');
@@ -3314,33 +3408,37 @@ function displayData(data) {
   } else {
     emptyState.style.display = 'none';
   }
-  
-  data.forEach(row => {
-    const tr = document.createElement('tr');
-    tr.className = 'fade-in';
-    
-    let badgeClass = 'badge-warning';
-    if (row.trang_thai === 'Đã nộp') {
-      badgeClass = 'badge-secondary';
-    }
 
-    let caLabel = row.ca || 'Không xác định';
-    if (/^\d{4}-\d{2}-\d{2}/.test(row.ca)) {
-      caLabel = formatShiftDayLabel(row.ca).replace(/^Ca /, '');
-    }
-    
-    tr.innerHTML = `
-      <td data-label="Tên điểm">${escapeHTML(row.ten_diem)}</td>
-      <td data-label="Doanh thu" class="revenue-cell">${formatCurrency(row.so_tien)}</td>
-      <td data-label="Thao tác">
-        <div class="action-buttons">
-          <button class="btn-secondary btn-sm" onclick="editItem('${row.id}')" onmousedown="vibrateShort()">✏️</button>
-          <button class="btn-danger btn-sm" onclick="deleteItem('${row.id}')" onmousedown="vibrateShort()">🗑️</button>
-        </div>
+  if (data.length === 0) {
+    return;
+  }
+
+  let visibleIndex = 0;
+  const initialRows = Math.min(data.length, INITIAL_VISIBLE_ROWS);
+  appendRowsToTable(data, 0, initialRows);
+  visibleIndex = initialRows;
+
+  if (data.length > initialRows) {
+    const buttonRow = document.createElement('tr');
+    buttonRow.innerHTML = `
+      <td colspan="3" style="text-align:center;">
+        <button class="btn-secondary btn-sm" type="button">Tải thêm ${Math.min(ROW_LOAD_STEP, data.length - visibleIndex)} bản ghi</button>
       </td>
     `;
-    tbody.appendChild(tr);
-  });
+    const button = buttonRow.querySelector('button');
+    button.addEventListener('click', () => {
+      const nextEnd = Math.min(visibleIndex + ROW_LOAD_STEP, data.length);
+      appendRowsToTable(data, visibleIndex, nextEnd);
+      visibleIndex = nextEnd;
+
+      if (visibleIndex < data.length) {
+        button.textContent = `Tải thêm ${Math.min(ROW_LOAD_STEP, data.length - visibleIndex)} bản ghi`;
+      } else {
+        buttonRow.remove();
+      }
+    });
+    tbody.appendChild(buttonRow);
+  }
 }
 
 // Hàm thay đổi trạng thái nhanh
@@ -3732,46 +3830,35 @@ async function guiDuLieu() {
 async function taiDuLieu() {
   closeSidebar();
   vibrateShort();
+
+  if (isLoadingData) return;
+  isLoadingData = true;
+
+  const cachedData = getCachedData();
+  if (cachedData) {
+    applyDataToView(cachedData);
+  }
+
   try {
-    const res = await fetch(scriptURL);
-    const data = await res.json();
-    allData = data;
-    currentFilteredData = data;
-    updateCacheDiem();
-    
-    const diemList = document.getElementById('diem-list');
-    diemList.innerHTML = '';
-    const uniqueDiems = new Set();
-    data.forEach(row => {
-      const ten = row.ten_diem;
-      if (!uniqueDiems.has(ten)) {
-        const opt = document.createElement('option');
-        opt.value = ten;
-        diemList.appendChild(opt);
-        uniqueDiems.add(ten);
-      }
+    const res = await fetch(`${scriptURL}?t=${Date.now()}`, {
+      cache: 'no-store'
     });
-
-    updateFilters(data);
-
-    const shiftInfo = getCurrentShift();
-    currentShift = shiftInfo.shiftKey;
-
-    const preferredShift = getPreferredShiftKey(data);
-    const shiftFilter = document.getElementById('filter-shift');
-    if (shiftFilter) {
-      const optionExists = Array.from(shiftFilter.options).some(opt => opt.value === preferredShift);
-      if (optionExists) {
-        shiftFilter.value = preferredShift;
-      } else {
-        shiftFilter.value = 'all';
-      }
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
     }
-    filterData();
+    const data = await res.json();
+    if (Array.isArray(data)) {
+      saveCachedData(data);
+      applyDataToView(data);
+    }
   } catch (error) {
-    showToast('❌ Có lỗi xảy ra khi tải dữ liệu!', 'error');
-    vibrateError();
+    if (!cachedData) {
+      showToast('❌ Có lỗi xảy ra khi tải dữ liệu!', 'error');
+      vibrateError();
+    }
     console.error(error);
+  } finally {
+    isLoadingData = false;
   }
 }
 
