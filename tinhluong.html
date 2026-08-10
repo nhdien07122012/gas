@@ -900,13 +900,7 @@
         <label for="ngay-bat-dau">Chu kỳ lương (từ ngày):</label>
         <div style="display: flex; gap: 10px;">
           <select id="ngay-bat-dau" style="flex: 1;">
-            <option value="5" selected>Ngày 05</option>
-            <option value="1">Ngày 01</option>
-            <option value="10">Ngày 10</option>
-            <option value="15">Ngày 15</option>
-            <option value="20">Ngày 20</option>
-            <option value="25">Ngày 25</option>
-            <option value="28">Ngày 28</option>
+            <option value="1" selected>Ngày 01</option>
           </select>
           <select id="thang-bat-dau" style="flex: 1;">
             <!-- Tháng sẽ được thêm bằng JavaScript -->
@@ -916,7 +910,7 @@
           </select>
         </div>
         <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 5px; font-family: var(--font-family);">
-          <i>Lương được tính từ ngày X tháng này đến ngày X tháng sau (30 ngày)</i>
+          <i>Chu kỳ tính lương: từ ngày 01 đến cuối tháng. Nếu nghỉ 2 ngày trong tháng, vẫn tính lương tối đa 1 ngày nghỉ được phép.</i>
         </p>
       </div>
       
@@ -1081,6 +1075,17 @@ function formatDate(date) {
   return `${day}/${month}/${year}`;
 }
 
+function getMonthRange(year, month) {
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 0);
+
+  return {
+    startDate,
+    endDate,
+    totalDays: endDate.getDate()
+  };
+}
+
 // Hàm lấy tháng và năm từ dữ liệu
 function populateMonthYearSelectors() {
   const monthSelect = document.getElementById('thang-bat-dau');
@@ -1123,64 +1128,17 @@ function populateMonthYearSelectors() {
   }
 }
 
-// Hàm tự động điền chu kỳ từ ngày 05 tháng trước đến 05 tháng này - FIXED LOGIC
+// Hàm tự động điền chu kỳ theo tháng hiện tại: từ ngày 01 đến cuối tháng
 function autoFillLastCycle() {
   const now = new Date();
-  const currentDay = now.getDate();
   const currentMonth = now.getMonth() + 1;
   const currentYear = now.getFullYear();
-  
-  const selectedDay = parseInt(document.getElementById('ngay-bat-dau').value) || 5;
-  
-  let startMonth, startYear;
-  let endMonth, endYear;
-  
-  // Logic FIXED: 
-  // 1. Nếu ngày hiện tại >= ngày đã chọn (ví dụ 5): tính từ [ngày] tháng NÀY đến [ngày] tháng SAU
-  // 2. Nếu ngày hiện tại < ngày đã chọn: tính từ [ngày] tháng TRƯỚC đến [ngày] tháng NÀY
-  
-  if (currentDay >= selectedDay) {
-    // Ví dụ: Hôm nay 10/01/2026, ngày chọn 5 -> tính từ 05/01/2026 đến 05/02/2026
-    startMonth = currentMonth;
-    startYear = currentYear;
-    
-    // Tính tháng kết thúc
-    if (currentMonth === 12) {
-      endMonth = 1;
-      endYear = currentYear + 1;
-    } else {
-      endMonth = currentMonth + 1;
-      endYear = currentYear;
-    }
-  } else {
-    // Ví dụ: Hôm nay 03/01/2026, ngày chọn 5 -> tính từ 05/12/2025 đến 05/01/2026
-    if (currentMonth === 1) {
-      startMonth = 12;
-      startYear = currentYear - 1;
-    } else {
-      startMonth = currentMonth - 1;
-      startYear = currentYear;
-    }
-    
-    endMonth = currentMonth;
-    endYear = currentYear;
-  }
-  
-  // Cập nhật form với ngày bắt đầu (tháng và năm)
-  document.getElementById('thang-bat-dau').value = startMonth;
-  document.getElementById('nam-bat-dau').value = startYear;
-  
-  // Hiển thị thông báo với cả ngày bắt đầu và kết thúc
-  showToast(`✅ Đã điền chu kỳ: ${selectedDay}/${startMonth}/${startYear} - ${selectedDay}/${endMonth}/${endYear}`);
-  
-  // Log để debug
-  console.log('Tự động điền chu kỳ:', {
-    selectedDay,
-    currentDate: `${currentDay}/${currentMonth}/${currentYear}`,
-    startDate: `${selectedDay}/${startMonth}/${startYear}`,
-    endDate: `${selectedDay}/${endMonth}/${endYear}`,
-    condition: currentDay >= selectedDay ? 'currentDay >= selectedDay' : 'currentDay < selectedDay'
-  });
+
+  document.getElementById('ngay-bat-dau').value = '1';
+  document.getElementById('thang-bat-dau').value = currentMonth;
+  document.getElementById('nam-bat-dau').value = currentYear;
+
+  showToast(`✅ Đã điền chu kỳ tính lương: 01/${currentMonth}/${currentYear} - cuối tháng ${currentMonth}/${currentYear}`);
 }
 
 // Hàm TEST tải dữ liệu
@@ -1441,9 +1399,7 @@ async function tinhLuong() {
     btn.textContent = '⏳ Đang tính...';
     btn.disabled = true;
     
-    // 1. Lấy thông tin đầu vào
     const luongThang = parseInt(document.getElementById('luong-thang').value);
-    const ngayBatDau = parseInt(document.getElementById('ngay-bat-dau').value);
     const thangBatDau = parseInt(document.getElementById('thang-bat-dau').value);
     const namBatDau = parseInt(document.getElementById('nam-bat-dau').value);
     
@@ -1452,57 +1408,35 @@ async function tinhLuong() {
       return;
     }
     
-    // 2. Tải dữ liệu mới nhất nếu chưa có
     if (allData.length === 0) {
       await taiDuLieu();
     }
-    
-    // 3. Tính ngày bắt đầu và kết thúc chu kỳ - FIXED: Xử lý chuyển năm
-    const ngayBatDauChuKy = new Date(namBatDau, thangBatDau - 1, ngayBatDau);
-    
-    // Tính ngày kết thúc (tháng sau, cùng ngày)
-    let ngayKetThucChuKy;
-    if (thangBatDau === 12) {
-      // Nếu là tháng 12, chuyển sang tháng 1 năm sau
-      ngayKetThucChuKy = new Date(namBatDau + 1, 0, ngayBatDau);
-    } else {
-      // Các tháng khác
-      ngayKetThucChuKy = new Date(namBatDau, thangBatDau, ngayBatDau);
-    }
-    
-    // Trừ đi 1 mili giây để không tính cả ngày bắt đầu của chu kỳ tiếp theo
-    ngayKetThucChuKy = new Date(ngayKetThucChuKy.getTime() - 1);
-    
-    console.log('Chu kỳ lương:', {
-      batDau: ngayBatDauChuKy.toLocaleDateString('vi-VN'),
-      ketThuc: ngayKetThucChuKy.toLocaleDateString('vi-VN')
-    });
-    
-    // 4. Lọc các ca làm việc trong chu kỳ
+
+    const monthRange = getMonthRange(namBatDau, thangBatDau);
+    const ngayBatDauChuKy = monthRange.startDate;
+    const ngayKetThucChuKy = monthRange.endDate;
+    const soNgayTrongThang = monthRange.totalDays;
+
     const caLamViecTrongChuKy = caLamViecList.filter(ca => {
       const caDate = new Date(ca.ngay);
       return caDate >= ngayBatDauChuKy && caDate <= ngayKetThucChuKy;
     });
-    
-    console.log('Ca làm việc trong chu kỳ:', caLamViecTrongChuKy.length);
-    console.log('Chi tiết:', caLamViecTrongChuKy.map(ca => ca.ngay));
-    
-    // 5. Tính số ngày công = số ca làm việc thực tế
+
     const soNgayCong = caLamViecTrongChuKy.length;
-    
-    // 6. Tính lương: lương tháng / 30 ngày * số ngày công thực tế
-    const luongTheoNgay = luongThang / 30;
-    const tongLuong = Math.round(luongTheoNgay * soNgayCong);
-    
-    // 7. Hiển thị kết quả
-    displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViecTrongChuKy, ngayBatDauChuKy, ngayKetThucChuKy);
-    
-    // 8. Kích hoạt hiệu ứng tiền rơi nếu có lương > 0
+    const soNgayNghiThucTe = Math.max(0, soNgayTrongThang - soNgayCong);
+    const soNgayNghiDuocPhep = Math.min(soNgayNghiThucTe, 1);
+    const soNgayCongHieuLuc = soNgayCong + soNgayNghiDuocPhep;
+
+    const luongTheoNgay = luongThang / soNgayTrongThang;
+    const tongLuong = Math.round(luongTheoNgay * soNgayCongHieuLuc);
+
+    displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViecTrongChuKy, ngayBatDauChuKy, ngayKetThucChuKy, soNgayTrongThang, soNgayNghiDuocPhep);
+
     if (tongLuong > 0) {
       createMoneyRain();
-      showToast('💰 Tính lương thành công! Tiền đang rơi!');
+      showToast('💰 Tính lương thành công!');
     } else {
-      showToast('⚠️ Không có ca làm việc trong chu kỳ này!', 'warning');
+      showToast('⚠️ Không có ca làm việc trong tháng này!', 'warning');
     }
     
   } catch (error) {
@@ -1515,11 +1449,11 @@ async function tinhLuong() {
 }
 
 // Hàm hiển thị kết quả tính lương - FIXED: Hiển thị đúng thông tin
-function displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViec, startDate, endDate) {
+function displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViec, startDate, endDate, soNgayTrongChuKy = 30, soNgayNghiDuocPhep = 0) {
   const statsContainer = document.getElementById('stats-container');
   
-  // Tính tổng tiền thu được từ các ca làm việc
   const tongTienThu = caLamViec.reduce((sum, ca) => sum + ca.tongTien, 0);
+  const luongTheoNgay = luongThang / soNgayTrongChuKy;
   
   // Cập nhật thống kê
   statsContainer.innerHTML = `
@@ -1555,13 +1489,14 @@ function displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViec, start
   document.getElementById('thoi-gian-tinh').textContent = `Thời gian tính: Từ ${startStr} đến ${endStr}`;
   
   const chiTietLuong = document.getElementById('chi-tiet-luong');
-  const luongTheoNgay = luongThang / 30;
   
   chiTietLuong.innerHTML = `
     <li style="margin-bottom: 8px; font-family: var(--font-family);">Lương tháng: ${formatCurrency(luongThang)}</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Quy ước: 30 ngày công/tháng</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Chu kỳ: ${startDate.getDate()}/${String(startDate.getMonth() + 1).padStart(2, '0')}/${startDate.getFullYear()} đến ${endDate.getDate()}/${String(endDate.getMonth() + 1).padStart(2, '0')}/${endDate.getFullYear()}</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày trong tháng: ${soNgayTrongChuKy} ngày</li>
     <li style="margin-bottom: 8px; font-family: var(--font-family);">Lương mỗi ngày: ${formatCurrency(luongTheoNgay)}</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ca làm việc thực tế: ${soNgayCong} ca</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày làm việc thực tế: ${soNgayCong} ngày</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Nghỉ được phép vẫn lương: ${soNgayNghiDuocPhep} ngày</li>
     <li style="margin-bottom: 8px; font-family: var(--font-family);">Tổng tiền thu được: ${formatCurrency(tongTienThu)}</li>
     <li style="margin-bottom: 8px; font-weight: bold; font-family: var(--font-family);">Tổng lương tạm tính: ${formatCurrency(tongLuong)}</li>
   `;
@@ -1579,30 +1514,20 @@ async function copySalaryToClipboard() {
   const tongLuong = document.getElementById('tong-luong').textContent;
   const thoiGianTinh = document.getElementById('thoi-gian-tinh').textContent;
   
-  // Tính số ca trong chu kỳ hiện tại
-  const ngayBatDau = parseInt(document.getElementById('ngay-bat-dau').value);
   const thangBatDau = parseInt(document.getElementById('thang-bat-dau').value);
   const namBatDau = parseInt(document.getElementById('nam-bat-dau').value);
-  
-  const ngayBatDauChuKy = new Date(namBatDau, thangBatDau - 1, ngayBatDau);
-  let ngayKetThucChuKy;
-  if (thangBatDau === 12) {
-    ngayKetThucChuKy = new Date(namBatDau + 1, 0, ngayBatDau);
-  } else {
-    ngayKetThucChuKy = new Date(namBatDau, thangBatDau, ngayBatDau);
-  }
-  ngayKetThucChuKy = new Date(ngayKetThucChuKy.getTime() - 1);
-  
+  const monthRange = getMonthRange(namBatDau, thangBatDau);
   const soCa = caLamViecList.filter(ca => {
     const caDate = new Date(ca.ngay);
-    return caDate >= ngayBatDauChuKy && caDate <= ngayKetThucChuKy;
+    return caDate >= monthRange.startDate && caDate <= monthRange.endDate;
   }).length;
   
   const content = `
-TÍNH LƯƠNG THEO SỐ CA LÀM VIỆC
+TÍNH LƯƠNG THEO THÁNG
 ${thoiGianTinh}
+Chu kỳ: Từ 01/${String(thangBatDau).padStart(2, '0')}/${namBatDau} đến ${monthRange.endDate.getDate()}/${String(thangBatDau).padStart(2, '0')}/${namBatDau}
 Lương tháng: ${formatCurrency(parseInt(luongThang))}
-Số ca làm việc thực tế: ${soCa} ca
+Số ngày làm việc thực tế: ${soCa} ngày
 Tổng lương tạm tính: ${tongLuong}
 ---
 Kết quả tính từ ứng dụng Quản lý điểm gas
@@ -1619,7 +1544,7 @@ Kết quả tính từ ứng dụng Quản lý điểm gas
 // Hàm reset form
 function resetForm() {
   document.getElementById('luong-thang').value = '5500000';
-  document.getElementById('ngay-bat-dau').value = '5';
+  document.getElementById('ngay-bat-dau').value = '1';
   populateMonthYearSelectors();
   
   // Ẩn phần tổng lương tạm tính ở đầu
