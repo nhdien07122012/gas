@@ -1430,7 +1430,18 @@ async function tinhLuong() {
     const luongTheoNgay = luongThang / soNgayTrongThang;
     const tongLuong = Math.round(luongTheoNgay * soNgayCongHieuLuc);
 
-    displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViecTrongChuKy, ngayBatDauChuKy, ngayKetThucChuKy, soNgayTrongThang, soNgayNghiDuocPhep);
+    displaySalaryResult(
+      luongThang,
+      tongLuong,
+      soNgayCong,
+      caLamViecTrongChuKy,
+      ngayBatDauChuKy,
+      ngayKetThucChuKy,
+      soNgayTrongThang,
+      soNgayNghiThucTe,
+      soNgayNghiDuocPhep,
+      soNgayCongHieuLuc
+    );
 
     if (tongLuong > 0) {
       createMoneyRain();
@@ -1449,13 +1460,23 @@ async function tinhLuong() {
 }
 
 // Hàm hiển thị kết quả tính lương - FIXED: Hiển thị đúng thông tin
-function displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViec, startDate, endDate, soNgayTrongChuKy = 30, soNgayNghiDuocPhep = 0) {
+function displaySalaryResult(
+  luongThang,
+  tongLuong,
+  soNgayCong,
+  caLamViec,
+  startDate,
+  endDate,
+  soNgayTrongChuKy = 30,
+  soNgayNghiThucTe = 0,
+  soNgayNghiDuocPhep = 0,
+  soNgayCongHieuLuc = 0
+) {
   const statsContainer = document.getElementById('stats-container');
   
   const tongTienThu = caLamViec.reduce((sum, ca) => sum + ca.tongTien, 0);
   const luongTheoNgay = luongThang / soNgayTrongChuKy;
   
-  // Cập nhật thống kê
   statsContainer.innerHTML = `
     <div class="stat-card">
       <div class="stat-value">${soNgayCong}</div>
@@ -1471,20 +1492,16 @@ function displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViec, start
     </div>
   `;
   
-  // Cập nhật phần tổng lương tạm tính ở đầu trang
   const salaryPreview = document.getElementById('salary-preview');
   const previewAmount = document.getElementById('preview-amount');
   const previewTime = document.getElementById('preview-time');
   
   previewAmount.textContent = formatCurrency(tongLuong);
-  
-  // FIXED: Định dạng ngày tháng đúng cách
   const startStr = startDate.toLocaleDateString('vi-VN');
   const endStr = endDate.toLocaleDateString('vi-VN');
   previewTime.textContent = `Thời gian tính: Từ ${startStr} đến ${endStr}`;
   salaryPreview.classList.add('show');
   
-  // Cập nhật phần kết quả chi tiết bên dưới
   document.getElementById('tong-luong').textContent = formatCurrency(tongLuong);
   document.getElementById('thoi-gian-tinh').textContent = `Thời gian tính: Từ ${startStr} đến ${endStr}`;
   
@@ -1496,15 +1513,15 @@ function displaySalaryResult(luongThang, tongLuong, soNgayCong, caLamViec, start
     <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày trong tháng: ${soNgayTrongChuKy} ngày</li>
     <li style="margin-bottom: 8px; font-family: var(--font-family);">Lương mỗi ngày: ${formatCurrency(luongTheoNgay)}</li>
     <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày làm việc thực tế: ${soNgayCong} ngày</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Nghỉ được phép vẫn lương: ${soNgayNghiDuocPhep} ngày</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày nghỉ thực tế: ${soNgayNghiThucTe} ngày</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Ngày nghỉ không trừ lương tối đa: ${soNgayNghiDuocPhep} ngày</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày tính lương thực tế: ${soNgayCongHieuLuc} ngày</li>
     <li style="margin-bottom: 8px; font-family: var(--font-family);">Tổng tiền thu được: ${formatCurrency(tongTienThu)}</li>
     <li style="margin-bottom: 8px; font-weight: bold; font-family: var(--font-family);">Tổng lương tạm tính: ${formatCurrency(tongLuong)}</li>
   `;
   
   document.getElementById('salary-result').style.display = 'block';
   document.getElementById('empty-state').style.display = 'none';
-  
-  // Hiển thị danh sách ca làm việc trong chu kỳ
   displayWorkingDays(caLamViec);
 }
 
