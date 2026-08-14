@@ -834,6 +834,277 @@
   .fade-in {
     animation: fadeIn 0.3s ease-out;
   }
+
+  /* ========== STAT CARDS (Reused from index.html) ========== */
+  .stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .stat-card {
+    flex: 1;
+    min-width: 150px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-light);
+  }
+  
+  .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    font-family: var(--font-family);
+    word-break: break-all;
+  }
+  
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 5px;
+    font-family: var(--font-family);
+    font-weight: 400;
+  }
+  
+  .total-card {
+    cursor: pointer;
+  }
+  
+  .total-card:active {
+    transform: scale(0.98);
+  }
+
+  /* ========== DENOMINATIONS GRID & CARDS ========== */
+  .denominations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+  }
+  
+  .denom-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+  }
+  
+  .denom-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary-light);
+    box-shadow: var(--shadow-lg);
+    background: var(--bg-hover);
+  }
+  
+  .denom-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .denomination-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-circle);
+    color: var(--text-inverse);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    font-family: var(--font-family);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .denom-card-body {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .stepper-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--border-color);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    padding: 0;
+    flex-shrink: 0;
+    font-family: var(--font-family);
+  }
+  
+  .stepper-btn:hover {
+    background: var(--primary-light);
+    color: var(--text-inverse);
+    border-color: var(--primary);
+  }
+  
+  .stepper-btn:active {
+    transform: scale(0.95);
+  }
+  
+  .denom-card-body .bill-input {
+    flex: 1;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 8px;
+    height: 40px;
+    border-radius: var(--radius-md);
+  }
+  
+  .denom-card-footer {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .denom-card-footer .quick-btn {
+    flex: 1;
+    padding: 8px 6px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    font-weight: 600;
+  }
+  
+  .denom-card-footer .quick-btn:hover {
+    background: var(--primary);
+    color: var(--text-inverse);
+    border-color: var(--primary-dark);
+  }
+  
+  /* Dropdown và Bar chọn ca làm việc gọn gàng */
+  .shift-selection-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  /* ========== RESPONSIVE MOBILE GRID ========== */
+  @media (max-width: 576px) {
+    .denominations-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 15px 0;
+    }
+    
+    .denom-card {
+      padding: 10px;
+      gap: 8px;
+      border-radius: var(--radius-md);
+    }
+    
+    .denom-card-header {
+      gap: 8px;
+    }
+    
+    .denomination-icon {
+      width: 36px;
+      height: 36px;
+      font-size: 0.8rem;
+    }
+    
+    .denomination-value {
+      font-size: 0.95rem;
+    }
+    
+    .denomination-label {
+      font-size: 0.8rem;
+    }
+    
+    .stepper-btn {
+      width: 32px;
+      height: 32px;
+      font-size: 1.1rem;
+      border-radius: var(--radius-xs);
+    }
+    
+    .denom-card-body .bill-input {
+      font-size: 1rem;
+      padding: 6px;
+      height: 32px;
+      border-radius: var(--radius-xs);
+    }
+    
+    .denom-card-footer .quick-btn {
+      padding: 6px 4px;
+      font-size: 0.8rem;
+      border-radius: var(--radius-xs);
+    }
+
+    .display-results-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    
+    .display-results-grid .stat-card {
+      padding: 12px;
+      min-width: 0;
+      border-radius: var(--radius-md);
+    }
+    
+    .display-results-grid .stat-value {
+      font-size: 1.25rem;
+    }
+    
+    .display-results-grid .stat-label {
+      font-size: 0.8rem;
+      margin-top: 3px;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .denom-card {
+      border-color: var(--border-dark);
+    }
+    .denom-card:hover {
+      background-color: var(--bg-hover);
+      border-color: var(--primary);
+    }
+    .stepper-btn {
+      background: var(--bg-secondary);
+      border-color: var(--border-dark);
+    }
+    .denom-card-footer .quick-btn {
+      background: var(--bg-secondary);
+      border-color: var(--border-dark);
+    }
+    .shift-selection-card {
+      border-color: var(--border-dark);
+    }
+  }
 </style>
 </head>
 <body>
@@ -843,62 +1114,50 @@
                 <span class="menu-back-icon">←</span>
             </button>
             <h1>💰 Đếm tiền theo mệnh giá</h1>
-            <p> Trang điếm tiền cuối ca</p>
+            <p>Trang đếm tiền cuối ca</p>
         </header>
         
-        <!-- KẾT QUẢ TRÊN CÙNG -->
-        <div class="result-header" id="result-header" style="display: none;">
-            <div class="total-display">
-                <div class="total-amount" id="total-amount" onclick="copyTotalOnly()" title="Nhấp để sao chép số tiền">0 ₫</div>
-                <div>Tổng tiền đếm được</div>
+        <!-- KẾT QUẢ ĐẾM TIỀN (Thống kê dạng card) -->
+        <div class="stats-container display-results-grid" id="result-header" style="display: none; padding: 20px 20px 5px 20px; border-bottom: 2px solid var(--border-color);">
+            <div class="stat-card total-card" id="total-amount-card" onclick="copyTotalOnly()" title="Nhấp để sao chép số tiền">
+                <div class="stat-value" id="total-amount">0 ₫</div>
+                <div class="stat-label">💰 Tổng đếm được</div>
             </div>
-            
-            <div class="comparison-row">
-                <div class="comparison-item">
-                    <div class="comparison-label">Doanh thu ca</div>
-                    <div class="comparison-value revenue-total" id="revenue-total">0 ₫</div>
-                </div>
-                <div class="comparison-item">
-                    <div class="comparison-label">Chênh lệch</div>
-                    <div class="comparison-value difference" id="difference-amount">0 ₫</div>
-                </div>
-                <div class="comparison-item">
-                    <div class="comparison-label">Tình trạng</div>
-                    <div class="comparison-value" id="status-text">-</div>
-                </div>
+            <div class="stat-card">
+                <div class="stat-value revenue-total" id="revenue-total">0 ₫</div>
+                <div class="stat-label">📈 Doanh thu ca</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value difference" id="difference-amount">0 ₫</div>
+                <div class="stat-label">⚖️ Chênh lệch</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="status-text">-</div>
+                <div class="stat-label">🔔 Tình trạng</div>
             </div>
         </div>
         
         <!-- FORM NHẬP LIỆU -->
         <div class="input-section">
-            <div class="form-group">
-                <label for="select-shift">Chọn ca cần đếm tiền:</label>
-                <select id="select-shift">
-                    <option value="">-- Chọn ca --</option>
-                    <!-- Options sẽ được thêm bằng JS -->
-                </select>
+            <div class="shift-selection-card">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="select-shift" style="margin-bottom: 6px;">Chọn ca cần đếm tiền:</label>
+                    <select id="select-shift">
+                        <option value="">-- Chọn ca --</option>
+                        <!-- Options sẽ được thêm bằng JS -->
+                    </select>
+                </div>
             </div>
             
-            <h3 style="margin: 20px 0 15px 0; color: var(--text-primary); font-family: var(--font-family); font-weight: 600;">Nhập số lượng tờ tiền:</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0 10px 0; flex-wrap: wrap; gap: 10px;">
+                <h3 style="color: var(--text-primary); font-family: var(--font-family); font-weight: 600; margin: 0;">Nhập số lượng tờ tiền:</h3>
+                <p class="keyboard-hint" style="margin: 0;">💡 <strong>Mẹo:</strong> <kbd>Enter</kbd> chuyển ô • <kbd>Ctrl+Enter</kbd> tính • <kbd>ESC</kbd> về ô đầu</p>
+            </div>
             
-            <p class="keyboard-hint">💡 <strong>Mẹo:</strong> Nhấn <kbd>Enter</kbd> để chuyển ô • <kbd>Ctrl+Enter</kbd> để tính toán • <kbd>ESC</kbd> về ô đầu</p>
-            
-            <table class="denominations-table">
-                <thead>
-                    <tr>
-                        <th style="font-family: var(--font-family);">Mệnh giá</th>
-                        <th style="font-family: var(--font-family);">
-                            Số tờ 
-                            <span style="font-weight: normal; font-size: 0.85rem; color: var(--text-secondary); display: block;">
-                                (Enter để chuyển ô)
-                            </span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="denominations-body">
-                    <!-- Các dòng mệnh giá sẽ được thêm bằng JS -->
-                </tbody>
-            </table>
+            <!-- Grid chứa các thẻ mệnh giá thay thế cho Table -->
+            <div class="denominations-grid" id="denominations-grid">
+                <!-- Các thẻ mệnh giá sẽ được thêm bằng JS -->
+            </div>
             
             <div class="action-buttons">
                 <button class="action-btn btn-primary" onclick="calculateTotal(true)">
@@ -1140,25 +1399,24 @@
         
         // Hàm tạo bảng nhập liệu - ĐÃ SỬA THÀNH INPUT TEXT
         function createDenominationTable() {
-            const tbody = document.getElementById('denominations-body');
-            tbody.innerHTML = '';
+            const grid = document.getElementById('denominations-grid');
+            grid.innerHTML = '';
             
             denominations.forEach((denom, index) => {
-                const row = document.createElement('tr');
-                row.className = 'fade-in';
-                row.innerHTML = `
-                    <td>
-                        <div class="denomination-info">
-                            <div class="denomination-icon" style="background-color: ${denom.color}">
-                                ${denom.short}
-                            </div>
-                            <div class="denomination-text">
-                                <div class="denomination-value">${denom.label}</div>
-                                <div class="denomination-label">${formatCurrency(denom.value)}</div>
-                            </div>
+                const card = document.createElement('div');
+                card.className = 'denom-card fade-in';
+                card.innerHTML = `
+                    <div class="denom-card-header">
+                        <div class="denomination-icon" style="background-color: ${denom.color}">
+                            ${denom.short}
                         </div>
-                    </td>
-                    <td class="input-cell">
+                        <div class="denomination-text">
+                            <div class="denomination-value" style="font-weight: 700; color: var(--text-primary); font-family: var(--font-family);">${denom.label}</div>
+                            <div class="denomination-label" style="font-size: 0.85rem; color: var(--text-secondary); font-family: var(--font-family);">${formatCurrency(denom.value)}</div>
+                        </div>
+                    </div>
+                    <div class="denom-card-body">
+                        <button type="button" class="stepper-btn" onclick="quickAdd(${denom.value}, -1)">−</button>
                         <input 
                             type="text" 
                             class="bill-input" 
@@ -1170,15 +1428,14 @@
                             inputmode="numeric"
                             pattern="[0-9]*"
                         >
-                        <div class="quick-controls">
-                            <button type="button" class="quick-btn" onclick="quickAdd(${denom.value}, 1)">+1</button>
-                            <button type="button" class="quick-btn" onclick="quickAdd(${denom.value}, 5)">+5</button>
-                            <button type="button" class="quick-btn" onclick="quickAdd(${denom.value}, 10)">+10</button>
-                            <button type="button" class="quick-btn" onclick="quickAdd(${denom.value}, -1)">-1</button>
-                        </div>
-                    </td>
+                        <button type="button" class="stepper-btn" onclick="quickAdd(${denom.value}, 1)">+</button>
+                    </div>
+                    <div class="denom-card-footer">
+                        <button type="button" class="quick-btn" onclick="quickAdd(${denom.value}, 5)">+5</button>
+                        <button type="button" class="quick-btn" onclick="quickAdd(${denom.value}, 10)">+10</button>
+                    </div>
                 `;
-                tbody.appendChild(row);
+                grid.appendChild(card);
             });
             
             // Khởi tạo navigation sau khi tạo bảng
@@ -1282,24 +1539,29 @@
             
             // Tính chênh lệch với doanh thu ca
             const difference = total - selectedShiftRevenue;
-            differenceAmount.textContent = formatCurrency(difference);
             
             // Hiển thị doanh thu ca
             revenueTotal.textContent = formatCurrency(selectedShiftRevenue);
             
-            // Hiển thị tình trạng
+            // Hiển thị tình trạng và chênh lệch dạng card
             if (difference === 0) {
                 statusText.textContent = "ĐẦY ĐỦ";
-                statusText.className = "comparison-value positive";
+                statusText.className = "stat-value positive";
+                differenceAmount.textContent = formatCurrency(difference);
+                differenceAmount.className = "stat-value positive";
             } else if (difference > 0) {
-                statusText.textContent = `DƯ ${formatCurrency(difference)}`;
-                statusText.className = "comparison-value positive";
+                statusText.textContent = "DƯ";
+                statusText.className = "stat-value positive";
+                differenceAmount.textContent = "+" + formatCurrency(difference);
+                differenceAmount.className = "stat-value positive";
             } else {
-                statusText.textContent = `THIẾU ${formatCurrency(Math.abs(difference))}`;
-                statusText.className = "comparison-value negative";
+                statusText.textContent = "THIẾU";
+                statusText.className = "stat-value negative";
+                differenceAmount.textContent = "-" + formatCurrency(Math.abs(difference));
+                differenceAmount.className = "stat-value negative";
             }
             
-            resultHeader.style.display = 'block';
+            resultHeader.style.display = 'flex';
         }
         
         // Hàm reset form
