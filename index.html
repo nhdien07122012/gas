@@ -1858,6 +1858,9 @@
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='dudoandiemgas.html'">
         🔮 Dự đoán điểm gas
       </button>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='clipboard.html'">
+        📋 Lưu Clipboard
+      </button>
       <button class="sidebar-item" onclick="openModal('help-modal')">
         ❓ Trợ giúp
       </button>
@@ -2954,6 +2957,7 @@ async function copyToClipboard(text) {
   try {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
+      saveClipboardToHistory(text);
       return true;
     } else {
       const textArea = document.createElement('textarea');
@@ -2964,12 +2968,56 @@ async function copyToClipboard(text) {
       textArea.select();
       const success = document.execCommand('copy');
       document.body.removeChild(textArea);
+      if (success) {
+        saveClipboardToHistory(text);
+      }
       return success;
     }
   } catch (err) {
     console.error('Lỗi khi sao chép vào clipboard: ', err);
     return false;
   }
+}
+
+// Hàm lưu lịch sử sao chép vào localStorage
+function saveClipboardToHistory(text) {
+  if (!text || !text.trim()) return;
+  
+  let type = "Khác";
+  if (text.startsWith("Giao ")) {
+    type = "Báo cáo cuối ca";
+  } else if (text.includes(" - ") && (text.includes("\n") || text.length > 10)) {
+    type = "Xuất data của ca";
+  }
+  
+  let history = [];
+  try {
+    history = JSON.parse(localStorage.getItem('clipboard_history') || '[]');
+  } catch (e) {
+    console.error('Lỗi phân tích cú pháp lịch sử clipboard:', e);
+    history = [];
+  }
+  
+  const cleanText = text.trim();
+  const duplicateIndex = history.findIndex(item => item.content.trim() === cleanText);
+  
+  const newItem = {
+    content: text,
+    type: type,
+    timestamp: new Date().toISOString()
+  };
+  
+  if (duplicateIndex !== -1) {
+    history.splice(duplicateIndex, 1);
+  }
+  
+  history.unshift(newItem);
+  
+  if (history.length > 100) {
+    history = history.slice(0, 100);
+  }
+  
+  localStorage.setItem('clipboard_history', JSON.stringify(history));
 }
 
 // Hàm xuất dữ liệu dạng văn bản
