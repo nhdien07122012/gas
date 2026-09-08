@@ -1987,8 +1987,8 @@
     </div>
   </div>
 
-  <!-- Nút cuộn về đầu trang -->
-  <button id="scrollTopBtn">↑</button>
+  <!-- Nút chọn nhanh điểm -->
+  <button id="scrollTopBtn" title="Chọn nhanh điểm">+</button>
 
   <!-- Modal xác nhận xóa -->
   <div class="modal" id="delete-modal">
@@ -4022,23 +4022,30 @@ function setupModalCloseOnOutsideClick() {
   });
 }
 
-// Hiển thị/ẩn nút cuộn về đầu trang khi cuộn
-window.addEventListener('scroll', function() {
-  const btn = document.getElementById('scrollTopBtn');
-  if (window.scrollY > 200) {
-    btn.style.display = 'flex';
-    btn.style.opacity = '1';
-  } else {
-    btn.style.opacity = '0';
-    setTimeout(() => { btn.style.display = 'none'; }, 300);
-  }
-});
-
-// Xử lý sự kiện cuộn về đầu trang
+// Xử lý sự kiện chọn nhanh điểm
 document.getElementById('scrollTopBtn').onclick = function() {
   vibrateShort();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // 1. Cuộn đến phần form nhập liệu
+  document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+  
+  // 2. Focus vào ô nhập điểm
+  const inputDiem = document.getElementById('chon_diem');
+  if (inputDiem) {
+    inputDiem.focus();
+    inputDiem.select();
+  }
 };
+
+// Hiển thị nút luôn luôn để tiện chọn điểm
+window.addEventListener('scroll', function() {
+  const btn = document.getElementById('scrollTopBtn');
+  btn.style.display = 'flex';
+  btn.style.opacity = '1';
+});
+
+// Đảm bảo nút hiển thị ngay khi load
+document.getElementById('scrollTopBtn').style.display = 'flex';
+document.getElementById('scrollTopBtn').style.opacity = '1';
 
 // Khởi tạo
 document.addEventListener('DOMContentLoaded', function() {
