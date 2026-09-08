@@ -1457,21 +1457,11 @@ async function tinhLuong() {
       await taiDuLieu();
     }
     
-    // 3. Tính ngày bắt đầu và kết thúc chu kỳ - FIXED: Xử lý chuyển năm
-    const ngayBatDauChuKy = new Date(namBatDau, thangBatDau - 1, ngayBatDau);
+    // 3. Tính ngày bắt đầu và kết thúc chu kỳ - ĐÃ SỬA: Tính từ ngày 1 đến ngày cuối của tháng đó
+    const ngayBatDauChuKy = new Date(namBatDau, thangBatDau - 1, 1);
     
-    // Tính ngày kết thúc (tháng sau, cùng ngày)
-    let ngayKetThucChuKy;
-    if (thangBatDau === 12) {
-      // Nếu là tháng 12, chuyển sang tháng 1 năm sau
-      ngayKetThucChuKy = new Date(namBatDau + 1, 0, ngayBatDau);
-    } else {
-      // Các tháng khác
-      ngayKetThucChuKy = new Date(namBatDau, thangBatDau, ngayBatDau);
-    }
-    
-    // Trừ đi 1 mili giây để không tính cả ngày bắt đầu của chu kỳ tiếp theo
-    ngayKetThucChuKy = new Date(ngayKetThucChuKy.getTime() - 1);
+    // Ngày cuối cùng của tháng đó
+    const ngayKetThucChuKy = new Date(namBatDau, thangBatDau, 0);
     
     console.log('Chu kỳ lương:', {
       batDau: ngayBatDauChuKy.toLocaleDateString('vi-VN'),
@@ -1481,35 +1471,48 @@ async function tinhLuong() {
     // 4. Lọc các ca làm việc trong chu kỳ
     const caLamViecTrongChuKy = caLamViecList.filter(ca => {
       const caDate = new Date(ca.ngay);
-      return caDate >= ngayBatDauChuKy && caDate <= ngayKetThucChuKy;
+      // Đảm bảo so sánh chính xác bao gồm cả ngày 31
+      // Reset giờ, phút, giây của đối tượng ngày để so sánh chuẩn xác
+      const normalizedCaDate = new Date(caDate.getFullYear(), caDate.getMonth(), caDate.getDate());
+      const normalizedStartDate = new Date(ngayBatDauChuKy.getFullYear(), ngayBatDauChuKy.getMonth(), ngayBatDauChuKy.getDate());
+      const normalizedEndDate = new Date(ngayKetThucChuKy.getFullYear(), ngayKetThucChuKy.getMonth(), ngayKetThucChuKy.getDate());
+      
+      return normalizedCaDate >= normalizedStartDate && normalizedCaDate <= normalizedEndDate;
     });
     
     console.log('Ca làm việc trong chu kỳ:', caLamViecTrongChuKy.length);
     console.log('Chi tiết:', caLamViecTrongChuKy.map(ca => ca.ngay));
     
-    // 5. Tính số ngày công = số ca làm việc thực tế + 1 ngày nghỉ phép không trừ lương
-    const soNgayCong = caLamViecTrongChuKy.length;
-    const soNgayNghiThucTe = Math.max(0, (ngayKetThucChuKy.getDate() - ngayBatDauChuKy.getDate() + 1) - soNgayCong);
-    const soNgayNghiDuocPhep = Math.min(soNgayNghiThucTe, 1);
-    const soNgayCongHieuLuc = soNgayCong + soNgayNghiDuocPhep;
+    // 5. Tính số ngày công theo quy tắc mới
+    // Công thức:
+    // Số ngày đi làm việc = số ngày trong tháng - (số ngày nghỉ trong tháng - 1 ngày)
+    // số ngày nghỉ trong tháng = số ngày trong tháng - số ngày làm việc thực tế
+    
     const soNgayTrongThang = (new Date(ngayKetThucChuKy.getFullYear(), ngayKetThucChuKy.getMonth() + 1, 0)).getDate();
-
-    // 6. Tính lương theo đúng số ngày thực của tháng
+    const soNgayLamViecThucTe = caLamViecTrongChuKy.length;
+    const soNgayNghiTrongThang = soNgayTrongThang - soNgayLamViecThucTe;
+    
+    // Đảm bảo số ngày nghỉ không âm (trường hợp làm nhiều hơn số ngày trong tháng - unlikely nhưng nên handle)
+    const soNgayNghiHopLe = Math.max(0, soNgayNghiTrongThang);
+    
+    // Áp dụng miễn 1 ngày công
+    const soNgayDiLamViec = soNgayTrongThang - (soNgayNghiHopLe - 1);
+    
+    // Tính lương
     const luongTheoNgay = luongThang / soNgayTrongThang;
-    const tongLuong = Math.round(luongTheoNgay * soNgayCongHieuLuc);
+    const tongLuong = Math.round(luongTheoNgay * soNgayDiLamViec);
     
     // 7. Hiển thị kết quả
     displaySalaryResult(
       luongThang,
       tongLuong,
-      soNgayCong,
+      soNgayLamViecThucTe,
       caLamViecTrongChuKy,
       ngayBatDauChuKy,
       ngayKetThucChuKy,
       soNgayTrongThang,
-      soNgayNghiThucTe,
-      soNgayNghiDuocPhep,
-      soNgayCongHieuLuc
+      soNgayNghiHopLe,
+      soNgayDiLamViec
     );
     
     // 8. Kích hoạt hiệu ứng tiền rơi nếu có lương > 0
@@ -1533,23 +1536,22 @@ async function tinhLuong() {
 function displaySalaryResult(
   luongThang,
   tongLuong,
-  soNgayCong,
+  soNgayLamViecThucTe,
   caLamViec,
   startDate,
   endDate,
-  soNgayTrongChuKy = 30,
-  soNgayNghiThucTe = 0,
-  soNgayNghiDuocPhep = 0,
-  soNgayCongHieuLuc = 0
+  soNgayTrongThang,
+  soNgayNghiTrongThang,
+  soNgayDiLamViec
 ) {
   const statsContainer = document.getElementById('stats-container');
   
   const tongTienThu = caLamViec.reduce((sum, ca) => sum + ca.tongTien, 0);
-  const luongTheoNgay = luongThang / soNgayTrongChuKy;
+  const luongTheoNgay = luongThang / soNgayTrongThang;
   
   statsContainer.innerHTML = `
     <div class="stat-card">
-      <div class="stat-value">${soNgayCong}</div>
+      <div class="stat-value">${soNgayLamViecThucTe}</div>
       <div class="stat-label">Số ca làm việc</div>
     </div>
     <div class="stat-card">
@@ -1579,13 +1581,12 @@ function displaySalaryResult(
   
   chiTietLuong.innerHTML = `
     <li style="margin-bottom: 8px; font-family: var(--font-family);">Lương tháng: ${formatCurrency(luongThang)}</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Chu kỳ: ${startDate.getDate()}/${String(startDate.getMonth() + 1).padStart(2, '0')}/${startDate.getFullYear()} đến ${endDate.getDate()}/${String(endDate.getMonth() + 1).padStart(2, '0')}/${endDate.getFullYear()}</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày trong tháng: ${soNgayTrongChuKy} ngày</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Chu kỳ: ${startStr} đến ${endStr}</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày trong tháng: ${soNgayTrongThang} ngày</li>
     <li style="margin-bottom: 8px; font-family: var(--font-family);">Lương mỗi ngày: ${formatCurrency(luongTheoNgay)}</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày làm việc thực tế: ${soNgayCong} ngày</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày nghỉ thực tế: ${soNgayNghiThucTe} ngày</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Ngày nghỉ không trừ lương tối đa: ${soNgayNghiDuocPhep} ngày</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày tính lương thực tế: ${soNgayCongHieuLuc} ngày</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày làm việc thực tế: ${soNgayLamViecThucTe} ngày</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày nghỉ trong tháng: ${soNgayNghiTrongThang} ngày</li>
+    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày đi làm việc (đã trừ 1 ngày miễn công): ${soNgayDiLamViec} ngày</li>
     <li style="margin-bottom: 8px; font-family: var(--font-family);">Tổng tiền thu được: ${formatCurrency(tongTienThu)}</li>
     <li style="margin-bottom: 8px; font-weight: bold; font-family: var(--font-family);">Tổng lương tạm tính: ${formatCurrency(tongLuong)}</li>
   `;
