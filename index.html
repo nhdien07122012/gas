@@ -1804,6 +1804,75 @@
     font-size: 1.125rem;
     font-weight: 600;
   }
+
+  /* ========== MANUAL THEME OVERRIDE ========== */
+  html[data-theme="light"] {
+    color-scheme: light;
+    --primary: #0f9d58;
+    --primary-dark: #0b7d45;
+    --primary-light: #4cd67f;
+    --secondary: #34c759;
+    --secondary-dark: #2aa64a;
+    --danger: #ff3b30;
+    --danger-dark: #e0352b;
+    --warning: #ff9500;
+    --warning-dark: #e08900;
+    --info: #5ac8fa;
+    --success: #34c759;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f3f7f2;
+    --bg-tertiary: #f7faf7;
+    --bg-card: #ffffff;
+    --bg-sidebar: #ffffff;
+    --bg-modal: #ffffff;
+    --bg-input: #ffffff;
+    --bg-hover: #eef7ec;
+    --bg-active: #e8f8ea;
+    --text-primary: #0b3b2a;
+    --text-secondary: #576a5f;
+    --text-tertiary: #7a9184;
+    --text-inverse: #ffffff;
+    --text-muted: #adb5bd;
+    --border-color: #e6efe8;
+    --border-light: #eef6ed;
+    --border-dark: #cfded0;
+    --night-shift: #0b7d45;
+    --day-shift: #f7fafc;
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --primary: #23b66a;
+    --primary-dark: #0b7d45;
+    --primary-light: #4cd67f;
+    --secondary: #34c759;
+    --secondary-dark: #26a64a;
+    --danger: #ff5252;
+    --danger-dark: #ff3838;
+    --warning: #ffa726;
+    --warning-dark: #ff9800;
+    --info: #42a5f5;
+    --success: #30c75a;
+    --bg-primary: #07140e;
+    --bg-secondary: #0b1a12;
+    --bg-tertiary: #0f231a;
+    --bg-card: #0b1410;
+    --bg-sidebar: #07140e;
+    --bg-modal: #0b1410;
+    --bg-input: #0b1410;
+    --bg-hover: #082116;
+    --bg-active: #12321f;
+    --text-primary: #e9f8ee;
+    --text-secondary: #bfe7cf;
+    --text-tertiary: #98c9aa;
+    --text-inverse: #06130d;
+    --text-muted: #8aa892;
+    --border-color: #123926;
+    --border-light: #0e2b1e;
+    --border-dark: #0a2a18;
+    --night-shift: #0b7d45;
+    --day-shift: #0b7d45;
+  }
 </style>
 
 </head>
@@ -1860,6 +1929,9 @@
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='clipboard.html'">
         📋 Lưu Clipboard
+      </button>
+      <button class="sidebar-item" id="theme-toggle" type="button" onclick="toggleTheme()">
+        🌙 Chế độ tối
       </button>
       <button class="sidebar-item" onclick="openModal('help-modal')">
         ❓ Trợ giúp
@@ -4046,6 +4118,39 @@ window.addEventListener('scroll', function() {
 // Đảm bảo nút hiển thị ngay khi load
 document.getElementById('scrollTopBtn').style.display = 'flex';
 document.getElementById('scrollTopBtn').style.opacity = '1';
+
+// ========== QUẢN LÝ CHẾ ĐỘ SÁNG/TỐI ==========
+function updateThemeToggle() {
+  const button = document.getElementById('theme-toggle');
+  if (!button) return;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  button.textContent = isDark ? '☀️ Chế độ sáng' : '🌙 Chế độ tối';
+  button.setAttribute('aria-label', isDark ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối');
+}
+
+function applySavedTheme() {
+  const savedTheme = localStorage.getItem('gas_theme');
+  if (savedTheme === 'light' || savedTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  updateThemeToggle();
+}
+
+function toggleTheme() {
+  vibrateShort();
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = currentTheme ? currentTheme === 'dark' : systemPrefersDark;
+  const nextTheme = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', nextTheme);
+  localStorage.setItem('gas_theme', nextTheme);
+  updateThemeToggle();
+  showToast(nextTheme === 'dark' ? '🌙 Đã chuyển sang chế độ tối' : '☀️ Đã chuyển sang chế độ sáng');
+}
+
+applySavedTheme();
 
 // Khởi tạo
 document.addEventListener('DOMContentLoaded', function() {
