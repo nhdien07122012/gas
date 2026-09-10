@@ -1570,10 +1570,10 @@
     scrollbar-color: var(--border-dark) var(--bg-tertiary);
   }
   
-  /* ========== SCROLL TO TOP BUTTON ========== */
+  /* ========== SCROLL TO TOP BUTTON (Now "Quick Add Button") ========== */
   #scrollTopBtn {
     position: fixed;
-    right: 30px;
+    left: 30px; /* Di chuyển sang trái */
     bottom: 30px;
     z-index: 999;
     background: var(--primary);
@@ -4123,9 +4123,18 @@ document.getElementById('scrollTopBtn').style.opacity = '1';
 function updateThemeToggle() {
   const button = document.getElementById('theme-toggle');
   if (!button) return;
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  button.textContent = isDark ? '☀️ Chế độ sáng' : '🌙 Chế độ tối';
-  button.setAttribute('aria-label', isDark ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối');
+
+  const savedTheme = localStorage.getItem('gas_theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = savedTheme === 'dark' || (savedTheme !== 'light' && systemPrefersDark);
+
+  if (!savedTheme) {
+    button.textContent = `⚙️ Tự động (${isDark ? 'tối' : 'sáng'})`;
+    button.setAttribute('aria-label', 'Đang dùng chế độ theo thiết bị');
+  } else {
+    button.textContent = isDark ? '☀️ Chế độ sáng' : '🌙 Chế độ tối';
+    button.setAttribute('aria-label', isDark ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối');
+  }
 }
 
 function applySavedTheme() {
@@ -4133,21 +4142,51 @@ function applySavedTheme() {
   if (savedTheme === 'light' || savedTheme === 'dark') {
     document.documentElement.setAttribute('data-theme', savedTheme);
   } else {
+    // Không có lựa chọn thủ công: để CSS prefers-color-scheme theo thiết bị hoạt động.
     document.documentElement.removeAttribute('data-theme');
+    localStorage.removeItem('gas_theme');
   }
   updateThemeToggle();
 }
 
 function toggleTheme() {
   vibrateShort();
-  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const savedTheme = localStorage.getItem('gas_theme');
   const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const isDark = currentTheme ? currentTheme === 'dark' : systemPrefersDark;
-  const nextTheme = isDark ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', nextTheme);
-  localStorage.setItem('gas_theme', nextTheme);
+
+  // Chu kỳ: tự động -> sáng -> tối -> tự động.
+  let nextTheme;
+  if (!savedTheme) {
+    nextTheme = 'light';
+  } else if (savedTheme === 'light') {
+    nextTheme = 'dark';
+  } else {
+    nextTheme = null;
+  }
+
+  if (nextTheme) {
+    localStorage.setItem('gas_theme', nextTheme);
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    showToast(nextTheme === 'dark' ? '🌙 Đã chuyển sang chế độ tối' : '☀️ Đã chuyển sang chế độ sáng');
+  } else {
+    localStorage.removeItem('gas_theme');
+    document.documentElement.removeAttribute('data-theme');
+    showToast(`⚙️ Đã bật chế độ tự động theo thiết bị (${systemPrefersDark ? 'tối' : 'sáng'})`);
+  }
   updateThemeToggle();
-  showToast(nextTheme === 'dark' ? '🌙 Đã chuyển sang chế độ tối' : '☀️ Đã chuyển sang chế độ sáng');
+}
+
+// Khi thiết bị đổi sáng/tối, giao diện tự cập nhật nếu người dùng đang ở chế độ tự động.
+const systemThemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+const handleSystemThemeChange = () => {
+  if (!localStorage.getItem('gas_theme')) {
+    applySavedTheme();
+  }
+};
+if (systemThemeMedia.addEventListener) {
+  systemThemeMedia.addEventListener('change', handleSystemThemeChange);
+} else {
+  systemThemeMedia.addListener(handleSystemThemeChange);
 }
 
 applySavedTheme();
