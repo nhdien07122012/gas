@@ -674,10 +674,26 @@
   }
 
   .stat-card-actions .action-buttons-quick {
-    display: flex;
-    flex-direction: column;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
     width: 100%;
+  }
+
+  .action-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .action-box button {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    font-size: 0.85rem;
+    font-weight: 600;
   }
 
   .stat-card-actions .action-buttons-quick button {
@@ -708,11 +724,30 @@
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
   }
 
-  .stat-card-actions .action-buttons-quick .btn-report:hover {
-    background: linear-gradient(135deg, #ffca28, #ffd54f);
-    transform: translateY(-1px);
-    box-shadow: 0 10px 22px rgba(255, 179, 0, 0.24);
+  /* Extra buttons for stats */
+  .btn-clipboard {
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
   }
+  .btn-clipboard:hover {
+    background: linear-gradient(135deg, #495057, #343a40);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(108, 117, 125, 0.24);
+  }
+  .btn-money {
+    background: linear-gradient(135deg, #8e44ad, #732d91);
+    color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  }
+  .btn-money:hover {
+    background: linear-gradient(135deg, #732d91, #5d2575);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(142, 68, 173, 0.24);
+  }
+
   
   .stat-label {
     font-size: 0.9rem;
@@ -1683,6 +1718,71 @@
     }
   }
   
+
+  /* Quick Actions Grid Style */
+  .quick-actions-section {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    padding: 15px;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+  }
+
+  .quick-actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Mobile-only quick actions */
+  @media (min-width: 768px) {
+    .quick-actions-section {
+      display: none !important;
+    }
+  }
+
+  .action-buttons button {
+    padding: 15px;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+
+  .action-buttons button:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .action-buttons button:active {
+    transform: translateY(0);
+  }
+    width: 100%;
+  }
+
+  .btn-secondary { background-color: var(--secondary); color: var(--text-inverse); }
+  .btn-clipboard { background-color: var(--info); color: var(--text-inverse); }
+  .btn-primary { background-color: var(--primary); color: var(--text-inverse); }
+  .btn-warning { background-color: var(--warning); color: var(--text-inverse); }
+  .btn-diemtien { background-color: var(--primary-light); color: var(--text-primary); border: 1px solid var(--primary); }
+  .btn-diemtien:hover { background-color: var(--primary); color: var(--text-inverse); }
+
+
   /* ========== LIGHT MODE SPECIFIC ADJUSTMENTS ========== */
   @media (prefers-color-scheme: light) {
     .container {
@@ -3415,14 +3515,30 @@ function displayStats(stats) {
       <div class="stat-value">${formatCurrencyCompact(stats.total)}</div>
       <div class="stat-label">Tổng tiền</div>
     </div>
-    <div class="stat-card stat-card-status">
-      <div class="stat-value">${stats.daNop}/${stats.chuaNop}</div>
-      <div class="stat-label">Đã nộp/Chưa nộp</div>
-    </div>
-    <div class="stat-card stat-card-actions">
-      <div class="action-buttons-quick">
-        <button class="btn-primary" type="button" onclick="exportToText();">📄 Xuất data</button>
-        <button class="btn-report" type="button" onclick="openReportModal();">📊 Báo cáo</button>
+  `;
+}
+
+// Hàm mới để render các nút hành động tách biệt
+function renderQuickActions() {
+  const container = document.getElementById('stats-container');
+  // Kiểm tra nếu đã tồn tại thì không thêm mới
+  let actionDiv = document.querySelector('.quick-actions-section');
+  
+  if (!actionDiv) {
+    actionDiv = document.createElement('div');
+    actionDiv.className = 'quick-actions-section';
+    container.parentNode.insertBefore(actionDiv, container.nextSibling);
+  }
+  
+  actionDiv.innerHTML = `
+    <div class="quick-actions-grid">
+      <div class="action-buttons">
+        <button class="btn-diemtien" type="button" onclick="window.location.href='diemtien.html';">💵 Đếm tiền</button>
+        <button class="btn-clipboard" type="button" onclick="window.location.href='clipboard.html';">📋 Clipboard</button>
+      </div>
+      <div class="action-buttons">
+        <button class="btn-primary" type="button" onclick="exportToText()">📄 Xuất data</button>
+        <button class="btn-warning" type="button" onclick="openReportModal()">📊 Báo cáo</button>
       </div>
     </div>
   `;
@@ -3490,6 +3606,8 @@ function filterData() {
 
   displayData(filteredData);
   displayStats(calculateStats(filteredData));
+
+  renderQuickActions();
 }
 
 function appendRowsToTable(data, startIndex, endIndex) {
