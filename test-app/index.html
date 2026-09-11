@@ -19,6 +19,11 @@
 <meta name="apple-mobile-web-app-title" content="Quản lý điểm gas">
 
 <style>
+  /* Chặn tự zoom khi double tap trên iPhone */
+  body, html {
+    touch-action: manipulation;
+  }
+
   /* Roboto loaded via Google Fonts link above. Avoid duplicating @font-face here
      to prevent double downloads and reduce render-blocking requests. */
   
@@ -1779,7 +1784,7 @@
   button.btn-diemtien { background-color: #006bdd !important; color: #ffffff !important; border: none !important; } 
   button.btn-clipboard { background-color: #6f42c1 !important; color: #ffffff !important; border: none !important; }
   
-  button.btn-warning { background-color: #f3e418 !important; color: #000000 !important; border: none !important; }
+  button.btn-warning { background-color: #f3a618 !important; color: #000000 !important; border: none !important; }
   
   .btn-diemtien:hover { background-color: var(--primary); color: var(--text-inverse); }
 
