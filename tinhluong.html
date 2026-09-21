@@ -872,9 +872,54 @@
     font-weight: 600;
     font-family: var(--font-family);
   }
+
+  /* ========== PAGE LOADING OVERLAY ========== */
+  .page-loader-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-primary);
+    z-index: 10000;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+  }
+
+  .page-loader-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .loader {
+    width: 45px;
+    aspect-ratio: .75;
+    --c: no-repeat linear-gradient(var(--text-primary) 0 0);
+    background:
+      var(--c) 0% 100%,
+      var(--c) 50% 100%,
+      var(--c) 100% 100%;
+    background-size: 20% 65%;
+    animation: l8 1s infinite linear;
+  }
+
+  @keyframes l8 {
+    16.67% { background-position: 0% 0%, 50% 100%, 100% 100%; }
+    33.33% { background-position: 0% 0%, 50% 0%, 100% 100%; }
+    50% { background-position: 0% 0%, 50% 0%, 100% 0%; }
+    66.67% { background-position: 0% 100%, 50% 0%, 100% 0%; }
+    83.33% { background-position: 0% 100%, 50% 100%, 100% 0%; }
+  }
 </style>
 </head>
 <body>
+  <!-- Page Loading Overlay -->
+  <div id="page-loader" class="page-loader-overlay" aria-live="polite" aria-label="Đang tải dữ liệu">
+    <div class="loader"></div>
+  </div>
+
   <!-- Container cho hiệu ứng tiền rơi -->
   <div class="money-rain" id="money-rain"></div>
   
@@ -1263,6 +1308,8 @@ async function testLoadData() {
 // Hàm TẢI DỮ LIỆU TỪ GOOGLE SHEETS
 async function taiDuLieu() {
   console.log('Đang tải dữ liệu từ Google Sheets...');
+  const loader = document.getElementById('page-loader');
+  if (loader) loader.classList.remove('hidden');
   
   try {
     // Thêm timestamp để tránh cache
@@ -1314,6 +1361,8 @@ async function taiDuLieu() {
     console.error('Lỗi khi tải dữ liệu:', error);
     showToast('❌ Không thể tải dữ liệu từ Google Sheets!', 'error');
     allData = [];
+  } finally {
+    if (loader) loader.classList.add('hidden');
   }
 }
 
@@ -1459,8 +1508,10 @@ function displayWorkingDays(caLamViec) {
 async function tinhLuong() {
   const btn = document.getElementById('btn-tinh-luong');
   const originalText = btn.textContent;
+  const loader = document.getElementById('page-loader');
   
   try {
+    if (loader) loader.classList.remove('hidden');
     btn.textContent = '⏳ Đang tính...';
     btn.disabled = true;
     
@@ -1550,6 +1601,7 @@ async function tinhLuong() {
     console.error('Lỗi khi tính lương:', error);
     showToast('❌ Có lỗi khi tính lương!', 'error');
   } finally {
+    if (loader) loader.classList.add('hidden');
     btn.textContent = originalText;
     btn.disabled = false;
   }

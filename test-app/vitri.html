@@ -1,448 +1,880 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý vị trí điểm gas</title>
-  <link rel="icon" type="image/png" href="icon.png">
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý vị trí điểm gas</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-icon-precomposed" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Quản lý vị trí">
+
+<style>
+  /* ========== CSS VARIABLES FOR LIGHT MODE ========== */
+  :root {
+    --primary: #0f9d58;
+    --primary-dark: #0b7d45;
+    --primary-light: #4cd67f;
+    --secondary: #34c759;
+    --secondary-dark: #2aa64a;
+    --danger: #ff3b30;
+    --danger-dark: #e0352b;
+    --warning: #ff9500;
+    --warning-dark: #e08900;
+    --info: #5ac8fa;
+    --success: #34c759;
+    
+    --bg-primary: #ffffff;
+    --bg-secondary: #f3f7f2;
+    --bg-tertiary: #f7faf7;
+    --bg-card: #ffffff;
+    --bg-sidebar: #ffffff;
+    --bg-modal: #ffffff;
+    --bg-input: #ffffff;
+    --bg-hover: #eef7ec;
+    --bg-active: #e8f8ea;
+    
+    --text-primary: #0b3b2a;
+    --text-secondary: #576a5f;
+    --text-tertiary: #7a9184;
+    --text-inverse: #ffffff;
+    --text-muted: #adb5bd;
+    
+    --border-color: #e6efe8;
+    --border-light: #eef6ed;
+    --border-dark: #cfded0;
+    --shadow: 0 2px 10px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
+    --shadow-dark: 0 2px 10px rgba(0,0,0,0.15);
+    
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
+    --radius-circle: 50%;
+    
+    --sidebar-width: 280px;
+    --header-height: auto;
+    
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s ease;
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    --opacity-disabled: 0.6;
+    --opacity-hover: 0.9;
+    --opacity-active: 0.8;
+  }
+  
+  @media (prefers-color-scheme: dark) {
     :root {
-      --primary: #0f9d58;
+      --primary: #23b66a;
       --primary-dark: #0b7d45;
+      --primary-light: #4cd67f;
       --secondary: #34c759;
-      --danger: #ff3b30;
-      --warning: #ff9500;
-      --light: #f7faf7;
-      --dark: #0b3b2a;
-      --gray: #576a5f;
-      --border: #e6efe8;
-      --shadow: 0 2px 10px rgba(0,0,0,0.08);
-      --radius: 10px;
-      --sidebar-width: 280px;
+      --secondary-dark: #26a64a;
+      --danger: #ff5252;
+      --danger-dark: #ff3838;
+      --warning: #ffa726;
+      --warning-dark: #ff9800;
+      --info: #42a5f5;
+      --success: #30c75a;
+      
+      --bg-primary: #07140e;
+      --bg-secondary: #0b1a12;
+      --bg-tertiary: #0f231a;
+      --bg-card: #0b1410;
+      --bg-sidebar: #07140e;
+      --bg-modal: #0b1410;
+      --bg-input: #0b1410;
+      --bg-hover: #082116;
+      --bg-active: #12321f;
+      
+      --text-primary: #e9f8ee;
+      --text-secondary: #bfe7cf;
+      --text-tertiary: #98c9aa;
+      --text-inverse: #06130d;
+      --text-muted: #8aa892;
+      
+      --border-color: #123926;
+      --border-light: #0e2b1e;
+      --border-dark: #0a2a18;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+      --shadow-lg: 0 8px 25px rgba(0,0,0,0.4);
+      --shadow-dark: 0 2px 10px rgba(0,0,0,0.5);
     }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f3f7f2;
-      color: var(--dark);
-      line-height: 1.6;
-      padding: 20px;
-      min-height: 100vh;
-      transition: margin-left 0.3s ease;
+    
+    h1, h2, h3, h4 {
+      color: var(--text-primary) !important;
     }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      background: #ffffff;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      transition: all 0.3s ease;
-      padding: 30px;
+    
+    .back-button {
+      color: var(--text-inverse) !important;
     }
-    h1 {
-      color: var(--primary);
-      margin-bottom: 20px;
-      font-size: 2rem;
-      text-align: center;
+    
+    input::placeholder {
+      color: var(--text-muted);
     }
-    .search-group {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html {
+    font-size: 16px;
+    transition: background-color 0.5s ease;
+  }
+  
+  body {
+    font-family: 'Segoe UI', 'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+    transition: var(--transition-slow);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+    padding: 30px;
+  }
+  
+  h1 {
+    color: var(--primary);
+    margin-bottom: 20px;
+    font-size: 2rem;
+    text-align: center;
+    transition: var(--transition);
+  }
+  
+  .search-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  input {
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--border-color);
+    font-size: 1rem;
+    flex: 1;
+    transition: var(--transition);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    min-width: 0;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(61, 142, 255, 0.2);
+    background: var(--bg-input);
+  }
+  
+  input::placeholder {
+    color: var(--text-muted);
+  }
+  
+  /* ========== LOCATION CARD GRID STYLES ========== */
+  .location-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-top: 15px;
+  }
+  
+  .location-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    transition: var(--transition);
+    position: relative;
+  }
+  
+  .location-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-light);
+  }
+  
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--bg-tertiary);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color);
+  }
+  
+  .card-info {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin-bottom: 5px;
+    word-break: break-word;
+  }
+  
+  .card-address {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    word-break: break-word;
+  }
+  
+  .card-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: var(--bg-tertiary);
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+  }
+  
+  .gps-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .badge-gps {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: var(--radius-xs);
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: var(--secondary);
+    color: var(--text-inverse);
+    border: 1px solid var(--secondary-dark);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    user-select: none;
+  }
+  
+  .badge-gps:hover {
+    transform: scale(1.04);
+    box-shadow: 0 2px 8px rgba(52, 199, 89, 0.3);
+  }
+  
+  .badge-gps:active {
+    transform: scale(0.96);
+  }
+  
+  /* PROMINENT GOOGLE MAPS ACTION BUTTON */
+  .btn-maps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--text-inverse) !important;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 14px 20px;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 14px rgba(44, 128, 255, 0.3);
+    transition: var(--transition);
+    border: 1px solid var(--primary-dark);
+    width: 100%;
+    min-height: 52px;
+    text-align: center;
+    user-select: none;
+  }
+  
+  .btn-maps:hover {
+    box-shadow: 0 6px 20px rgba(44, 128, 255, 0.45);
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+  }
+  
+  .btn-maps:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(44, 128, 255, 0.3);
+  }
+  
+  #empty-state {
+    text-align: center;
+    color: var(--text-secondary);
+    margin: 30px 0;
+    display: none;
+    padding: 40px 20px;
+    border-radius: var(--radius-md);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+  }
+  
+  #empty-state h3 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+  }
+  
+  #empty-state p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+  }
+  
+  .back-button {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    z-index: 999;
+    background: var(--primary);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: var(--radius-circle);
+    width: 56px;
+    height: 56px;
+    box-shadow: var(--shadow-lg);
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    border: 2px solid var(--primary-dark);
+  }
+  
+  .back-button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(44, 128, 255, 0.3);
+  }
+  
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-dark);
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--bg-tertiary);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+  }
+  
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-dark) var(--bg-tertiary);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+  
+  @media (max-width: 768px) {
+    body { padding: 15px; }
+    .container { padding: 20px; border-radius: var(--radius-lg); }
+    h1 { font-size: 1.8rem; margin-bottom: 15px; }
+    .search-group { flex-direction: column; gap: 8px; }
+    input { padding: 12px 14px; font-size: 1rem; border-radius: var(--radius-sm); width: 100%; }
+    .table-container { border-radius: var(--radius-sm); }
+    table { min-width: 500px; }
+    th, td { padding: 12px 8px; font-size: 0.9rem; }
+    .badge { padding: 5px 10px; font-size: 0.8rem; max-width: 150px; }
+    .map-link { padding: 6px 12px; font-size: 0.9rem; }
+    #empty-state { padding: 30px 15px; margin: 20px 0; }
+    .back-button { right: 20px; bottom: 20px; width: 50px; height: 50px; font-size: 1.6rem; }
+  }
+  
+  @media (max-width: 480px) {
+    body { padding: 10px; }
+    .container { padding: 15px; border-radius: var(--radius-md); }
+    h1 { font-size: 1.6rem; margin-bottom: 12px; }
+    input { padding: 10px 12px; font-size: 0.95rem; border-radius: var(--radius-xs); }
+    table { min-width: 400px; }
+    th, td { padding: 10px 6px; font-size: 0.85rem; }
+    .badge { padding: 4px 8px; font-size: 0.75rem; max-width: 120px; }
+    .map-link { padding: 5px 10px; font-size: 0.85rem; min-width: 50px; }
+    #empty-state { padding: 20px 10px; margin: 15px 0; }
+    #empty-state h3 { font-size: 1.1rem; }
+    #empty-state p { font-size: 0.9rem; }
+    .back-button { right: 15px; bottom: 15px; width: 45px; height: 45px; font-size: 1.4rem; }
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .table-container { border-color: var(--border-dark); }
+    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+    ::-webkit-scrollbar-thumb { background: var(--text-muted); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+    tr:hover { background-color: var(--bg-tertiary); }
+    .container { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+    .badge { box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
+    #empty-state { background: var(--bg-secondary); }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
-    input {
-      padding: 14px 16px;
-      border-radius: var(--radius);
-      border: 1.5px solid var(--border);
-      font-size: 1rem;
-      flex: 1;
-      transition: all 0.3s ease;
-    }
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(15, 157, 88, 0.12);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 5px;
-      min-width: 600px;
-    }
-    th {
-      background-color: #f7faf7;
-      padding: 16px 12px;
-      text-align: left;
-      font-weight: 600;
-      color: var(--dark);
-      border-bottom: 2px solid var(--border);
-    }
-    td {
-      padding: 14px 12px;
-      border-bottom: 1px solid var(--border);
-    }
-    tr:last-child td {
-      border-bottom: none;
-    }
-    tr:hover {
-      background-color: #eef7ec;
-    }
-    .badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      background: var(--secondary);
-      color: white;
-    }
-    .map-link {
-      background: var(--primary);
-      color: #fff !important;
-      text-decoration: none;
-      cursor: pointer;
-      font-weight: 600;
-      border-radius: 6px;
-      padding: 8px 16px;
-      display: inline-block;
-      box-shadow: 0 2px 8px rgba(44,128,255,0.08);
-      transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-      border: none;
-      outline: none;
-    }
-    .map-link:hover {
-      background: var(--primary-dark);
-      box-shadow: 0 4px 16px rgba(15,157,88,0.18);
-      transform: translateY(-2px) scale(1.04);
-    }
-    #empty-state {
-      text-align: center;
-      color: var(--gray);
-      margin: 30px 0;
-      display: none;
-      padding: 40px 20px;
-    }
-    #empty-state h3 {
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-    }
-    #empty-state p {
-      font-size: 1rem;
-    }
-    /* Ẩn hoàn toàn cột ghi chú */
-    .col-ghichu { display: none !important; }
-    @media (max-width: 768px) {
-      body {
-        padding: 10px;
-      }
-      .container {
-        padding: 10px;
-      }
-      h1 {
-        font-size: 2rem;
-      }
-      th, td {
-        padding: 12px 8px;
-        font-size: 0.95rem;
-      }
-      table {
-        min-width: 400px;
-      }
-      .search-group {
-        flex-direction: column;
-        gap: 8px;
-      }
-      input {
-        font-size: 1rem;
-        padding: 12px 14px;
-      }
-      #empty-state {
-        padding: 20px 10px;
-      }
-    }
-    @media (max-width: 480px) {
-      body {
-        padding: 5px;
-      }
-      .container {
-        padding: 5px;
-      }
-      h1 {
-        font-size: 2rem;
-      }
-      th, td {
-        padding: 10px 6px;
-        font-size: 0.9rem;
-      }
-      table {
-        min-width: 320px;
-      }
-      input {
-        font-size: 0.95rem;
-        padding: 10px 10px;
-      }
-      #empty-state {
-        padding: 10px 2px;
-      }
-    }
-    /* Sidebar styles - giống index18.html */
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-      display: none;
-    }
-    .overlay.active {
-      display: block;
-    }
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -60vw;
-      width: 60vw;
-      max-width: 420px;
-      min-width: 280px;
-      height: 100%;
-      background: white;
-      box-shadow: 2px 0 15px rgba(0,0,0,0.1);
-      z-index: 1001;
-      transition: left 0.3s ease;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-    .sidebar.open {
-      left: 0;
-    }
-    .sidebar-header {
-      padding: 20px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .sidebar-header h2 {
-      font-size: 1.3rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-    .sidebar-header .menu-icon {
-      font-size: 1.6rem;
-      margin-right: 6px;
-      display: inline-block;
-    }
-    .close-sidebar {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 0;
-      width: auto;
-    }
-    .sidebar-content {
-      padding: 20px;
-      flex: 1;
-    }
-    .sidebar-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: var(--radius);
-      background: #f8f9fa;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      border: none;
-      width: 100%;
-      text-align: left;
-      font-size: 1rem;
-      font-weight: 500;
-    }
-    .sidebar-item:hover {
-      background: #e9ecef;
-      transform: translateY(-2px);
-    }
-    .sidebar-item.active {
-      background: var(--primary);
-      color: white;
-    }
-    .sidebar-footer {
-      padding: 20px;
-      border-top: 1px solid var(--border);
-      font-size: 0.85rem;
-      color: var(--gray);
-      text-align: center;
-    }
-    .menu-toggle {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 2rem;
-      cursor: pointer;
-      padding: 5px;
-      margin-right: 10px;
-      position: absolute;
-      left: 20px;
-      top: 20px;
-      z-index: 1002;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--primary);
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(44,128,255,0.08);
-      width: 48px;
-      height: 48px;
-      transition: background 0.2s;
-    }
-    .menu-toggle:hover {
-      background: var(--primary-dark);
-    }
-    @media (max-width: 768px) {
-      .sidebar {
-        width: 90vw;
-        left: -90vw;
-        max-width: none;
-        min-width: 0;
-      }
-      .sidebar.open {
-        left: 0;
-      }
-      .menu-toggle {
-        left: 10px;
-        top: 10px;
-        width: 44px;
-        height: 44px;
-      }
-    }
-  </style>
+    .fade-in { animation: none; }
+    .badge:hover,
+    .map-link:hover,
+    .back-button:hover { transform: none !important; }
+  }
+  
+  /* ========== PAGE LOADING OVERLAY ========== */
+  .page-loader-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-primary);
+    z-index: 10000;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+  }
+
+  .page-loader-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .loader {
+    width: 45px;
+    aspect-ratio: .75;
+    --c: no-repeat linear-gradient(var(--text-primary) 0 0);
+    background:
+      var(--c) 0% 100%,
+      var(--c) 50% 100%,
+      var(--c) 100% 100%;
+    background-size: 20% 65%;
+    animation: l8 1s infinite linear;
+  }
+
+  @keyframes l8 {
+    16.67% { background-position: 0% 0%, 50% 100%, 100% 100%; }
+    33.33% { background-position: 0% 0%, 50% 0%, 100% 100%; }
+    50% { background-position: 0% 0%, 50% 0%, 100% 0%; }
+    66.67% { background-position: 0% 100%, 50% 0%, 100% 0%; }
+    83.33% { background-position: 0% 100%, 50% 100%, 100% 0%; }
+  }
+
+  @media print {
+    body { background: white !important; color: black !important; padding: 0; }
+    .container { box-shadow: none !important; border: 1px solid #ccc !important; border-radius: 0 !important; max-width: 100% !important; padding: 10px !important; }
+    .back-button, .search-group { display: none !important; }
+    table { border: 1px solid #ccc; }
+    th, td { color: black !important; border-color: #ccc !important; }
+    .badge { border: 1px solid #ccc !important; color: black !important; background: white !important; }
+    .map-link { color: black !important; background: white !important; border: 1px solid #ccc !important; }
+  }
+</style>
 </head>
 <body>
-  <!-- Overlay cho sidebar -->
-  <div class="overlay" id="sidebar-overlay"></div>
-  <!-- Sidebar -->
-  <div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <h2 style="font-size:1.3rem;display:flex;align-items:center;gap:10px;">
-        <span style="font-size:1.6rem;display:inline-block;"></span>
-        
-      </h2>
-      <button class="close-sidebar" id="close-sidebar">&times;</button>
-    </div>
-    <div class="sidebar-content">
-      <button class="sidebar-item" onclick="window.location.href='index18.html'">Quản lý điểm gas</button>
-      <button class="sidebar-item active" onclick="window.location.href='vitri.html'">📍 Quản lý vị trí</button>
-      <button class="sidebar-item" onclick="closeSidebar()">❌ Đóng</button>
-    </div>
-    <div class="sidebar-footer">Gas Manager &copy; 2025</div>
+  <!-- Page Loading Overlay -->
+  <div id="page-loader" class="page-loader-overlay" aria-live="polite" aria-label="Đang tải dữ liệu">
+    <div class="loader"></div>
   </div>
-  <!-- Nút menu-toggle ngoài container, nổi trên giao diện -->
-  <button class="menu-toggle" id="menu-toggle" style="background:var(--primary);color:white;font-size:1.5rem;position:fixed;left:30px;top:30px;z-index:1002;border:none;border-radius:10px;box-shadow:0 2px 8px rgba(44,128,255,0.08);width:48px;height:48px;display:flex;align-items:center;justify-content:center;transition:background 0.2s;">☰</button>
+
   <div class="container">
-    <h1>📍 Quản lý vị trí</h1>
+    <h1>📍 Quản lý vị trí điểm gas</h1>
+    
     <div class="search-group">
       <input id="search" placeholder="Tìm kiếm tên điểm, địa chỉ hoặc ghi chú...">
     </div>
-    <table id="vitri-table">
-      <thead>
-        <tr>
-          <th>Tên điểm</th>
-          <th>Địa chỉ</th>
-          <!-- Ẩn hoàn toàn cột ghi chú -->
-          <th class="col-ghichu" style="display:none;">Ghi chú</th>
-          <th>Tọa độ</th>
-          <th>Bản đồ</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <div id="empty-state" style="text-align:center;color:#888;margin:30px 0;display:none;">
+    
+    <div id="location-grid" class="location-grid">
+    </div>
+    
+    <div id="empty-state">
       <h3>📭 Chưa có vị trí nào được lưu</h3>
-      <p>Hãy sử dụng chức năng lưu vị trí trên trang chính để bắt đầu.</p>
+      <p>Hãy sử dụng chức năng lưu vị trí GPS trên trang chính để bắt đầu.</p>
+      <p style="font-size: 0.9rem; margin-top: 10px;">
+        <em>Lưu ý: Chỉ những điểm gas có tọa độ GPS mới hiển thị ở đây.</em>
+      </p>
     </div>
   </div>
-  <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
-    let allData = [];
-    let vitriData = [];
-    // Trích xuất tọa độ từ ghi chú
-    function extractGPS(note) {
-      const match = note.match(/\[GPS: ([\d.]+), ([\d.]+)\]/);
-      if (match) return { lat: match[1], lng: match[2] };
-      return null;
+
+  <a href="index.html" class="back-button" title="Quay về trang chính" aria-label="Quay về trang chính">
+    ←
+  </a>
+
+<script>
+// URL của Google Apps Script (giữ nguyên)
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
+let allData = [];
+let vitriData = [];
+let currentFilteredData = [];
+
+// Hàm ép kiểu an toàn để trích xuất GPS
+function extractGPS(note) {
+  // Ép mọi giá trị về chuỗi
+  const noteStr = note == null ? '' : String(note);
+  if (!noteStr.trim()) return null;
+  
+  const match = noteStr.match(/\[GPS:\s*([\d.]+),\s*([\d.]+)\]/);
+  if (match) {
+    const lat = parseFloat(match[1]);
+    const lng = parseFloat(match[2]);
+    if (!isNaN(lat) && !isNaN(lng)) {
+      return { 
+        lat: lat.toFixed(6), 
+        lng: lng.toFixed(6),
+        rawLat: lat,
+        rawLng: lng
+      };
     }
-    function displayVitri(data) {
-      const tbody = document.querySelector('#vitri-table tbody');
-      tbody.innerHTML = '';
-      let count = 0;
-      data.forEach(row => {
-        const gps = extractGPS(row.ghi_chu || '');
-        if (!gps) return;
-        count++;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${row.ten_diem}</td>
-          <td>${row.dia_chi}</td>
-          <td class="col-ghichu" style="display:none;"></td>
-          <td><span class="badge">${gps.lat}, ${gps.lng}</span></td>
-          <td><a class="map-link" href="https://maps.google.com/?q=${gps.lat},${gps.lng}" target="_blank">🗺️</a></td>
-        `;
-        tbody.appendChild(tr);
-      });
-      document.getElementById('empty-state').style.display = count === 0 ? 'block' : 'none';
+  }
+  return null;
+}
+
+// Hàm escape HTML an toàn (xử lý mọi kiểu dữ liệu)
+function escapeHtml(text) {
+  if (text == null) return '';
+  const str = String(text);
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// Hiển thị danh sách vị trí dưới dạng Thẻ (Card Layout)
+function displayVitri(data) {
+  const gridContainer = document.getElementById('location-grid');
+  const emptyState = document.getElementById('empty-state');
+  
+  if (!data || data.length === 0) {
+    if (gridContainer) gridContainer.innerHTML = '';
+    if (emptyState) emptyState.style.display = 'block';
+    return;
+  }
+  
+  if (gridContainer) gridContainer.innerHTML = '';
+  let count = 0;
+  
+  data.forEach(row => {
+    const gps = extractGPS(row.ghi_chu);
+    if (!gps) return;
+    
+    count++;
+    const card = document.createElement('div');
+    card.className = 'location-card fade-in';
+    
+    const tenDiem = escapeHtml(row.ten_diem) || 'Chưa có tên';
+    const diaChi = escapeHtml(row.dia_chi) || 'Chưa có địa chỉ';
+    
+    card.innerHTML = `
+      <div>
+        <div class="card-header">
+          <div class="card-icon">🏪</div>
+          <div class="card-info">
+            <div class="card-title">${tenDiem}</div>
+            <div class="card-address">📍 ${diaChi}</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card-details">
+        <span class="gps-label">🧭 Tọa độ GPS:</span>
+        <div class="badge-gps badge" data-coords="${gps.lat}, ${gps.lng}" title="Nhấn để sao chép tọa độ">
+          📋 ${gps.lat}, ${gps.lng}
+        </div>
+      </div>
+      
+      <a class="btn-maps" href="https://maps.google.com/?q=${gps.rawLat},${gps.rawLng}" target="_blank" title="Mở Google Maps dẫn đường">
+        🗺️ Mở Google Maps
+      </a>
+    `;
+    
+    if (gridContainer) gridContainer.appendChild(card);
+  });
+  
+  if (count === 0) {
+    if (emptyState) {
+      emptyState.style.display = 'block';
+      emptyState.innerHTML = `
+        <h3>📭 Không tìm thấy vị trí</h3>
+        <p>Không có điểm gas nào có tọa độ GPS trong dữ liệu hiện tại.</p>
+        <p style="font-size: 0.9rem; margin-top: 10px;">
+          <em>Lưu ý: Chỉ những điểm gas có tọa độ GPS mới hiển thị ở đây.</em>
+        </p>
+      `;
     }
-    function filterVitri() {
-      const q = document.getElementById('search').value.toLowerCase();
-      const filtered = vitriData.filter(row => {
-        return (row.ten_diem && row.ten_diem.toLowerCase().includes(q)) ||
-               (row.dia_chi && row.dia_chi.toLowerCase().includes(q)) ||
-               (row.ghi_chu && row.ghi_chu.toLowerCase().includes(q));
-      });
-      displayVitri(filtered);
-    }
-    async function taiDuLieu() {
-      try {
-        const res = await fetch(scriptURL);
-        allData = await res.json();
-        vitriData = allData.filter(row => extractGPS(row.ghi_chu || ''));
-        displayVitri(vitriData);
-      } catch (e) {
-        document.getElementById('empty-state').style.display = 'block';
+  } else {
+    if (emptyState) emptyState.style.display = 'none';
+  }
+  
+  updateResultCount(count);
+}
+
+function updateResultCount(count) {
+  const header = document.querySelector('h1');
+  if (header) {
+    const currentText = header.textContent.replace(/\(\d+\)$/, '').trim();
+    header.textContent = count > 0 ? `${currentText} (${count})` : currentText;
+  }
+}
+
+function filterVitri() {
+  const query = document.getElementById('search').value.toLowerCase().trim();
+  if (!query) {
+    currentFilteredData = vitriData;
+    displayVitri(vitriData);
+    return;
+  }
+  
+  const filtered = vitriData.filter(row => {
+    const searchableText = `
+      ${row.ten_diem || ''}
+      ${row.dia_chi || ''}
+      ${row.ghi_chu || ''}
+    `.toLowerCase();
+    return searchableText.includes(query);
+  });
+  
+  currentFilteredData = filtered;
+  displayVitri(filtered);
+}
+
+async function copyToClipboard(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      showToast(`✅ Đã sao chép: ${text}`);
+    } else {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.select();
+      const success = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      if (success) {
+        showToast(`✅ Đã sao chép: ${text}`);
+      } else {
+        showToast('❌ Không thể sao chép vào clipboard', 'error');
       }
     }
-    document.getElementById('search').addEventListener('input', filterVitri);
-    taiDuLieu();
-    // Sidebar logic
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
-      document.getElementById('sidebar-overlay').classList.toggle('active');
-      // Ẩn nút menu khi sidebar mở
-      document.getElementById('menu-toggle').style.display = document.getElementById('sidebar').classList.contains('open') ? 'none' : 'flex';
+  } catch (err) {
+    console.error('Lỗi sao chép:', err);
+    showToast('❌ Lỗi khi sao chép', 'error');
+  }
+}
+
+function showToast(message, type = 'success') {
+  let toast = document.getElementById('toast-notification');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast-notification';
+    toast.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: ${type === 'success' ? 'var(--secondary)' : 'var(--danger)'};
+      color: var(--text-inverse);
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 0.3s, transform 0.3s;
+      font-weight: 500;
+      border: 1px solid ${type === 'success' ? 'var(--secondary-dark)' : 'var(--danger-dark)'};
+    `;
+    document.body.appendChild(toast);
+  }
+  
+  toast.textContent = message;
+  toast.style.opacity = '1';
+  toast.style.transform = 'translateY(0)';
+  
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(-20px)';
+    setTimeout(() => {
+      if (toast.parentNode) document.body.removeChild(toast);
+    }, 300);
+  }, 3000);
+}
+
+async function taiDuLieu() {
+  const loader = document.getElementById('page-loader');
+  if (loader) loader.classList.remove('hidden');
+
+  try {
+    console.log('Đang tải dữ liệu...');
+    const url = scriptURL + '?t=' + Date.now();
+    const response = await fetch(url);
+    
+    if (!response.ok) throw new Error(`Lỗi HTTP ${response.status}`);
+    
+    const text = await response.text();
+    let data;
+    
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      // Thử sửa lỗi JSON (ví dụ thiếu dấu ngoặc)
+      const fixedText = text.trim();
+      if (fixedText.startsWith('[') && fixedText.endsWith(']')) {
+        data = JSON.parse(fixedText);
+      } else {
+        throw new Error('Dữ liệu không phải JSON hợp lệ');
+      }
     }
-    function closeSidebar() {
-      document.getElementById('sidebar').classList.remove('open');
-      document.getElementById('sidebar-overlay').classList.remove('active');
-      // Hiện nút menu khi sidebar đóng
-      document.getElementById('menu-toggle').style.display = 'flex';
+    
+    // Nếu dữ liệu là object có thuộc tính data (một số cấu hình Google Apps Script)
+    if (data && typeof data === 'object' && !Array.isArray(data) && data.data && Array.isArray(data.data)) {
+      data = data.data;
     }
-    document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
-    document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
-    document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
-    // Khi load trang, đảm bảo nút menu hiện
-    window.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('menu-toggle').style.display = 'flex';
+    
+    if (!Array.isArray(data)) throw new Error('Dữ liệu không phải mảng');
+    
+    allData = data;
+    console.log(`Đã tải ${allData.length} bản ghi`);
+    
+    // Lọc các điểm có GPS
+    vitriData = allData.filter(row => extractGPS(row.ghi_chu) !== null);
+    
+    // Loại bỏ trùng lặp (theo tên điểm và tọa độ)
+    const uniqueMap = new Map();
+    vitriData.forEach(row => {
+      const gps = extractGPS(row.ghi_chu);
+      if (gps) {
+        const key = `${row.ten_diem || ''}_${gps.lat}_${gps.lng}`;
+        if (!uniqueMap.has(key)) uniqueMap.set(key, row);
+      }
     });
-  </script>
+    vitriData = Array.from(uniqueMap.values());
+    
+    currentFilteredData = vitriData;
+    displayVitri(vitriData);
+    
+    if (vitriData.length === 0) {
+      showToast('⚠️ Không có điểm gas nào có tọa độ GPS', 'warning');
+    } else {
+      showToast(`✅ Đã tải ${vitriData.length} vị trí có GPS`);
+    }
+    
+  } catch (error) {
+    console.error('Lỗi tải dữ liệu:', error);
+    const emptyState = document.getElementById('empty-state');
+    emptyState.style.display = 'block';
+    emptyState.innerHTML = `
+      <h3>❌ Lỗi khi tải dữ liệu</h3>
+      <p>Không thể kết nối đến nguồn dữ liệu. Vui lòng thử lại sau.</p>
+      <p style="font-size: 0.9rem; margin-top: 10px;">
+        <em>Chi tiết lỗi: ${escapeHtml(error.message)}</em>
+      </p>
+      <button onclick="taiDuLieu()" style="
+        margin-top: 15px;
+        padding: 8px 16px;
+        background: var(--primary);
+        color: var(--text-inverse);
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-weight: 500;
+      ">
+        🔄 Thử lại
+      </button>
+    `;
+    showToast('❌ Không thể tải dữ liệu từ Google Sheets!', 'error');
+  } finally {
+    if (loader) loader.classList.add('hidden');
+  }
+}
+
+// Sự kiện tìm kiếm
+document.getElementById('search').addEventListener('input', filterVitri);
+document.getElementById('search').addEventListener('keypress', e => { if (e.key === 'Enter') filterVitri(); });
+
+// Xử lý click sao chép tọa độ (delegation)
+document.addEventListener('click', e => {
+  const badge = e.target.closest('.badge');
+  if (badge) {
+    const coords = badge.getAttribute('data-coords') || badge.textContent.trim();
+    if (coords) copyToClipboard(coords);
+  }
+});
+
+// Khởi động
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('=== TRANG QUẢN LÝ VỊ TRÍ KHỞI ĐỘNG ===');
+  taiDuLieu();
+  setTimeout(() => document.getElementById('search')?.focus(), 500);
+});
+
+// Tải lại khi online
+window.addEventListener('online', () => {
+  console.log('Kết nối mạng được khôi phục, tải lại dữ liệu...');
+  taiDuLieu();
+});
+</script>
 </body>
 </html>

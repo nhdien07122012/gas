@@ -480,6 +480,46 @@
     .back-button:hover { transform: none !important; }
   }
   
+  /* ========== PAGE LOADING OVERLAY ========== */
+  .page-loader-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-primary);
+    z-index: 10000;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+  }
+
+  .page-loader-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .loader {
+    width: 45px;
+    aspect-ratio: .75;
+    --c: no-repeat linear-gradient(var(--text-primary) 0 0);
+    background:
+      var(--c) 0% 100%,
+      var(--c) 50% 100%,
+      var(--c) 100% 100%;
+    background-size: 20% 65%;
+    animation: l8 1s infinite linear;
+  }
+
+  @keyframes l8 {
+    16.67% { background-position: 0% 0%, 50% 100%, 100% 100%; }
+    33.33% { background-position: 0% 0%, 50% 0%, 100% 100%; }
+    50% { background-position: 0% 0%, 50% 0%, 100% 0%; }
+    66.67% { background-position: 0% 100%, 50% 0%, 100% 0%; }
+    83.33% { background-position: 0% 100%, 50% 100%, 100% 0%; }
+  }
+
   @media print {
     body { background: white !important; color: black !important; padding: 0; }
     .container { box-shadow: none !important; border: 1px solid #ccc !important; border-radius: 0 !important; max-width: 100% !important; padding: 10px !important; }
@@ -492,6 +532,11 @@
 </style>
 </head>
 <body>
+  <!-- Page Loading Overlay -->
+  <div id="page-loader" class="page-loader-overlay" aria-live="polite" aria-label="Đang tải dữ liệu">
+    <div class="loader"></div>
+  </div>
+
   <div class="container">
     <h1>📍 Quản lý vị trí điểm gas</h1>
     
@@ -718,6 +763,9 @@ function showToast(message, type = 'success') {
 }
 
 async function taiDuLieu() {
+  const loader = document.getElementById('page-loader');
+  if (loader) loader.classList.remove('hidden');
+
   try {
     console.log('Đang tải dữ liệu...');
     const url = scriptURL + '?t=' + Date.now();
@@ -797,6 +845,8 @@ async function taiDuLieu() {
       </button>
     `;
     showToast('❌ Không thể tải dữ liệu từ Google Sheets!', 'error');
+  } finally {
+    if (loader) loader.classList.add('hidden');
   }
 }
 
