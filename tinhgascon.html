@@ -5,12 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tính tiền gas còn lại</title>
 
-<!-- Tải font Roboto từ Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- Thêm các thẻ icon cho web và màn hình chính iPhone -->
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="apple-touch-icon-precomposed" href="icon.png">
@@ -55,7 +53,7 @@
     font-display: swap;
     src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfCRc4EsA.woff2) format('woff2');
   }
-  
+
   /* ========== CSS VARIABLES FOR LIGHT MODE ========== */
   :root {
     --primary: #0f9d58;
@@ -69,7 +67,7 @@
     --warning-dark: #e08900;
     --info: #5ac8fa;
     --success: #34c759;
-    
+
     --bg-primary: #ffffff;
     --bg-secondary: #f3f7f2;
     --bg-tertiary: #f7faf7;
@@ -79,34 +77,48 @@
     --bg-input: #ffffff;
     --bg-hover: #eef7ec;
     --bg-active: #e8f8ea;
-    
+
     --text-primary: #0b3b2a;
     --text-secondary: #576a5f;
     --text-tertiary: #7a9184;
     --text-inverse: #ffffff;
     --text-muted: #adb5bd;
-    
+
     --border-color: #e6efe8;
     --border-light: #eef6ed;
     --border-dark: #cfded0;
     --shadow: 0 2px 10px rgba(0,0,0,0.08);
     --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
     --shadow-dark: 0 2px 10px rgba(0,0,0,0.15);
-    
+
     --radius-xl: 28px;
     --radius-lg: 20px;
     --radius-md: 16px;
     --radius-sm: 12px;
     --radius-xs: 8px;
     --radius-circle: 50%;
-    
+
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.15s ease;
     --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   }
-  
+
+  /* ========== HEROICONS BASE ========== */
+  .hero-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
+    color: currentColor;
+  }
+  .hero-icon-sm { width: 16px; height: 16px; }
+  .hero-icon-md { width: 22px; height: 22px; }
+  .hero-icon-lg { width: 26px; height: 26px; }
+  .hero-icon-xl { width: 32px; height: 32px; }
+
   /* ========== DARK MODE VARIABLES ========== */
   @media (prefers-color-scheme: dark) {
     :root {
@@ -121,7 +133,7 @@
       --warning-dark: #ff9800;
       --info: #42a5f5;
       --success: #30c75a;
-      
+
       --bg-primary: #0b0b0b;
       --bg-secondary: #121212;
       --bg-tertiary: #191919;
@@ -131,13 +143,13 @@
       --bg-input: #161616;
       --bg-hover: #1f1f1f;
       --bg-active: #292929;
-      
+
       --text-primary: #f2f2f2;
       --text-secondary: #c7c7c7;
       --text-tertiary: #a5a5a5;
       --text-inverse: #f5f5f5;
       --text-muted: #999999;
-      
+
       --border-color: #303030;
       --border-light: #242424;
       --border-dark: #3a3a3a;
@@ -145,44 +157,25 @@
       --shadow-lg: 0 8px 25px rgba(0,0,0,0.55);
       --shadow-dark: 0 2px 10px rgba(0,0,0,0.6);
     }
-    
-    header {
-      color: #ffffff !important;
-    }
-    header h1,
-    header p {
-      color: #ffffff !important;
-    }
-    .menu-toggle {
-      color: #ffffff !important;
-    }
-    .sidebar-header h2 {
-      color: #ffffff !important;
-    }
-    .close-sidebar {
-      color: #ffffff !important;
-    }
-    .sidebar-item {
-      color: #ffffff !important;
-    }
-    .sidebar-footer p {
-      color: rgba(255, 255, 255, 0.8) !important;
-    }
+
+    header { color: #ffffff !important; }
+    header h1, header p { color: #ffffff !important; }
+    .menu-toggle { color: #ffffff !important; }
+    .sidebar-header h2 { color: #ffffff !important; }
+    .close-sidebar { color: #ffffff !important; }
+    .sidebar-item { color: #ffffff !important; }
+    .sidebar-footer p { color: rgba(255, 255, 255, 0.8) !important; }
   }
-  
+
   /* ========== CSS RESET & BASE STYLES ========== */
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
   html {
     font-size: 16px;
     transition: background-color 0.5s ease;
     font-family: var(--font-family);
   }
-  
+
   body {
     font-family: var(--font-family);
     background-color: var(--bg-secondary);
@@ -195,7 +188,7 @@
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
   }
-  
+
   .container {
     max-width: 600px;
     margin: 0 auto;
@@ -206,7 +199,7 @@
     transition: var(--transition);
     border: 1px solid var(--border-color);
   }
-  
+
   /* ========== SIDEBAR STYLES ========== */
   .sidebar {
     position: fixed;
@@ -224,11 +217,8 @@
     border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
     border-right: 1px solid var(--border-color);
   }
-  
-  .sidebar.open {
-    left: 0;
-  }
-  
+  .sidebar.open { left: 0; }
+
   .sidebar-header {
     padding: 20px;
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
@@ -238,39 +228,31 @@
     align-items: center;
     border-radius: 0 var(--radius-lg) 0 0;
   }
-  
-  .sidebar-header h2 {
-    font-size: 1.3rem;
-    font-weight: 600;
-  }
-  
+  .sidebar-header h2 { font-size: 1.3rem; font-weight: 600; }
+
   .close-sidebar {
     background: none;
     border: none;
     color: var(--text-inverse);
-    font-size: 1.5rem;
     cursor: pointer;
     padding: 0;
     width: auto;
     transition: var(--transition-fast);
     font-family: var(--font-family);
     font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
-  
-  .close-sidebar:hover {
-    opacity: 0.9;
-    transform: scale(1.1);
-  }
-  
-  .sidebar-content {
-    padding: 20px;
-    flex: 1;
-  }
-  
+  .close-sidebar .hero-icon { width: 24px; height: 24px; }
+  .close-sidebar:hover { opacity: 0.9; transform: scale(1.1); }
+
+  .sidebar-content { padding: 20px; flex: 1; }
+
   .sidebar-item {
     display: flex;
     align-items: center;
-    justify-content: left;
+    justify-content: flex-start;
     gap: 12px;
     width: 100%;
     padding: 14px 16px;
@@ -286,24 +268,29 @@
     text-align: left;
     margin-bottom: 8px;
   }
-  
+  .sidebar-item .hero-icon { color: var(--primary); }
   .sidebar-item:hover {
     background: var(--bg-hover);
     border-color: var(--border-color);
     transform: translateX(5px);
   }
-  
+  .sidebar-item.active {
+    background: var(--bg-active);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .sidebar-item.active .hero-icon { color: var(--primary); }
+
   .sidebar-footer {
     padding: 20px;
     border-top: 1px solid var(--border-color);
     text-align: center;
   }
-  
   .sidebar-footer p {
     font-size: 0.85rem;
     color: var(--text-secondary);
   }
-  
+
   /* ========== HEADER STYLES ========== */
   header {
     padding: 25px;
@@ -314,65 +301,78 @@
     gap: 15px;
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
-  
+
   header h1 {
     font-size: 1.8rem;
     font-weight: 600;
     flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
-  
+  header h1 .hero-icon { width: 28px; height: 28px; }
+
   header p {
     font-size: 0.95rem;
     opacity: 0.9;
     margin-top: 5px;
   }
-  
+
   .menu-toggle {
     background: rgba(255, 255, 255, 0.2);
     border: none;
     color: var(--text-inverse);
-    font-size: 1.5rem;
     cursor: pointer;
     border-radius: var(--radius-sm);
-    padding: 8px 12px;
+    padding: 8px 10px;
     transition: var(--transition-fast);
     font-family: var(--font-family);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
-  
+  .menu-toggle .hero-icon { width: 22px; height: 22px; }
   .menu-toggle:hover {
     background: rgba(255, 255, 255, 0.3);
     transform: scale(1.05);
   }
-  
+
   /* ========== CARD & FORM STYLES ========== */
   .card {
     padding: 25px;
     border-bottom: 1px solid var(--border-color);
   }
-  
-  .card:last-child {
-    border-bottom: none;
-  }
-  
+  .card:last-child { border-bottom: none; }
+
   .card h2 {
     font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 20px;
     color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
-  
-  .form-group {
-    margin-bottom: 18px;
-  }
-  
+  .card h2 .hero-icon { color: var(--primary); width: 24px; height: 24px; }
+
+  .form-group { margin-bottom: 18px; }
+
   .form-group label {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-weight: 500;
     margin-bottom: 8px;
     color: var(--text-primary);
     font-size: 0.95rem;
   }
-  
+  .form-group label .hero-icon {
+    color: var(--primary);
+    width: 18px;
+    height: 18px;
+  }
+
   input[type="text"],
   input[type="number"],
   input[type="date"],
@@ -387,30 +387,29 @@
     color: var(--text-primary);
     transition: var(--transition-fast);
   }
-  
   input[type="text"]:focus,
   input[type="number"]:focus,
   input[type="date"]:focus,
   select:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(44, 128, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(15, 157, 88, 0.1);
   }
-  
+
   /* ========== BUTTON STYLES ========== */
   .button-group {
     display: flex;
     gap: 12px;
     margin-top: 25px;
   }
-  
+
   button {
     font-family: var(--font-family);
     cursor: pointer;
     transition: var(--transition-fast);
     font-weight: 600;
   }
-  
+
   .btn {
     padding: 12px 24px;
     border: none;
@@ -421,32 +420,31 @@
     justify-content: center;
     gap: 8px;
   }
-  
+  .btn .hero-icon { width: 18px; height: 18px; }
+
   .btn-primary {
     background-color: var(--primary);
     color: var(--text-inverse);
     flex: 1;
   }
-  
   .btn-primary:hover {
     background-color: var(--primary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(44, 128, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(15, 157, 88, 0.3);
   }
-  
+
   .btn-secondary {
     background-color: var(--bg-tertiary);
     color: var(--text-primary);
     border: 1px solid var(--border-color);
     flex: 1;
   }
-  
   .btn-secondary:hover {
     background-color: var(--bg-hover);
     transform: translateY(-2px);
     border-color: var(--border-dark);
   }
-  
+
   /* ========== RESULT DISPLAY ========== */
   .result-box {
     margin-top: 25px;
@@ -456,12 +454,11 @@
     border: 2px solid var(--primary);
     display: none;
   }
-  
   .result-box.show {
     display: block;
     animation: slideIn 0.3s ease-out;
   }
-  
+
   .result-item {
     display: flex;
     justify-content: space-between;
@@ -470,41 +467,38 @@
     padding-bottom: 12px;
     border-bottom: 1px solid var(--border-color);
   }
-  
   .result-item:last-child {
     margin-bottom: 0;
     padding-bottom: 0;
     border-bottom: none;
   }
-  
+
   .result-label {
     font-weight: 500;
     color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
-  
+  .result-label .hero-icon { width: 18px; height: 18px; }
+
   .result-value {
     font-weight: 700;
     font-size: 1.1rem;
     color: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
-  
-  .result-value.success {
-    color: var(--success);
-  }
-  
-  .result-value.warning {
-    color: var(--warning);
-  }
-  
-  .result-value.error {
-    color: var(--danger);
-  }
-  
+  .result-value .hero-icon { width: 18px; height: 18px; }
+  .result-value.success { color: var(--success); }
+  .result-value.warning { color: var(--warning); }
+  .result-value.error { color: var(--danger); }
+
   /* ========== TOAST STYLES ========== */
   .toast {
     position: fixed;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%) translateY(100px);
     background: var(--primary);
     color: var(--text-inverse);
@@ -524,60 +518,107 @@
     font-family: var(--font-family);
     font-weight: 500;
   }
-
   .toast.show {
     transform: translate(-50%, -50%) translateY(0);
     opacity: 1;
   }
-  
-  .toast.success {
-    background: var(--secondary);
-    border-color: var(--secondary-dark);
+  .toast.success { background: var(--secondary); border-color: var(--secondary-dark); }
+  .toast.error { background: var(--danger); border-color: var(--danger-dark); }
+  .toast.warning { background: var(--warning); border-color: var(--warning-dark); }
+  .toast.info { background: var(--info); border-color: var(--info); }
+  .toast-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
-  
-  .toast.error {
-    background: var(--danger);
-    border-color: var(--danger-dark);
-  }
+  .toast-icon .hero-icon { width: 20px; height: 20px; }
 
-  .toast.warning {
-    background: var(--warning);
-    border-color: var(--warning-dark);
-  }
-  
   /* ========== OVERLAY ========== */
   .overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
     display: none;
   }
-  
-  .overlay.active {
-    display: block;
+  .overlay.active { display: block; }
+
+  /* ========== MODAL STYLES ========== */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
   }
-  
+  .modal-content {
+    background: var(--bg-modal);
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+    padding: 20px;
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 10px;
+  }
+  .modal-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+  .modal-header h2 .hero-icon { color: var(--primary); width: 24px; height: 24px; }
+  .modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: var(--radius-xs);
+    transition: var(--transition-fast);
+  }
+  .modal-close .hero-icon { width: 22px; height: 22px; }
+  .modal-close:hover { color: var(--text-primary); background: var(--bg-hover); }
+
+  .help-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .help-section-title .hero-icon { color: var(--primary); width: 20px; height: 20px; }
+
   /* ========== ANIMATIONS ========== */
   @keyframes slideIn {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  
   @keyframes fadeIn {
     from { opacity: 0; transform: translateX(-20px); }
     to { opacity: 1; transform: translateX(0); }
   }
-  
+
   /* ========== RESPONSIVE STYLES ========== */
   @media (max-width: 768px) {
-    body {
-      padding: 15px;
-    }
-    
+    body { padding: 15px; }
     header {
       padding: 20px;
       flex-direction: row;
@@ -586,113 +627,112 @@
       text-align: left;
       position: relative;
     }
-    
     header .menu-toggle {
       flex-shrink: 0;
       margin-right: 10px;
       padding: 8px;
     }
-    
-    header > div {
-      flex: 1;
-      text-align: center;
-    }
-    
-    header h1 {
-      font-size: 1.5rem;
-      margin: 0;
-    }
-    
-    header p {
-      margin-top: 3px;
-    }
-    
-    .container {
-      max-width: 100%;
-    }
-    
-    .card {
-      padding: 20px;
-    }
-    
-    .button-group {
-      flex-direction: column;
-    }
-    
-    .btn {
-      width: 100%;
-    }
+    header > div { flex: 1; text-align: center; }
+    header h1 { font-size: 1.5rem; margin: 0; justify-content: center; }
+    header p { margin-top: 3px; }
+    .container { max-width: 100%; }
+    .card { padding: 20px; }
+    .button-group { flex-direction: column; }
+    .btn { width: 100%; }
   }
-  
-  /* ========== DARK MODE ADJUSTMENTS ========== */
+
   @media (prefers-color-scheme: dark) {
-    .result-box {
-      border-color: var(--primary-light);
-    }
+    .result-box { border-color: var(--primary-light); }
   }
-  
-  /* ========== REDUCED MOTION SUPPORT ========== */
+
   @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
+    *, *::before, *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
-    .result-box.show {
-      animation: none;
-    }
-    button:hover {
-      transform: none !important;
-    }
+    .result-box.show { animation: none; }
+    button:hover { transform: none !important; }
   }
 </style>
-
-  <link rel="stylesheet" href="assets/hero-icons.css">
 </head>
 <body>
   <!-- Overlay cho sidebar -->
   <div class="overlay" id="sidebar-overlay"></div>
-  
+
   <!-- Toast notification -->
   <div class="toast" id="toast">
+    <span class="toast-icon" id="toast-icon"></span>
     <span id="toast-message">Thông báo</span>
   </div>
-  
+
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <h2>MenuBar</h2>
-      <button class="close-sidebar" id="close-sidebar">&times;</button>
+      <button class="close-sidebar" id="close-sidebar" aria-label="Đóng menu">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+        </svg>
+      </button>
     </div>
     <div class="sidebar-content">
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html'">
-        📋 Quản lý điểm gas
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z" clip-rule="evenodd" />
+          <path fill-rule="evenodd" d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V9.375Zm2.25 4.125a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75ZM6 16.5a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+        </svg>
+        Quản lý điểm gas
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='diemtien.html'">
-          💵 Đếm tiền
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
+          <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
+        </svg>
+        Đếm tiền
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='vitri.html'">
-        📍 Quản lý vị trí
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+        </svg>
+        Quản lý vị trí
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='tinhluong.html'">
-        💰 Tính công & lương
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 0 1-.921.42Z" />
+          <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a3.836 3.836 0 0 0-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 0 1-.921-.421l-.879-.66a.75.75 0 0 0-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 0 0 1.5 0v-.81a4.124 4.124 0 0 0 1.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 0 0-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 0 0 .933-1.175l-.415-.33a3.836 3.836 0 0 0-1.719-.755V6Z" clip-rule="evenodd" />
+        </svg>
+        Tính công & lương
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='dudoandiemgas.html'">
-        🔮 Dự đoán điểm gas
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258a2.625 2.625 0 0 0-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" />
+        </svg>
+        Dự đoán điểm gas
       </button>
       <button class="sidebar-item active" type="button">
-        💧 Tính tiền gas còn lại
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10.5 3.798v5.02a3 3 0 0 1-.879 2.121l-2.377 2.377a9.845 9.845 0 0 1 5.091 1.013 8.315 8.315 0 0 0 5.713.636l.285-.071-3.954-3.955a3 3 0 0 1-.879-2.121v-5.02a23.614 23.614 0 0 0-3 0Zm4.5.138a.75.75 0 0 0 .093-1.495A24.837 24.837 0 0 0 12 2.25a25.048 25.048 0 0 0-3.093.191A.75.75 0 0 0 9 3.936v4.882a1.5 1.5 0 0 1-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.471-4.881L15.44 9.879A1.5 1.5 0 0 1 15 8.818V3.936Z" clip-rule="evenodd" />
+        </svg>
+        Tính tiền gas còn lại
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='clipboard.html'">
-        📋 Lưu Clipboard
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" />
+        </svg>
+        Lưu Clipboard
       </button>
       <button class="sidebar-item" onclick="openModal('help-modal')">
-        ❓ Trợ giúp
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 0 1-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 0 1-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 0 1-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.83-.727.83-1.857 0-2.584ZM12 18a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+        </svg>
+        Trợ giúp
       </button>
       <button class="sidebar-item" onclick="resetForm()">
-        ❌ Đóng
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+        </svg>
+        Đóng
       </button>
     </div>
     <div class="sidebar-footer">
@@ -702,21 +742,42 @@
 
   <div class="container">
     <header>
-      <button class="menu-toggle" id="menu-toggle">彡</button>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Mở menu">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+        </svg>
+      </button>
       <div>
-        <h1> Tính tiền gas còn lại</h1>
+        <h1>
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10.5 3.798v5.02a3 3 0 0 1-.879 2.121l-2.377 2.377a9.845 9.845 0 0 1 5.091 1.013 8.315 8.315 0 0 0 5.713.636l.285-.071-3.954-3.955a3 3 0 0 1-.879-2.121v-5.02a23.614 23.614 0 0 0-3 0Zm4.5.138a.75.75 0 0 0 .093-1.495A24.837 24.837 0 0 0 12 2.25a25.048 25.048 0 0 0-3.093.191A.75.75 0 0 0 9 3.936v4.882a1.5 1.5 0 0 1-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.471-4.881L15.44 9.879A1.5 1.5 0 0 1 15 8.818V3.936Z" clip-rule="evenodd" />
+          </svg>
+          Tính tiền gas còn lại
+        </h1>
         <p>Tính toán số tiền cần trừ dựa trên khối lượng gas còn lại</p>
       </div>
     </header>
-    
+
     <div class="card">
-      <h2>📝 Nhập thông tin</h2>
-      
+      <h2>
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+          <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+        </svg>
+        Nhập thông tin
+      </h2>
+
       <div class="form-group">
-        <label for="gia_binh">💰 Giá bán bình gas 45kg (VND):</label>
-        <input 
-          id="gia_binh" 
-          type="number" 
+        <label for="gia_binh">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
+            <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
+          </svg>
+          Giá bán bình gas 45kg (VND):
+        </label>
+        <input
+          id="gia_binh"
+          type="number"
           placeholder="VD: 1780 (tự động thêm 000)"
           value=""
           min="0"
@@ -724,39 +785,56 @@
           onblur="autoMultiplyThousand(this)"
         >
       </div>
-      
+
       <div class="form-group">
-        <label for="kg_binh_con">⚖️ Khối lượng bình có gas hiện tại (kg):</label>
-        <input 
-          id="kg_binh_con" 
-          type="number" 
+        <label for="kg_binh_con">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v.756a49.106 49.106 0 0 1 9.152 1 .75.75 0 0 1-.152 1.485h-1.42l2.79 3.458a.75.75 0 1 1-1.16.95l-2.79-3.457a45.877 45.877 0 0 0-6.42 1.665v10.268h2.25a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1 0-1.5h2.25V7.267a45.877 45.877 0 0 0-6.42-1.665l-2.79 3.457a.75.75 0 0 1-1.16-.95l2.79-3.458H3.75a.75.75 0 0 1-.152-1.485 49.106 49.106 0 0 1 9.152-1V3a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+          </svg>
+          Khối lượng bình có gas hiện tại (kg):
+        </label>
+        <input
+          id="kg_binh_con"
+          type="number"
           placeholder="VD: 45.5"
           step="0.1"
           min="0"
         >
       </div>
-      
+
       <div class="form-group">
-        <label for="kg_vo_gas">📦 Khối lượng vỏ gas rỗng (kg):</label>
-        <input 
-          id="kg_vo_gas" 
-          type="number" 
+        <label for="kg_vo_gas">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+            <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm6.133 2.845a.75.75 0 0 1 1.06 0l1.72 1.72 1.72-1.72a.75.75 0 1 1 1.06 1.06l-1.72 1.72 1.72 1.72a.75.75 0 1 1-1.06 1.06L12 15.685l-1.72 1.72a.75.75 0 1 1-1.06-1.06l1.72-1.72-1.72-1.72a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          </svg>
+          Khối lượng vỏ gas rỗng (kg):
+        </label>
+        <input
+          id="kg_vo_gas"
+          type="number"
           placeholder="VD: 42"
           step="0.1"
           min="0"
         >
       </div>
-      
+
       <div class="button-group">
         <button class="btn btn-primary" onclick="tinhTienGas()">
-          🧮 Tính toán
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M6.32 1.827a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V4.757c0-1.47 1.073-2.756 2.57-2.93ZM7.5 11.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75v-.008Zm.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V15a.75.75 0 0 0-.75-.75H8.25Zm-.75 6a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75V20.25Zm3.75-3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75H11.25Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm3.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75h-.008Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm3.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75h-.008Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008ZM15.75 6a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V6.75a.75.75 0 0 0-.75-.75h-.008Z" clip-rule="evenodd" />
+          </svg>
+          Tính toán
         </button>
         <button class="btn btn-secondary" onclick="resetForm()">
-          🔄 Làm lại
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" />
+          </svg>
+          Làm lại
         </button>
       </div>
     </div>
-    
+
     <!-- Kết quả hiển thị -->
     <div id="result" class="card">
       <div class="result-box" id="result-box">
@@ -764,64 +842,105 @@
           <span class="result-label">Khối lượng gas còn:</span>
           <span class="result-value" id="kg-gas-con">-</span>
         </div>
-        
+
         <div class="result-item">
           <span class="result-label">Điều kiện (> 2kg):</span>
           <span class="result-value" id="dieu-kien">-</span>
         </div>
-        
+
         <div class="result-item" id="tien-item" style="display: none;">
-          <span class="result-label">💵 Tiền cần trừ:</span>
+          <span class="result-label">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
+              <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
+            </svg>
+            Tiền cần trừ:
+          </span>
           <span class="result-value success" id="tien-can-tru">-</span>
         </div>
-        
+
         <div class="result-item" id="khong-tru-item" style="display: none; border-color: var(--warning);">
-          <span class="result-label" style="color: var(--warning);">⚠️ Kết quả:</span>
+          <span class="result-label" style="color: var(--warning);">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+            </svg>
+            Kết quả:
+          </span>
           <span class="result-value warning" id="khong-tru-msg">-</span>
         </div>
-        
+
         <div class="result-item" id="khach-tra-item" style="display: none; border-top: 2px solid var(--primary); padding-top: 15px; margin-top: 15px;">
-          <span class="result-label" style="font-weight: 700; color: var(--primary);">💳 Khách phải trả:</span>
+          <span class="result-label" style="font-weight: 700; color: var(--primary);">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M4.5 3.75a3 3 0 0 0-3 3v.75h21v-.75a3 3 0 0 0-3-3h-15Z" />
+              <path fill-rule="evenodd" d="M22.5 9.75h-21v7.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-7.5Zm-18 3.75a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" />
+            </svg>
+            Khách phải trả:
+          </span>
           <span class="result-value" id="khach-phai-tra" style="font-size: 1.3rem;">-</span>
         </div>
       </div>
     </div>
-    
+
     <!-- Help Modal -->
-    <div class="modal" id="help-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-      <div style="background: var(--bg-modal); border-radius: var(--radius-lg); width: 90%; max-width: 500px; box-shadow: var(--shadow-lg); padding: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-          <h2 style="font-size: 1.4rem; font-weight: 600;">❓ Trợ giúp</h2>
-          <button style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-secondary);" onclick="closeModal('help-modal')">×</button>
+    <div class="modal" id="help-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 0 1-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 0 1-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 0 1-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.83-.727.83-1.857 0-2.584ZM12 18a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+            </svg>
+            Trợ giúp
+          </h2>
+          <button class="modal-close" onclick="closeModal('help-modal')" aria-label="Đóng">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+          </button>
         </div>
-        
+
         <div style="max-height: calc(85vh - 100px); overflow-y: auto;">
-          <h3 style="margin-top: 15px; margin-bottom: 10px; font-weight: 600;">📖 Cách sử dụng:</h3>
+          <h3 class="help-section-title">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M11.25 4.533A9.707 9.707 0 0 0 6 3a9.735 9.735 0 0 0-3.25.555.75.75 0 0 0-.5.707v14.25a.75.75 0 0 0 1 .707A8.237 8.237 0 0 1 6 18.75c1.995 0 3.823.707 5.25 1.886V4.533ZM12.75 20.636A8.214 8.214 0 0 1 18 18.75c.966 0 1.89.166 2.75.47a.75.75 0 0 0 1-.708V4.262a.75.75 0 0 0-.5-.707A9.735 9.735 0 0 0 18 3a9.707 9.707 0 0 0-5.25 1.533v16.103Z" />
+            </svg>
+            Cách sử dụng:
+          </h3>
           <ol style="margin-left: 20px; margin-top: 10px;">
             <li>Nhập giá bán của bình gas 45kg</li>
             <li>Nhập khối lượng bình có gas hiện tại (bình nguyên, chứa gas)</li>
             <li>Nhập khối lượng vỏ gas rỗng (trọng lượng khi chưa có gas)</li>
             <li>Nhấn "Tính toán" để xem kết quả</li>
           </ol>
-          
-          <h3 style="margin-top: 15px; margin-bottom: 10px; font-weight: 600;">📐 Công thức tính:</h3>
+
+          <h3 class="help-section-title">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M6.32 1.827a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V4.757c0-1.47 1.073-2.756 2.57-2.93ZM7.5 11.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75v-.008Zm.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V15a.75.75 0 0 0-.75-.75H8.25Zm-.75 6a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75V20.25Zm3.75-3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75H11.25Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm3.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75h-.008Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm3.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75h-.008Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008ZM15.75 6a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V6.75a.75.75 0 0 0-.75-.75h-.008Z" clip-rule="evenodd" />
+            </svg>
+            Công thức tính:
+          </h3>
           <p style="background: var(--bg-tertiary); padding: 12px; border-radius: var(--radius-sm); margin: 10px 0; font-family: monospace; font-size: 0.9rem;">
             Khối lượng gas còn = Khối lượng bình - Khối lượng vỏ
           </p>
           <p style="background: var(--bg-tertiary); padding: 12px; border-radius: var(--radius-sm); margin: 10px 0; font-family: monospace; font-size: 0.9rem;">
             Tiền trừ = (Khối lượng gas còn) × (Giá bán) ÷ 45
           </p>
-          
-          <h3 style="margin-top: 15px; margin-bottom: 10px; font-weight: 600;">⚠️ Lưu ý:</h3>
+
+          <h3 class="help-section-title">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+            </svg>
+            Lưu ý:
+          </h3>
           <ul style="margin-left: 20px; margin-top: 10px;">
-            <li style="margin-bottom: 8px;"><strong>💰 Giá bán: Nhập chỉ phần chính (VD: 1780), tự động thêm 000 → 1780000</strong></li>
+            <li style="margin-bottom: 8px;"><strong>Giá bán: Nhập chỉ phần chính (VD: 1780), tự động thêm 000 → 1780000</strong></li>
             <li style="margin-bottom: 8px;"><strong>Chỉ tính tiền nếu khối lượng gas còn > 2kg</strong></li>
             <li style="margin-bottom: 8px;">Nếu khối lượng gas ≤ 2kg thì không trừ tiền</li>
             <li style="margin-bottom: 8px;">Giá bán phải > 0 để có thể tính toán</li>
             <li>Các giá trị được tính với độ chính xác 2 chữ số thập phân</li>
           </ul>
         </div>
-        
+
         <div style="display: flex; gap: 10px; margin-top: 20px;">
           <button class="btn btn-primary" style="width: 100%;" onclick="closeModal('help-modal')">Đóng</button>
         </div>
@@ -830,15 +949,28 @@
   </div>
 
 <script>
+// ========== HEROICONS LIBRARY ==========
+const ICONS = {
+  checkCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" /></svg>',
+  xCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" /></svg>',
+  warning: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>',
+  info: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>'
+};
+
+function stripLeadingEmoji(str) {
+  if (!str) return '';
+  return str.replace(/^[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{2B00}-\u{2BFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}\u{200D}\s]+/u, '').trim() || str.trim();
+}
+
 // ========== HÀM TOGGLE SIDEBAR ==========
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
   const isOpen = sidebar.classList.contains('open');
-  
+
   sidebar.classList.toggle('open');
   overlay.classList.toggle('active');
-  
+
   if (!isOpen) {
     document.body.style.overflow = 'hidden';
   } else {
@@ -879,10 +1011,17 @@ function closeModal(modalId) {
 function showToast(message, type = 'info') {
   const toast = document.getElementById('toast');
   const toastMessage = document.getElementById('toast-message');
-  
-  toastMessage.textContent = message;
+  const toastIcon = document.getElementById('toast-icon');
+
+  let iconKey = 'info';
+  if (type === 'success') iconKey = 'checkCircle';
+  else if (type === 'error') iconKey = 'xCircle';
+  else if (type === 'warning') iconKey = 'warning';
+
+  toastIcon.innerHTML = ICONS[iconKey];
+  toastMessage.textContent = stripLeadingEmoji(message);
   toast.className = 'toast show ' + type;
-  
+
   setTimeout(() => {
     toast.classList.remove('show');
   }, 3000);
@@ -907,7 +1046,7 @@ async function copyTextToClipboard(text) {
   try {
     await navigator.clipboard.writeText(text);
   } catch (error) {
-    showToast('⚠️ Không thể sao chép clipboard.', 'warning');
+    showToast('Không thể sao chép clipboard.', 'warning');
     console.error('Clipboard error:', error);
   }
 }
@@ -917,32 +1056,32 @@ function tinhTienGas() {
   const giaBinh = parseFloat(document.getElementById('gia_binh').value);
   const kgBinhCon = parseFloat(document.getElementById('kg_binh_con').value);
   const kgVoGas = parseFloat(document.getElementById('kg_vo_gas').value);
-  
+
   // Validation
   if (isNaN(giaBinh) || isNaN(kgBinhCon) || isNaN(kgVoGas)) {
-    showToast('⚠️ Vui lòng nhập đầy đủ thông tin!', 'error');
+    showToast('Vui lòng nhập đầy đủ thông tin!', 'error');
     return;
   }
-  
+
   if (giaBinh <= 0) {
-    showToast('⚠️ Giá bán phải lớn hơn 0!', 'error');
+    showToast('Giá bán phải lớn hơn 0!', 'error');
     return;
   }
-  
+
   if (kgBinhCon < 0 || kgVoGas < 0) {
-    showToast('⚠️ Khối lượng không thể âm!', 'error');
+    showToast('Khối lượng không thể âm!', 'error');
     return;
   }
-  
+
   if (kgVoGas >= kgBinhCon) {
-    showToast('⚠️ Khối lượng vỏ phải nhỏ hơn khối lượng bình!', 'error');
+    showToast('Khối lượng vỏ phải nhỏ hơn khối lượng bình!', 'error');
     return;
   }
-  
+
   // Tính toán
   const kgGasCon = kgBinhCon - kgVoGas;
-  const kgGasConRounded = Math.round(kgGasCon * 100) / 100; // Làm tròn 2 chữ số thập phân
-  
+  const kgGasConRounded = Math.round(kgGasCon * 100) / 100;
+
   // Hiển thị kết quả
   const resultBox = document.getElementById('result-box');
   const kgGasConEl = document.getElementById('kg-gas-con');
@@ -951,65 +1090,64 @@ function tinhTienGas() {
   const khongTruItem = document.getElementById('khong-tru-item');
   const tienCanTru = document.getElementById('tien-can-tru');
   const khongTruMsg = document.getElementById('khong-tru-msg');
-  
+
   kgGasConEl.textContent = kgGasConRounded + ' kg';
-  
+
   if (kgGasConRounded > 2) {
-    dieuKienEl.textContent = '✅ Đạt điều kiện (> 2kg)';
+    // Icon check nhỏ trước text
+    dieuKienEl.innerHTML = `${ICONS.checkCircle} <span>Đạt điều kiện (> 2kg)</span>`;
     dieuKienEl.className = 'result-value success';
-    
+
     // Tính tiền cần trừ
     const tien = (kgGasConRounded * giaBinh) / 45;
     const tienRounded = Math.round(tien * 100) / 100;
-    
+
     // Tính tiền khách phải trả
     const khachPhaiTra = giaBinh - tienRounded;
     const khachPhaiTraRounded = Math.round(khachPhaiTra * 100) / 100;
-    
+
     tienCanTru.textContent = formatCurrency(tienRounded);
     document.getElementById('khach-phai-tra').textContent = formatCurrency(khachPhaiTraRounded);
-    
+
     tienItem.style.display = 'flex';
     khongTruItem.style.display = 'none';
     document.getElementById('khach-tra-item').style.display = 'flex';
-    
+
     const copyText = `Trừ ${kgGasConRounded}kg = ${formatKText(tienRounded)}`;
     copyTextToClipboard(copyText);
-    
-    showToast('✅ Tính toán thành công! Text đã được sao chép.', 'success');
+
+    showToast('Tính toán thành công! Text đã được sao chép.', 'success');
   } else {
-    dieuKienEl.textContent = '❌ Không đạt điều kiện (≤ 2kg)';
+    dieuKienEl.innerHTML = `${ICONS.xCircle} <span>Không đạt điều kiện (≤ 2kg)</span>`;
     dieuKienEl.className = 'result-value warning';
-    
+
     // Nếu không trừ tiền, khách phải trả toàn bộ giá bán
     const khachPhaiTraRounded = Math.round(giaBinh * 100) / 100;
     document.getElementById('khach-phai-tra').textContent = formatCurrency(khachPhaiTraRounded);
-    
+
     khongTruMsg.textContent = 'Không trừ tiền (gas còn ≤ 2kg)';
     tienItem.style.display = 'none';
     khongTruItem.style.display = 'flex';
     document.getElementById('khach-tra-item').style.display = 'flex';
-    
-    showToast('ℹ️ Gas còn ≤ 2kg, không trừ tiền', 'warning');
+
+    showToast('Gas còn ≤ 2kg, không trừ tiền', 'warning');
   }
-  
+
   resultBox.classList.add('show');
 }
 
 // ========== HÀM TỰ ĐỘNG NHÂN 1000 CHO GIÁ BÁN ==========
 function autoMultiplyThousand(element) {
   if (!element.value || element.value.trim() === '') {
-    return; // Nếu trống thì không làm gì
+    return;
   }
-  
+
   const value = parseInt(element.value, 10);
-  
-  // Nếu giá trị lớn hơn 100000 thì cho là đã nhân 1000 rồi
+
   if (value >= 100000) {
     return;
   }
-  
-  // Nếu giá trị nhỏ hơn 100000 thì nhân 1000
+
   if (value > 0 && value < 100000) {
     element.value = value * 1000;
   }
@@ -1023,13 +1161,12 @@ function resetForm() {
   document.getElementById('result-box').classList.remove('show');
 }
 
-// ========== SỰ KIỆN PHÍM ENTER ==========
+// ========== SỰ KIỆN ==========
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
   document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
   document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
-  
-  // Cho phép Enter để tính toán
+
   document.getElementById('kg_vo_gas').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
       tinhTienGas();
@@ -1037,7 +1174,5 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
-
-  <script src="assets/hero-icons.js" defer></script>
 </body>
 </html>
