@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tính công và lương</title>
 
-<!-- Tải font Roboto từ Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -25,7 +24,6 @@
     font-display: swap;
     src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmSU5fCRc4EsA.woff2) format('woff2');
   }
-  
   @font-face {
     font-family: 'Roboto';
     font-style: normal;
@@ -33,7 +31,6 @@
     font-display: swap;
     src: url(https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxK.woff2) format('woff2');
   }
-  
   @font-face {
     font-family: 'Roboto';
     font-style: normal;
@@ -41,7 +38,6 @@
     font-display: swap;
     src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmEU9fCRc4EsA.woff2) format('woff2');
   }
-  
   @font-face {
     font-family: 'Roboto';
     font-style: normal;
@@ -49,7 +45,6 @@
     font-display: swap;
     src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfCRc4EsA.woff2) format('woff2');
   }
-  
   @font-face {
     font-family: 'Roboto';
     font-style: normal;
@@ -57,10 +52,9 @@
     font-display: swap;
     src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfCRc4EsA.woff2) format('woff2');
   }
-  
+
   /* ========== CSS VARIABLES FOR LIGHT MODE ========== */
   :root {
-    /* Màu sắc cơ bản */
     --primary: #0f9d58;
     --primary-dark: #0b7d45;
     --primary-light: #4cd67f;
@@ -72,8 +66,7 @@
     --warning-dark: #e08900;
     --info: #5ac8fa;
     --success: #34c759;
-    
-    /* Màu nền và văn bản Light Mode */
+
     --bg-primary: #ffffff;
     --bg-secondary: #f3f7f2;
     --bg-tertiary: #f7faf7;
@@ -83,50 +76,58 @@
     --bg-input: #ffffff;
     --bg-hover: #eef7ec;
     --bg-active: #e8f8ea;
-    
-    /* Màu văn bản Light Mode */
+
     --text-primary: #0b3b2a;
     --text-secondary: #576a5f;
     --text-tertiary: #7a9184;
     --text-inverse: #ffffff;
     --text-muted: #adb5bd;
-    
-    /* Màu viền và bóng */
+
     --border-color: #e6efe8;
     --border-light: #eef6ed;
     --border-dark: #cfded0;
     --shadow: 0 2px 10px rgba(0,0,0,0.08);
     --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
     --shadow-dark: 0 2px 10px rgba(0,0,0,0.15);
-    
-    /* Border radius */
+
     --radius-xl: 28px;
     --radius-lg: 20px;
     --radius-md: 16px;
     --radius-sm: 12px;
     --radius-xs: 8px;
     --radius-circle: 50%;
-    
-    /* Hiệu ứng chuyển tiếp */
+
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.15s ease;
     --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    /* Độ trong suốt */
+
     --opacity-disabled: 0.6;
     --opacity-hover: 0.9;
     --opacity-active: 0.8;
-    
-    /* Font chữ */
+
     --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     --font-family-mono: 'Roboto Mono', 'Courier New', monospace;
   }
-  
+
+  /* ========== HEROICONS BASE ========== */
+  .hero-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
+    color: currentColor;
+  }
+  .hero-icon-sm { width: 16px; height: 16px; }
+  .hero-icon-md { width: 22px; height: 22px; }
+  .hero-icon-lg { width: 26px; height: 26px; }
+  .hero-icon-xl { width: 32px; height: 32px; }
+  .hero-icon-2xl { width: 40px; height: 40px; }
+
   /* ========== DARK MODE VARIABLES ========== */
   @media (prefers-color-scheme: dark) {
     :root {
       color-scheme: dark;
-      /* Màu sắc cơ bản */
       --page-loader-bg: #0b0b0b;
       --primary: #23b66a;
       --primary-dark: #0b7d45;
@@ -139,8 +140,7 @@
       --warning-dark: #ff9800;
       --info: #42a5f5;
       --success: #30c75a;
-      
-      /* Màu nền và văn bản Dark Mode */
+
       --bg-primary: #0b0b0b;
       --bg-secondary: #121212;
       --bg-tertiary: #191919;
@@ -150,15 +150,13 @@
       --bg-input: #161616;
       --bg-hover: #1f1f1f;
       --bg-active: #292929;
-      
-      /* Màu văn bản Dark Mode */
+
       --text-primary: #f2f2f2;
       --text-secondary: #c7c7c7;
       --text-tertiary: #a5a5a5;
       --text-inverse: #f5f5f5;
       --text-muted: #999999;
-      
-      /* Màu viền và bóng Dark Mode */
+
       --border-color: #303030;
       --border-light: #242424;
       --border-dark: #3a3a3a;
@@ -166,42 +164,26 @@
       --shadow-lg: 0 8px 25px rgba(0,0,0,0.55);
       --shadow-dark: 0 2px 10px rgba(0,0,0,0.6);
     }
-    
-    /* Đảm bảo header có chữ trắng */
-    header {
-      color: #ffffff !important;
-    }
-    
-    header h1,
-    header p {
-      color: #ffffff !important;
-    }
-    
-    /* Đảm bảo link quay về có màu trắng */
-    header a {
-      color: #ffffff !important;
-    }
-    
-    /* Điều chỉnh màu nền cho hiệu ứng tiền rơi */
-    .money-particle {
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    }
+
+    header { color: #ffffff !important; }
+    header h1, header p { color: #ffffff !important; }
+    header a { color: #ffffff !important; }
+
+    .money-particle { text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
   }
-  
+
   /* ========== CSS RESET & BASE STYLES ========== */
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
   html {
     font-size: 16px;
     background-color: var(--bg-secondary);
     transition: background-color 0.5s ease;
     font-family: var(--font-family);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-dark) var(--bg-tertiary);
   }
-  
+
   body {
     font-family: var(--font-family);
     background-color: var(--bg-secondary);
@@ -214,7 +196,7 @@
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
   }
-  
+
   .container {
     max-width: 800px;
     margin: 0 auto;
@@ -225,7 +207,7 @@
     transition: var(--transition);
     border: 1px solid var(--border-color);
   }
-  
+
   header {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: var(--text-inverse);
@@ -234,7 +216,7 @@
     position: relative;
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
-  
+
   header h1 {
     font-size: 1.8rem;
     margin-bottom: 8px;
@@ -245,24 +227,43 @@
     font-weight: 600;
     font-family: var(--font-family);
   }
-  
+  header h1 .hero-icon { width: 30px; height: 30px; }
+
   header p {
     opacity: 0.9;
     font-size: 1rem;
     font-weight: 400;
     font-family: var(--font-family);
   }
-  
+
+  /* Nút back ở góc trên trái header */
+  .back-link-top {
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    color: var(--text-inverse);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+    background: rgba(255,255,255,0.1);
+  }
+  .back-link-top:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
+  .back-link-top .hero-icon { width: 22px; height: 22px; }
+
   .card {
     padding: 25px 30px;
     border-bottom: 1px solid var(--border-color);
     transition: var(--transition);
   }
-  
-  .card:last-child {
-    border-bottom: none;
-  }
-  
+  .card:last-child { border-bottom: none; }
+
+  .card h2 { display: flex; align-items: center; gap: 8px; }
+  .card h2 .hero-icon { color: var(--primary); }
+
   /* PHẦN TỔNG LƯƠNG TẠM TÍNH Ở ĐẦU */
   .salary-preview {
     background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
@@ -275,20 +276,18 @@
     border: 1px solid var(--border-color);
     font-family: var(--font-family);
   }
-  
-  .salary-preview.show {
-    display: block;
-    animation: fadeIn 0.5s ease-out;
-  }
-  
+  .salary-preview.show { display: block; animation: fadeIn 0.5s ease-out; }
   .salary-preview h3 {
     font-size: 1rem;
     color: var(--text-secondary);
     margin-bottom: 10px;
     font-weight: 600;
     font-family: var(--font-family);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
   }
-  
   .preview-amount {
     font-size: 2.2rem;
     font-weight: 800;
@@ -297,18 +296,15 @@
     text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     font-family: var(--font-family);
   }
-  
   .preview-time {
     font-size: 0.9rem;
     color: var(--text-secondary);
     font-family: var(--font-family);
     font-weight: 400;
   }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
+
+  .form-group { margin-bottom: 20px; }
+
   label {
     display: block;
     margin-bottom: 8px;
@@ -316,7 +312,7 @@
     color: var(--text-primary);
     font-family: var(--font-family);
   }
-  
+
   input, select {
     width: 100%;
     padding: 14px 16px;
@@ -329,25 +325,21 @@
     font-family: var(--font-family);
     font-weight: 400;
   }
-  
   input:focus, select:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(61, 142, 255, 0.2);
+    box-shadow: 0 0 0 3px rgba(15, 157, 88, 0.2);
     background: var(--bg-input);
   }
-  
-  input::placeholder {
-    color: var(--text-muted);
-    font-family: var(--font-family);
-  }
-  
+  input::placeholder { color: var(--text-muted); font-family: var(--font-family); }
+
   .button-group {
     display: flex;
     gap: 15px;
     margin-top: 25px;
+    flex-wrap: wrap;
   }
-  
+
   button {
     flex: 1;
     padding: 16px;
@@ -362,68 +354,42 @@
     justify-content: center;
     gap: 8px;
     font-family: var(--font-family);
+    min-width: 140px;
   }
-  
-  .btn-primary {
-    background-color: var(--primary);
-    color: var(--text-inverse);
-  }
-  
+
+  .btn-primary { background-color: var(--primary); color: var(--text-inverse); }
   .btn-primary:hover {
     background-color: var(--primary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(44, 128, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(15, 157, 88, 0.3);
   }
-  
+
   .btn-secondary {
     background-color: var(--bg-tertiary);
     color: var(--text-primary);
     border: 1px solid var(--border-color);
   }
-  
   .btn-secondary:hover {
     background-color: var(--bg-hover);
     transform: translateY(-2px);
     border-color: var(--border-dark);
   }
-  
-  .btn-success {
-    background-color: var(--secondary);
-    color: var(--text-inverse);
-  }
-  
-  .btn-success:hover {
-    background-color: var(--secondary-dark);
-    transform: translateY(-2px);
-  }
-  
-  .btn-warning {
-    background-color: var(--warning);
-    color: var(--text-inverse);
-  }
-  
-  .btn-warning:hover {
-    background-color: var(--warning-dark);
-    transform: translateY(-2px);
-  }
-  
-  .btn-info {
-    background-color: var(--info);
-    color: var(--text-inverse);
-  }
-  
-  .btn-info:hover {
-    background-color: #4ab8ea;
-    transform: translateY(-2px);
-  }
-  
+
+  .btn-success { background-color: var(--secondary); color: var(--text-inverse); }
+  .btn-success:hover { background-color: var(--secondary-dark); transform: translateY(-2px); }
+
+  .btn-warning { background-color: var(--warning); color: var(--text-inverse); }
+  .btn-warning:hover { background-color: var(--warning-dark); transform: translateY(-2px); }
+
+  .btn-info { background-color: var(--info); color: var(--text-inverse); }
+  .btn-info:hover { background-color: #4ab8ea; transform: translateY(-2px); }
+
   .stats-container {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 20px;
   }
-  
   .stat-card {
     flex: 1;
     min-width: 150px;
@@ -435,20 +401,17 @@
     transition: var(--transition);
     border: 1px solid var(--border-color);
   }
-  
   .stat-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
     border-color: var(--primary-light);
   }
-  
   .stat-value {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--primary);
     font-family: var(--font-family);
   }
-  
   .stat-label {
     font-size: 0.9rem;
     color: var(--text-secondary);
@@ -456,7 +419,7 @@
     font-family: var(--font-family);
     font-weight: 400;
   }
-  
+
   .table-container {
     overflow-x: auto;
     margin-top: 10px;
@@ -464,13 +427,7 @@
     border: 1px solid var(--border-color);
     background: var(--bg-card);
   }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 0;
-  }
-  
+  table { width: 100%; border-collapse: collapse; margin-top: 0; }
   th {
     background-color: var(--bg-tertiary);
     padding: 16px 12px;
@@ -480,7 +437,6 @@
     border-bottom: 2px solid var(--border-color);
     font-family: var(--font-family);
   }
-  
   td {
     padding: 14px 12px;
     border-bottom: 1px solid var(--border-color);
@@ -488,27 +444,25 @@
     font-family: var(--font-family);
     font-weight: 400;
   }
-  
-  tr:last-child td {
-    border-bottom: none;
-  }
-  
-  tr:hover {
-    background-color: var(--bg-hover);
-  }
-  
+  tr:last-child td { border-bottom: none; }
+  tr:hover { background-color: var(--bg-hover); }
+
   .empty-state {
     text-align: center;
     padding: 40px 20px;
     color: var(--text-secondary);
     font-family: var(--font-family);
   }
-  
-  .empty-state p {
-    margin-top: 10px;
-    font-weight: 400;
+  .empty-state h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
   }
-  
+  .empty-state h3 .hero-icon { color: var(--text-tertiary); opacity: 0.75; }
+  .empty-state p { margin-top: 10px; font-weight: 400; }
+
   .salary-summary {
     background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
     border-radius: var(--radius-lg);
@@ -518,7 +472,6 @@
     border-left: 5px solid var(--secondary);
     border: 1px solid var(--border-color);
   }
-  
   .salary-amount {
     font-size: 2.5rem;
     font-weight: 800;
@@ -527,7 +480,6 @@
     text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     font-family: var(--font-family);
   }
-  
   .salary-breakdown {
     margin-top: 20px;
     padding: 15px;
@@ -537,30 +489,24 @@
     text-align: left;
     font-family: var(--font-family);
   }
-  
-  .salary-breakdown ul {
-    margin-left: 20px;
-    margin-top: 10px;
+  .salary-breakdown h4 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
   }
-  
-  .salary-breakdown li {
-    margin-bottom: 8px;
-    color: var(--text-primary);
-    font-family: var(--font-family);
-  }
-  
+  .salary-breakdown ul { margin-left: 20px; margin-top: 10px; }
+  .salary-breakdown li { margin-bottom: 8px; color: var(--text-primary); font-family: var(--font-family); }
+
   /* HIỆU ỨNG TIỀN/VÀNG RƠI */
   .money-rain {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     pointer-events: none;
     z-index: 9999;
     overflow: hidden;
   }
-  
   .money-particle {
     position: absolute;
     font-size: 24px;
@@ -570,28 +516,17 @@
     animation: moneyFall linear forwards;
     font-family: var(--font-family);
   }
-  
   @keyframes moneyFall {
-    0% {
-      transform: translateY(-100px) rotate(0deg);
-      opacity: 0;
-    }
-    10% {
-      opacity: 1;
-    }
-    90% {
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(100vh) rotate(360deg);
-      opacity: 0;
-    }
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
   }
-  
+
+  /* ========== TOAST ========== */
   .toast {
     position: fixed;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%) translateY(100px);
     background: var(--primary);
     color: var(--text-inverse);
@@ -611,270 +546,127 @@
     font-family: var(--font-family);
     font-weight: 500;
   }
+  .toast.show { transform: translate(-50%, -50%) translateY(0); opacity: 1; }
+  .toast.success { background: var(--secondary); border-color: var(--secondary-dark); }
+  .toast.error { background: var(--danger); border-color: var(--danger-dark); }
+  .toast.warning { background: var(--warning); border-color: var(--warning-dark); }
+  .toast.info { background: var(--info); border-color: var(--info); }
+  .toast-icon { display: inline-flex; align-items: center; justify-content: center; }
+  .toast-icon .hero-icon { width: 20px; height: 20px; }
 
-  .toast.show {
-    transform: translate(-50%, -50%) translateY(0);
-    opacity: 1;
-  }
-  
-  .toast.success {
-    background: var(--secondary);
-    border-color: var(--secondary-dark);
-  }
-  
-  .toast.error {
-    background: var(--danger);
-    border-color: var(--danger-dark);
-  }
-  
-  .toast.warning {
-    background: var(--warning);
-    border-color: var(--warning-dark);
-  }
-  
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  
-  .fade-in {
-    animation: fadeIn 0.4s ease-out;
-  }
-  
-  /* ========== SCROLLBAR STYLING ========== */
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-sm);
-  }
-  
+  .fade-in { animation: fadeIn 0.4s ease-out; }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg-tertiary); border-radius: var(--radius-sm); }
   ::-webkit-scrollbar-thumb {
     background: var(--border-dark);
     border-radius: var(--radius-sm);
     border: 2px solid var(--bg-tertiary);
   }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-secondary);
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+  /* Floating back button */
+  .back-link-floating {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    z-index: 999;
+    background: var(--primary);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: var(--radius-circle);
+    width: 56px;
+    height: 56px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    border: 2px solid var(--primary-dark);
   }
-  
-  /* Firefox scrollbar */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-dark) var(--bg-tertiary);
+  .back-link-floating .hero-icon { width: 26px; height: 26px; }
+  .back-link-floating:hover {
+    background: var(--primary-dark);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(15,157,88,0.28);
   }
-  
+
   @media (max-width: 768px) {
-    body {
-      padding: 15px;
-    }
-    
-    header {
-      padding: 20px;
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    }
-    
-    header h1 {
-      font-size: 1.5rem;
-    }
-    
-    .card {
-      padding: 20px;
-    }
-    
+    body { padding: 15px; }
+    header { padding: 20px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+    header h1 { font-size: 1.5rem; }
+    header h1 .hero-icon { width: 24px; height: 24px; }
+    .back-link-top { left: 16px; top: 16px; }
+    .card { padding: 20px; }
     .button-group {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-    
-    .button-group button:last-child {
-      grid-column: span 2;
-    }
-    
-    .stats-container {
-      flex-direction: column;
-    }
-    
-    .stat-card {
-      border-radius: var(--radius-md);
-    }
-    
-    .salary-amount {
-      font-size: 2rem;
-    }
-    
-    .preview-amount {
-      font-size: 1.8rem;
-    }
-    
-    th, td {
-      padding: 12px 8px;
-      font-size: 0.9rem;
-    }
-    
-    .money-particle {
-      font-size: 20px;
-    }
-    
-    .table-container {
-      border-radius: var(--radius-sm);
-    }
-    
-    table {
-      min-width: 600px;
-    }
+    .button-group button:last-child { grid-column: span 2; }
+    .stats-container { flex-direction: column; }
+    .stat-card { border-radius: var(--radius-md); }
+    .salary-amount { font-size: 2rem; }
+    .preview-amount { font-size: 1.8rem; }
+    th, td { padding: 12px 8px; font-size: 0.9rem; }
+    .money-particle { font-size: 20px; }
+    .table-container { border-radius: var(--radius-sm); }
+    table { min-width: 600px; }
   }
-  
+
   @media (max-width: 480px) {
-    body {
-      padding: 10px;
-    }
-    
-    header {
-      padding: 18px 15px;
-      border-radius: var(--radius-md) var(--radius-md) 0 0;
-    }
-    
-    header h1 {
-      font-size: 1.3rem;
-    }
-    
-    .card {
-      padding: 18px 15px;
-    }
-    
-    input, select {
-      padding: 12px 14px;
-      font-size: 16px;
-      border-radius: var(--radius-sm);
-    }
-    
-    button {
-      padding: 14px;
-      min-height: 44px;
-      border-radius: var(--radius-sm);
-    }
+    body { padding: 10px; }
+    header { padding: 18px 15px; border-radius: var(--radius-md) var(--radius-md) 0 0; }
+    header h1 { font-size: 1.3rem; }
+    .back-link-top { left: 12px; top: 14px; }
+    .card { padding: 18px 15px; }
+    input, select { padding: 12px 14px; font-size: 16px; border-radius: var(--radius-sm); }
+    button { padding: 14px; min-height: 44px; border-radius: var(--radius-sm); }
   }
-  
-  /* ========== DARK MODE SPECIFIC ADJUSTMENTS ========== */
+
   @media (prefers-color-scheme: dark) {
-    /* Điều chỉnh độ tương phản cho các phần tử đặc biệt */
-    .btn-secondary {
-      border-color: var(--border-dark);
-    }
-    
-    .table-container {
-      border-color: var(--border-dark);
-    }
-    
-    .stat-card {
-      border-color: var(--border-dark);
-    }
-    
-    /* Điều chỉnh màu placeholder */
-    input::placeholder {
-      color: var(--text-muted);
-    }
-    
-    /* Điều chỉnh bóng cho container */
-    .container {
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    }
-    
-    /* Điều chỉnh thanh scrollbar trong dark mode */
-    ::-webkit-scrollbar-track {
-      background: var(--bg-secondary);
-    }
-    
-    ::-webkit-scrollbar-thumb {
-      background: var(--text-muted);
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--text-secondary);
-    }
-    
-    /* Điều chỉnh hover cho table rows */
-    tr:hover {
-      background-color: var(--bg-tertiary);
-    }
-    
-    /* Điều chỉnh màu border cho các phần tử có viền */
-    .card {
-      border-color: var(--border-color);
-    }
-    
-    /* Điều chỉnh màu cho các select option */
+    .btn-secondary { border-color: var(--border-dark); }
+    .table-container { border-color: var(--border-dark); }
+    .stat-card { border-color: var(--border-dark); }
+    input::placeholder { color: var(--text-muted); }
+    .container { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+    ::-webkit-scrollbar-thumb { background: var(--text-muted); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+    tr:hover { background-color: var(--bg-tertiary); }
+    .card { border-color: var(--border-color); }
     option {
       background-color: var(--bg-modal);
       color: var(--text-primary);
       font-family: var(--font-family);
     }
   }
-  
-  /* ========== REDUCED MOTION SUPPORT ========== */
+
   @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
+    *, *::before, *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
-    
-    .fade-in {
-      animation: none;
-    }
-    
-    .toast {
-      transition: opacity 0.1s;
-    }
-    
-    button:hover,
-    .stat-card:hover {
-      transform: none !important;
-    }
-    
-    .money-particle {
-      display: none !important;
-    }
+    .fade-in { animation: none; }
+    .toast { transition: opacity 0.1s; }
+    button:hover, .stat-card:hover { transform: none !important; }
+    .money-particle { display: none !important; }
   }
-  
-  /* ========== FONT WEIGHT CONSISTENCY ========== */
-  h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
-    font-family: var(--font-family);
-  }
-  
-  strong, b {
-    font-weight: 700;
-    font-family: var(--font-family);
-  }
-  
-  /* ========== TYPOGRAPHY ENHANCEMENTS ========== */
-  .text-small {
-    font-size: 0.875rem;
-    font-weight: 400;
-    font-family: var(--font-family);
-  }
-  
-  .text-medium {
-    font-size: 1rem;
-    font-weight: 500;
-    font-family: var(--font-family);
-  }
-  
-  .text-large {
-    font-size: 1.125rem;
-    font-weight: 600;
-    font-family: var(--font-family);
-  }
+
+  h1, h2, h3, h4, h5, h6 { font-weight: 600; font-family: var(--font-family); }
+  strong, b { font-weight: 700; font-family: var(--font-family); }
+
+  .text-small { font-size: 0.875rem; font-weight: 400; font-family: var(--font-family); }
+  .text-medium { font-size: 1rem; font-weight: 500; font-family: var(--font-family); }
+  .text-large { font-size: 1.125rem; font-weight: 600; font-family: var(--font-family); }
 
   /* ========== PAGE LOADING OVERLAY ========== */
   .page-loader-overlay {
@@ -890,25 +682,19 @@
     visibility: visible;
     transition: opacity 0.35s ease, visibility 0.35s ease;
   }
-
   .page-loader-overlay.hidden {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
   }
-
   .loader {
     width: 45px;
     aspect-ratio: .75;
     --c: no-repeat linear-gradient(var(--text-primary) 0 0);
-    background:
-      var(--c) 0% 100%,
-      var(--c) 50% 100%,
-      var(--c) 100% 100%;
+    background: var(--c) 0% 100%, var(--c) 50% 100%, var(--c) 100% 100%;
     background-size: 20% 65%;
     animation: l8 1s infinite linear;
   }
-
   @keyframes l8 {
     16.67% { background-position: 0% 0%, 50% 100%, 100% 100%; }
     33.33% { background-position: 0% 0%, 50% 0%, 100% 100%; }
@@ -917,7 +703,6 @@
     83.33% { background-position: 0% 100%, 50% 100%, 100% 0%; }
   }
 </style>
-  <link rel="stylesheet" href="assets/hero-icons.css">
 </head>
 <body>
   <!-- Page Loading Overlay -->
@@ -927,31 +712,47 @@
 
   <!-- Container cho hiệu ứng tiền rơi -->
   <div class="money-rain" id="money-rain"></div>
-  
+
   <div class="toast" id="toast">
+    <span class="toast-icon" id="toast-icon"></span>
     <span id="toast-message">Đã sao chép vào clipboard!</span>
   </div>
 
   <div class="container">
     <header>
-      <a href="index.html" style="position: absolute; left: 30px; top: 30px; color: var(--text-inverse); text-decoration: none; font-size: 1.2rem; font-family: var(--font-family);">←</a>
-      <h1>💰 Tính công và lương</h1>
+      <a href="index.html" class="back-link-top" aria-label="Quay về trang chủ">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+        </svg>
+      </a>
+      <h1>
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
+          <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
+        </svg>
+        Tính công và lương
+      </h1>
       <p>Tính lương dựa trên số ca làm việc thực tế</p>
     </header>
-    
+
     <div class="card">
       <!-- PHẦN TỔNG LƯƠNG TẠM TÍNH - ĐÃ DI CHUYỂN LÊN ĐẦU -->
       <div class="salary-preview" id="salary-preview">
-        <h3>Tổng lương tạm tính</h3>
+        <h3>
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
+          </svg>
+          Tổng lương tạm tính
+        </h3>
         <div class="preview-amount" id="preview-amount">0 đ</div>
         <p class="preview-time" id="preview-time">Thời gian tính: </p>
       </div>
-      
+
       <div class="form-group" id="group-luong-thang" style="display: none;">
         <label for="luong-thang">Lương tháng (VND):</label>
         <input type="number" id="luong-thang" value="5500000" placeholder="Nhập lương tháng">
       </div>
-      
+
       <div class="form-group" id="group-chu-ky" style="display: none;">
         <label for="ngay-bat-dau">Chu kỳ lương (từ ngày):</label>
         <div style="display: flex; gap: 10px;">
@@ -964,33 +765,44 @@
             <option value="25">Ngày 25</option>
             <option value="28">Ngày 28</option>
           </select>
-          <select id="thang-bat-dau" style="flex: 1;">
-            <!-- Tháng sẽ được thêm bằng JavaScript -->
-          </select>
-          <select id="nam-bat-dau" style="flex: 1;">
-            <!-- Năm sẽ được thêm bằng JavaScript -->
-          </select>
+          <select id="thang-bat-dau" style="flex: 1;"></select>
+          <select id="nam-bat-dau" style="flex: 1;"></select>
         </div>
         <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 5px; font-family: var(--font-family);">
           <i>Lương được tính từ ngày X tháng này đến ngày X tháng sau (30 ngày)</i>
         </p>
       </div>
-      
+
       <div class="button-group">
         <button class="btn-primary" onclick="tinhLuong()" id="btn-tinh-luong">
-          🧮 Tính lương
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M6.32 1.827a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V4.757c0-1.47 1.073-2.756 2.57-2.93ZM7.5 11.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75v-.008Zm.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V15a.75.75 0 0 0-.75-.75H8.25Zm-.75 6a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75V20.25Zm3.75-3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75H11.25Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm3.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75h-.008Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm3.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75h-.008Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008ZM15.75 6a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V6.75a.75.75 0 0 0-.75-.75h-.008Z" clip-rule="evenodd" />
+          </svg>
+          Tính lương
         </button>
         <button class="btn-info" onclick="autoFillLastCycle()">
-          ⚡ Tự động điền
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .913-.143Z" clip-rule="evenodd" />
+          </svg>
+          Tự động điền
         </button>
         <button class="btn-secondary" onclick="resetForm()">
-          🔄 Làm mới
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" />
+          </svg>
+          Làm mới
         </button>
         <button class="btn-info" onclick="toggleSettings()">
-          ⚙️ Cài đặt
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
+          </svg>
+          Cài đặt
         </button>
         <button class="btn-warning" onclick="testLoadData()">
-          🔍 Test dữ liệu
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
+          </svg>
+          Test dữ liệu
         </button>
       </div>
 
@@ -1008,43 +820,64 @@
         }
       </script>
     </div>
-    
+
     <div class="card">
-      <h2 style="margin-bottom: 15px; color: var(--text-primary); display: none;">📊 Kết quả tính lương</h2>
-      
-      <div class="stats-container" id="stats-container" style="display: none;">
-        <!-- Thống kê sẽ được thêm bằng JavaScript -->
-      </div>
-      
+      <h2 style="margin-bottom: 15px; color: var(--text-primary); display: none;">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
+        </svg>
+        Kết quả tính lương
+      </h2>
+
+      <div class="stats-container" id="stats-container" style="display: none;"></div>
+
       <div id="salary-result" style="display: none;">
         <div class="salary-summary">
           <h3 style="color: var(--text-primary);">Tổng lương tạm tính</h3>
           <div class="salary-amount" id="tong-luong">0 VND</div>
           <p id="thoi-gian-tinh" style="color: var(--text-secondary);">Thời gian tính: </p>
         </div>
-        
+
         <div class="salary-breakdown">
-          <h4 style="color: var(--text-primary); margin-bottom: 10px;">📝 Chi tiết tính lương:</h4>
-          <ul id="chi-tiet-luong">
-            <!-- Chi tiết sẽ được thêm bằng JavaScript -->
-          </ul>
+          <h4 style="color: var(--text-primary);">
+            <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+              <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+            </svg>
+            Chi tiết tính lương:
+          </h4>
+          <ul id="chi-tiet-luong"></ul>
         </div>
-        
+
         <div class="button-group">
           <button class="btn-success" onclick="copySalaryToClipboard()">
-            📋 Sao chép kết quả
+            <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" />
+            </svg>
+            Sao chép kết quả
           </button>
         </div>
       </div>
-      
+
       <div id="empty-state" class="empty-state">
-        <h3>📭 Chưa có kết quả tính lương</h3>
+        <h3>
+          <svg class="hero-icon hero-icon-xl" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M6.912 3a3 3 0 0 0-2.868 2.118l-2.411 7.838a3 3 0 0 0-.133.882V18a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0 0 17.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0 0 17.088 4.5H6.912a1.5 1.5 0 0 0-1.434 1.059L3.265 12.75H6.11a3 3 0 0 1 2.684 1.658l.256.513a1.5 1.5 0 0 0 1.342.829h3.218a1.5 1.5 0 0 0 1.342-.83l.256-.512a3 3 0 0 1 2.684-1.658h2.844Z" clip-rule="evenodd" />
+          </svg>
+          Chưa có kết quả tính lương
+        </h3>
         <p>Hãy nhấn "Tính lương" để xem kết quả</p>
       </div>
     </div>
-    
+
     <div class="card">
-      <h2 style="margin-bottom: 15px; color: var(--text-primary);">📅 Chi tiết các ca làm việc</h2>
+      <h2 style="margin-bottom: 15px; color: var(--text-primary);">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />
+          <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z" clip-rule="evenodd" />
+        </svg>
+        Chi tiết các ca làm việc
+      </h2>
       <div class="table-container">
         <table id="bang-cong">
           <thead>
@@ -1056,87 +889,106 @@
               <th>Trạng thái nộp</th>
             </tr>
           </thead>
-          <tbody id="bang-cong-body">
-            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
-          </tbody>
+          <tbody id="bang-cong-body"></tbody>
         </table>
         <div id="empty-cong" class="empty-state" style="display: none;">
-          <h3>📭 Không có dữ liệu ca làm việc</h3>
+          <h3>
+            <svg class="hero-icon hero-icon-xl" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M6.912 3a3 3 0 0 0-2.868 2.118l-2.411 7.838a3 3 0 0 0-.133.882V18a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0 0 17.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0 0 17.088 4.5H6.912a1.5 1.5 0 0 0-1.434 1.059L3.265 12.75H6.11a3 3 0 0 1 2.684 1.658l.256.513a1.5 1.5 0 0 0 1.342.829h3.218a1.5 1.5 0 0 0 1.342-.83l.256-.512a3 3 0 0 1 2.684-1.658h2.844Z" clip-rule="evenodd" />
+            </svg>
+            Không có dữ liệu ca làm việc
+          </h3>
           <p id="empty-message">Hệ thống chưa tìm thấy ca làm việc nào</p>
         </div>
       </div>
     </div>
   </div>
 
-  <a href="index.html" style="position:fixed;right:30px;bottom:30px;z-index:999;background:var(--primary);color:var(--text-inverse);border:none;border-radius:var(--radius-circle);width:56px;height:56px;box-shadow:var(--shadow-lg);font-size:2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition); text-decoration: none; border: 2px solid var(--primary-dark); font-family: var(--font-family);">
-    ←
+  <a href="index.html" class="back-link-floating" aria-label="Quay về trang chủ">
+    <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+    </svg>
   </a>
 
 <script>
-// SỬA LẠI: Dùng CÙNG URL với file index.html
+// ========== HEROICONS LIBRARY ==========
+const ICONS = {
+  checkCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" /></svg>',
+  xCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" /></svg>',
+  warning: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>',
+  info: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>',
+  checkSmall: '<svg class="hero-icon hero-icon-sm" style="color:var(--secondary);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" /></svg>',
+  clockSmall: '<svg class="hero-icon hero-icon-sm" style="color:var(--warning);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" /></svg>',
+  banknotes: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" /><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" /></svg>'
+};
+
+function svgInline(key, extraClass) {
+  const svg = ICONS[key] || '';
+  if (!extraClass) return svg;
+  return svg.replace('class="hero-icon', `class="hero-icon ${extraClass}`);
+}
+
+// Loại bỏ emoji ở đầu chuỗi thông báo (nếu còn sót)
+function stripLeadingEmoji(str) {
+  if (!str) return '';
+  return str.replace(/^[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{2B00}-\u{2BFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}\u{200D}\s]+/u, '').trim() || str.trim();
+}
+
 const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
 let allData = [];
 let caLamViecList = [];
 
-// Hàm hiển thị thông báo toast
+// ========== TOAST ==========
 function showToast(message, type = 'success') {
   const toast = document.getElementById('toast');
   const toastMessage = document.getElementById('toast-message');
-  
-  toastMessage.textContent = message;
+  const toastIcon = document.getElementById('toast-icon');
+
+  let iconKey = 'checkCircle';
+  if (type === 'error') iconKey = 'xCircle';
+  else if (type === 'warning') iconKey = 'warning';
+  else if (type === 'info') iconKey = 'info';
+
+  toastIcon.innerHTML = ICONS[iconKey];
+  toastMessage.textContent = stripLeadingEmoji(message);
   toast.className = `toast ${type} show`;
-  
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 3000);
+
+  setTimeout(() => { toast.classList.remove('show'); }, 3000);
 }
 
-// Hàm tạo hiệu ứng tiền/vàng rơi
+// ========== HIỆU ỨNG TIỀN RƠI (giữ nguyên emoji vì là hiệu ứng hình ảnh) ==========
 function createMoneyRain() {
   const moneyRain = document.getElementById('money-rain');
   const moneySymbols = ['💰', '💵', '💸', '🪙', '💎', '💶', '💷', '💴', '🤑', '💳'];
-  
-  // Xóa hiệu ứng cũ nếu có
+
   moneyRain.innerHTML = '';
-  
-  // Tạo 30-50 phần tử tiền rơi
   const particleCount = Math.min(Math.max(window.innerWidth / 20, 30), 50);
-  
+
   for (let i = 0; i < particleCount; i++) {
     const particle = document.createElement('div');
     particle.className = 'money-particle';
-    
-    // Chọn ngẫu nhiên biểu tượng tiền
+
     const symbol = moneySymbols[Math.floor(Math.random() * moneySymbols.length)];
     particle.textContent = symbol;
-    
-    // Vị trí ngẫu nhiên
+
     const left = Math.random() * 100;
     particle.style.left = `${left}%`;
-    
-    // Kích thước ngẫu nhiên
+
     const size = 20 + Math.random() * 30;
     particle.style.fontSize = `${size}px`;
-    
-    // Thời gian rơi ngẫu nhiên
+
     const duration = 2 + Math.random() * 3;
     const delay = Math.random() * 2;
-    
     particle.style.animation = `moneyFall ${duration}s ease-in ${delay}s forwards`;
-    
-    // Thêm vào container
+
     moneyRain.appendChild(particle);
-    
-    // Xóa phần tử sau khi animation kết thúc
+
     setTimeout(() => {
-      if (particle.parentNode === moneyRain) {
-        moneyRain.removeChild(particle);
-      }
+      if (particle.parentNode === moneyRain) moneyRain.removeChild(particle);
     }, (duration + delay) * 1000);
   }
 }
 
-// Hàm định dạng tiền tệ
 function formatCurrency(amount) {
   return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
@@ -1145,7 +997,6 @@ function formatCurrency(amount) {
   }).format(amount);
 }
 
-// Hàm định dạng ngày tháng
 function formatDate(date) {
   const d = new Date(date);
   const day = String(d.getDate()).padStart(2, '0');
@@ -1154,70 +1005,55 @@ function formatDate(date) {
   return `${day}/${month}/${year}`;
 }
 
-// Hàm lấy tháng và năm từ dữ liệu
 function populateMonthYearSelectors() {
   const monthSelect = document.getElementById('thang-bat-dau');
   const yearSelect = document.getElementById('nam-bat-dau');
-  
+
   const now = new Date();
   const currentMonth = now.getMonth() + 1;
   const currentYear = now.getFullYear();
-  
+
   monthSelect.innerHTML = '';
   yearSelect.innerHTML = '';
-  
-  // Thêm các tháng
+
   const months = [
     {value: 1, text: 'Tháng 1'}, {value: 2, text: 'Tháng 2'}, {value: 3, text: 'Tháng 3'},
     {value: 4, text: 'Tháng 4'}, {value: 5, text: 'Tháng 5'}, {value: 6, text: 'Tháng 6'},
     {value: 7, text: 'Tháng 7'}, {value: 8, text: 'Tháng 8'}, {value: 9, text: 'Tháng 9'},
     {value: 10, text: 'Tháng 10'}, {value: 11, text: 'Tháng 11'}, {value: 12, text: 'Tháng 12'}
   ];
-  
+
   months.forEach(month => {
     const option = document.createElement('option');
     option.value = month.value;
     option.textContent = month.text;
-    if (month.value === currentMonth) {
-      option.selected = true;
-    }
+    if (month.value === currentMonth) option.selected = true;
     monthSelect.appendChild(option);
   });
-  
-  // Thêm các năm (từ năm trước đến năm sau)
+
   for (let year = currentYear - 1; year <= currentYear + 1; year++) {
     const option = document.createElement('option');
     option.value = year;
     option.textContent = `Năm ${year}`;
-    if (year === currentYear) {
-      option.selected = true;
-    }
+    if (year === currentYear) option.selected = true;
     yearSelect.appendChild(option);
   }
 }
 
-// Hàm tự động điền chu kỳ từ ngày 05 tháng trước đến 05 tháng này - FIXED LOGIC
 function autoFillLastCycle() {
   const now = new Date();
   const currentDay = now.getDate();
   const currentMonth = now.getMonth() + 1;
   const currentYear = now.getFullYear();
-  
+
   const selectedDay = parseInt(document.getElementById('ngay-bat-dau').value) || 5;
-  
+
   let startMonth, startYear;
   let endMonth, endYear;
-  
-  // Logic FIXED: 
-  // 1. Nếu ngày hiện tại >= ngày đã chọn (ví dụ 5): tính từ [ngày] tháng NÀY đến [ngày] tháng SAU
-  // 2. Nếu ngày hiện tại < ngày đã chọn: tính từ [ngày] tháng TRƯỚC đến [ngày] tháng NÀY
-  
+
   if (currentDay >= selectedDay) {
-    // Ví dụ: Hôm nay 10/01/2026, ngày chọn 5 -> tính từ 05/01/2026 đến 05/02/2026
     startMonth = currentMonth;
     startYear = currentYear;
-    
-    // Tính tháng kết thúc
     if (currentMonth === 12) {
       endMonth = 1;
       endYear = currentYear + 1;
@@ -1226,7 +1062,6 @@ function autoFillLastCycle() {
       endYear = currentYear;
     }
   } else {
-    // Ví dụ: Hôm nay 03/01/2026, ngày chọn 5 -> tính từ 05/12/2025 đến 05/01/2026
     if (currentMonth === 1) {
       startMonth = 12;
       startYear = currentYear - 1;
@@ -1234,68 +1069,50 @@ function autoFillLastCycle() {
       startMonth = currentMonth - 1;
       startYear = currentYear;
     }
-    
     endMonth = currentMonth;
     endYear = currentYear;
   }
-  
-  // Cập nhật form với ngày bắt đầu (tháng và năm)
+
   document.getElementById('thang-bat-dau').value = startMonth;
   document.getElementById('nam-bat-dau').value = startYear;
-  
-  // Hiển thị thông báo với cả ngày bắt đầu và kết thúc
-  showToast(`✅ Đã điền chu kỳ: ${selectedDay}/${startMonth}/${startYear} - ${selectedDay}/${endMonth}/${endYear}`);
-  
-  // Log để debug
-  console.log('Tự động điền chu kỳ:', {
-    selectedDay,
-    currentDate: `${currentDay}/${currentMonth}/${currentYear}`,
-    startDate: `${selectedDay}/${startMonth}/${startYear}`,
-    endDate: `${selectedDay}/${endMonth}/${endYear}`,
-    condition: currentDay >= selectedDay ? 'currentDay >= selectedDay' : 'currentDay < selectedDay'
-  });
+
+  showToast(`Đã điền chu kỳ: ${selectedDay}/${startMonth}/${startYear} - ${selectedDay}/${endMonth}/${endYear}`, 'success');
 }
 
-// Hàm TEST tải dữ liệu
 async function testLoadData() {
   console.log('=== BẮT ĐẦU TEST DỮ LIỆU ===');
   console.log('URL API:', scriptURL);
-  
+
   try {
     const response = await fetch(scriptURL + '?t=' + Date.now());
     console.log('Response status:', response.status);
     console.log('Response ok:', response.ok);
-    
+
     const text = await response.text();
     console.log('Response text (first 500 chars):', text.substring(0, 500));
-    
+
     try {
       const data = JSON.parse(text);
       console.log('Parsed data type:', typeof data);
       console.log('Parsed data length:', Array.isArray(data) ? data.length : 'Not an array');
       console.log('Sample data (first item):', Array.isArray(data) && data.length > 0 ? data[0] : 'No data');
-      
+
       if (Array.isArray(data) && data.length > 0) {
-        // Kiểm tra cấu trúc dữ liệu
         const sample = data[0];
         console.log('Data structure:', Object.keys(sample));
         console.log('Ca field value:', sample.ca);
         console.log('Ca field type:', typeof sample.ca);
-        
-        // Đếm số bản ghi có trường "ca"
+
         const hasCaCount = data.filter(item => item.ca && item.ca.trim() !== '').length;
         console.log('Số bản ghi có trường ca:', hasCaCount);
-        
-        // Lấy danh sách ca duy nhất
+
         const caSet = new Set();
         data.forEach(item => {
-          if (item.ca && item.ca.trim() !== '') {
-            caSet.add(item.ca);
-          }
+          if (item.ca && item.ca.trim() !== '') caSet.add(item.ca);
         });
         console.log('Số ca duy nhất:', caSet.size);
         console.log('Danh sách ca:', Array.from(caSet));
-        
+
         alert(`TEST DỮ LIỆU:\n- Tổng bản ghi: ${data.length}\n- Có trường "ca": ${hasCaCount}\n- Số ca duy nhất: ${caSet.size}\n- Xem Console để biết chi tiết`);
       } else {
         alert('Dữ liệu trống hoặc không phải mảng!');
@@ -1310,31 +1127,23 @@ async function testLoadData() {
   }
 }
 
-// Hàm TẢI DỮ LIỆU TỪ GOOGLE SHEETS
 async function taiDuLieu() {
   console.log('Đang tải dữ liệu từ Google Sheets...');
   const loader = document.getElementById('page-loader');
   if (loader) loader.classList.remove('hidden');
-  
+
   try {
-    // Thêm timestamp để tránh cache
     const url = scriptURL + '?t=' + Date.now();
-    
     const response = await fetch(url);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
     const text = await response.text();
-    
-    // Thử parse JSON
+
     let data;
     try {
       data = JSON.parse(text);
     } catch (e) {
       console.error('Lỗi parse JSON:', e);
-      // Thử fix nếu có vấn đề với JSON
       const fixedText = text.trim();
       if (fixedText.startsWith('[') && fixedText.endsWith(']')) {
         data = JSON.parse(fixedText);
@@ -1342,86 +1151,63 @@ async function taiDuLieu() {
         throw new Error('Dữ liệu không phải JSON hợp lệ');
       }
     }
-    
+
     if (!Array.isArray(data)) {
       console.error('Dữ liệu không phải là mảng:', data);
       allData = [];
-      showToast('⚠️ Dữ liệu không đúng định dạng!', 'error');
+      showToast('Dữ liệu không đúng định dạng!', 'error');
       return;
     }
-    
+
     allData = data;
     console.log('Đã tải được', allData.length, 'bản ghi từ Google Sheets');
-    
-    // Phân tích dữ liệu ca
+
     analyzeCaData();
-    
+
     if (allData.length === 0) {
-      showToast('⚠️ Không có dữ liệu trong Google Sheets!', 'warning');
+      showToast('Không có dữ liệu trong Google Sheets!', 'warning');
     } else {
-      showToast(`✅ Đã tải ${allData.length} bản ghi từ Google Sheets`);
+      showToast(`Đã tải ${allData.length} bản ghi từ Google Sheets`, 'success');
     }
-    
+
   } catch (error) {
     console.error('Lỗi khi tải dữ liệu:', error);
-    showToast('❌ Không thể tải dữ liệu từ Google Sheets!', 'error');
+    showToast('Không thể tải dữ liệu từ Google Sheets!', 'error');
     allData = [];
   } finally {
     if (loader) loader.classList.add('hidden');
   }
 }
 
-// Hàm phân tích dữ liệu ca
 function analyzeCaData() {
   console.log('=== PHÂN TÍCH DỮ LIỆU CA ===');
-  
-  // Reset danh sách ca
   caLamViecList = [];
-  
+
   if (allData.length === 0) {
     console.log('Không có dữ liệu để phân tích');
     return;
   }
-  
-  // Nhóm dữ liệu theo ca
+
   const caMap = new Map();
-  
+
   allData.forEach((item, index) => {
-    // Kiểm tra xem có trường "ca" không
-    if (!item.ca) {
-      console.log(`Bản ghi ${index} không có trường "ca"`);
-      return;
-    }
-    
+    if (!item.ca) return;
+
     const caValue = item.ca.toString().trim();
-    
-    if (!caValue || caValue === '') {
-      console.log(`Bản ghi ${index} có trường "ca" rỗng`);
-      return;
-    }
-    
-    // Parse ngày từ trường ca
+    if (!caValue) return;
+
     let caDate;
     try {
-      // Thử parse theo định dạng YYYY-MM-DD
-      if (caValue.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) {
-        caDate = new Date(caValue);
-      } else {
-        // Thử parse các định dạng khác
-        caDate = new Date(caValue);
-      }
-      
-      if (isNaN(caDate.getTime())) {
-        console.log(`Ngày không hợp lệ: ${caValue}`);
-        return;
-      }
-      
-      // Chuẩn hóa ngày về YYYY-MM-DD
+      if (caValue.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) caDate = new Date(caValue);
+      else caDate = new Date(caValue);
+
+      if (isNaN(caDate.getTime())) return;
+
       const year = caDate.getFullYear();
       const month = String(caDate.getMonth() + 1).padStart(2, '0');
       const day = String(caDate.getDate()).padStart(2, '0');
       const caKey = `${year}-${month}-${day}`;
-      
+
       if (!caMap.has(caKey)) {
         caMap.set(caKey, {
           ngay: caKey,
@@ -1432,64 +1218,55 @@ function analyzeCaData() {
           dateObj: caDate
         });
       }
-      
+
       const caData = caMap.get(caKey);
       caData.diemGas.push(item);
-      
-      // Tính tổng tiền
+
       const soTien = parseInt(item.so_tien) || 0;
       caData.tongTien += soTien;
-      
-      // Đếm trạng thái nộp
-      if (item.trang_thai === 'Đã nộp') {
-        caData.daNopCount++;
-      } else {
-        caData.chuaNopCount++;
-      }
-      
+
+      if (item.trang_thai === 'Đã nộp') caData.daNopCount++;
+      else caData.chuaNopCount++;
+
     } catch (e) {
       console.log(`Lỗi parse ngày ${caValue}:`, e);
     }
   });
-  
-  // Chuyển Map thành mảng và sắp xếp theo ngày (mới nhất trước)
+
   caLamViecList = Array.from(caMap.values());
   caLamViecList.sort((a, b) => b.dateObj - a.dateObj);
-  
+
   console.log(`Tìm thấy ${caLamViecList.length} ca làm việc`);
-  console.log('Danh sách ca:', caLamViecList.map(ca => ca.ngay));
-  
-  // Hiển thị danh sách ca
   displayWorkingDays(caLamViecList);
 }
 
-// Hàm hiển thị danh sách ngày công
+// ========== BẢNG CÔNG (dùng SVG cho ✅ và ⏳) ==========
 function displayWorkingDays(caLamViec) {
   const bangCongBody = document.getElementById('bang-cong-body');
   const emptyCong = document.getElementById('empty-cong');
   const emptyMessage = document.getElementById('empty-message');
-  
+
   if (!caLamViec || caLamViec.length === 0) {
     bangCongBody.innerHTML = '';
     emptyCong.style.display = 'block';
-    emptyMessage.textContent = allData.length === 0 
-      ? 'Không thể tải dữ liệu từ Google Sheets. Vui lòng kiểm tra kết nối.' 
+    emptyMessage.textContent = allData.length === 0
+      ? 'Không thể tải dữ liệu từ Google Sheets. Vui lòng kiểm tra kết nối.'
       : 'Không tìm thấy ca làm việc nào trong dữ liệu';
     return;
   }
-  
+
   emptyCong.style.display = 'none';
   bangCongBody.innerHTML = '';
-  
+
   caLamViec.forEach((ca, index) => {
     const tr = document.createElement('tr');
     tr.className = 'fade-in';
-    
+
     const caDate = new Date(ca.ngay);
     const day = String(caDate.getDate()).padStart(2, '0');
     const month = String(caDate.getMonth() + 1).padStart(2, '0');
     const year = caDate.getFullYear();
-    
+
     tr.innerHTML = `
       <td>${index + 1}</td>
       <td>
@@ -1499,9 +1276,9 @@ function displayWorkingDays(caLamViec) {
       <td style="color: var(--text-primary); font-family: var(--font-family);">${ca.diemGas.length}</td>
       <td style="color: var(--text-primary); font-family: var(--font-family);">${formatCurrency(ca.tongTien)}</td>
       <td>
-        <div style="display: flex; flex-direction: column; gap: 2px;">
-          <span style="color: var(--secondary); font-size: 0.85rem; font-family: var(--font-family);">✅ Đã nộp: ${ca.daNopCount}</span>
-          <span style="color: var(--warning); font-size: 0.85rem; font-family: var(--font-family);">⏳ Chưa nộp: ${ca.chuaNopCount}</span>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <span style="display:inline-flex;align-items:center;gap:6px;color:var(--secondary);font-size:0.85rem;font-family:var(--font-family);">${ICONS.checkSmall} Đã nộp: ${ca.daNopCount}</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;color:var(--warning);font-size:0.85rem;font-family:var(--font-family);">${ICONS.clockSmall} Chưa nộp: ${ca.chuaNopCount}</span>
         </div>
       </td>
     `;
@@ -1509,79 +1286,54 @@ function displayWorkingDays(caLamViec) {
   });
 }
 
-// Hàm tính lương - FIXED: Xử lý đúng việc chuyển tháng/năm
 async function tinhLuong() {
   const btn = document.getElementById('btn-tinh-luong');
-  const originalText = btn.textContent;
+  const originalHTML = btn.innerHTML;
   const loader = document.getElementById('page-loader');
-  
+
   try {
     if (loader) loader.classList.remove('hidden');
-    btn.textContent = '⏳ Đang tính...';
+    btn.innerHTML = `<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" /></svg> Đang tính...`;
     btn.disabled = true;
-    
-    // 1. Lấy thông tin đầu vào
+
     const luongThang = parseInt(document.getElementById('luong-thang').value);
     const ngayBatDau = parseInt(document.getElementById('ngay-bat-dau').value);
     const thangBatDau = parseInt(document.getElementById('thang-bat-dau').value);
     const namBatDau = parseInt(document.getElementById('nam-bat-dau').value);
-    
+
     if (!luongThang || luongThang <= 0) {
-      showToast('⚠️ Vui lòng nhập lương tháng hợp lệ!', 'error');
+      showToast('Vui lòng nhập lương tháng hợp lệ!', 'error');
       return;
     }
-    
-    // 2. Tải dữ liệu mới nhất nếu chưa có
-    if (allData.length === 0) {
-      await taiDuLieu();
-    }
-    
-    // 3. Tính ngày bắt đầu và kết thúc chu kỳ - ĐÃ SỬA: Tính từ ngày 1 đến ngày cuối của tháng đó
+
+    if (allData.length === 0) await taiDuLieu();
+
     const ngayBatDauChuKy = new Date(namBatDau, thangBatDau - 1, 1);
-    
-    // Ngày cuối cùng của tháng đó
     const ngayKetThucChuKy = new Date(namBatDau, thangBatDau, 0);
-    
+
     console.log('Chu kỳ lương:', {
       batDau: ngayBatDauChuKy.toLocaleDateString('vi-VN'),
       ketThuc: ngayKetThucChuKy.toLocaleDateString('vi-VN')
     });
-    
-    // 4. Lọc các ca làm việc trong chu kỳ
+
     const caLamViecTrongChuKy = caLamViecList.filter(ca => {
       const caDate = new Date(ca.ngay);
-      // Đảm bảo so sánh chính xác bao gồm cả ngày 31
-      // Reset giờ, phút, giây của đối tượng ngày để so sánh chuẩn xác
       const normalizedCaDate = new Date(caDate.getFullYear(), caDate.getMonth(), caDate.getDate());
       const normalizedStartDate = new Date(ngayBatDauChuKy.getFullYear(), ngayBatDauChuKy.getMonth(), ngayBatDauChuKy.getDate());
       const normalizedEndDate = new Date(ngayKetThucChuKy.getFullYear(), ngayKetThucChuKy.getMonth(), ngayKetThucChuKy.getDate());
-      
       return normalizedCaDate >= normalizedStartDate && normalizedCaDate <= normalizedEndDate;
     });
-    
+
     console.log('Ca làm việc trong chu kỳ:', caLamViecTrongChuKy.length);
-    console.log('Chi tiết:', caLamViecTrongChuKy.map(ca => ca.ngay));
-    
-    // 5. Tính số ngày công theo quy tắc mới
-    // Công thức:
-    // Số ngày đi làm việc = số ngày trong tháng - (số ngày nghỉ trong tháng - 1 ngày)
-    // số ngày nghỉ trong tháng = số ngày trong tháng - số ngày làm việc thực tế
-    
+
     const soNgayTrongThang = (new Date(ngayKetThucChuKy.getFullYear(), ngayKetThucChuKy.getMonth() + 1, 0)).getDate();
     const soNgayLamViecThucTe = caLamViecTrongChuKy.length;
     const soNgayNghiTrongThang = soNgayTrongThang - soNgayLamViecThucTe;
-    
-    // Đảm bảo số ngày nghỉ không âm (trường hợp làm nhiều hơn số ngày trong tháng - unlikely nhưng nên handle)
     const soNgayNghiHopLe = Math.max(0, soNgayNghiTrongThang);
-    
-    // Áp dụng miễn 1 ngày công
     const soNgayDiLamViec = soNgayTrongThang - (soNgayNghiHopLe - 1);
-    
-    // Tính lương
     const luongTheoNgay = luongThang / soNgayTrongThang;
     const tongLuong = Math.round(luongTheoNgay * soNgayDiLamViec);
-    
-    // 7. Hiển thị kết quả
+
     displaySalaryResult(
       luongThang,
       tongLuong,
@@ -1593,26 +1345,24 @@ async function tinhLuong() {
       soNgayNghiHopLe,
       soNgayDiLamViec
     );
-    
-    // 8. Kích hoạt hiệu ứng tiền rơi nếu có lương > 0
+
     if (tongLuong > 0) {
       createMoneyRain();
-      showToast('💰 Tính lương thành công! Tiền đang rơi!');
+      showToast('Tính lương thành công! Tiền đang rơi!', 'success');
     } else {
-      showToast('⚠️ Không có ca làm việc trong chu kỳ này!', 'warning');
+      showToast('Không có ca làm việc trong chu kỳ này!', 'warning');
     }
-    
+
   } catch (error) {
     console.error('Lỗi khi tính lương:', error);
-    showToast('❌ Có lỗi khi tính lương!', 'error');
+    showToast('Có lỗi khi tính lương!', 'error');
   } finally {
     if (loader) loader.classList.add('hidden');
-    btn.textContent = originalText;
+    btn.innerHTML = originalHTML;
     btn.disabled = false;
   }
 }
 
-// Hàm hiển thị kết quả tính lương - FIXED: Hiển thị đúng thông tin
 function displaySalaryResult(
   luongThang,
   tongLuong,
@@ -1625,10 +1375,10 @@ function displaySalaryResult(
   soNgayDiLamViec
 ) {
   const statsContainer = document.getElementById('stats-container');
-  
+
   const tongTienThu = caLamViec.reduce((sum, ca) => sum + ca.tongTien, 0);
   const luongTheoNgay = luongThang / soNgayTrongThang;
-  
+
   statsContainer.innerHTML = `
     <div class="stat-card">
       <div class="stat-value">${soNgayLamViecThucTe}</div>
@@ -1643,22 +1393,22 @@ function displaySalaryResult(
       <div class="stat-label">Lương tạm tính</div>
     </div>
   `;
-  
+
   const salaryPreview = document.getElementById('salary-preview');
   const previewAmount = document.getElementById('preview-amount');
   const previewTime = document.getElementById('preview-time');
-  
+
   previewAmount.textContent = formatCurrency(tongLuong);
   const startStr = startDate.toLocaleDateString('vi-VN');
   const endStr = endDate.toLocaleDateString('vi-VN');
   previewTime.textContent = `Thời gian tính: Từ ${startStr} đến ${endStr}`;
   salaryPreview.classList.add('show');
-  
+
   document.getElementById('tong-luong').textContent = formatCurrency(tongLuong);
   document.getElementById('thoi-gian-tinh').textContent = `Thời gian tính: Từ ${startStr} đến ${endStr}`;
-  
+
   const chiTietLuong = document.getElementById('chi-tiet-luong');
-  
+
   chiTietLuong.innerHTML = `
     <li style="margin-bottom: 8px; font-family: var(--font-family);">Lương tháng: ${formatCurrency(luongThang)}</li>
     <li style="margin-bottom: 8px; font-family: var(--font-family);">Chu kỳ: ${startStr} đến ${endStr}</li>
@@ -1670,23 +1420,21 @@ function displaySalaryResult(
     <li style="margin-bottom: 8px; font-family: var(--font-family);">Tổng tiền thu được: ${formatCurrency(tongTienThu)}</li>
     <li style="margin-bottom: 8px; font-weight: bold; font-family: var(--font-family);">Tổng lương tạm tính: ${formatCurrency(tongLuong)}</li>
   `;
-  
+
   document.getElementById('salary-result').style.display = 'block';
   document.getElementById('empty-state').style.display = 'none';
   displayWorkingDays(caLamViec);
 }
 
-// Hàm sao chép kết quả
 async function copySalaryToClipboard() {
   const luongThang = document.getElementById('luong-thang').value;
   const tongLuong = document.getElementById('tong-luong').textContent;
   const thoiGianTinh = document.getElementById('thoi-gian-tinh').textContent;
-  
-  // Tính số ca trong chu kỳ hiện tại
+
   const ngayBatDau = parseInt(document.getElementById('ngay-bat-dau').value);
   const thangBatDau = parseInt(document.getElementById('thang-bat-dau').value);
   const namBatDau = parseInt(document.getElementById('nam-bat-dau').value);
-  
+
   const ngayBatDauChuKy = new Date(namBatDau, thangBatDau - 1, ngayBatDau);
   let ngayKetThucChuKy;
   if (thangBatDau === 12) {
@@ -1695,12 +1443,12 @@ async function copySalaryToClipboard() {
     ngayKetThucChuKy = new Date(namBatDau, thangBatDau, ngayBatDau);
   }
   ngayKetThucChuKy = new Date(ngayKetThucChuKy.getTime() - 1);
-  
+
   const soCa = caLamViecList.filter(ca => {
     const caDate = new Date(ca.ngay);
     return caDate >= ngayBatDauChuKy && caDate <= ngayKetThucChuKy;
   }).length;
-  
+
   const content = `
 TÍNH LƯƠNG THEO SỐ CA LÀM VIỆC
 ${thoiGianTinh}
@@ -1710,63 +1458,46 @@ Tổng lương tạm tính: ${tongLuong}
 ---
 Kết quả tính từ ứng dụng Quản lý điểm gas
   `.trim();
-  
+
   try {
     await navigator.clipboard.writeText(content);
-    showToast('✅ Đã sao chép kết quả vào clipboard!');
+    showToast('Đã sao chép kết quả vào clipboard!', 'success');
   } catch (err) {
-    showToast('❌ Không thể sao chép vào clipboard!', 'error');
+    showToast('Không thể sao chép vào clipboard!', 'error');
   }
 }
 
-// Hàm reset form
 function resetForm() {
   document.getElementById('luong-thang').value = '5500000';
   document.getElementById('ngay-bat-dau').value = '5';
   populateMonthYearSelectors();
-  
-  // Ẩn phần tổng lương tạm tính ở đầu
+
   document.getElementById('salary-preview').classList.remove('show');
-  
-  // Ẩn phần kết quả chi tiết
   document.getElementById('salary-result').style.display = 'none';
   document.getElementById('empty-state').style.display = 'block';
-  
-  // Reset bảng công
+
   const bangCongBody = document.getElementById('bang-cong-body');
   bangCongBody.innerHTML = '';
   document.getElementById('empty-cong').style.display = 'block';
   document.getElementById('empty-message').textContent = 'Hệ thống chưa tìm thấy ca làm việc nào';
 }
 
-// Khởi tạo khi trang được tải
 document.addEventListener('DOMContentLoaded', function() {
   console.log('=== TRANG TÍNH LƯƠNG ĐANG KHỞI ĐỘNG ===');
-  
-  // 1. Điền tháng/năm
+
   populateMonthYearSelectors();
-  
-  // 2. Tự động điền chu kỳ gần nhất (từ 05 tháng trước đến 05 tháng này)
   autoFillLastCycle();
-  
-  // 3. Tải dữ liệu ngay khi trang load
+
   taiDuLieu().then(() => {
-    // 4. Tự động tính lương sau khi có dữ liệu (nếu có)
     if (caLamViecList.length > 0) {
-      setTimeout(() => {
-        tinhLuong();
-      }, 500);
+      setTimeout(() => { tinhLuong(); }, 500);
     }
   });
-  
-  // 5. Thêm sự kiện cho ô nhập lương
+
   document.getElementById('luong-thang').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      tinhLuong();
-    }
+    if (e.key === 'Enter') tinhLuong();
   });
 });
 </script>
-  <script src="assets/hero-icons.js" defer></script>
 </body>
 </html>

@@ -25,7 +25,7 @@
     --warning-dark: #e08900;
     --info: #5ac8fa;
     --success: #34c759;
-    
+
     --bg-primary: #ffffff;
     --bg-secondary: #f3f7f2;
     --bg-tertiary: #f7faf7;
@@ -35,39 +35,54 @@
     --bg-input: #ffffff;
     --bg-hover: #eef7ec;
     --bg-active: #e8f8ea;
-    
+
     --text-primary: #0b3b2a;
     --text-secondary: #576a5f;
     --text-tertiary: #7a9184;
     --text-inverse: #ffffff;
     --text-muted: #adb5bd;
-    
+
     --border-color: #e6efe8;
     --border-light: #eef6ed;
     --border-dark: #cfded0;
     --shadow: 0 2px 10px rgba(0,0,0,0.08);
     --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
     --shadow-dark: 0 2px 10px rgba(0,0,0,0.15);
-    
+
     --radius-xl: 28px;
     --radius-lg: 20px;
     --radius-md: 16px;
     --radius-sm: 12px;
     --radius-xs: 8px;
     --radius-circle: 50%;
-    
+
     --sidebar-width: 280px;
     --header-height: auto;
-    
+
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.15s ease;
     --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     --opacity-disabled: 0.6;
     --opacity-hover: 0.9;
     --opacity-active: 0.8;
   }
-  
+
+  /* ========== HEROICONS BASE ========== */
+  .hero-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
+    color: currentColor;
+  }
+  .hero-icon-sm { width: 16px; height: 16px; }
+  .hero-icon-md { width: 22px; height: 22px; }
+  .hero-icon-lg { width: 26px; height: 26px; }
+  .hero-icon-xl { width: 32px; height: 32px; }
+  .hero-icon-2xl { width: 42px; height: 42px; }
+
   @media (prefers-color-scheme: dark) {
     :root {
       color-scheme: dark;
@@ -83,7 +98,7 @@
       --warning-dark: #ff9800;
       --info: #42a5f5;
       --success: #30c75a;
-      
+
       --bg-primary: #0b0b0b;
       --bg-secondary: #121212;
       --bg-tertiary: #191919;
@@ -93,13 +108,13 @@
       --bg-input: #161616;
       --bg-hover: #1f1f1f;
       --bg-active: #292929;
-      
+
       --text-primary: #f2f2f2;
       --text-secondary: #c7c7c7;
       --text-tertiary: #a5a5a5;
       --text-inverse: #f5f5f5;
       --text-muted: #999999;
-      
+
       --border-color: #303030;
       --border-light: #242424;
       --border-dark: #3a3a3a;
@@ -107,32 +122,20 @@
       --shadow-lg: 0 8px 25px rgba(0,0,0,0.4);
       --shadow-dark: 0 2px 10px rgba(0,0,0,0.5);
     }
-    
-    h1, h2, h3, h4 {
-      color: var(--text-primary) !important;
-    }
-    
-    .back-button {
-      color: var(--text-inverse) !important;
-    }
-    
-    input::placeholder {
-      color: var(--text-muted);
-    }
+
+    h1, h2, h3, h4 { color: var(--text-primary) !important; }
+    .back-button { color: var(--text-inverse) !important; }
+    input::placeholder { color: var(--text-muted); }
   }
-  
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
   html {
     font-size: 16px;
     background-color: var(--bg-secondary);
     transition: background-color 0.5s ease;
   }
-  
+
   body {
     font-family: 'Segoe UI', 'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-secondary);
@@ -144,7 +147,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
+
   .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -156,22 +159,40 @@
     border: 1px solid var(--border-color);
     padding: 30px;
   }
-  
+
   h1 {
     color: var(--primary);
     margin-bottom: 20px;
     font-size: 2rem;
     text-align: center;
     transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
   }
-  
+  h1 .hero-icon { width: 34px; height: 34px; }
+
   .search-group {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
     flex-wrap: wrap;
+    position: relative;
   }
-  
+  .search-group .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+  .search-group .search-icon .hero-icon { width: 18px; height: 18px; }
+  .search-group input {
+    padding-left: 46px;
+  }
+
   input {
     padding: 14px 16px;
     border-radius: var(--radius-md);
@@ -183,18 +204,14 @@
     color: var(--text-primary);
     min-width: 0;
   }
-  
   input:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(61, 142, 255, 0.2);
+    box-shadow: 0 0 0 3px rgba(15, 157, 88, 0.2);
     background: var(--bg-input);
   }
-  
-  input::placeholder {
-    color: var(--text-muted);
-  }
-  
+  input::placeholder { color: var(--text-muted); }
+
   /* ========== LOCATION CARD GRID STYLES ========== */
   .location-grid {
     display: grid;
@@ -202,7 +219,7 @@
     gap: 16px;
     margin-top: 15px;
   }
-  
+
   .location-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -216,19 +233,18 @@
     transition: var(--transition);
     position: relative;
   }
-  
   .location-card:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-lg);
     border-color: var(--primary-light);
   }
-  
+
   .card-header {
     display: flex;
     align-items: flex-start;
     gap: 14px;
   }
-  
+
   .card-icon {
     width: 44px;
     height: 44px;
@@ -238,16 +254,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.4rem;
     flex-shrink: 0;
     border: 1px solid var(--border-color);
   }
-  
-  .card-info {
-    flex: 1;
-    min-width: 0;
-  }
-  
+  .card-icon .hero-icon { width: 24px; height: 24px; }
+
+  .card-info { flex: 1; min-width: 0; }
+
   .card-title {
     font-size: 1.15rem;
     font-weight: 700;
@@ -256,14 +269,24 @@
     margin-bottom: 5px;
     word-break: break-word;
   }
-  
+
   .card-address {
     font-size: 0.9rem;
     color: var(--text-secondary);
     line-height: 1.4;
     word-break: break-word;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
   }
-  
+  .card-address .hero-icon {
+    width: 14px;
+    height: 14px;
+    color: var(--primary);
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+
   .card-details {
     display: flex;
     align-items: center;
@@ -274,16 +297,21 @@
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
   }
-  
+
   .gps-label {
     font-size: 0.85rem;
     color: var(--text-secondary);
     font-weight: 500;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
   }
-  
+  .gps-label .hero-icon {
+    width: 15px;
+    height: 15px;
+    color: var(--primary);
+  }
+
   .badge-gps {
     display: inline-flex;
     align-items: center;
@@ -299,16 +327,13 @@
     transition: var(--transition-fast);
     user-select: none;
   }
-  
+  .badge-gps .hero-icon { width: 14px; height: 14px; }
   .badge-gps:hover {
     transform: scale(1.04);
     box-shadow: 0 2px 8px rgba(52, 199, 89, 0.3);
   }
-  
-  .badge-gps:active {
-    transform: scale(0.96);
-  }
-  
+  .badge-gps:active { transform: scale(0.96); }
+
   /* PROMINENT GOOGLE MAPS ACTION BUTTON */
   .btn-maps {
     display: flex;
@@ -322,7 +347,7 @@
     font-size: 1.05rem;
     padding: 14px 20px;
     border-radius: var(--radius-md);
-    box-shadow: 0 4px 14px rgba(44, 128, 255, 0.3);
+    box-shadow: 0 4px 14px rgba(15, 157, 88, 0.3);
     transition: var(--transition);
     border: 1px solid var(--primary-dark);
     width: 100%;
@@ -330,18 +355,17 @@
     text-align: center;
     user-select: none;
   }
-  
+  .btn-maps .hero-icon { width: 20px; height: 20px; }
   .btn-maps:hover {
-    box-shadow: 0 6px 20px rgba(44, 128, 255, 0.45);
+    box-shadow: 0 6px 20px rgba(15, 157, 88, 0.45);
     transform: translateY(-2px);
     background: linear-gradient(135deg, var(--primary-light), var(--primary));
   }
-  
   .btn-maps:active {
     transform: translateY(1px);
-    box-shadow: 0 2px 8px rgba(44, 128, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(15, 157, 88, 0.3);
   }
-  
+
   #empty-state {
     text-align: center;
     color: var(--text-secondary);
@@ -352,19 +376,27 @@
     background: var(--bg-tertiary);
     border: 1px solid var(--border-color);
   }
-  
   #empty-state h3 {
     margin-bottom: 10px;
     font-size: 1.2rem;
     color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
   }
-  
+  #empty-state h3 .hero-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--text-tertiary);
+    opacity: 0.85;
+  }
   #empty-state p {
     font-size: 1rem;
     color: var(--text-secondary);
     margin-bottom: 15px;
   }
-  
+
   .back-button {
     position: fixed;
     right: 30px;
@@ -377,7 +409,6 @@
     width: 56px;
     height: 56px;
     box-shadow: var(--shadow-lg);
-    font-size: 1.8rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -385,104 +416,79 @@
     transition: var(--transition);
     text-decoration: none;
     border: 2px solid var(--primary-dark);
+    padding: 0;
   }
-  
+  .back-button .hero-icon { width: 26px; height: 26px; }
   .back-button:hover {
     background: var(--primary-dark);
     transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 10px 20px rgba(44, 128, 255, 0.3);
+    box-shadow: 0 10px 20px rgba(15, 157, 88, 0.3);
   }
-  
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-sm);
-  }
-  
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg-tertiary); border-radius: var(--radius-sm); }
   ::-webkit-scrollbar-thumb {
     background: var(--border-dark);
     border-radius: var(--radius-sm);
     border: 2px solid var(--bg-tertiary);
   }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-secondary);
-  }
-  
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-dark) var(--bg-tertiary);
-  }
-  
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+  * { scrollbar-width: thin; scrollbar-color: var(--border-dark) var(--bg-tertiary); }
+
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  
-  .fade-in {
-    animation: fadeIn 0.4s ease-out;
-  }
-  
+  .fade-in { animation: fadeIn 0.4s ease-out; }
+
   @media (max-width: 768px) {
     body { padding: 15px; }
     .container { padding: 20px; border-radius: var(--radius-lg); }
     h1 { font-size: 1.8rem; margin-bottom: 15px; }
+    h1 .hero-icon { width: 28px; height: 28px; }
     .search-group { flex-direction: column; gap: 8px; }
     input { padding: 12px 14px; font-size: 1rem; border-radius: var(--radius-sm); width: 100%; }
-    .table-container { border-radius: var(--radius-sm); }
-    table { min-width: 500px; }
-    th, td { padding: 12px 8px; font-size: 0.9rem; }
+    .search-group input { padding-left: 42px; }
     .badge { padding: 5px 10px; font-size: 0.8rem; max-width: 150px; }
-    .map-link { padding: 6px 12px; font-size: 0.9rem; }
     #empty-state { padding: 30px 15px; margin: 20px 0; }
-    .back-button { right: 20px; bottom: 20px; width: 50px; height: 50px; font-size: 1.6rem; }
+    .back-button { right: 20px; bottom: 20px; width: 50px; height: 50px; }
+    .back-button .hero-icon { width: 22px; height: 22px; }
   }
-  
+
   @media (max-width: 480px) {
     body { padding: 10px; }
     .container { padding: 15px; border-radius: var(--radius-md); }
     h1 { font-size: 1.6rem; margin-bottom: 12px; }
+    h1 .hero-icon { width: 24px; height: 24px; }
     input { padding: 10px 12px; font-size: 0.95rem; border-radius: var(--radius-xs); }
-    table { min-width: 400px; }
-    th, td { padding: 10px 6px; font-size: 0.85rem; }
-    .badge { padding: 4px 8px; font-size: 0.75rem; max-width: 120px; }
-    .map-link { padding: 5px 10px; font-size: 0.85rem; min-width: 50px; }
+    .search-group input { padding-left: 38px; }
     #empty-state { padding: 20px 10px; margin: 15px 0; }
     #empty-state h3 { font-size: 1.1rem; }
     #empty-state p { font-size: 0.9rem; }
-    .back-button { right: 15px; bottom: 15px; width: 45px; height: 45px; font-size: 1.4rem; }
+    .back-button { right: 15px; bottom: 15px; width: 45px; height: 45px; }
+    .back-button .hero-icon { width: 20px; height: 20px; }
   }
-  
+
   @media (prefers-color-scheme: dark) {
-    .table-container { border-color: var(--border-dark); }
     ::-webkit-scrollbar-track { background: var(--bg-secondary); }
     ::-webkit-scrollbar-thumb { background: var(--text-muted); }
     ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
-    tr:hover { background-color: var(--bg-tertiary); }
     .container { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
     .badge { box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
     #empty-state { background: var(--bg-secondary); }
   }
-  
+
   @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
+    *, *::before, *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
     .fade-in { animation: none; }
-    .badge:hover,
-    .map-link:hover,
-    .back-button:hover { transform: none !important; }
+    .badge:hover, .back-button:hover { transform: none !important; }
   }
-  
+
   /* ========== PAGE LOADING OVERLAY ========== */
   .page-loader-overlay {
     position: fixed;
@@ -497,25 +503,19 @@
     visibility: visible;
     transition: opacity 0.35s ease, visibility 0.35s ease;
   }
-
   .page-loader-overlay.hidden {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
   }
-
   .loader {
     width: 45px;
     aspect-ratio: .75;
     --c: no-repeat linear-gradient(var(--text-primary) 0 0);
-    background:
-      var(--c) 0% 100%,
-      var(--c) 50% 100%,
-      var(--c) 100% 100%;
+    background: var(--c) 0% 100%, var(--c) 50% 100%, var(--c) 100% 100%;
     background-size: 20% 65%;
     animation: l8 1s infinite linear;
   }
-
   @keyframes l8 {
     16.67% { background-position: 0% 0%, 50% 100%, 100% 100%; }
     33.33% { background-position: 0% 0%, 50% 0%, 100% 100%; }
@@ -528,13 +528,9 @@
     body { background: white !important; color: black !important; padding: 0; }
     .container { box-shadow: none !important; border: 1px solid #ccc !important; border-radius: 0 !important; max-width: 100% !important; padding: 10px !important; }
     .back-button, .search-group { display: none !important; }
-    table { border: 1px solid #ccc; }
-    th, td { color: black !important; border-color: #ccc !important; }
     .badge { border: 1px solid #ccc !important; color: black !important; background: white !important; }
-    .map-link { color: black !important; background: white !important; border: 1px solid #ccc !important; }
   }
 </style>
-  <link rel="stylesheet" href="assets/hero-icons.css">
 </head>
 <body>
   <!-- Page Loading Overlay -->
@@ -543,17 +539,31 @@
   </div>
 
   <div class="container">
-    <h1>📍 Quản lý vị trí điểm gas</h1>
-    
+    <h1>
+      <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+      </svg>
+      Quản lý vị trí điểm gas
+    </h1>
+
     <div class="search-group">
+      <span class="search-icon">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
+        </svg>
+      </span>
       <input id="search" placeholder="Tìm kiếm tên điểm, địa chỉ hoặc ghi chú...">
     </div>
-    
-    <div id="location-grid" class="location-grid">
-    </div>
-    
+
+    <div id="location-grid" class="location-grid"></div>
+
     <div id="empty-state">
-      <h3>📭 Chưa có vị trí nào được lưu</h3>
+      <h3>
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M6.912 3a3 3 0 0 0-2.868 2.118l-2.411 7.838a3 3 0 0 0-.133.882V18a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0 0 17.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0 0 17.088 4.5H6.912a1.5 1.5 0 0 0-1.434 1.059L3.265 12.75H6.11a3 3 0 0 1 2.684 1.658l.256.513a1.5 1.5 0 0 0 1.342.829h3.218a1.5 1.5 0 0 0 1.342-.83l.256-.512a3 3 0 0 1 2.684-1.658h2.844Z" clip-rule="evenodd" />
+        </svg>
+        Chưa có vị trí nào được lưu
+      </h3>
       <p>Hãy sử dụng chức năng lưu vị trí GPS trên trang chính để bắt đầu.</p>
       <p style="font-size: 0.9rem; margin-top: 10px;">
         <em>Lưu ý: Chỉ những điểm gas có tọa độ GPS mới hiển thị ở đây.</em>
@@ -562,29 +572,46 @@
   </div>
 
   <a href="index.html" class="back-button" title="Quay về trang chính" aria-label="Quay về trang chính">
-    ←
+    <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+    </svg>
   </a>
 
 <script>
-// URL của Google Apps Script (giữ nguyên)
+// ========== HEROICONS LIBRARY ==========
+const ICONS = {
+  checkCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" /></svg>',
+  xCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" /></svg>',
+  warning: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>',
+  arrowPath: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" /></svg>',
+  buildingStorefront: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5.223 2.25c-.497 0-.974.198-1.325.55l-1.3 1.298A3.75 3.75 0 0 0 7.5 9.75c.627.47 1.406.75 2.25.75.844 0 1.623-.28 2.25-.75a3.75 3.75 0 0 0 6.75-2.25c0-.362-.05-.714-.146-1.048l-1.3-1.3a1.875 1.875 0 0 0-1.325-.549H5.223Z" /><path d="M2.25 11.25v8.25a1.5 1.5 0 0 0 1.5 1.5h3.75v-3.75a2.25 2.25 0 0 1 4.5 0v3.75h3.75a1.5 1.5 0 0 0 1.5-1.5v-8.25a4.865 4.865 0 0 1-2.25.75 4.86 4.86 0 0 1-2.25-.75 4.861 4.861 0 0 1-2.25.75 4.86 4.86 0 0 1-2.25-.75 4.86 4.86 0 0 1-2.25.75A4.865 4.865 0 0 1 2.25 11.25Z" /></svg>',
+  mapPin: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" /></svg>',
+  globeAlt: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.721 12.752a9.711 9.711 0 0 0-.945-5.003 12.754 12.754 0 0 1-4.339 2.708 18.991 18.991 0 0 1-.214 4.772 17.165 17.165 0 0 0 5.498-2.477ZM14.634 15.55a17.324 17.324 0 0 0 .332-4.647c-.952.227-1.945.347-2.966.347-1.021 0-2.014-.12-2.966-.347a17.515 17.515 0 0 0 .332 4.647 17.385 17.385 0 0 0 5.268 0ZM9.772 17.119a18.963 18.963 0 0 0 4.456 0A17.182 17.182 0 0 1 12 21.724a17.18 17.18 0 0 1-2.228-4.605ZM7.777 15.23a18.87 18.87 0 0 1-.214-4.773 12.753 12.753 0 0 1-4.34-2.708 9.711 9.711 0 0 0-.944 5.004 17.165 17.165 0 0 0 5.498 2.477ZM21.356 14.752a9.765 9.765 0 0 1-7.478 6.817 18.64 18.64 0 0 0 1.988-4.718 18.627 18.627 0 0 0 5.49-2.098ZM2.644 14.752c1.682.971 3.53 1.688 5.49 2.099a18.64 18.64 0 0 0 1.988 4.718 9.765 9.765 0 0 1-7.478-6.816ZM13.878 2.43a9.755 9.755 0 0 1 6.116 3.986 11.267 11.267 0 0 1-3.746 2.504 18.63 18.63 0 0 0-2.37-6.49ZM12 2.276a17.152 17.152 0 0 1 2.805 7.121c-.897.23-1.837.353-2.805.353-.968 0-1.908-.122-2.805-.353A17.151 17.151 0 0 1 12 2.276ZM10.122 2.43a18.629 18.629 0 0 0-2.37 6.49 11.266 11.266 0 0 1-3.746-2.504 9.754 9.754 0 0 1 6.116-3.985Z" /></svg>',
+  clipboard: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" /></svg>',
+  map: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.161 2.58a1.875 1.875 0 0 1 1.678 0l4.993 2.498c.106.052.23.052.336 0l3.869-1.935A1.875 1.875 0 0 1 21.75 4.82v12.485c0 .71-.401 1.36-1.037 1.677l-4.875 2.437a1.875 1.875 0 0 1-1.676 0l-4.994-2.497a.375.375 0 0 0-.336 0l-3.868 1.935A1.875 1.875 0 0 1 2.25 19.18V6.695c0-.71.401-1.36 1.036-1.677l4.875-2.437ZM9 6a.75.75 0 0 1 .75.75V15a.75.75 0 0 1-1.5 0V6.75A.75.75 0 0 1 9 6Zm6.75 3a.75.75 0 0 0-1.5 0v8.25a.75.75 0 0 0 1.5 0V9Z" clip-rule="evenodd" /></svg>'
+};
+
+// Loại bỏ emoji ở đầu chuỗi thông báo (nếu còn sót)
+function stripLeadingEmoji(str) {
+  if (!str) return '';
+  return str.replace(/^[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{2B00}-\u{2BFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}\u{200D}\s]+/u, '').trim() || str.trim();
+}
+
 const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
 let allData = [];
 let vitriData = [];
 let currentFilteredData = [];
 
-// Hàm ép kiểu an toàn để trích xuất GPS
 function extractGPS(note) {
-  // Ép mọi giá trị về chuỗi
   const noteStr = note == null ? '' : String(note);
   if (!noteStr.trim()) return null;
-  
   const match = noteStr.match(/\[GPS:\s*([\d.]+),\s*([\d.]+)\]/);
   if (match) {
     const lat = parseFloat(match[1]);
     const lng = parseFloat(match[2]);
     if (!isNaN(lat) && !isNaN(lng)) {
-      return { 
-        lat: lat.toFixed(6), 
+      return {
+        lat: lat.toFixed(6),
         lng: lng.toFixed(6),
         rawLat: lat,
         rawLng: lng
@@ -594,7 +621,6 @@ function extractGPS(note) {
   return null;
 }
 
-// Hàm escape HTML an toàn (xử lý mọi kiểu dữ liệu)
 function escapeHtml(text) {
   if (text == null) return '';
   const str = String(text);
@@ -606,62 +632,66 @@ function escapeHtml(text) {
     .replace(/'/g, '&#39;');
 }
 
-// Hiển thị danh sách vị trí dưới dạng Thẻ (Card Layout)
 function displayVitri(data) {
   const gridContainer = document.getElementById('location-grid');
   const emptyState = document.getElementById('empty-state');
-  
+
   if (!data || data.length === 0) {
     if (gridContainer) gridContainer.innerHTML = '';
     if (emptyState) emptyState.style.display = 'block';
     return;
   }
-  
+
   if (gridContainer) gridContainer.innerHTML = '';
   let count = 0;
-  
+
   data.forEach(row => {
     const gps = extractGPS(row.ghi_chu);
     if (!gps) return;
-    
+
     count++;
     const card = document.createElement('div');
     card.className = 'location-card fade-in';
-    
+
     const tenDiem = escapeHtml(row.ten_diem) || 'Chưa có tên';
     const diaChi = escapeHtml(row.dia_chi) || 'Chưa có địa chỉ';
-    
+
     card.innerHTML = `
       <div>
         <div class="card-header">
-          <div class="card-icon">🏪</div>
+          <div class="card-icon">${ICONS.buildingStorefront}</div>
           <div class="card-info">
             <div class="card-title">${tenDiem}</div>
-            <div class="card-address">📍 ${diaChi}</div>
+            <div class="card-address">${ICONS.mapPin} <span>${diaChi}</span></div>
           </div>
         </div>
       </div>
-      
+
       <div class="card-details">
-        <span class="gps-label">🧭 Tọa độ GPS:</span>
+        <span class="gps-label">${ICONS.globeAlt} Tọa độ GPS:</span>
         <div class="badge-gps badge" data-coords="${gps.lat}, ${gps.lng}" title="Nhấn để sao chép tọa độ">
-          📋 ${gps.lat}, ${gps.lng}
+          ${ICONS.clipboard} ${gps.lat}, ${gps.lng}
         </div>
       </div>
-      
+
       <a class="btn-maps" href="https://maps.google.com/?q=${gps.rawLat},${gps.rawLng}" target="_blank" title="Mở Google Maps dẫn đường">
-        🗺️ Mở Google Maps
+        ${ICONS.map} Mở Google Maps
       </a>
     `;
-    
+
     if (gridContainer) gridContainer.appendChild(card);
   });
-  
+
   if (count === 0) {
     if (emptyState) {
       emptyState.style.display = 'block';
       emptyState.innerHTML = `
-        <h3>📭 Không tìm thấy vị trí</h3>
+        <h3>
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M6.912 3a3 3 0 0 0-2.868 2.118l-2.411 7.838a3 3 0 0 0-.133.882V18a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0 0 17.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0 0 17.088 4.5H6.912a1.5 1.5 0 0 0-1.434 1.059L3.265 12.75H6.11a3 3 0 0 1 2.684 1.658l.256.513a1.5 1.5 0 0 0 1.342.829h3.218a1.5 1.5 0 0 0 1.342-.83l.256-.512a3 3 0 0 1 2.684-1.658h2.844Z" clip-rule="evenodd" />
+          </svg>
+          Không tìm thấy vị trí
+        </h3>
         <p>Không có điểm gas nào có tọa độ GPS trong dữ liệu hiện tại.</p>
         <p style="font-size: 0.9rem; margin-top: 10px;">
           <em>Lưu ý: Chỉ những điểm gas có tọa độ GPS mới hiển thị ở đây.</em>
@@ -671,15 +701,29 @@ function displayVitri(data) {
   } else {
     if (emptyState) emptyState.style.display = 'none';
   }
-  
+
   updateResultCount(count);
 }
 
 function updateResultCount(count) {
   const header = document.querySelector('h1');
   if (header) {
-    const currentText = header.textContent.replace(/\(\d+\)$/, '').trim();
-    header.textContent = count > 0 ? `${currentText} (${count})` : currentText;
+    // Lấy text node bên trong h1 (không lấy SVG)
+    const textContent = Array.from(header.childNodes)
+      .filter(node => node.nodeType === Node.TEXT_NODE)
+      .map(node => node.textContent)
+      .join('')
+      .replace(/\(\d+\)$/, '')
+      .trim();
+    const suffix = count > 0 ? ` (${count})` : '';
+    // Cập nhật text node cuối cùng
+    const textNodes = Array.from(header.childNodes).filter(node => node.nodeType === Node.TEXT_NODE);
+    if (textNodes.length > 0) {
+      // Cập nhật node cuối cùng
+      textNodes[textNodes.length - 1].textContent = `\n      ${textContent}${suffix}\n    `;
+    } else {
+      header.appendChild(document.createTextNode(` ${textContent}${suffix}`));
+    }
   }
 }
 
@@ -690,7 +734,7 @@ function filterVitri() {
     displayVitri(vitriData);
     return;
   }
-  
+
   const filtered = vitriData.filter(row => {
     const searchableText = `
       ${row.ten_diem || ''}
@@ -699,7 +743,7 @@ function filterVitri() {
     `.toLowerCase();
     return searchableText.includes(query);
   });
-  
+
   currentFilteredData = filtered;
   displayVitri(filtered);
 }
@@ -708,7 +752,7 @@ async function copyToClipboard(text) {
   try {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
-      showToast(`✅ Đã sao chép: ${text}`);
+      showToast(`Đã sao chép: ${text}`, 'success');
     } else {
       const textArea = document.createElement('textarea');
       textArea.value = text;
@@ -719,14 +763,14 @@ async function copyToClipboard(text) {
       const success = document.execCommand('copy');
       document.body.removeChild(textArea);
       if (success) {
-        showToast(`✅ Đã sao chép: ${text}`);
+        showToast(`Đã sao chép: ${text}`, 'success');
       } else {
-        showToast('❌ Không thể sao chép vào clipboard', 'error');
+        showToast('Không thể sao chép vào clipboard', 'error');
       }
     }
   } catch (err) {
     console.error('Lỗi sao chép:', err);
-    showToast('❌ Lỗi khi sao chép', 'error');
+    showToast('Lỗi khi sao chép', 'error');
   }
 }
 
@@ -739,7 +783,7 @@ function showToast(message, type = 'success') {
       position: fixed;
       top: 20px;
       right: 20px;
-      background: ${type === 'success' ? 'var(--secondary)' : 'var(--danger)'};
+      background: ${type === 'success' ? 'var(--secondary)' : (type === 'warning' ? 'var(--warning)' : 'var(--danger)')};
       color: var(--text-inverse);
       padding: 12px 20px;
       border-radius: var(--radius-md);
@@ -749,15 +793,27 @@ function showToast(message, type = 'success') {
       transform: translateY(-20px);
       transition: opacity 0.3s, transform 0.3s;
       font-weight: 500;
-      border: 1px solid ${type === 'success' ? 'var(--secondary-dark)' : 'var(--danger-dark)'};
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid ${type === 'success' ? 'var(--secondary-dark)' : (type === 'warning' ? 'var(--warning-dark)' : 'var(--danger-dark)')};
+      font-family: 'Segoe UI', 'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
     `;
     document.body.appendChild(toast);
   }
-  
-  toast.textContent = message;
+
+  // Chọn icon
+  let iconKey = 'checkCircle';
+  if (type === 'error') iconKey = 'xCircle';
+  else if (type === 'warning') iconKey = 'warning';
+
+  toast.innerHTML = `${ICONS[iconKey]}<span></span>`;
+  const span = toast.querySelector('span');
+  if (span) span.textContent = stripLeadingEmoji(message);
+
   toast.style.opacity = '1';
   toast.style.transform = 'translateY(0)';
-  
+
   setTimeout(() => {
     toast.style.opacity = '0';
     toast.style.transform = 'translateY(-20px)';
@@ -775,16 +831,15 @@ async function taiDuLieu() {
     console.log('Đang tải dữ liệu...');
     const url = scriptURL + '?t=' + Date.now();
     const response = await fetch(url);
-    
+
     if (!response.ok) throw new Error(`Lỗi HTTP ${response.status}`);
-    
+
     const text = await response.text();
     let data;
-    
+
     try {
       data = JSON.parse(text);
     } catch (parseError) {
-      // Thử sửa lỗi JSON (ví dụ thiếu dấu ngoặc)
       const fixedText = text.trim();
       if (fixedText.startsWith('[') && fixedText.endsWith(']')) {
         data = JSON.parse(fixedText);
@@ -792,21 +847,18 @@ async function taiDuLieu() {
         throw new Error('Dữ liệu không phải JSON hợp lệ');
       }
     }
-    
-    // Nếu dữ liệu là object có thuộc tính data (một số cấu hình Google Apps Script)
+
     if (data && typeof data === 'object' && !Array.isArray(data) && data.data && Array.isArray(data.data)) {
       data = data.data;
     }
-    
+
     if (!Array.isArray(data)) throw new Error('Dữ liệu không phải mảng');
-    
+
     allData = data;
     console.log(`Đã tải ${allData.length} bản ghi`);
-    
-    // Lọc các điểm có GPS
+
     vitriData = allData.filter(row => extractGPS(row.ghi_chu) !== null);
-    
-    // Loại bỏ trùng lặp (theo tên điểm và tọa độ)
+
     const uniqueMap = new Map();
     vitriData.forEach(row => {
       const gps = extractGPS(row.ghi_chu);
@@ -816,22 +868,27 @@ async function taiDuLieu() {
       }
     });
     vitriData = Array.from(uniqueMap.values());
-    
+
     currentFilteredData = vitriData;
     displayVitri(vitriData);
-    
+
     if (vitriData.length === 0) {
-      showToast('⚠️ Không có điểm gas nào có tọa độ GPS', 'warning');
+      showToast('Không có điểm gas nào có tọa độ GPS', 'warning');
     } else {
-      showToast(`✅ Đã tải ${vitriData.length} vị trí có GPS`);
+      showToast(`Đã tải ${vitriData.length} vị trí có GPS`, 'success');
     }
-    
+
   } catch (error) {
     console.error('Lỗi tải dữ liệu:', error);
     const emptyState = document.getElementById('empty-state');
     emptyState.style.display = 'block';
     emptyState.innerHTML = `
-      <h3>❌ Lỗi khi tải dữ liệu</h3>
+      <h3>
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="color: var(--danger);">
+          <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" />
+        </svg>
+        Lỗi khi tải dữ liệu
+      </h3>
       <p>Không thể kết nối đến nguồn dữ liệu. Vui lòng thử lại sau.</p>
       <p style="font-size: 0.9rem; margin-top: 10px;">
         <em>Chi tiết lỗi: ${escapeHtml(error.message)}</em>
@@ -845,21 +902,23 @@ async function taiDuLieu() {
         border-radius: var(--radius-sm);
         cursor: pointer;
         font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: inherit;
       ">
-        🔄 Thử lại
+        ${ICONS.arrowPath} Thử lại
       </button>
     `;
-    showToast('❌ Không thể tải dữ liệu từ Google Sheets!', 'error');
+    showToast('Không thể tải dữ liệu từ Google Sheets!', 'error');
   } finally {
     if (loader) loader.classList.add('hidden');
   }
 }
 
-// Sự kiện tìm kiếm
 document.getElementById('search').addEventListener('input', filterVitri);
 document.getElementById('search').addEventListener('keypress', e => { if (e.key === 'Enter') filterVitri(); });
 
-// Xử lý click sao chép tọa độ (delegation)
 document.addEventListener('click', e => {
   const badge = e.target.closest('.badge');
   if (badge) {
@@ -868,19 +927,16 @@ document.addEventListener('click', e => {
   }
 });
 
-// Khởi động
 document.addEventListener('DOMContentLoaded', () => {
   console.log('=== TRANG QUẢN LÝ VỊ TRÍ KHỞI ĐỘNG ===');
   taiDuLieu();
   setTimeout(() => document.getElementById('search')?.focus(), 500);
 });
 
-// Tải lại khi online
 window.addEventListener('online', () => {
   console.log('Kết nối mạng được khôi phục, tải lại dữ liệu...');
   taiDuLieu();
 });
 </script>
-  <script src="assets/hero-icons.js" defer></script>
 </body>
 </html>
