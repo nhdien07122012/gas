@@ -455,12 +455,12 @@
     gap: 8px;
     font-family: var(--font-family);
   }
-  .btn-primary { background-color: var(--primary); color: var(--text-inverse); }
-  .btn-primary:hover { background-color: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(15,157,88,0.28); }
-  .btn-secondary { background-color: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); }
-  .btn-secondary:hover { background-color: var(--bg-hover); transform: translateY(-2px); border-color: var(--border-dark); }
-  .btn-success { background-color: var(--secondary); color: var(--text-inverse); }
-  .btn-success:hover { background-color: var(--secondary-dark); transform: translateY(-2px); }
+  .btn-primary { background-color: #0d6efd; color: var(--text-inverse); } /* Xanh dương - Lưu */
+  .btn-primary:hover { background-color: #0b5ed7; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(13,110,253,0.28); }
+  .btn-secondary { background-color: #6c757d; color: var(--text-inverse); } /* Xám - Tải lại */
+  .btn-secondary:hover { background-color: #5c636a; transform: translateY(-2px); }
+  .btn-success { background-color: var(--primary); color: var(--text-inverse); } /* Xanh lá - Xác nhận */
+  .btn-success:hover { background-color: var(--primary-dark); transform: translateY(-2px); }
   .btn-warning { background-color: var(--warning); color: var(--text-inverse); }
   .btn-warning:hover { background-color: var(--warning-dark); transform: translateY(-2px); }
   .btn-danger { background-color: var(--danger); color: var(--text-inverse); }
@@ -761,8 +761,14 @@
   .btn-location-disabled { background-color: var(--text-muted) !important; cursor: not-allowed !important; opacity: var(--opacity-disabled); }
   .btn-location-disabled:hover { transform: none !important; background-color: var(--text-muted) !important; }
 
+  /* ========== MODAL BÁO CÁO CUỐI CA ========== */
   #report-summary { border-left: 4px solid var(--primary); margin-top: 20px; padding: 15px; background: var(--bg-tertiary); border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
-  #report-details { line-height: 1.6; font-family: var(--font-family); }
+  #report-details { line-height: 1.8; font-family: var(--font-family); }
+  .report-line { display: flex; justify-content: space-between; margin-bottom: 4px; }
+  .report-label { color: var(--text-secondary); }
+  .report-value { font-weight: 600; }
+  .report-value.highlight { color: var(--primary); }
+  .report-value.danger { color: var(--danger); }
   .recipient-row { display: flex; gap: 10px; align-items: center; }
   .recipient-row input { flex: 1; border-radius: var(--radius-sm); }
   .recipient-row button { min-width: 80px; border-radius: var(--radius-sm); }
@@ -1727,14 +1733,16 @@ function removeExpense(index) {
 function updateReportSummary() {
   const selectedShift = document.getElementById('report-shift').value;
   const actualCountInput = document.getElementById('report-actual-count');
+  const recipientInput = document.getElementById('report-recipient');
+  
   if (selectedShift && actualCountInput.value === '') {
     const savedCountValue = getSavedCountForCurrentShift(selectedShift);
     if (savedCountValue !== null) actualCountInput.value = savedCountValue;
   }
-  const recipientInput = document.getElementById('report-recipient');
+  
   const recipient = recipientInput.value.trim();
   const summaryDiv = document.getElementById('report-summary');
-  const detailsP = document.getElementById('report-details');
+  const detailsDiv = document.getElementById('report-details');
   const totalP = document.getElementById('report-total');
   const generateBtn = document.getElementById('btn-generate-report');
 
@@ -1746,7 +1754,7 @@ function updateReportSummary() {
 
   const shiftData = allData.filter(item => item.ca === selectedShift);
   if (shiftData.length === 0) {
-    detailsP.textContent = 'Không có dữ liệu cho ca này';
+    detailsDiv.innerHTML = '<p>Không có dữ liệu cho ca này</p>';
     totalP.textContent = '';
     summaryDiv.style.display = 'block';
     generateBtn.disabled = true;
@@ -1757,17 +1765,22 @@ function updateReportSummary() {
   const actualCountedAmount = actualCountInput.value.trim() !== ''
     ? (parseInt(actualCountInput.value, 10) || 0)
     : totalRevenue;
-  const difference = actualCountedAmount - totalRevenue;
-  const estimatedExpense = Math.max(0, -difference);
+  
+  const difference = totalRevenue - actualCountedAmount; // Thiếu tiền là số dương
   const totalExpense = currentExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-  const isMatched = totalExpense >= estimatedExpense;
+  
+  const remainingForExpenses = Math.max(0, difference - totalExpense);
 
-  detailsP.innerHTML = `
-    Tổng doanh thu ca: <strong>${formatCurrencyCompact(totalRevenue)}</strong><br>
-    Số tiền thực tế đã đếm được: <strong>${formatCurrencyCompact(actualCountedAmount)}</strong><br>
-    Chênh lệch: <strong style="color: ${difference >= 0 ? 'var(--primary)' : 'var(--danger)'}">${difference >= 0 ? '+' : '-'}${formatCurrencyCompact(Math.abs(difference))}</strong><br>
-    Ước tính chi tiêu: <strong>${formatCurrencyCompact(estimatedExpense)}</strong>
+  detailsDiv.innerHTML = `
+    <div class="report-line"><span class="report-label">Tổng doanh thu:</span><span class="report-value">${formatCurrencyCompact(totalRevenue)}</span></div>
+    <div class="report-line"><span class="report-label">Thực tế đếm:</span><span class="report-value">${formatCurrencyCompact(actualCountedAmount)}</span></div>
+    <div class="report-line"><span class="report-label">Tổng thiếu:</span><span class="report-value ${difference > 0 ? 'danger' : 'highlight'}">${difference >= 0 ? '+' : ''}${formatCurrencyCompact(difference)}</span></div>
+    <div class="report-line"><span class="report-label">Đã chi tiêu:</span><span class="report-value danger">-${formatCurrencyCompact(totalExpense)}</span></div>
+    <div class="report-line"><span class="report-label">Còn lại dự kiến:</span><span class="report-value ${remainingForExpenses > 0 ? 'highlight' : ''}">${formatCurrencyCompact(remainingForExpenses)}</span></div>
   `;
+
+  // Trạng thái khớp: Tổng thiếu tiền phải bằng tổng chi tiêu (hoặc chênh lệch 0)
+  const isMatched = (difference === totalExpense);
   totalP.innerHTML = `Trạng thái: <span style="color: ${isMatched ? 'var(--primary)' : 'var(--danger)'}">${isMatched ? 'Khớp' : 'Chưa khớp'}</span>`;
   summaryDiv.style.display = 'block';
   generateBtn.disabled = false;
