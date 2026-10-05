@@ -919,6 +919,97 @@
     --border-color: #303030; --border-light: #242424; --border-dark: #3a3a3a;
     --night-shift: #0b7d45; --day-shift: #0b7d45;
   }
+
+  /* ========== QUEUE BUTTON & PANEL ========== */
+  #queueBtn {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    z-index: 999;
+    background: var(--warning);
+    color: var(--text-inverse);
+    border: 2px solid var(--warning-dark);
+    border-radius: var(--radius-circle);
+    width: 56px;
+    height: 56px;
+    box-shadow: var(--shadow-lg);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: var(--font-family);
+    font-weight: 600;
+    padding: 0;
+    flex: 0 0 auto;
+  }
+  #queueBtn .hero-icon { width: 28px; height: 28px; }
+  #queueBtn:hover { background: var(--warning-dark); transform: translateY(-5px) scale(1.05); box-shadow: 0 10px 20px rgba(255,149,0,0.28); }
+  #queueBtn .queue-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--danger);
+    color: white;
+    border-radius: var(--radius-circle);
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-primary);
+    animation: queuePulse 2s ease-in-out infinite;
+  }
+  @keyframes queuePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+  @keyframes queueSyncSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  #queueBtn.syncing .hero-icon { animation: queueSyncSpin 1s linear infinite; }
+
+  .queue-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    background-color: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+    font-family: var(--font-family);
+    gap: 10px;
+  }
+  .queue-item:hover { background-color: var(--bg-hover); }
+  .queue-item:last-child { margin-bottom: 0; }
+  .queue-item-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+  .queue-item-name { font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .queue-item-detail { font-size: 0.85rem; color: var(--text-secondary); margin-top: 3px; font-weight: 400; }
+  .queue-item-amount { font-weight: 700; color: var(--warning); font-size: 1rem; white-space: nowrap; }
+  .queue-item-actions { display: flex; gap: 5px; flex-shrink: 0; }
+  .queue-item-delete { background: none; border: none; color: var(--danger); cursor: pointer; padding: 5px; border-radius: var(--radius-xs); transition: var(--transition-fast); font-family: var(--font-family); display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+  .queue-item-delete:hover { background: rgba(255, 59, 48, 0.1); transform: scale(1.1); }
+
+  .queue-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .queue-status-bar.online { background: rgba(52, 199, 89, 0.15); color: var(--success); border: 1px solid rgba(52, 199, 89, 0.3); }
+  .queue-status-bar.offline { background: rgba(255, 59, 48, 0.15); color: var(--danger); border: 1px solid rgba(255, 59, 48, 0.3); }
+  .queue-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .queue-status-bar.online .queue-status-dot { background: var(--success); }
+  .queue-status-bar.offline .queue-status-dot { background: var(--danger); }
 </style>
 
 </head>
@@ -1177,6 +1268,52 @@
       <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
     </svg>
   </button>
+
+  <!-- Queue button (bên phải, đối diện nút +) -->
+  <button id="queueBtn" title="Hàng đợi" aria-label="Hàng đợi đồng bộ" onclick="openModal('queue-modal')">
+    <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
+    </svg>
+    <span class="queue-badge" id="queueBadge">0</span>
+  </button>
+
+  <!-- Modal hàng đợi -->
+  <div class="modal" id="queue-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
+          </svg>
+          Hàng đợi đồng bộ
+        </h2>
+        <button class="close-modal" onclick="closeModal('queue-modal')" aria-label="Đóng">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="queue-status-bar" class="queue-status-bar online">
+          <span class="queue-status-dot"></span>
+          <span id="queue-status-text">Đang kiểm tra kết nối...</span>
+        </div>
+        <div id="queue-list-container"></div>
+        <div id="queue-empty" class="empty-state" style="display: none;">
+          <p>Không có điểm gas nào trong hàng đợi</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('queue-modal')">Đóng</button>
+        <button class="btn-primary" id="btn-sync-queue" onclick="syncQueue()" disabled>
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" />
+          </svg>
+          Đồng bộ ngay
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal xác nhận xóa -->
   <div class="modal" id="delete-modal">
@@ -1439,6 +1576,9 @@ let currentExpenses = [];
 
 let audioContext = null;
 let clickSoundBuffer = null;
+
+const QUEUE_STORAGE_KEY = 'gas_point_queue_v1';
+let isSyncingQueue = false;
 
 /* ========== HEROICONS SVG LIBRARY ========== */
 const ICONS = {
@@ -2818,12 +2958,28 @@ async function guiDuLieu() {
       resetForm();
       taiDuLieu();
     } else {
+      // Server trả về lỗi - thêm vào hàng đợi nếu là thêm mới
+      if (!editingId) {
+        addToQueue(data);
+        showToast('Lỗi khi lưu! Đã thêm vào hàng đợi để đồng bộ sau.', 'warning');
+        vibrateError();
+        resetForm();
+      } else {
+        showToast('Có lỗi xảy ra khi lưu dữ liệu!', 'error');
+        vibrateError();
+      }
+    }
+  } catch (error) {
+    // Lỗi mạng - thêm vào hàng đợi nếu là thêm mới
+    if (!editingId) {
+      addToQueue(data);
+      showToast('Mất kết nối! Đã thêm vào hàng đợi để đồng bộ khi có mạng.', 'warning');
+      vibrateError();
+      resetForm();
+    } else {
       showToast('Có lỗi xảy ra khi lưu dữ liệu!', 'error');
       vibrateError();
     }
-  } catch (error) {
-    showToast('Có lỗi xảy ra khi lưu dữ liệu!', 'error');
-    vibrateError();
     console.error(error);
   } finally {
     if (loader) loader.classList.add('hidden');
@@ -3037,11 +3193,195 @@ if (systemThemeMedia.addEventListener) {
 
 applySavedTheme();
 
+/* ========== QUẢN LÝ HÀNG ĐỢI ========== */
+function getQueue() {
+  try {
+    return JSON.parse(localStorage.getItem(QUEUE_STORAGE_KEY) || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveQueue(queue) {
+  localStorage.setItem(QUEUE_STORAGE_KEY, JSON.stringify(queue));
+  updateQueueUI();
+}
+
+function addToQueue(data) {
+  const queue = getQueue();
+  const queueItem = {
+    ...data,
+    queueId: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+    queueTime: new Date().toISOString()
+  };
+  queue.push(queueItem);
+  saveQueue(queue);
+}
+
+function removeFromQueue(queueId) {
+  vibrateShort();
+  const queue = getQueue();
+  const newQueue = queue.filter(item => item.queueId !== queueId);
+  saveQueue(newQueue);
+}
+
+function updateQueueUI() {
+  const queue = getQueue();
+  const btn = document.getElementById('queueBtn');
+  const badge = document.getElementById('queueBadge');
+  const container = document.getElementById('queue-list-container');
+  const emptyState = document.getElementById('queue-empty');
+  const syncBtn = document.getElementById('btn-sync-queue');
+  
+  if (queue.length > 0) {
+    btn.style.display = 'flex';
+    badge.textContent = queue.length;
+    emptyState.style.display = 'none';
+    syncBtn.disabled = !navigator.onLine || isSyncingQueue;
+    
+    container.innerHTML = '';
+    queue.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'queue-item';
+      div.innerHTML = `
+        <div class="queue-item-info">
+          <div class="queue-item-name">${escapeHTML(item.ten_diem)}</div>
+          <div class="queue-item-detail">${escapeHTML(item.dia_chi || '')} • Ca: ${escapeHTML(formatShiftDayLabel(item.ca))}</div>
+        </div>
+        <div class="queue-item-amount">${formatCurrency(item.so_tien)}</div>
+        <div class="queue-item-actions">
+          <button class="queue-item-delete" onclick="removeFromQueue('${item.queueId}')" aria-label="Xóa">${svgInline('trash')}</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  } else {
+    btn.style.display = 'none';
+    emptyState.style.display = 'block';
+    container.innerHTML = '';
+    syncBtn.disabled = true;
+  }
+}
+
+function updateNetworkStatus() {
+  const statusBar = document.getElementById('queue-status-bar');
+  const statusText = document.getElementById('queue-status-text');
+  const syncBtn = document.getElementById('btn-sync-queue');
+  
+  if (navigator.onLine) {
+    statusBar.className = 'queue-status-bar online';
+    statusText.textContent = 'Đã kết nối mạng - Sẵn sàng đồng bộ';
+    if (getQueue().length > 0 && !isSyncingQueue) {
+      syncBtn.disabled = false;
+      // Tự động đồng bộ sau 2s khi có mạng trở lại
+      setTimeout(syncQueue, 2000);
+    }
+  } else {
+    statusBar.className = 'queue-status-bar offline';
+    statusText.textContent = 'Mất kết nối mạng - Đang chờ mạng...';
+    syncBtn.disabled = true;
+  }
+}
+
+async function syncQueue() {
+  if (!navigator.onLine) {
+    showToast('Không có kết nối mạng!', 'warning');
+    return;
+  }
+  
+  let queue = getQueue();
+  if (queue.length === 0 || isSyncingQueue) return;
+  
+  isSyncingQueue = true;
+  vibrateShort();
+  const queueBtn = document.getElementById('queueBtn');
+  queueBtn.classList.add('syncing');
+  
+  const syncBtn = document.getElementById('btn-sync-queue');
+  syncBtn.disabled = true;
+  syncBtn.innerHTML = `<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" /></svg> Đang đồng bộ...`;
+
+  let successCount = 0;
+  let duplicateCount = 0;
+  let failCount = 0;
+  
+  try {
+    const res = await fetch(`${scriptURL}?t=${Date.now()}`, { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        allData = data;
+        updateCacheDiem();
+      }
+    }
+  } catch(e) {
+    console.warn("Không tải được dữ liệu mới để check trùng", e);
+  }
+
+  for (const item of [...queue]) {
+    const isDuplicate = allData.some(d => 
+      d.ten_diem === item.ten_diem && 
+      d.ca === item.ca && 
+      String(d.so_tien) === String(item.so_tien)
+    );
+    
+    if (isDuplicate) {
+      duplicateCount++;
+      queue = queue.filter(q => q.queueId !== item.queueId);
+      saveQueue(queue);
+      continue;
+    }
+    
+    const dataToSend = { ...item };
+    delete dataToSend.queueId;
+    delete dataToSend.queueTime;
+    
+    try {
+      const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(dataToSend) });
+      const result = await response.json();
+      
+      if (result.result === 'success') {
+        successCount++;
+        queue = queue.filter(q => q.queueId !== item.queueId);
+        saveQueue(queue);
+      } else {
+        failCount++;
+      }
+    } catch (error) {
+      failCount++;
+      console.error("Lỗi đồng bộ item:", error);
+    }
+  }
+  
+  isSyncingQueue = false;
+  queueBtn.classList.remove('syncing');
+  syncBtn.innerHTML = `<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" /></svg> Đồng bộ ngay`;
+  
+  if (successCount > 0 || duplicateCount > 0) {
+    showToast(`Đồng bộ: ${successCount} thành công, ${duplicateCount} trùng lặp${failCount > 0 ? `, ${failCount} lỗi` : ''}`, 'success');
+    vibrateSuccess();
+    if (queue.length === 0) {
+      closeModal('queue-modal');
+    }
+    taiDuLieu();
+  } else if (failCount > 0) {
+    showToast(`Đồng bộ thất bại ${failCount} điểm. Vui lòng thử lại sau.`, 'error');
+    vibrateError();
+  }
+  
+  updateQueueUI();
+}
+
 /* ========== KHỞI TẠO ========== */
 document.addEventListener('DOMContentLoaded', function() {
   initAudio();
   updateShiftInfo();
   taiDuLieu();
+  updateQueueUI();
+  updateNetworkStatus();
+
+  window.addEventListener('online', updateNetworkStatus);
+  window.addEventListener('offline', updateNetworkStatus);
 
   document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
   document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
