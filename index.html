@@ -560,7 +560,7 @@
   .filter-toggle span#filter-toggle-icon { display: inline-flex; width: 18px; justify-content: center; transform: rotate(0deg); transition: transform 0.2s ease; }
   .filter-toggle[aria-expanded="true"] span#filter-toggle-icon { transform: rotate(90deg); }
   .filter-group { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-  .filter-group select { flex: 1; min-width: 200px; border-radius: var(--radius-md); padding: 12px 16px; font-family: var(--font-family); }
+  .filter-group select, .filter-group input { flex: 1; min-width: 160px; border-radius: var(--radius-md); padding: 12px 16px; font-family: var(--font-family); }
   .filter-group-advanced { display: none; }
   .filter-group-advanced.show { display: flex; }
 
@@ -649,7 +649,7 @@
     .stat-card { border-radius: var(--radius-md); min-width: 0; width: 100%; padding: 16px 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
     .stat-value { font-size: 1.3rem; font-weight: 700; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
     .filter-group { flex-direction: column; }
-    .filter-group select { min-width: 100%; border-radius: var(--radius-sm); }
+    .filter-group select, .filter-group input { min-width: 100%; border-radius: var(--radius-sm); }
     th, td { padding: 12px 8px; font-size: 0.9rem; }
     table { min-width: auto; width: 100%; table-layout: auto; }
     .modal { padding: 10px; }
@@ -1168,22 +1168,12 @@
           <option value="Chưa nộp">Chưa nộp</option>
           <option value="Đã nộp">Đã nộp</option>
         </select>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="chon_diem">Chọn điểm:</label>
-          <input id="chon_diem" list="diem-list" placeholder="Nhập hoặc chọn điểm..." oninput="chonDiem()">
-          <datalist id="diem-list"></datalist>
-        </div>
-
-        <div class="form-group">
-          <label for="trang_thai">Trạng thái:</label>
-          <select id="trang_thai">
-            <option value="Chưa nộp">Chưa nộp</option>
-            <option value="Đã nộp">Đã nộp</option>
-          </select>
-        </div>
+        <input id="chon_diem" list="diem-list" placeholder="Chọn điểm gas..." oninput="chonDiem()">
+        <datalist id="diem-list"></datalist>
+        <select id="trang_thai">
+          <option value="Chưa nộp">Chưa nộp</option>
+          <option value="Đã nộp">Đã nộp</option>
+        </select>
       </div>
 
       <div class="form-group">
