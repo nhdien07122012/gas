@@ -1154,6 +1154,8 @@
         <select id="filter-shift" onchange="filterByShift()">
           <option value="all">Tất cả các ca</option>
         </select>
+        <input id="chon_diem" list="diem-list" placeholder="Chọn điểm gas..." oninput="chonDiem()" style="flex:1;min-width:160px;">
+        <datalist id="diem-list"></datalist>
         <button class="filter-toggle" type="button" onclick="toggleAdvancedFilters()" aria-expanded="false">
           <span id="filter-toggle-icon">▸</span>
           <span class="filter-toggle-text">Lọc thêm</span>
@@ -1168,18 +1170,14 @@
           <option value="Chưa nộp">Chưa nộp</option>
           <option value="Đã nộp">Đã nộp</option>
         </select>
-        <input id="chon_diem" list="diem-list" placeholder="Chọn điểm gas..." oninput="chonDiem()">
-        <datalist id="diem-list"></datalist>
         <select id="trang_thai">
           <option value="Chưa nộp">Chưa nộp</option>
           <option value="Đã nộp">Đã nộp</option>
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="ten_diem">Tên điểm:</label>
-        <input id="ten_diem" placeholder="Nhập tên điểm (nếu thêm mới)">
-      </div>
+      <!-- ten_diem ẩn, JS vẫn dùng để lấy tên điểm -->
+      <input id="ten_diem" type="hidden" value="">
 
       <div class="form-group">
         <label for="so_tien">Số tiền:</label>
@@ -2738,19 +2736,16 @@ function chonDiem() {
   const diaChiInput = document.getElementById('dia_chi');
   const soTienInput = document.getElementById('so_tien');
 
+  // Luôn đồng bộ ten_diem với giá trị chon_diem (cả điểm mới lẫn điểm có sẵn)
+  tenDiemInput.value = val;
+
   resetSaveLocationButton();
 
   if (!val) {
-    tenDiemInput.value = '';
     diaChiInput.value = '';
     soTienInput.value = '';
-    tenDiemInput.disabled = false;
-    tenDiemInput.placeholder = "Nhập tên điểm (nếu thêm mới)";
   } else {
-    tenDiemInput.value = val;
     diaChiInput.value = cacheDiem[val] || '';
-    tenDiemInput.disabled = true;
-    tenDiemInput.placeholder = "Tên điểm đã chọn";
 
     const latestEntry = findLatestEntryForDiem(val);
     if (latestEntry) {
