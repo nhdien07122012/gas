@@ -216,8 +216,13 @@
     flex-direction: column;
     border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
     border-right: 1px solid var(--border-color);
+    touch-action: pan-y;
   }
   .sidebar.open { left: 0; }
+  .sidebar.swiping {
+    transition: none !important;
+    will-change: left;
+  }
 
   .sidebar-header {
     padding: 20px;
@@ -544,6 +549,11 @@
     display: none;
   }
   .overlay.active { display: block; }
+  .overlay.swiping {
+    display: block !important;
+    transition: none !important;
+    pointer-events: none !important;
+  }
 
   /* ========== MODAL STYLES ========== */
   .modal {
@@ -963,27 +973,231 @@ function stripLeadingEmoji(str) {
 }
 
 // ========== HÀM TOGGLE SIDEBAR ==========
-function toggleSidebar() {
+function openSidebar() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
-  const isOpen = sidebar.classList.contains('open');
-
-  sidebar.classList.toggle('open');
-  overlay.classList.toggle('active');
-
-  if (!isOpen) {
+  if (!sidebar || !overlay) return;
+  if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
+  sidebar.style.left = '';
+  sidebar.style.transition = '';
+  overlay.style.opacity = '';
+  overlay.style.transition = '';
+  overlay.style.display = '';
+  if (!sidebar.classList.contains('open')) {
+    if (navigator.vibrate) navigator.vibrate(10);
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = '';
   }
 }
 
 function closeSidebar() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
+  if (!sidebar || !overlay) return;
+  if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
+  sidebar.style.left = '';
+  sidebar.style.transition = '';
+  overlay.style.opacity = '';
+  overlay.style.transition = '';
+  overlay.style.display = '';
   sidebar.classList.remove('open');
   overlay.classList.remove('active');
   document.body.style.overflow = '';
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar && sidebar.classList.contains('open')) {
+    if (navigator.vibrate) navigator.vibrate(10);
+    closeSidebar();
+  } else {
+    openSidebar();
+  }
+}
+
+/* ========== VUỐT CẠNH TRÁI ĐỂ MỞ/ĐÓNG MENUBAR (IPHONE STYLE) ========== */
+function setupSidebarSwipe() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!sidebar || !overlay) return;
+
+  const EDGE_THRESHOLD = 35; // Vùng cảm ứng mép trái màn hình (px)
+  let startX = 0;
+  let startY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let startTime = 0;
+  let isSwiping = false;
+  let isClosing = false;
+  let isDetermined = false;
+  let animTimeout = null;
+
+  window.sidebarSwipeCancelAnim = function() {
+    if (animTimeout) {
+      clearTimeout(animTimeout);
+      animTimeout = null;
+    }
+  };
+
+  function getSidebarWidth() {
+    return sidebar.offsetWidth || 280;
+  }
+
+  function handleTouchStart(e) {
+    if (e.touches.length !== 1) return;
+
+    const touch = e.touches[0];
+    const target = touch.target;
+    if (target && target.closest && target.closest('input, textarea, select')) return;
+
+    startX = touch.clientX;
+    startY = touch.clientY;
+    currentX = startX;
+    currentY = startY;
+    startTime = Date.now();
+    isDetermined = false;
+    isSwiping = false;
+
+    const isOpen = sidebar.classList.contains('open');
+
+    if (isOpen) {
+      isClosing = true;
+    } else {
+      if (startX <= EDGE_THRESHOLD) {
+        isClosing = false;
+      } else {
+        return;
+      }
+    }
+
+    if (animTimeout) {
+      clearTimeout(animTimeout);
+      animTimeout = null;
+    }
+  }
+
+  function handleTouchMove(e) {
+    if (e.touches.length !== 1) return;
+
+    const touch = e.touches[0];
+    currentX = touch.clientX;
+    currentY = touch.clientY;
+    const deltaX = currentX - startX;
+    const deltaY = currentY - startY;
+
+    if (!isDetermined) {
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
+
+      if (absX < 8 && absY < 8) return;
+
+      isDetermined = true;
+
+      if (!isClosing) {
+        if (deltaX > 0 && absX > absY * 1.2) {
+          isSwiping = true;
+        } else {
+          isSwiping = false;
+          return;
+        }
+      } else {
+        if (deltaX < 0 && absX > absY * 1.2) {
+          isSwiping = true;
+        } else {
+          isSwiping = false;
+          return;
+        }
+      }
+    }
+
+    if (!isSwiping) return;
+
+    e.preventDefault();
+
+    const sidebarWidth = getSidebarWidth();
+
+    sidebar.classList.add('swiping');
+    overlay.classList.add('swiping');
+
+    if (!isClosing) {
+      const left = Math.min(0, -sidebarWidth + Math.max(0, deltaX));
+      const progress = Math.min(Math.max(deltaX / sidebarWidth, 0), 1);
+      sidebar.style.left = left + 'px';
+      overlay.style.opacity = progress.toFixed(3);
+    } else {
+      const left = Math.min(0, Math.max(-sidebarWidth, deltaX));
+      const progress = Math.min(Math.max(1 + (deltaX / sidebarWidth), 0), 1);
+      sidebar.style.left = left + 'px';
+      overlay.style.opacity = progress.toFixed(3);
+    }
+  }
+
+  function handleTouchEnd(e) {
+    if (!isSwiping) {
+      isDetermined = false;
+      return;
+    }
+
+    isSwiping = false;
+    isDetermined = false;
+
+    sidebar.classList.remove('swiping');
+    overlay.classList.remove('swiping');
+
+    const sidebarWidth = getSidebarWidth();
+    const deltaX = currentX - startX;
+    const duration = Math.max(Date.now() - startTime, 1);
+    const velocityX = deltaX / duration;
+
+    let shouldOpen = false;
+
+    if (!isClosing) {
+      shouldOpen = (deltaX > sidebarWidth * 0.3) || (velocityX > 0.3 && deltaX > 30);
+    } else {
+      const shouldClose = (deltaX < -sidebarWidth * 0.25) || (velocityX < -0.3 && deltaX < -30);
+      shouldOpen = !shouldClose;
+    }
+
+    sidebar.style.transition = 'left 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
+    overlay.style.transition = 'opacity 0.25s ease';
+
+    if (shouldOpen) {
+      sidebar.style.left = '0px';
+      overlay.style.opacity = '1';
+      if (navigator.vibrate) navigator.vibrate(10);
+
+      animTimeout = setTimeout(() => {
+        sidebar.style.left = '';
+        sidebar.style.transition = '';
+        overlay.style.opacity = '';
+        overlay.style.transition = '';
+        overlay.style.display = '';
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }, 250);
+    } else {
+      sidebar.style.left = (-sidebarWidth) + 'px';
+      overlay.style.opacity = '0';
+
+      animTimeout = setTimeout(() => {
+        sidebar.style.left = '';
+        sidebar.style.transition = '';
+        overlay.style.opacity = '';
+        overlay.style.transition = '';
+        overlay.style.display = '';
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }, 250);
+    }
+  }
+
+  window.addEventListener('touchstart', handleTouchStart, { passive: true });
+  window.addEventListener('touchmove', handleTouchMove, { passive: false });
+  window.addEventListener('touchend', handleTouchEnd, { passive: true });
+  window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 }
 
 // ========== HÀM ĐIỀU HƯỚNG ==========
@@ -1166,6 +1380,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
   document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
   document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
+  setupSidebarSwipe();
 
   document.getElementById('kg_vo_gas').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
