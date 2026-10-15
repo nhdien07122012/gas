@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quản lý tiền thu điểm gas theo ca</title>
+<title>Quản lý tiền thu điểm gas theo ca - VNPost Gas</title>
 
+<!-- Google Fonts: Be Vietnam Pro & Inter for ultra-crisp Vietnamese typography -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
-<link rel="apple-touch-icon-precomposed" href="icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Quản lý điểm gas">
@@ -19,110 +19,314 @@
 <style>
   body, html { touch-action: manipulation; }
 
+  /* ============================================================
+     VNPost Gas Management - Modern Clean Design System
+     Typography: Be Vietnam Pro & Inter for Crisp Vietnamese Diacritics
+     Palette: VNPost Blue (#005ba6) + Amber Accent (#f59e0b) + Slate Neutrals
+     ============================================================ */
+
   :root {
-    --primary: #0f9d58;
-    --primary-dark: #0b7d45;
-    --primary-light: #4cd67f;
-    --secondary: #34c759;
-    --secondary-dark: #2aa64a;
-    --danger: #ff3b30;
-    --danger-dark: #e0352b;
-    --warning: #ff9500;
-    --warning-dark: #e08900;
-    --info: #5ac8fa;
-    --success: #34c759;
+    /* Brand Palette (Vietnam Post) */
+    --vnpost-blue: #005ba6;
+    --vnpost-blue-hover: #004680;
+    --vnpost-blue-light: #e8f2fa;
+    --vnpost-blue-border: #bfdbfe;
+    --vnpost-yellow: #f59e0b;
+    --vnpost-yellow-light: #fef3c7;
+    --vnpost-yellow-border: #fde68a;
+
+    /* Semantic Status Accents */
+    --color-success: #10b981;
+    --color-success-hover: #059669;
+    --color-success-bg: #ecfdf5;
+    --color-success-text: #065f46;
+    --color-success-border: #a7f3d0;
+
+    --color-warning: #f59e0b;
+    --color-warning-hover: #d97706;
+    --color-warning-bg: #fffbeb;
+    --color-warning-text: #92400e;
+    --color-warning-border: #fde68a;
+
+    --color-danger: #ef4444;
+    --color-danger-hover: #dc2626;
+    --color-danger-bg: #fef2f2;
+    --color-danger-text: #991b1b;
+    --color-danger-border: #fecaca;
+
+    --primary: #005ba6;
+    --primary-dark: #004680;
+    --primary-light: #e8f2fa;
+    --secondary: #64748b;
+    --secondary-dark: #475569;
+    --danger: #ef4444;
+    --danger-dark: #dc2626;
+    --warning: #f59e0b;
+    --warning-dark: #d97706;
+    --info: #0284c7;
+    --success: #10b981;
+
+    /* Neutral Slate Palette (Light Mode) */
+    --bg-app: #f8fafc;
     --bg-primary: #ffffff;
-    --bg-secondary: #f3f7f2;
-    --bg-tertiary: #f7faf7;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
     --bg-card: #ffffff;
     --bg-sidebar: #ffffff;
     --bg-modal: #ffffff;
     --bg-input: #ffffff;
-    --bg-hover: #eef7ec;
-    --bg-active: #e8f8ea;
-    --text-primary: #0b3b2a;
-    --text-secondary: #576a5f;
-    --text-tertiary: #7a9184;
+    --bg-hover: #f1f5f9;
+    --bg-active: #e2e8f0;
+
+    --text-main: #0f172a;
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-tertiary: #64748b;
     --text-inverse: #ffffff;
-    --text-muted: #adb5bd;
-    --border-color: #e6efe8;
-    --border-light: #eef6ed;
-    --border-dark: #cfded0;
-    --shadow: 0 2px 10px rgba(0,0,0,0.08);
-    --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
-    --shadow-dark: 0 2px 10px rgba(0,0,0,0.15);
-    --night-shift: #0b7d45;
-    --day-shift: #f7fafc;
-    --radius-xl: 28px;
-    --radius-lg: 20px;
-    --radius-md: 16px;
-    --radius-sm: 12px;
-    --radius-xs: 8px;
+    --text-muted: #94a3b8;
+
+    --border-color: #e2e8f0;
+    --border-card: #e2e8f0;
+    --border-light: #f1f5f9;
+    --border-dark: #cbd5e1;
+    --border-input: #cbd5e1;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+    --shadow-float: 0 10px 20px -3px rgb(0 0 0 / 0.14), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+
+    --radius-xl: 20px;
+    --radius-lg: 14px;
+    --radius-md: 10px;
+    --radius-sm: 8px;
+    --radius-xs: 6px;
     --radius-circle: 50%;
-    --sidebar-width: 280px;
-    --header-height: auto;
-    --transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
-    --transition-fast: transform 0.12s ease, opacity 0.12s ease;
-    --transition-slow: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s ease;
-    --opacity-disabled: 0.6;
-    --opacity-hover: 0.9;
-    --opacity-active: 0.8;
-    --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-    --font-family-mono: 'Roboto Mono', 'Courier New', monospace;
+
+    --sidebar-width: 290px;
+    --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-fast: all 0.12s ease;
+    --transition-slow: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Vietnamese Optimized Typography Stack */
+    --font-family: 'Be Vietnam Pro', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-family-mono: 'Roboto Mono', 'SFMono-Regular', Consolas, Menlo, monospace;
   }
 
+  /* ========== DARK MODE (Slate 900 High-Contrast) ========== */
   @media (prefers-color-scheme: dark) {
     :root {
-      --primary: #23b66a;
-      --primary-dark: #0b7d45;
-      --primary-light: #4cd67f;
-      --secondary: #34c759;
-      --secondary-dark: #26a64a;
-      --danger: #ff5252;
-      --danger-dark: #ff3838;
-      --warning: #ffa726;
-      --warning-dark: #ff9800;
-      --info: #42a5f5;
-      --success: #30c75a;
-      --bg-primary: #0b0b0b;
-      --bg-secondary: #121212;
-      --bg-tertiary: #191919;
-      --bg-card: #161616;
-      --bg-sidebar: #0b0b0b;
-      --bg-modal: #161616;
-      --bg-input: #161616;
-      --bg-hover: #1f1f1f;
-      --bg-active: #292929;
-      --text-primary: #f2f2f2;
-      --text-secondary: #c7c7c7;
-      --text-tertiary: #a5a5a5;
-      --text-inverse: #f5f5f5;
-      --text-muted: #999999;
-      --border-color: #303030;
-      --border-light: #242424;
-      --border-dark: #3a3a3a;
-      --shadow: 0 2px 10px rgba(0,0,0,0.5);
+      --vnpost-blue: #38bdf8;
+      --vnpost-blue-hover: #0284c7;
+      --vnpost-blue-light: rgba(56, 189, 248, 0.14);
+      --vnpost-blue-border: rgba(56, 189, 248, 0.3);
+      --vnpost-yellow: #fbbf24;
+      --vnpost-yellow-light: rgba(251, 191, 36, 0.14);
+      --vnpost-yellow-border: rgba(251, 191, 36, 0.3);
+
+      --color-success: #34d399;
+      --color-success-hover: #10b981;
+      --color-success-bg: rgba(16, 185, 129, 0.14);
+      --color-success-text: #6ee7b7;
+      --color-success-border: rgba(16, 185, 129, 0.3);
+
+      --color-warning: #fbbf24;
+      --color-warning-hover: #f59e0b;
+      --color-warning-bg: rgba(245, 158, 11, 0.14);
+      --color-warning-text: #fde68a;
+      --color-warning-border: rgba(245, 158, 11, 0.3);
+
+      --color-danger: #f87171;
+      --color-danger-hover: #ef4444;
+      --color-danger-bg: rgba(239, 68, 68, 0.14);
+      --color-danger-text: #fca5a5;
+      --color-danger-border: rgba(239, 68, 68, 0.3);
+
+      --primary: #38bdf8;
+      --primary-dark: #0284c7;
+      --primary-light: rgba(56, 189, 248, 0.14);
+      --secondary: #94a3b8;
+      --secondary-dark: #64748b;
+      --danger: #f87171;
+      --danger-dark: #ef4444;
+      --warning: #fbbf24;
+      --warning-dark: #f59e0b;
+      --info: #38bdf8;
+      --success: #34d399;
+
+      --bg-app: #0f172a;
+      --bg-primary: #1e293b;
+      --bg-secondary: #0f172a;
+      --bg-tertiary: #1e293b;
+      --bg-card: #1e293b;
+      --bg-sidebar: #0f172a;
+      --bg-modal: #1e293b;
+      --bg-input: #0f172a;
+      --bg-hover: #334155;
+      --bg-active: #475569;
+
+      --text-main: #f8fafc;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-tertiary: #94a3b8;
+      --text-inverse: #ffffff;
+      --text-muted: #64748b;
+
+      --border-color: #334155;
+      --border-card: #334155;
+      --border-light: #1e293b;
+      --border-dark: #475569;
+      --border-input: #475569;
+
+      --shadow: 0 2px 10px rgba(0,0,0,0.45);
       --shadow-lg: 0 8px 25px rgba(0,0,0,0.55);
-      --shadow-dark: 0 2px 10px rgba(0,0,0,0.6);
-      --night-shift: #0b7d45;
-      --day-shift: #0b7d45;
+      --shadow-float: 0 10px 25px rgba(0,0,0,0.6);
     }
-    header { color: var(--text-inverse) !important; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
-    header h1, header p { color: var(--text-inverse) !important; }
-    .menu-toggle { color: var(--text-inverse) !important; }
-    .shift-info { color: var(--text-inverse) !important; background: linear-gradient(135deg, var(--night-shift), #0b7d45) !important; }
-    .shift-info .current-shift, .shift-info .shift-time { color: var(--text-inverse) !important; }
-    .sidebar-header h2 { color: var(--text-inverse) !important; }
-    .close-sidebar { color: var(--text-inverse) !important; }
-    .sidebar-item { color: var(--text-primary) !important; background: transparent; }
-    .sidebar-footer p { color: rgba(233, 248, 238, 0.9) !important; }
   }
 
+  [data-theme="dark"], body.dark-mode {
+    --vnpost-blue: #38bdf8;
+    --vnpost-blue-hover: #0284c7;
+    --vnpost-blue-light: rgba(56, 189, 248, 0.14);
+    --vnpost-blue-border: rgba(56, 189, 248, 0.3);
+    --vnpost-yellow: #fbbf24;
+    --vnpost-yellow-light: rgba(251, 191, 36, 0.14);
+    --vnpost-yellow-border: rgba(251, 191, 36, 0.3);
+
+    --color-success: #34d399;
+    --color-success-hover: #10b981;
+    --color-success-bg: rgba(16, 185, 129, 0.14);
+    --color-success-text: #6ee7b7;
+    --color-success-border: rgba(16, 185, 129, 0.3);
+
+    --color-warning: #fbbf24;
+    --color-warning-hover: #f59e0b;
+    --color-warning-bg: rgba(245, 158, 11, 0.14);
+    --color-warning-text: #fde68a;
+    --color-warning-border: rgba(245, 158, 11, 0.3);
+
+    --color-danger: #f87171;
+    --color-danger-hover: #ef4444;
+    --color-danger-bg: rgba(239, 68, 68, 0.14);
+    --color-danger-text: #fca5a5;
+    --color-danger-border: rgba(239, 68, 68, 0.3);
+
+    --primary: #38bdf8;
+    --primary-dark: #0284c7;
+    --primary-light: rgba(56, 189, 248, 0.14);
+    --secondary: #94a3b8;
+    --secondary-dark: #64748b;
+    --danger: #f87171;
+    --danger-dark: #ef4444;
+    --warning: #fbbf24;
+    --warning-dark: #f59e0b;
+    --info: #38bdf8;
+    --success: #34d399;
+
+    --bg-app: #0f172a;
+    --bg-primary: #1e293b;
+    --bg-secondary: #0f172a;
+    --bg-tertiary: #1e293b;
+    --bg-card: #1e293b;
+    --bg-sidebar: #0f172a;
+    --bg-modal: #1e293b;
+    --bg-input: #0f172a;
+    --bg-hover: #334155;
+    --bg-active: #475569;
+
+    --text-main: #f8fafc;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-tertiary: #94a3b8;
+    --text-inverse: #ffffff;
+    --text-muted: #64748b;
+
+    --border-color: #334155;
+    --border-card: #334155;
+    --border-light: #1e293b;
+    --border-dark: #475569;
+    --border-input: #475569;
+
+    --shadow: 0 2px 10px rgba(0,0,0,0.45);
+    --shadow-lg: 0 8px 25px rgba(0,0,0,0.55);
+    --shadow-float: 0 10px 25px rgba(0,0,0,0.6);
+  }
+
+  [data-theme="light"] {
+    --vnpost-blue: #005ba6;
+    --vnpost-blue-hover: #004680;
+    --vnpost-blue-light: #e8f2fa;
+    --vnpost-blue-border: #bfdbfe;
+    --vnpost-yellow: #f59e0b;
+    --vnpost-yellow-light: #fef3c7;
+    --vnpost-yellow-border: #fde68a;
+
+    --color-success: #10b981;
+    --color-success-hover: #059669;
+    --color-success-bg: #ecfdf5;
+    --color-success-text: #065f46;
+    --color-success-border: #a7f3d0;
+
+    --color-warning: #f59e0b;
+    --color-warning-hover: #d97706;
+    --color-warning-bg: #fffbeb;
+    --color-warning-text: #92400e;
+    --color-warning-border: #fde68a;
+
+    --color-danger: #ef4444;
+    --color-danger-hover: #dc2626;
+    --color-danger-bg: #fef2f2;
+    --color-danger-text: #991b1b;
+    --color-danger-border: #fecaca;
+
+    --primary: #005ba6;
+    --primary-dark: #004680;
+    --primary-light: #e8f2fa;
+    --secondary: #64748b;
+    --secondary-dark: #475569;
+    --danger: #ef4444;
+    --danger-dark: #dc2626;
+    --warning: #f59e0b;
+    --warning-dark: #d97706;
+    --info: #0284c7;
+    --success: #10b981;
+
+    --bg-app: #f8fafc;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-sidebar: #ffffff;
+    --bg-modal: #ffffff;
+    --bg-input: #ffffff;
+    --bg-hover: #f1f5f9;
+    --bg-active: #e2e8f0;
+
+    --text-main: #0f172a;
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-tertiary: #64748b;
+    --text-inverse: #ffffff;
+    --text-muted: #94a3b8;
+
+    --border-color: #e2e8f0;
+    --border-card: #e2e8f0;
+    --border-light: #f1f5f9;
+    --border-dark: #cbd5e1;
+    --border-input: #cbd5e1;
+
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+    --shadow-lg: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-float: 0 10px 20px -3px rgb(0 0 0 / 0.14), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+  }
+
+  /* ========== GLOBAL RESETS & TYPOGRAPHY ========== */
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html {
     font-size: 16px;
-    transition: background-color 0.5s ease;
     font-family: var(--font-family);
     scrollbar-width: thin;
     scrollbar-color: var(--border-dark) var(--bg-tertiary);
@@ -130,14 +334,16 @@
 
   body {
     font-family: var(--font-family);
-    background-color: var(--bg-secondary);
-    color: var(--text-primary);
-    line-height: 1.6;
-    padding: 20px;
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    line-height: 1.5;
+    padding: 16px;
     min-height: 100vh;
-    transition: var(--transition-slow);
+    transition: background-color 0.25s ease, color 0.25s ease;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    letter-spacing: -0.011em;
     font-weight: 400;
   }
 
@@ -151,51 +357,40 @@
     display: inline-block;
     vertical-align: middle;
     color: currentColor;
+    fill: currentColor;
   }
   .hero-icon-sm { width: 16px; height: 16px; }
   .hero-icon-md { width: 22px; height: 22px; }
   .hero-icon-lg { width: 26px; height: 26px; }
   .hero-icon-xl { width: 32px; height: 32px; }
 
-  .toast-icon { display: inline-flex; align-items: center; justify-content: center; }
-  .toast-icon .hero-icon { width: 20px; height: 20px; }
-
-  .empty-state .hero-icon-xl { color: var(--text-tertiary); opacity: 0.7; }
-
   /* Page Loading Overlay */
   .page-loader-overlay {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: var(--bg-primary);
+    background: var(--bg-app);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    transition: opacity 0.5s ease, visibility 0.5s;
+    transition: opacity 0.3s ease, visibility 0.3s;
   }
   .page-loader-overlay.hidden { opacity: 0; visibility: hidden; }
 
   .loader {
-    width: 20px;
+    width: 32px;
     aspect-ratio: 1;
-    background: var(--text-primary);
-    box-shadow: 0 0 60px 15px var(--text-primary);
-    transform: translate(-80px);
-    clip-path: inset(0);
-    animation:
-      l4-1 0.5s ease-in-out infinite alternate,
-      l4-2 1s   ease-in-out infinite;
+    border-radius: 50%;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--vnpost-blue);
+    animation: loader-spin 0.8s linear infinite;
   }
-  @keyframes l4-1 {
-    100% {transform: translateX(80px)}
-  }
-  @keyframes l4-2 {
-     33% {clip-path: inset(0 0 0 -100px)}
-     50% {clip-path: inset(0 0 0 0)     }
-     83% {clip-path: inset(0 -100px 0 0)}
+  @keyframes loader-spin {
+    to { transform: rotate(360deg); }
   }
 
+  /* Pull-to-refresh Indicator */
   .pull-refresh-indicator {
     position: fixed;
     top: 0; left: 50%;
@@ -206,13 +401,13 @@
     justify-content: center;
     gap: 8px;
     min-width: 190px;
-    padding: 10px 16px;
+    padding: 9px 16px;
     border-radius: 0 0 16px 16px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: var(--text-inverse);
-    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, var(--vnpost-blue), var(--vnpost-blue-hover));
+    color: #ffffff;
+    box-shadow: var(--shadow-float);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     opacity: 0;
     transition: transform 0.25s ease, opacity 0.25s ease;
     pointer-events: none;
@@ -223,10 +418,13 @@
     transform: translate(-50%, 0);
   }
   .pull-refresh-indicator.loading {
-    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    background: linear-gradient(135deg, var(--color-success), var(--color-success-hover));
   }
   .pull-refresh-indicator .pull-refresh-icon {
     font-size: 1.05rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     transition: transform 0.2s ease;
   }
   .pull-refresh-indicator.loading .pull-refresh-icon {
@@ -237,795 +435,1245 @@
     to { transform: rotate(360deg); }
   }
 
+  /* ========== MAIN CONTAINER ========== */
   .container {
-    max-width: 1200px;
+    max-width: 920px;
     margin: 0 auto;
     background: var(--bg-card);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-card);
     overflow: hidden;
-    transition: var(--transition);
-    border: 1px solid var(--border-color);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid var(--border-card);
   }
 
-  /* ========== SIDEBAR ========== */
-  .sidebar {
-    position: fixed;
-    top: 0; left: -280px;
-    width: var(--sidebar-width);
-    height: 100%;
-    background: var(--bg-sidebar);
-    box-shadow: 2px 0 15px rgba(0,0,0,0.2);
-    z-index: 1001;
-    transition: left 0.3s ease;
-    overflow-y: auto;
+  /* ========== APP HEADER (VNPost Brand Style - Centered) ========== */
+  .app-header {
     display: flex;
-    flex-direction: column;
-    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-    border-right: 1px solid var(--border-color);
-    touch-action: pan-y;
-  }
-  .sidebar.open { left: 0; }
-  .sidebar.swiping {
-    transition: none !important;
-    will-change: left;
-  }
-
-  .sidebar-header {
-    padding: 20px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: var(--text-inverse);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 0 var(--radius-lg) 0 0;
-  }
-  .sidebar-header h2 { font-size: 1.3rem; font-weight: 600; }
-
-  .close-sidebar {
-    background: none;
-    border: none;
-    color: var(--text-inverse);
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0;
-    width: auto;
-    transition: var(--transition-fast);
-    font-family: var(--font-family);
-    font-weight: 500;
-    display: inline-flex;
     align-items: center;
     justify-content: center;
-  }
-  .close-sidebar:hover { opacity: var(--opacity-hover); transform: scale(1.1); }
-
-  .sidebar-content { padding: 20px; flex: 1; }
-
-  .sidebar-item {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 12px;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: var(--radius-md);
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: var(--transition);
-    border: 1px solid transparent;
-    width: 100%;
-    text-align: left;
-    font-size: 1rem;
-    font-weight: 500;
-    font-family: var(--font-family);
-  }
-  .sidebar-item:hover {
-    background: var(--bg-hover);
-    transform: translateY(-2px);
-    border-radius: var(--radius-lg);
-    border-color: var(--border-light);
-    box-shadow: var(--shadow);
-  }
-  .sidebar-item.active {
-    background: var(--primary);
-    color: var(--text-inverse);
-    border-color: var(--primary-dark);
-  }
-  .sidebar-item .hero-icon { color: var(--primary); transition: color 0.2s ease; }
-  .sidebar-item:hover .hero-icon { color: var(--primary-dark); }
-  .sidebar-item.active .hero-icon { color: var(--text-inverse); }
-
-  .sidebar-footer {
-    padding: 20px;
-    border-top: 1px solid var(--border-color);
-    font-size: 0.85rem;
-    color: var(--text-secondary);
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-card);
+    position: relative;
     text-align: center;
-    border-radius: 0 0 var(--radius-lg) 0;
-    font-family: var(--font-family);
-  }
-
-  .overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 1000;
-    display: none;
-  }
-  .overlay.active { display: block; }
-  .overlay.swiping {
-    display: block !important;
-    transition: none !important;
-    pointer-events: none !important;
   }
 
   .menu-toggle {
-  position: absolute;
-  top: 22px;
-  left: 22px;
-  background: none;
-  border: none;
-  color: var(--text-inverse);
-  cursor: pointer;
-  padding: 6px;
-  transition: var(--transition-fast);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-family);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-}
-.menu-toggle:hover { background: rgba(255,255,255,0.1); }
-.menu-toggle .hero-icon { width: 26px; height: 26px; }
-
-  /* ========== HEADER ========== */
-  header {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: var(--text-inverse);
-    padding: 25px 30px;
-    text-align: center;
-    position: relative;
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  }
-  header h1 {
-    font-size: 1.8rem;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-weight: 600;
-  }
-  header h1 .hero-icon { width: 28px; height: 28px; }
-  header p { opacity: 0.9; font-size: 1rem; font-weight: 400; }
-
-  .shift-info {
-    background: var(--night-shift);
-    color: var(--text-inverse);
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-  }
-  .shift-info .current-shift { font-weight: 600; font-size: 1.1rem; }
-  .shift-info .shift-time { font-size: 0.9rem; opacity: 0.9; font-weight: 400; display: inline-flex; align-items: center; gap: 6px; }
-  .shift-info .shift-time .hero-icon { width: 16px; height: 16px; }
-
-  /* ========== CARD ========== */
-  .card { padding: 25px 30px; border-bottom: 1px solid var(--border-color); transition: var(--transition); }
-  .card:last-child { border-bottom: none; }
-  .card h2 { display: flex; align-items: center; gap: 8px; }
-  .card h2 .hero-icon { color: var(--primary); }
-
-  /* ========== FORM ========== */
-  .form-group { margin-bottom: 20px; }
-  label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: var(--text-primary);
-    font-family: var(--font-family);
-  }
-  input, select, textarea {
-    width: 100%;
-    padding: 14px 16px;
-    background: var(--bg-input);
-    color: var(--text-primary);
-    border: 1.5px solid var(--border-color);
-    border-radius: var(--radius-md);
-    font-size: 1rem;
-    transition: var(--transition);
-    font-family: var(--font-family);
-    font-weight: 400;
-  }
-  input:focus, select:focus, textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(15, 157, 88, 0.2);
-    background: var(--bg-input);
-  }
-  input::placeholder, textarea::placeholder { color: var(--text-muted); font-family: var(--font-family); }
-
-  /* ========== BUTTON ========== */
-  .button-group { display: flex; gap: 15px; margin-top: 25px; }
-  button {
-    flex: 1;
-    padding: 16px;
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-family: var(--font-family);
-  }
-  .btn-primary { background-color: #0d6efd; color: var(--text-inverse); } /* Xanh dương - Lưu */
-  .btn-primary:hover { background-color: #0b5ed7; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(13,110,253,0.28); }
-  .btn-secondary { background-color: #6c757d; color: var(--text-inverse); } /* Xám - Tải lại */
-  .btn-secondary:hover { background-color: #5c636a; transform: translateY(-2px); }
-  .btn-success { background-color: var(--primary); color: var(--text-inverse); } /* Xanh lá - Xác nhận */
-  .btn-success:hover { background-color: var(--primary-dark); transform: translateY(-2px); }
-  .btn-warning { background-color: var(--warning); color: var(--text-inverse); }
-  .btn-warning:hover { background-color: var(--warning-dark); transform: translateY(-2px); }
-  .btn-danger { background-color: var(--danger); color: var(--text-inverse); }
-  .btn-danger:hover { background-color: var(--danger-dark); transform: translateY(-2px); }
-  .btn-info { background-color: var(--info); color: var(--text-inverse); }
-  .btn-sm { padding: 10px 16px; font-size: 0.85rem; border-radius: var(--radius-sm); font-weight: 500; }
-
-  /* ========== TABLE ========== */
-  .table-container {
-    overflow-x: auto;
-    margin-top: 10px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
-  }
-  table { width: 100%; border-collapse: collapse; margin-top: 0; }
-  th {
-    background-color: var(--bg-tertiary);
-    padding: 16px 12px;
-    text-align: left;
-    font-weight: 600;
-    color: var(--text-primary);
-    border-bottom: 2px solid var(--border-color);
-    font-family: var(--font-family);
-  }
-  td {
-    padding: 14px 12px;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-primary);
-    font-family: var(--font-family);
-    font-weight: 400;
-  }
-  .revenue-cell { color: var(--primary); font-weight: 700; font-size: 1.05rem; white-space: nowrap; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover { background-color: var(--bg-hover); }
-
-  /* ========== EMPTY STATE ========== */
-  .empty-state { text-align: center; padding: 40px 20px; color: var(--text-secondary); font-family: var(--font-family); }
-  .empty-state h3 { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; }
-  .empty-state p { margin-top: 10px; font-weight: 400; }
-
-  /* ========== STAT CARDS ========== */
-  .stats-container { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
-  .stat-card {
-    flex: 1;
-    min-width: 150px;
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    text-align: center;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-    border: 1px solid var(--border-color);
-  }
-  .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--primary-light); }
-  .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--primary); font-family: var(--font-family); }
-  .stat-label { font-size: 0.9rem; color: var(--text-secondary); margin-top: 5px; font-family: var(--font-family); font-weight: 400; }
-
-  .stat-card-actions { display: none; }
-  .stat-card-actions .action-buttons-quick { display: grid !important; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
-  .action-box { display: flex; flex-direction: column; gap: 8px; }
-  .action-box button { width: 100%; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-card); font-size: 0.85rem; font-weight: 600; }
-  .stat-card-actions .action-buttons-quick button { width: 100%; padding: 14px 16px; font-size: 0.98rem; border-radius: var(--radius-md); font-weight: 700; letter-spacing: 0.01em; transition: var(--transition-fast); }
-  .stat-card-actions .action-buttons-quick .btn-primary { background-color: var(--primary); color: var(--text-inverse); }
-  .stat-card-actions .action-buttons-quick .btn-secondary { background-color: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); }
-  .stat-card-actions .action-buttons-quick .btn-report { background: linear-gradient(135deg, #ffb300, #ffca28); color: #111111; border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12); }
-
-  .btn-clipboard { background: linear-gradient(135deg, #6c757d, #495057); color: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12); }
-  .btn-clipboard:hover { background: linear-gradient(135deg, #495057, #343a40); transform: translateY(-1px); box-shadow: 0 10px 22px rgba(108, 117, 125, 0.24); }
-  .btn-money { background: linear-gradient(135deg, #8e44ad, #732d91); color: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12); }
-  .btn-money:hover { background: linear-gradient(135deg, #732d91, #5d2575); transform: translateY(-1px); box-shadow: 0 10px 22px rgba(142, 68, 173, 0.24); }
-
-  /* ========== FILTER ========== */
-  .filter-header { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
-  .filter-toggle {
-    appearance: none;
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
-    color: var(--text-primary);
-    border-radius: var(--radius-md);
-    padding: 12px 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    font-family: var(--font-family);
-    font-weight: 600;
-    transition: var(--transition);
-    flex: 0 0 auto;
-    width: auto;
-  }
-  .filter-toggle:hover { background: var(--bg-hover); }
-  .filter-toggle span#filter-toggle-icon { display: inline-flex; width: 18px; justify-content: center; transform: rotate(0deg); transition: transform 0.2s ease; }
-  .filter-toggle[aria-expanded="true"] span#filter-toggle-icon { transform: rotate(90deg); }
-  .filter-group { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-  .filter-group select, .filter-group input { flex: 1; min-width: 160px; border-radius: var(--radius-md); padding: 12px 16px; font-family: var(--font-family); }
-  .filter-group-advanced { display: none; }
-  .filter-group-advanced.show { display: flex; }
-
-  /* ========== MODAL ========== */
-  .modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .modal-content {
-    background: var(--bg-modal);
-    border-radius: var(--radius-lg);
-    width: 90%;
-    max-width: 500px;
-    box-shadow: var(--shadow-lg);
-    animation: modalFadeIn 0.3s ease-out;
-    max-height: 85vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    border: 1px solid var(--border-color);
-  }
-  .modal-header {
-    padding: 20px 25px;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    background: var(--bg-tertiary);
-  }
-  .modal-header h2 { font-size: 1.4rem; color: var(--text-primary); font-weight: 600; font-family: var(--font-family); display: flex; align-items: center; gap: 8px; }
-  .modal-header h2 .hero-icon { color: var(--primary); }
-  .modal-body { padding: 25px; flex: 1; overflow-y: auto; overflow-x: hidden; max-height: calc(85vh - 120px); font-family: var(--font-family); }
-  .modal-footer {
-    padding: 20px 25px;
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    flex-shrink: 0;
-    margin-top: auto;
-    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-    background: var(--bg-tertiary);
-  }
-  .modal-footer button { width: 100%; padding: 14px; font-size: 1rem; min-height: 44px; }
-  .modal-footer .btn-danger { font-size: 1.2rem; min-height: 52px; padding: 16px 0; border-radius: var(--radius-md); position: relative; z-index: 2; pointer-events: auto; }
-
-  .close-modal {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--text-secondary);
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-subtle, var(--bg-tertiary));
+    border: 1px solid var(--border-card);
+    border-radius: 10px;
+    color: var(--text-main);
+    width: 40px;
+    height: 40px;
     padding: 0;
-    width: auto;
-    transition: var(--transition-fast);
-    font-family: var(--font-family);
+    cursor: pointer;
+    transition: var(--transition);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex: 0 0 auto;
+    flex-shrink: 0;
+    z-index: 2;
   }
-  .close-modal:hover { color: var(--text-primary); transform: scale(1.1); }
+  .menu-toggle:hover {
+    background: var(--bg-hover);
+    color: var(--vnpost-blue);
+    border-color: var(--vnpost-blue-border);
+  }
+  .menu-toggle:active { transform: translateY(-50%) scale(0.96); }
 
-  /* ========== RESPONSIVE ========== */
-  @media (max-width: 768px) {
-    body { padding: 15px; }
-    header { padding: 20px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
-    header h1 { font-size: 1.5rem; }
-    header h1 .hero-icon { width: 24px; height: 24px; }
-    .shift-info { padding: 15px 20px; flex-direction: column; align-items: flex-start; gap: 5px; border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
-    .card { padding: 20px; }
-    .button-group { flex-direction: column; }
-    .stats-container { display: grid; grid-template-columns: repeat(2, minmax(140px, 1fr)); gap: 10px; width: 100%; }
-    .stat-card-status { display: none; }
-    .stat-card-actions { display: flex; }
-    .status-toggle-wrapper { justify-content: flex-start; }
-    .stat-card { border-radius: var(--radius-md); min-width: 0; width: 100%; padding: 16px 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-    .stat-value { font-size: 1.3rem; font-weight: 700; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
-    .filter-group { flex-direction: column; }
-    .filter-group select, .filter-group input { min-width: 100%; border-radius: var(--radius-sm); }
-    th, td { padding: 12px 8px; font-size: 0.9rem; }
-    table { min-width: auto; width: 100%; table-layout: auto; }
-    .modal { padding: 10px; }
-    .modal-content { width: 95%; margin: 10px; max-height: 90vh; border-radius: var(--radius-md); }
-    .modal-header, .modal-body, .modal-footer { padding: 15px; }
-    .modal-body { max-height: calc(90vh - 110px); }
-    .modal-footer { flex-direction: column; gap: 12px; padding: 15px 10px; }
-    .modal-footer button { width: 100%; padding: 16px; font-size: 1.1rem; min-height: 48px; border-radius: var(--radius-sm); }
-    .modal-footer .btn-danger { font-size: 1.3rem; min-height: 56px; padding: 18px 0; border-radius: var(--radius-md); width: 100%; z-index: 1; }
-    .close-modal { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
-    .table-container { border-radius: var(--radius-sm); width: 100%; }
-    .action-buttons { flex-direction: column; gap: 5px; }
-    .action-buttons button { padding: 10px; font-size: 0.9rem; min-height: 36px; border-radius: var(--radius-sm); }
-    .badge { padding: 6px 10px; font-size: 0.85rem; }
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    padding: 0 44px;
+    min-width: 0;
   }
 
-  @media (max-width: 480px) {
-    body { padding: 10px; }
-    header { padding: 18px 15px; border-radius: var(--radius-md) var(--radius-md) 0 0; }
-    header h1 { font-size: 1.3rem; }
-    .card { padding: 18px 15px; }
-    input, select { padding: 12px 14px; font-size: 16px; border-radius: var(--radius-sm); }
-    .stats-container { grid-template-columns: repeat(2, minmax(140px, 1fr)); gap: 12px; }
-    .stat-card-actions { display: flex; }
-    th, td { white-space: normal; word-break: break-word; }
-    button { padding: 14px; min-height: 44px; border-radius: var(--radius-sm); }
-    .btn-sm { min-height: 36px; border-radius: var(--radius-xs); }
-    .modal-content { width: 98%; margin: 5px; max-height: 95vh; border-radius: var(--radius-md); }
-    .modal-header h2 { font-size: 1.2rem; }
-    .modal-body { padding: 15px 10px; max-height: calc(95vh - 100px); }
-    .modal-footer { flex-direction: column; gap: 12px; padding: 16px 6px; }
-    .modal-footer button { width: 100%; padding: 16px; font-size: 1.1rem; min-height: 48px; border-radius: var(--radius-sm); }
-    .modal-footer .btn-danger { font-size: 1.3rem; min-height: 56px; padding: 18px 0; border-radius: var(--radius-md); width: 100%; z-index: 1; }
-    .modal-body p { font-size: 1rem; line-height: 1.5; }
+  .brand-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-width: 0;
   }
 
-  /* ========== ANIMATIONS ========== */
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes modalFadeIn { from { opacity: 0; transform: translateY(-20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-  .fade-in { animation: fadeIn 0.4s ease-out; }
-  .slide-in { animation: slideIn 0.3s ease-out; }
+  .brand-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
 
-  /* ========== BADGE ========== */
-  .badge { display: inline-block; padding: 6px 12px; border-radius: var(--radius-xs); font-size: 0.8rem; font-weight: 600; border: 1px solid transparent; font-family: var(--font-family); }
-  .badge-primary { background-color: var(--primary); color: var(--text-inverse); border-color: var(--primary-dark); }
-  .badge-secondary { background-color: var(--secondary); color: var(--text-inverse); border-color: var(--secondary-dark); }
-  .badge-warning { background-color: var(--warning); color: var(--text-inverse); border-color: var(--warning-dark); }
-  .badge-danger { background-color: var(--danger); color: var(--text-inverse); border-color: var(--danger-dark); }
-  .badge-info { background-color: var(--info); color: var(--text-inverse); border-color: var(--info); }
+  .brand-title {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--vnpost-blue);
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
 
-  .progress-bar-wrapper { margin-top: 12px; display: none; }
-  .progress-bar-track { width: 100%; height: 10px; background: var(--bg-tertiary); border-radius: 999px; overflow: hidden; border: 1px solid var(--border-color); }
-  .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--info)); transition: width 0.25s ease; border-radius: inherit; }
-  .progress-bar-text { margin-top: 8px; font-size: 0.9rem; color: var(--text-secondary); }
+  .version-tag {
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    background: var(--vnpost-blue-light);
+    color: var(--vnpost-blue);
+    letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: center;
+  }
 
-  .action-buttons { display: flex; gap: 5px; }
-  .form-row { display: flex; gap: 15px; }
-  .form-row .form-group { flex: 1; }
+  .brand-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+    line-height: 1.35;
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-  .status-toggle { cursor: pointer; transition: var(--transition); }
-  .status-toggle:hover { transform: scale(1.05); }
-  .status-toggle-wrapper { display: flex; align-items: center; gap: 8px; }
+  /* ========== SHIFT INFO & STATUS BANNER ========== */
+  .shift-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 20px;
+    background: var(--bg-subtle, var(--bg-tertiary));
+    border-bottom: 1px solid var(--border-card);
+    font-size: 14px;
+  }
 
-  /* ========== TOAST ========== */
-  .toast {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%) translateY(100px);
-    background: var(--primary);
-    color: var(--text-inverse);
-    padding: 16px 24px;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    z-index: 1002;
+  .shift-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    font-weight: 600;
+    color: var(--text-main);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Live Pulse Dot */
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-success);
+    flex-shrink: 0;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    animation: pulse-dot 1.8s infinite;
+  }
+  @keyframes pulse-dot {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { box-shadow: 0 0 0 7px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  }
+
+  .current-shift {
+    font-weight: 600;
+  }
+
+  .shift-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    font-weight: 500;
+  }
+
+  /* ========== CARDS ========== */
+  .card {
+    padding: 20px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-card);
+  }
+  .card:last-child {
+    border-bottom: none;
+  }
+
+  .card h2 {
+    font-size: 17.5px;
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ========== STATS OVERVIEW CARDS (Compact 1-row layout) ========== */
+  .stats-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .stat-card {
     display: flex;
     align-items: center;
     gap: 10px;
-    opacity: 0;
+    padding: 10px 12px;
+    background: var(--bg-subtle, var(--bg-tertiary));
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
     transition: var(--transition);
-    min-width: 280px;
-    text-align: center;
-    justify-content: center;
-    border: 1px solid var(--primary-dark);
-    font-family: var(--font-family);
-    font-weight: 500;
+    min-width: 0;
   }
-  .toast.show { transform: translate(-50%, -50%) translateY(0); opacity: 1; }
-  .toast.success { background: var(--secondary); border-color: var(--secondary-dark); }
-  .toast.error { background: var(--danger); border-color: var(--danger-dark); }
-  .toast.warning { background: var(--warning); border-color: var(--warning-dark); }
-  .toast.info { background: var(--info); border-color: var(--info); }
-
-  .diachi-row { display: flex; gap: 8px; align-items: center; }
-  .diachi-row input { flex: 8 1 0%; min-width: 0; border-radius: var(--radius-sm); }
-  .diachi-row button { flex: 2 1 0%; min-width: 0; max-width: 100px; white-space: nowrap; padding-left: 0.5em; padding-right: 0.5em; border-radius: var(--radius-sm); }
-
-  /* ========== QUICK VIEW ========== */
-  .quick-view-list { max-height: none; overflow-y: visible; margin-top: 15px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-card); }
-  .quick-view-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid var(--border-color); transition: background-color 0.2s ease; font-family: var(--font-family); }
-  .quick-view-item:first-child { border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
-  .quick-view-item:last-child { border-bottom: none; border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
-  .quick-view-item:hover { background-color: var(--bg-hover); }
-  .quick-view-item-info { display: flex; flex-direction: column; }
-  .quick-view-item-name { font-weight: 600; color: var(--text-primary); }
-  .quick-view-item-address { font-size: 0.85rem; color: var(--text-secondary); margin-top: 3px; font-weight: 400; }
-  .quick-view-item-amount { font-weight: 700; color: var(--primary); font-size: 1.1rem; }
-  .quick-view-total { padding: 15px; background-color: var(--bg-tertiary); border-top: 1px solid var(--border-color); font-weight: 700; text-align: center; color: var(--text-primary); border-radius: 0 0 var(--radius-sm) var(--radius-sm); font-family: var(--font-family); }
-
-  #so_tien { transition: var(--transition); border-radius: var(--radius-md); }
-  #so_tien:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.1); background-color: var(--bg-input); }
-
-  .btn-location-disabled { background-color: var(--text-muted) !important; cursor: not-allowed !important; opacity: var(--opacity-disabled); }
-  .btn-location-disabled:hover { transform: none !important; background-color: var(--text-muted) !important; }
-
-  /* ========== MODAL BÁO CÁO CUỐI CA ========== */
-  #report-summary { border-left: 4px solid var(--primary); margin-top: 20px; padding: 15px; background: var(--bg-tertiary); border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
-  #report-details { line-height: 1.8; font-family: var(--font-family); }
-  .report-line { display: flex; justify-content: space-between; margin-bottom: 4px; }
-  .report-label { color: var(--text-secondary); }
-  .report-value { font-weight: 600; }
-  .report-value.highlight { color: var(--primary); }
-  .report-value.danger { color: var(--danger); }
-  .recipient-row { display: flex; gap: 10px; align-items: center; }
-  .recipient-row input { flex: 1; border-radius: var(--radius-sm); }
-  .recipient-row button { min-width: 80px; border-radius: var(--radius-sm); }
-
-  .expense-input-group { display: flex; gap: 10px; align-items: center; }
-  .expense-input-group input { flex: 1; border-radius: var(--radius-sm); }
-  .expense-input-group button { min-width: 80px; border-radius: var(--radius-sm); }
-  .expense-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; margin-bottom: 8px; background-color: var(--bg-tertiary); border-radius: var(--radius-sm); transition: var(--transition); border: 1px solid var(--border-color); font-family: var(--font-family); }
-  .expense-item:hover { background-color: var(--bg-hover); }
-  .expense-item:last-child { margin-bottom: 0; }
-  .expense-item-info { display: flex; flex-direction: column; }
-  .expense-item-name { font-weight: 600; color: var(--text-primary); }
-  .expense-item-amount { font-weight: 700; color: var(--danger); }
-  .expense-item-delete { background: none; border: none; color: var(--danger); cursor: pointer; padding: 5px; border-radius: var(--radius-xs); transition: var(--transition-fast); font-family: var(--font-family); display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
-  .expense-item-delete:hover { background: rgba(255, 59, 48, 0.1); transform: scale(1.1); }
-  .expense-total { margin-top: 15px; padding: 12px 15px; background-color: var(--bg-secondary); border-radius: var(--radius-sm); font-weight: 700; text-align: center; color: var(--danger); border: 1px solid var(--border-color); font-family: var(--font-family); }
-
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-track { background: var(--bg-tertiary); border-radius: var(--radius-sm); }
-  ::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: var(--radius-sm); border: 2px solid var(--bg-tertiary); }
-  ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
-
-  #scrollTopBtn {
-    position: fixed;
-    left: 30px;
-    bottom: 30px;
-    z-index: 999;
-    background: var(--primary);
-    color: var(--text-inverse);
-    border: none;
-    border-radius: var(--radius-circle);
-    width: 56px;
-    height: 56px;
-    box-shadow: var(--shadow-lg);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition);
-    border: 2px solid var(--primary-dark);
-    font-family: var(--font-family);
-    font-weight: 600;
-    padding: 0;
-    flex: 0 0 auto;
-  }
-  #scrollTopBtn .hero-icon { width: 28px; height: 28px; }
-  #scrollTopBtn:hover { background: var(--primary-dark); transform: translateY(-5px) scale(1.05); box-shadow: 0 10px 20px rgba(15,157,88,0.28); }
-
-  @media (prefers-color-scheme: dark) {
-    .btn-secondary { border-color: var(--border-dark); }
-    .table-container { border-color: var(--border-dark); }
-    .stat-card { border-color: var(--border-dark); }
-    .quick-view-list { border-color: var(--border-dark); }
-    .expense-item { border-color: var(--border-dark); }
-    .modal-body { color: var(--text-primary); }
-    input::placeholder, textarea::placeholder { color: var(--text-muted); }
-    datalist option { background: var(--bg-modal); color: var(--text-primary); }
-    .container { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
-    .overlay { background: rgba(0, 0, 0, 0.7); }
-    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
-    ::-webkit-scrollbar-thumb { background: var(--text-muted); }
-    ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
-    tr:hover { background-color: var(--bg-tertiary); }
-    .card { border-color: var(--border-color); background: linear-gradient(180deg, rgba(255,255,255,0.02), var(--bg-card)); color: var(--text-primary); box-shadow: var(--shadow); }
-    .badge-primary { box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
-    .stat-value { color: var(--primary-light); font-weight: 700; }
-    .badge-primary { background: var(--primary); color: var(--text-inverse); border-color: var(--primary-dark); }
-    .btn-primary { background-color: var(--primary); color: var(--text-inverse); border-color: var(--primary-dark); }
-    .shift-info { background: linear-gradient(135deg, var(--night-shift), var(--primary-dark)); }
+  .stat-card:hover {
+    border-color: var(--border-dark);
   }
 
-  .quick-actions-section { margin-top: 25px; margin-bottom: 25px; padding: 15px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow); }
-  .quick-actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .action-buttons { display: flex; flex-direction: column; gap: 10px; }
-  @media (min-width: 768px) { .quick-actions-section { display: none !important; } }
-  .action-buttons button { padding: 15px; border-radius: var(--radius-sm); border: none; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; color: white; }
-  .action-buttons button:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-  .action-buttons button:active { transform: translateY(0); }
-
-  .btn-secondary { background-color: var(--secondary); color: var(--text-inverse); }
-  button.btn-diemtien { background-color: #006bdd !important; color: #ffffff !important; border: none !important; }
-  button.btn-clipboard { background-color: #6f42c1 !important; color: #ffffff !important; border: none !important; }
-  button.btn-warning { background-color: #f3a618 !important; color: #000000 !important; border: none !important; }
-  .btn-diemtien:hover { background-color: var(--primary); color: var(--text-inverse); }
-
-  @media (prefers-color-scheme: light) {
-    .container { box-shadow: var(--shadow-lg); }
-    .sidebar { box-shadow: 2px 0 20px rgba(0,0,0,0.1); }
-    .text-muted { color: var(--text-secondary); }
-    tr:hover { background-color: rgba(0, 0, 0, 0.02); }
-  }
-
-  @media (prefers-contrast: high) {
-    :root { --primary: #0056cc; --primary-dark: #0047ab; --secondary: #008a00; --danger: #c30000; --warning: #cc7a00; }
-    @media (prefers-color-scheme: dark) { :root { --primary: #4dabff; --primary-dark: #2c7de6; --secondary: #00c700; --danger: #ff5252; --warning: #ffb74d; } }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
-    .fade-in, .slide-in { animation: none; }
-    .toast { transition: opacity 0.1s; }
-    button:hover, .sidebar-item:hover, .stat-card:hover { transform: none !important; }
-  }
-
-  @media print {
-    body { background: white !important; color: black !important; padding: 0; font-family: 'Roboto', Arial, sans-serif !important; }
-    .container { box-shadow: none !important; border: 1px solid #ccc !important; border-radius: 0 !important; max-width: 100% !important; }
-    .sidebar, .menu-toggle, .button-group, .action-buttons, .modal, #scrollTopBtn, .overlay { display: none !important; }
-    table { border: 1px solid #ccc; }
-    th, td { color: black !important; border-color: #ccc !important; }
-    .badge { border: 1px solid #ccc !important; color: black !important; background: white !important; }
-  }
-
-  h1, h2, h3, h4, h5, h6 { font-weight: 600; }
-  strong, b { font-weight: 700; }
-  .text-small { font-size: 0.875rem; font-weight: 400; }
-  .text-medium { font-size: 1rem; font-weight: 500; }
-  .text-large { font-size: 1.125rem; font-weight: 600; }
-
-  html[data-theme="light"] {
-    color-scheme: light;
-    --primary: #0f9d58; --primary-dark: #0b7d45; --primary-light: #4cd67f;
-    --secondary: #34c759; --secondary-dark: #2aa64a;
-    --danger: #ff3b30; --danger-dark: #e0352b;
-    --warning: #ff9500; --warning-dark: #e08900;
-    --info: #5ac8fa; --success: #34c759;
-    --bg-primary: #ffffff; --bg-secondary: #f3f7f2; --bg-tertiary: #f7faf7;
-    --bg-card: #ffffff; --bg-sidebar: #ffffff; --bg-modal: #ffffff; --bg-input: #ffffff;
-    --bg-hover: #eef7ec; --bg-active: #e8f8ea;
-    --text-primary: #0b3b2a; --text-secondary: #576a5f; --text-tertiary: #7a9184;
-    --text-inverse: #ffffff; --text-muted: #adb5bd;
-    --border-color: #e6efe8; --border-light: #eef6ed; --border-dark: #cfded0;
-    --night-shift: #0b7d45; --day-shift: #f7fafc;
-  }
-
-  html[data-theme="dark"] {
-    color-scheme: dark;
-    --primary: #23b66a; --primary-dark: #0b7d45; --primary-light: #4cd67f;
-    --secondary: #34c759; --secondary-dark: #26a64a;
-    --danger: #ff5252; --danger-dark: #ff3838;
-    --warning: #ffa726; --warning-dark: #ff9800;
-    --info: #42a5f5; --success: #30c75a;
-    --bg-primary: #0b0b0b; --bg-secondary: #121212; --bg-tertiary: #191919;
-    --bg-card: #161616; --bg-sidebar: #0b0b0b; --bg-modal: #161616; --bg-input: #161616;
-    --bg-hover: #1f1f1f; --bg-active: #292929;
-    --text-primary: #f2f2f2; --text-secondary: #c7c7c7; --text-tertiary: #a5a5a5;
-    --text-inverse: #f5f5f5; --text-muted: #999999;
-    --border-color: #303030; --border-light: #242424; --border-dark: #3a3a3a;
-    --night-shift: #0b7d45; --day-shift: #0b7d45;
-  }
-
-  /* ========== QUEUE BUTTON & PANEL ========== */
-  #queueBtn {
-    position: fixed;
-    right: 30px;
-    bottom: 30px;
-    z-index: 999;
-    background: var(--warning);
-    color: var(--text-inverse);
-    border: 2px solid var(--warning-dark);
-    border-radius: var(--radius-circle);
-    width: 56px;
-    height: 56px;
-    box-shadow: var(--shadow-lg);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition);
-    font-family: var(--font-family);
-    font-weight: 600;
-    padding: 0;
-    flex: 0 0 auto;
-  }
-  #queueBtn .hero-icon { width: 28px; height: 28px; }
-  #queueBtn:hover { background: var(--warning-dark); transform: translateY(-5px) scale(1.05); box-shadow: 0 10px 20px rgba(255,149,0,0.28); }
-  #queueBtn .queue-badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background: var(--danger);
-    color: white;
-    border-radius: var(--radius-circle);
-    width: 24px;
-    height: 24px;
-    font-size: 0.75rem;
-    font-weight: 700;
+  .stat-icon-wrap {
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid var(--bg-primary);
+    flex-shrink: 0;
+  }
+  .stat-icon-wrap .hero-icon {
+    width: 20px;
+    height: 20px;
+  }
+  .stat-icon-blue {
+    background: var(--vnpost-blue-light);
+    color: var(--vnpost-blue);
+  }
+  .stat-icon-emerald {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+  }
+
+  .stat-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-main);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .stat-label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .stat-card-breakdown {
+    justify-content: center;
+  }
+  .stat-pills-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    justify-content: space-around;
+  }
+  .stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .stat-pill-success {
+    background: var(--color-success-bg);
+    color: var(--color-success-text);
+    border: 1px solid var(--color-success-border);
+  }
+  .stat-pill-warning {
+    background: var(--color-warning-bg);
+    color: var(--color-warning-text);
+    border: 1px solid var(--color-warning-border);
+  }
+  .stat-pill-label { opacity: 0.85; }
+
+  /* ========== QUICK ACTION BUTTONS ========== */
+  .quick-actions-section {
+    margin-bottom: 18px;
+  }
+  .quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 8px;
+  }
+  .quick-actions-grid .action-buttons {
+    display: flex;
+    gap: 8px;
+  }
+  .quick-actions-grid button {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    height: 42px !important;
+    min-height: 42px !important;
+    padding: 8px 14px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-radius: var(--radius-sm);
+    border: none !important;
+    cursor: pointer;
+    transition: var(--transition);
+    user-select: none;
+    white-space: nowrap;
+  }
+  .quick-actions-grid button:active { transform: scale(0.97); }
+
+  /* Đếm tiền button - VNPost Blue Gradient */
+  .btn-diemtien {
+    background: linear-gradient(135deg, #005ba6 0%, #004680 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(0, 91, 166, 0.28) !important;
+    border: none !important;
+  }
+  .btn-diemtien:hover:not(:disabled) {
+    background: linear-gradient(135deg, #004680 0%, #003366 100%) !important;
+    box-shadow: 0 4px 10px rgba(0, 91, 166, 0.38) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+  }
+
+  /* Clipboard button - Violet/Purple Gradient */
+  .btn-clipboard {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(139, 92, 246, 0.28) !important;
+    border: none !important;
+  }
+  .btn-clipboard:hover:not(:disabled) {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%) !important;
+    box-shadow: 0 4px 10px rgba(139, 92, 246, 0.38) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+  }
+
+  /* ========== FILTER CONTROLS ========== */
+  .filter-header {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-header select,
+  .filter-header input,
+  .filter-group select,
+  .form-input,
+  .form-group input,
+  .form-group select {
+    height: 42px;
+    padding: 8px 12px;
+    border: 1px solid var(--border-input);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-input);
+    font-family: inherit;
+    font-size: 14.5px;
+    color: var(--text-main);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .filter-header select,
+  .filter-group select,
+  .form-group select {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 30px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2364748b'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 14px;
+  }
+
+  .filter-header input:focus,
+  .filter-header select:focus,
+  .filter-group select:focus,
+  .form-input:focus,
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: var(--vnpost-blue);
+    box-shadow: 0 0 0 3px rgba(0, 91, 166, 0.14);
+  }
+
+  .filter-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    height: 42px;
+    background: var(--bg-subtle, var(--bg-tertiary));
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .filter-toggle:hover {
+    color: var(--vnpost-blue);
+    border-color: var(--vnpost-blue-border);
+  }
+  .filter-toggle.active {
+    background: var(--vnpost-blue-light);
+    color: var(--vnpost-blue);
+    border-color: var(--vnpost-blue-border);
+  }
+  .filter-toggle-icon {
+    transition: transform 0.2s ease;
+  }
+  .filter-toggle[aria-expanded="true"] .filter-toggle-icon {
+    transform: rotate(180deg);
+  }
+
+  .filter-group-advanced {
+    display: none;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 12px;
+    background: var(--bg-subtle, var(--bg-tertiary));
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-card);
+  }
+  .filter-group-advanced.show {
+    display: grid;
+    animation: fadeInSlideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes fadeInSlideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========== FORM CONTROLS ========== */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .form-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .label-icon {
+    color: var(--text-muted);
+  }
+
+  .diachi-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .diachi-row input {
+    flex: 1;
+  }
+
+  .btn-gps {
+    height: 42px;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-weight: 600;
+    font-size: 13.5px;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+  }
+
+  /* ========== ACTION BUTTONS WITH GRADIENTS ========== */
+  .button-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .btn, button.btn-primary, button.btn-secondary, button.btn-warning, button.btn-success, button.btn-danger, button.btn-diemtien, button.btn-clipboard {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    height: 44px;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .btn:active:not(:disabled),
+  button:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  .btn:disabled, button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(20%);
+    box-shadow: none !important;
+  }
+
+  /* Emerald Start / Submit Button */
+  .btn-primary, .btn-start {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.28) !important;
+    border: none !important;
+  }
+  .btn-primary:hover:not(:disabled), .btn-start:hover:not(:disabled) {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.38) !important;
+  }
+
+  /* VNPost Blue Secondary / Reload Button */
+  .btn-secondary, .btn-reload {
+    background: linear-gradient(135deg, #005ba6 0%, #004680 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(0, 91, 166, 0.25) !important;
+    border: none !important;
+  }
+  .btn-secondary:hover:not(:disabled), .btn-reload:hover:not(:disabled) {
+    background: linear-gradient(135deg, #004680 0%, #003366 100%) !important;
+    box-shadow: 0 4px 10px rgba(0, 91, 166, 0.35) !important;
+  }
+
+  /* Amber Warning / Cancel / Report Button */
+  .btn-warning, .btn-pause {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.28) !important;
+    border: none !important;
+  }
+  .btn-warning:hover:not(:disabled), .btn-pause:hover:not(:disabled) {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.38) !important;
+  }
+
+  /* Crimson Danger / Delete Button */
+  .btn-danger, .btn-stop {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.28) !important;
+    border: none !important;
+  }
+  .btn-danger:hover:not(:disabled), .btn-stop:hover:not(:disabled) {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.38) !important;
+  }
+
+  .btn-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+  }
+
+  .btn-sm {
+    height: 34px !important;
+    padding: 4px 10px !important;
+    font-size: 13px !important;
+    border-radius: var(--radius-xs) !important;
+  }
+
+  /* ========== TABLE STYLES ========== */
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    margin-top: 12px;
+    background: var(--bg-card);
+  }
+
+  #bang {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    text-align: left;
+  }
+
+  #bang thead {
+    background: var(--bg-subtle, var(--bg-tertiary));
+    border-bottom: 1px solid var(--border-card);
+  }
+
+  #bang th {
+    padding: 11px 16px;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+
+  #bang td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-main);
+    vertical-align: middle;
+  }
+
+  #bang tbody tr {
+    transition: background-color 0.12s ease;
+  }
+  #bang tbody tr:hover {
+    background-color: var(--bg-hover);
+  }
+  #bang tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .revenue-cell {
+    font-weight: 700;
+    color: var(--vnpost-blue);
+    font-variant-numeric: tabular-nums;
+    font-size: 15.5px;
+  }
+
+  .diem-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .diem-name {
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .action-buttons {
+    display: inline-flex;
+    gap: 6px;
+  }
+
+  /* Status Badges */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition-fast);
+  }
+  .status-badge .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: none;
+  }
+  .status-success {
+    background: var(--color-success-bg);
+    color: var(--color-success-text);
+    border: 1px solid var(--color-success-border);
+  }
+  .status-warning {
+    background: var(--color-warning-bg);
+    color: var(--color-warning-text);
+    border: 1px solid var(--color-warning-border);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+  }
+  .empty-state h3 {
+    font-size: 16.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .empty-state p {
+    font-size: 14px;
+  }
+
+  /* ========== FLOATING TOAST (Pill Style 2.4s) ========== */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    padding: 10px 18px;
+    border-radius: 9999px;
+    font-size: 13.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-float);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 9999;
+    max-width: 90%;
+    text-align: center;
+    white-space: nowrap;
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1px solid #334155;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+
+  .toast.success, .toast.toast-success {
+    background: #064e3b;
+    color: #ecfdf5;
+    border: 1px solid #059669;
+  }
+  .toast.warning, .toast.toast-warning {
+    background: #78350f;
+    color: #fffbeb;
+    border: 1px solid #d97706;
+  }
+  .toast.error, .toast.danger, .toast.toast-error {
+    background: #7f1d1d;
+    color: #fef2f2;
+    border: 1px solid #dc2626;
+  }
+  .toast.info, .toast.toast-info {
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1px solid #334155;
+  }
+
+  /* ========== FLOATING ACTION BUTTONS (VỊ TRÍ BÊN TRÁI) ========== */
+  /* Nút thêm điểm gas (+) nằm góc dưới bên trái */
+  #scrollTopBtn {
+    position: fixed;
+    bottom: 24px;
+    left: 20px; /* Đặt ở bên trái theo yêu cầu */
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--vnpost-blue), var(--vnpost-blue-hover));
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 6px 18px rgba(0, 91, 166, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 990;
+    transition: var(--transition);
+  }
+  #scrollTopBtn .hero-icon {
+    width: 28px;
+    height: 28px;
+  }
+  #scrollTopBtn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 10px 24px -2px rgba(0, 91, 166, 0.55);
+  }
+  #scrollTopBtn:active { transform: scale(0.92); }
+
+  /* Nút hàng đợi đồng bộ khi mất mạng/mạng không ổn định, nằm ngay trên nút dấu + ở bên trái */
+  #queueBtn {
+    position: fixed;
+    bottom: 86px; /* Xếp ngay trên nút dấu + ở bên trái */
+    left: 20px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--vnpost-yellow, #f59e0b);
+    color: var(--vnpost-yellow, #f59e0b);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+    display: flex; /* Luôn hiển thị ở bên trái */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 990;
+    transition: var(--transition);
+  }
+  #queueBtn .hero-icon {
+    width: 26px;
+    height: 26px;
+  }
+  #queueBtn:hover {
+    transform: translateY(-2px) scale(1.05);
+    border-color: var(--color-warning-hover, #d97706);
+    box-shadow: 0 10px 24px -2px rgba(245, 158, 11, 0.35);
+  }
+  #queueBtn:active { transform: scale(0.92); }
+  #queueBtn.has-items {
+    background: var(--color-warning-bg);
+    border-color: var(--color-warning);
     animation: queuePulse 2s ease-in-out infinite;
   }
+  #queueBtn.offline {
+    background: var(--color-danger-bg);
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+  }
   @keyframes queuePulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
+    0%, 100% { box-shadow: 0 6px 18px rgba(245, 158, 11, 0.3); }
+    50% { box-shadow: 0 8px 25px rgba(245, 158, 11, 0.6); }
   }
   @keyframes queueSyncSpin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
-  #queueBtn.syncing .hero-icon { animation: queueSyncSpin 1s linear infinite; }
+  #queueBtn.syncing .hero-icon {
+    animation: queueSyncSpin 1s linear infinite;
+  }
+
+  .queue-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--color-danger);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 4px;
+    border-radius: 9999px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-card);
+  }
+
+  .btn-queue-add {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.28) !important;
+    border: none !important;
+  }
+  .btn-queue-add:hover:not(:disabled) {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.38) !important;
+    transform: translateY(-1px);
+  }
+
+  tr.queue-row {
+    background: rgba(245, 158, 11, 0.06);
+  }
+  tr.queue-row:hover {
+    background: rgba(245, 158, 11, 0.12);
+  }
+  [data-theme="dark"] tr.queue-row {
+    background: rgba(245, 158, 11, 0.1);
+  }
+  [data-theme="dark"] tr.queue-row:hover {
+    background: rgba(245, 158, 11, 0.18);
+  }
+
+  /* ========== SIDEBAR (Off-Canvas Drawer) ========== */
+  .overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s;
+  }
+  .overlay.open, .overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0; left: -300px;
+    width: var(--sidebar-width);
+    height: 100%;
+    background: var(--bg-sidebar);
+    box-shadow: var(--shadow-float);
+    z-index: 1001;
+    transition: left 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-card);
+    touch-action: pan-y;
+  }
+  .sidebar.open { left: 0; }
+  .sidebar.swiping { transition: none !important; will-change: left; }
+
+  .sidebar-header {
+    padding: 16px 20px;
+    background: linear-gradient(135deg, var(--vnpost-blue), var(--vnpost-blue-hover));
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sidebar-header h2 {
+    font-size: 17.5px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .close-sidebar {
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.15s ease;
+  }
+  .close-sidebar:hover { opacity: 0.8; }
+
+  .sidebar-content {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    transition: var(--transition-fast);
+  }
+  .sidebar-item:hover {
+    background: var(--bg-hover);
+    color: var(--vnpost-blue);
+  }
+  .sidebar-item:active { transform: scale(0.98); }
+  .sidebar-item .hero-icon {
+    color: var(--text-muted);
+  }
+  .sidebar-item:hover .hero-icon {
+    color: var(--vnpost-blue);
+  }
+
+  .sidebar-footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border-card);
+    font-size: 12.5px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  /* ========== MODALS (Glassmorphism & Crisp Cards) ========== */
+  .modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+    z-index: 1050;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.22s ease, visibility 0.22s;
+    padding: 16px;
+  }
+  .modal.open, .modal.active, .modal[style*="display: flex"], .modal[style*="display:flex"] {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .modal-content {
+    background: var(--bg-modal);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-card);
+    box-shadow: var(--shadow-float);
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    animation: modalPopIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes modalPopIn {
+    from { opacity: 0; transform: scale(0.96) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border-card);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-header h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .close-modal {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+  }
+  .close-modal:hover { color: var(--text-main); background: var(--bg-hover); }
+
+  .modal-body {
+    padding: 18px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .modal-footer {
+    padding: 12px 18px;
+    border-top: 1px solid var(--border-card);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  /* Queue Modal Specifics */
+  .queue-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .queue-status-bar.online {
+    background: var(--color-success-bg);
+    color: var(--color-success-text);
+    border: 1px solid var(--color-success-border);
+  }
+  .queue-status-bar.offline {
+    background: var(--color-warning-bg);
+    color: var(--color-warning-text);
+    border: 1px solid var(--color-warning-border);
+  }
+  .queue-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+  }
 
   .queue-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 15px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-sm);
     margin-bottom: 8px;
-    background-color: var(--bg-tertiary);
-    border-radius: var(--radius-sm);
-    transition: var(--transition);
-    border: 1px solid var(--border-color);
-    font-family: var(--font-family);
-    gap: 10px;
+    background: var(--bg-card);
+    gap: 12px;
   }
-  .queue-item:hover { background-color: var(--bg-hover); }
-  .queue-item:last-child { margin-bottom: 0; }
-  .queue-item-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
-  .queue-item-name { font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .queue-item-detail { font-size: 0.85rem; color: var(--text-secondary); margin-top: 3px; font-weight: 400; }
-  .queue-item-amount { font-weight: 700; color: var(--warning); font-size: 1rem; white-space: nowrap; }
-  .queue-item-actions { display: flex; gap: 5px; flex-shrink: 0; }
-  .queue-item-delete { background: none; border: none; color: var(--danger); cursor: pointer; padding: 5px; border-radius: var(--radius-xs); transition: var(--transition-fast); font-family: var(--font-family); display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
-  .queue-item-delete:hover { background: rgba(255, 59, 48, 0.1); transform: scale(1.1); }
-
-  .queue-status-bar {
-    display: flex;
+  .queue-item-info { flex: 1; min-width: 0; }
+  .queue-item-name { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-primary); }
+  .queue-item-detail { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .queue-item-amount { font-weight: 700; color: var(--vnpost-blue); font-size: 14px; white-space: nowrap; }
+  .queue-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .queue-item-delete {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    color: var(--color-danger, #ef4444);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: var(--radius-sm, 6px);
+    transition: var(--transition-fast);
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 15px;
-    margin-bottom: 15px;
-    border-radius: var(--radius-sm);
-    font-size: 0.9rem;
-    font-weight: 500;
+    justify-content: center;
   }
-  .queue-status-bar.online { background: rgba(52, 199, 89, 0.15); color: var(--success); border: 1px solid rgba(52, 199, 89, 0.3); }
-  .queue-status-bar.offline { background: rgba(255, 59, 48, 0.15); color: var(--danger); border: 1px solid rgba(255, 59, 48, 0.3); }
-  .queue-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .queue-status-bar.online .queue-status-dot { background: var(--success); }
-  .queue-status-bar.offline .queue-status-dot { background: var(--danger); }
-</style>
+  .queue-item-delete:hover {
+    background: var(--color-danger, #ef4444);
+    color: white;
+  }
 
+  /* Quick View Modal Items */
+  .quick-view-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .quick-view-item-name { font-weight: 600; font-size: 14px; }
+  .quick-view-item-address { font-size: 12.5px; color: var(--text-muted); }
+  .quick-view-item-amount { font-weight: 700; color: var(--vnpost-blue); }
+  .quick-view-total {
+    margin-top: 14px;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--vnpost-blue-light);
+    color: var(--vnpost-blue);
+    font-size: 15px;
+    text-align: right;
+  }
+
+  /* Progress Bar in Batch Update */
+  .progress-bar-wrapper {
+    margin-top: 14px;
+    display: none;
+  }
+  .progress-bar-track {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--vnpost-blue), var(--color-success));
+    transition: width 0.2s ease;
+  }
+  .progress-bar-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    text-align: center;
+  }
+
+  /* Report Modal */
+  .recipient-row {
+    display: flex;
+    gap: 8px;
+  }
+  .expense-input-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .expense-input-group input:first-child { flex: 2; }
+  .expense-input-group input:nth-child(2) { flex: 1; }
+  .expense-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 14px;
+  }
+
+  /* ========== RESPONSIVE STYLES (Extension Popup 350px - Desktop) ========== */
+  @media (max-width: 640px) {
+    body { padding: 8px; }
+    .container { border-radius: var(--radius-lg); }
+    .app-header { padding: 12px 14px; }
+    .shift-info { padding: 10px 14px; }
+    .card { padding: 14px; }
+    .stats-container { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .button-group { grid-template-columns: 1fr; }
+    .filter-header { flex-direction: column; align-items: stretch; }
+    .filter-header select, .filter-header input, .filter-toggle { width: 100%; }
+    .quick-actions-grid { grid-template-columns: 1fr; }
+    #scrollTopBtn { bottom: 16px; left: 16px; width: 48px; height: 48px; }
+    #scrollTopBtn .hero-icon { width: 26px; height: 26px; }
+    #queueBtn { bottom: 74px; left: 16px; width: 48px; height: 48px; }
+    #queueBtn .hero-icon { width: 24px; height: 24px; }
+  }
+
+  /* ========== PRINT STYLES ========== */
+  @media print {
+    body { background: white !important; color: black !important; padding: 0; font-family: var(--font-family) !important; }
+    .container { box-shadow: none !important; border: 1px solid #ccc !important; border-radius: 0 !important; max-width: 100% !important; }
+    .sidebar, .menu-toggle, .button-group, .action-buttons, .modal, #scrollTopBtn, #queueBtn, .overlay, .shift-banner, .quick-actions-section, .filter-section, .page-loader-overlay, .toast { display: none !important; }
+    table { border: 1px solid #ccc; width: 100% !important; }
+    th, td { color: black !important; border-color: #ccc !important; }
+    .status-badge { border: 1px solid #ccc !important; color: black !important; background: white !important; }
+  }
+</style>
 </head>
 <body>
   <div class="overlay" id="sidebar-overlay"></div>
@@ -1034,82 +1682,93 @@
     <div class="loader"></div>
   </div>
 
-  <!-- Toast notification -->
+  <!-- Toast notification (Modern Floating Pill) -->
   <div class="toast" id="toast">
     <span class="toast-icon" id="toast-icon"></span>
     <span id="toast-message">Đã sao chép vào clipboard!</span>
   </div>
 
   <div class="pull-refresh-indicator" id="pull-refresh-indicator" aria-hidden="true">
-    <span class="pull-refresh-icon" id="pull-refresh-icon">⇣</span>
+    <span class="pull-refresh-icon" id="pull-refresh-icon">
+      <svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v7.59l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" clip-rule="evenodd" />
+      </svg>
+    </span>
     <span id="pull-refresh-text">Kéo xuống để tải lại</span>
   </div>
 
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <h2>MenuBar</h2>
+      <h2>Danh mục quản lý</h2>
       <button class="close-sidebar" id="close-sidebar" aria-label="Đóng menu">
-        <svg class="hero-icon hero-icon-md" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+        <svg class="hero-icon hero-icon-md" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
         </svg>
       </button>
     </div>
     <div class="sidebar-content">
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='diemtien.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
-          <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M10.75 10.818v2.614A3.13 3.13 0 0011.888 13c.482-.315.612-.648.612-.875 0-.247-.152-.619-.75-.807ZM9.25 6.568v2.614c-.482.315-.612.648-.612.875 0 .247.152.619.75.807A3.13 3.13 0 009.25 6.568Z" />
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16Zm.75-11.25a.75.75 0 00-1.5 0v.152A3.125 3.125 0 007.75 9.5c0 1.254.838 2.158 1.5 2.5v2.348c-.662-.342-1.5-1.246-1.5-2.5a.75.75 0 00-1.5 0c0 1.956 1.34 3.486 3 3.9v.502a.75.75 0 001.5 0v-.502c1.66-.414 3-1.944 3-3.9 0-1.254-.838-2.158-1.5-2.5V7.4c.662.342 1.5 1.246 1.5 2.5a.75.75 0 001.5 0c0-1.956-1.34-3.486-3-3.9v-.152Z" clip-rule="evenodd" />
         </svg>
         Đếm tiền
       </button>
       <button class="sidebar-item" onclick="openOutOfHoursModal()">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
         </svg>
         Thêm điểm ngoài ca
       </button>
+      <button class="sidebar-item" onclick="closeSidebar(); openModal('queue-modal')">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
+        </svg>
+        <span>Hàng đợi đồng bộ</span>
+        <span id="sidebar-queue-badge" class="badge" style="display:none;margin-left:auto;background:var(--color-danger,#ef4444);color:#ffffff;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:700;">0</span>
+      </button>
       <button class="sidebar-item" onclick="openBatchStatusModal()">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" />
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.451a.75.75 0 000-1.5H4.5a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-2.138l.385.385a7 7 0 0011.758-3.15.75.75 0 00-2.08-.892ZM4.688 8.576a5.5 5.5 0 019.201-2.466l.312.311h-2.451a.75.75 0 000 1.5H15.5a.75.75 0 00.75-.75V3.421a.75.75 0 00-1.5 0v2.138l-.385-.385A7 7 0 002.607 8.324a.75.75 0 002.081.252Z" clip-rule="evenodd" />
         </svg>
         Chuyển tất cả chưa nộp
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='vitri.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19.02 10.11 18.934l.004-.002.01-.005a20.086 20.086 0 001.838-1.295A21.36 21.36 0 0015.5 12.87c1.336-1.614 2-3.435 2-5.37a7.5 7.5 0 10-15 0c0 1.935.664 3.756 2 5.37a21.36 21.36 0 003.548 4.762 20.086 20.086 0 001.838 1.295l.01.005.004.002.001.001ZM10 10.5a3 3 0 100-6 3 3 0 000 6Z" clip-rule="evenodd" />
         </svg>
         Quản lý vị trí
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='tinhluong.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 0 1-.921.42Z" />
-          <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a3.836 3.836 0 0 0-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 0 1-.921-.421l-.879-.66a.75.75 0 0 0-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 0 0 1.5 0v-.81a4.124 4.124 0 0 0 1.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 0 0-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 0 0 .933-1.175l-.415-.33a3.836 3.836 0 0 0-1.719-.755V6Z" clip-rule="evenodd" />
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-3-1a1 1 0 011 1v2a1 1 0 11-2 0v-2a1 1 0 011-1z" clip-rule="evenodd" />
         </svg>
-        Tính công & lương
+        Tính công &amp; lương
       </button>
       <button class="sidebar-item" onclick="openQuickViewModal()">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-          <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+          <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
         </svg>
         Xem nhanh điểm (ca)
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='tinhgascon.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M10.5 3.798v5.02a3 3 0 0 1-.879 2.121l-2.377 2.377a9.845 9.845 0 0 1 5.091 1.013 8.315 8.315 0 0 0 5.713.636l.285-.071-3.954-3.955a3 3 0 0 1-.879-2.121v-5.02a23.614 23.614 0 0 0-3 0Zm4.5.138a.75.75 0 0 0 .093-1.495A24.837 24.837 0 0 0 12 2.25a25.048 25.048 0 0 0-3.093.191A.75.75 0 0 0 9 3.936v4.882a1.5 1.5 0 0 1-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.471-4.881L15.44 9.879A1.5 1.5 0 0 1 15 8.818V3.936Z" clip-rule="evenodd" />
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 2a.75.75 0 01.75.75v.258a33.12 33.12 0 013.722.505.75.75 0 11-.244 1.48 31.623 31.623 0 00-3.478-.48v3.424l3.18 3.18a3.25 3.25 0 01.952 2.298V14a3 3 0 01-3 3H8.118a3 3 0 01-3-3v-.585a3.25 3.25 0 01.952-2.298l3.18-3.18V4.513c-1.168.1-2.33.262-3.478.48a.75.75 0 11-.244-1.48 33.124 33.124 0 013.722-.505V2.75A.75.75 0 0110 2z" clip-rule="evenodd" />
         </svg>
         Tính tiền gas còn lại
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='dudoandiemgas.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258a2.625 2.625 0 0 0-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" />
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
         </svg>
         Dự đoán điểm gas
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='clipboard.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" />
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M15.988 3.012A2.25 2.25 0 0118 5.25v6.5A2.25 2.25 0 0115.75 14H13.5v-1.5h2.25a.75.75 0 00.75-.75v-6.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 00-.75.75V7H6v-.75A2.25 2.25 0 018.25 3h7.738z" clip-rule="evenodd" />
+          <path fill-rule="evenodd" d="M2 9.25A2.25 2.25 0 014.25 7h7.5A2.25 2.25 0 0114 9.25v7.5A2.25 2.25 0 0111.75 19h-7.5A2.25 2.25 0 012 16.75v-7.5zm2.25-.75a.75.75 0 00-.75.75v7.5c0 .414.336.75.75.75h7.5a.75.75 0 00.75-.75v-7.5a.75.75 0 00-.75-.75h-7.5z" clip-rule="evenodd" />
         </svg>
         Lưu Clipboard
       </button>
@@ -1118,59 +1777,71 @@
         <span id="theme-text">Chế độ tối</span>
       </button>
       <button class="sidebar-item" onclick="openModal('help-modal')">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 0 1-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 0 1-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 0 1-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.83-.727.83-1.857 0-2.584ZM12 18a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.94 6.94a.75.75 0 11-1.061-1.061 3 3 0 112.871 5.026v.345a.75.75 0 01-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 108.94 6.94zM10 15a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
         </svg>
         Trợ giúp
       </button>
       <button class="sidebar-item" onclick="resetForm()">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
         </svg>
         Đóng
       </button>
     </div>
     <div class="sidebar-footer">
-      <p>Quản lý điểm gas &copy; 2025</p>
+      <p>VNPost Gas Manager &copy; 2026</p>
     </div>
   </div>
 
   <div class="container">
-    <header>
+    <!-- Header (VNPost Brand Identity) -->
+    <header class="app-header">
       <button class="menu-toggle" id="menu-toggle" aria-label="Mở menu">
-        <svg class="hero-icon hero-icon-md" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+        <svg class="hero-icon hero-icon-md" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
         </svg>
       </button>
-      <h1>
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z" clip-rule="evenodd" />
-          <path fill-rule="evenodd" d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V9.375Zm2.25 4.125a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75ZM6 16.5a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
-        </svg>
-        Quản lý tiền điểm gas
-      </h1>
-      <p>Theo dõi và quản lý thu chi tại các điểm gas theo ca làm việc</p>
+      <div class="brand">
+        <div class="brand-info">
+          <div class="brand-title-row">
+            <h1 class="brand-title">Quản lý điểm gas</h1>
+            <span class="version-tag">v3.0</span>
+          </div>
+          <span class="brand-subtitle">Theo dõi &amp; quản lý thu chi theo ca làm việc</span>
+        </div>
+      </div>
     </header>
 
+    <!-- Shift Status Banner with Pulsing Live Dot -->
     <div class="shift-info">
-      <div class="current-shift" id="current-shift">Đang tải thông tin ca...</div>
+      <div class="shift-status-pill">
+        <span class="status-dot"></span>
+        <span class="current-shift" id="current-shift">Đang tải thông tin ca...</span>
+      </div>
       <div class="shift-time" id="shift-time"></div>
     </div>
 
+    <!-- Main Entry & Management Card -->
     <div class="card">
       <div class="stats-container" id="stats-container"></div>
 
+      <!-- Filter Controls -->
       <div class="filter-header">
         <select id="filter-shift" onchange="filterByShift()">
           <option value="all">Tất cả các ca</option>
         </select>
-        <input id="chon_diem" list="diem-list" placeholder="Chọn điểm gas..." oninput="chonDiem()" style="flex:1;min-width:160px;">
+        <input id="chon_diem" list="diem-list" placeholder="Tìm hoặc chọn điểm gas..." oninput="chonDiem()" style="flex:1;min-width:160px;">
         <datalist id="diem-list"></datalist>
         <button class="filter-toggle" type="button" onclick="toggleAdvancedFilters()" aria-expanded="false">
-          <span id="filter-toggle-icon">▸</span>
+          <svg class="hero-icon hero-icon-sm filter-toggle-icon" id="filter-toggle-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.972.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clip-rule="evenodd" />
+          </svg>
           <span class="filter-toggle-text">Lọc thêm</span>
         </button>
       </div>
+
+      <!-- Advanced Collapsible Filters -->
       <div class="filter-group filter-group-advanced" id="advanced-filters">
         <select id="filter-diem" onchange="filterByDiem()">
           <option value="all">Tất cả điểm gas</option>
@@ -1189,55 +1860,80 @@
       <!-- ten_diem ẩn, JS vẫn dùng để lấy tên điểm -->
       <input id="ten_diem" type="hidden" value="">
 
+      <!-- Input Form -->
       <div class="form-group">
-        <label for="so_tien">Số tiền:</label>
-        <input id="so_tien" type="number" placeholder="Nhập số tiền">
+        <label for="so_tien" class="form-label">
+          <svg class="hero-icon hero-icon-sm label-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10.75 10.818v2.614A3.13 3.13 0 0011.888 13c.482-.315.612-.648.612-.875 0-.247-.152-.619-.75-.807ZM9.25 6.568v2.614c-.482.315-.612.648-.612.875 0 .247.152.619.75.807A3.13 3.13 0 009.25 6.568Z" />
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16Zm.75-11.25a.75.75 0 00-1.5 0v.152A3.125 3.125 0 007.75 9.5c0 1.254.838 2.158 1.5 2.5v2.348c-.662-.342-1.5-1.246-1.5-2.5a.75.75 0 00-1.5 0c0 1.956 1.34 3.486 3 3.9v.502a.75.75 0 001.5 0v-.502c1.66-.414 3-1.944 3-3.9 0-1.254-.838-2.158-1.5-2.5V7.4c.662.342 1.5 1.246 1.5 2.5a.75.75 0 001.5 0c0-1.956-1.34-3.486-3-3.9v-.152Z" clip-rule="evenodd" />
+          </svg>
+          Số tiền:
+        </label>
+        <input id="so_tien" class="form-input" type="number" placeholder="Nhập số tiền (VD: 500 hoặc 500000)">
       </div>
 
       <div class="form-group">
-        <label for="dia_chi">Địa chỉ:</label>
+        <label for="dia_chi" class="form-label">
+          <svg class="hero-icon hero-icon-sm label-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19.02 10.11 18.934l.004-.002.01-.005a20.086 20.086 0 001.838-1.295A21.36 21.36 0 0015.5 12.87c1.336-1.614 2-3.435 2-5.37a7.5 7.5 0 10-15 0c0 1.935.664 3.756 2 5.37a21.36 21.36 0 003.548 4.762 20.086 20.086 0 001.838 1.295l.01.005.004.002.001.001ZM10 10.5a3 3 0 100-6 3 3 0 000 6Z" clip-rule="evenodd" />
+          </svg>
+          Địa chỉ:
+        </label>
         <div class="diachi-row">
-          <input id="dia_chi" placeholder="Nhập địa chỉ">
-          <button class="btn-success btn-sm" type="button" id="btn-save-location" title="Lưu vị trí GPS" style="display:inline-flex;align-items:center;justify-content:center;gap:4px;">
-            <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+          <input id="dia_chi" class="form-input" placeholder="Nhập địa chỉ điểm gas">
+          <button class="btn-success btn-sm btn-gps" type="button" id="btn-save-location" title="Lưu vị trí GPS">
+            <svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19.02 10.11 18.934l.004-.002.01-.005a20.086 20.086 0 001.838-1.295A21.36 21.36 0 0015.5 12.87c1.336-1.614 2-3.435 2-5.37a7.5 7.5 0 10-15 0c0 1.935.664 3.756 2 5.37a21.36 21.36 0 003.548 4.762 20.086 20.086 0 001.838 1.295l.01.005.004.002.001.001ZM10 10.5a3 3 0 100-6 3 3 0 000 6Z" clip-rule="evenodd" />
             </svg>
-            Lưu
+            <span>Lưu</span>
           </button>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="ghi_chu">Ghi chú:</label>
-        <input id="ghi_chu" placeholder="Nhập ghi chú (nếu có)">
+        <label for="ghi_chu" class="form-label">
+          <svg class="hero-icon hero-icon-sm label-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5Zm2.25 8.25a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5Zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5Z" clip-rule="evenodd" />
+          </svg>
+          Ghi chú:
+        </label>
+        <input id="ghi_chu" class="form-input" placeholder="Nhập ghi chú (nếu có)">
       </div>
 
-      <div class="button-group">
-        <button class="btn-primary" onclick="guiDuLieu()" id="btn-submit">
-          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+      <!-- Action Buttons with Hierarchy -->
+      <div class="button-group control-actions">
+        <button class="btn btn-primary btn-start" onclick="guiDuLieu()" id="btn-submit" type="button">
+          <svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16Zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5Z" clip-rule="evenodd" />
           </svg>
           <span id="btn-submit-text">Lưu thông tin</span>
         </button>
-        <button class="btn-secondary" onclick="taiDuLieu()">
-          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" />
+        <button class="btn btn-warning btn-queue-add" onclick="luuVaoHangDoi()" id="btn-queue-add" type="button" title="Lưu vào hàng đợi khi mất mạng hoặc mạng không ổn định">
+          <svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
           </svg>
-          Tải lại
+          <span>Lưu hàng đợi</span>
         </button>
-        <button class="btn-warning" onclick="resetForm()" id="btn-cancel" style="display: none;">
-          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+        <button class="btn btn-secondary btn-reload" onclick="taiDuLieu()" type="button">
+          <svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.451a.75.75 0 000-1.5H4.5a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-2.138l.385.385a7 7 0 0011.758-3.15.75.75 0 00-2.08-.892ZM4.688 8.576a5.5 5.5 0 019.201-2.466l.312.311h-2.451a.75.75 0 000 1.5H15.5a.75.75 0 00.75-.75V3.421a.75.75 0 00-1.5 0v2.138l-.385-.385A7 7 0 002.607 8.324a.75.75 0 002.081.252Z" clip-rule="evenodd" />
           </svg>
-          Hủy
+          <span>Tải lại</span>
+        </button>
+        <button class="btn btn-warning btn-pause" onclick="resetForm()" id="btn-cancel" style="display: none;" type="button">
+          <svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16ZM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22Z" clip-rule="evenodd" />
+          </svg>
+          <span>Hủy</span>
         </button>
       </div>
     </div>
 
+    <!-- Data Table Card -->
     <div class="card">
       <h2 style="margin-bottom: 15px;">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M2 4.75A2.75 2.75 0 014.75 2h10.5A2.75 2.75 0 0118 4.75v10.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25V4.75zM4.75 3.5c-.69 0-1.25.56-1.25 1.25v2.75h4.25V3.5H4.75zm5.75 0v4h5.75V4.75c0-.69-.56-1.25-1.25-1.25H10.5zM3.5 9v3.25h4.25V9H3.5zm5.75 0v3.25h5.75V9H9.25zm0 4.75v3.75h4.5c.69 0 1.25-.56 1.25-1.25v-2.5H9.25zm-1.5 3.75v-3.75H3.5v2.5c0 .69.56 1.25 1.25 1.25h3z" clip-rule="evenodd" />
         </svg>
         Danh sách điểm gas theo ca
       </h2>
@@ -1254,8 +1950,8 @@
         </table>
         <div id="empty-state" class="empty-state" style="display: none;">
           <h3>
-            <svg class="hero-icon hero-icon-xl" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M6.912 3a3 3 0 0 0-2.868 2.118l-2.411 7.838a3 3 0 0 0-.133.882V18a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0 0 17.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0 0 17.088 4.5H6.912a1.5 1.5 0 0 0-1.434 1.059L3.265 12.75H6.11a3 3 0 0 1 2.684 1.658l.256.513a1.5 1.5 0 0 0 1.342.829h3.218a1.5 1.5 0 0 0 1.342-.83l.256-.512a3 3 0 0 1 2.684-1.658h2.844Z" clip-rule="evenodd" />
+            <svg class="hero-icon hero-icon-xl" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M6.912 3a3 3 0 00-2.868 2.118l-2.411 7.838a3 3 0 00-.133.882V18a3 3 0 003 3h15a3 3 0 003-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0017.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0017.088 4.5H6.912a1.5 1.5 0 00-1.434 1.059L3.265 12.75H6.11a3 3 0 012.684 1.658l.256.513a1.5 1.5 0 001.342.829h3.218a1.5 1.5 0 001.342-.83l.256-.512a3 3 0 012.684-1.658h2.844Z" clip-rule="evenodd" />
             </svg>
             Chưa có dữ liệu
           </h3>
@@ -1265,16 +1961,17 @@
     </div>
   </div>
 
-  <button id="scrollTopBtn" title="Chọn nhanh điểm" aria-label="Chọn nhanh điểm">
-    <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+  <!-- Floating Scroll Top & Quick Select Button -->
+  <button id="scrollTopBtn" title="Thêm điểm gas (+)" aria-label="Thêm điểm gas">
+    <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
     </svg>
   </button>
 
-  <!-- Queue button (bên phải, đối diện nút +) -->
+  <!-- Queue button -->
   <button id="queueBtn" title="Hàng đợi" aria-label="Hàng đợi đồng bộ" onclick="openModal('queue-modal')">
-    <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
+    <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
     </svg>
     <span class="queue-badge" id="queueBadge">0</span>
   </button>
@@ -1284,14 +1981,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2>
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
           </svg>
           Hàng đợi đồng bộ
         </h2>
         <button class="close-modal" onclick="closeModal('queue-modal')" aria-label="Đóng">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
           </svg>
         </button>
       </div>
@@ -1308,8 +2005,8 @@
       <div class="modal-footer">
         <button class="btn-secondary" onclick="closeModal('queue-modal')">Đóng</button>
         <button class="btn-primary" id="btn-sync-queue" onclick="syncQueue()" disabled>
-          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" />
+          <svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.451a.75.75 0 000-1.5H4.5a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-2.138l.385.385a7 7 0 0011.758-3.15.75.75 0 00-2.08-.892ZM4.688 8.576a5.5 5.5 0 019.201-2.466l.312.311h-2.451a.75.75 0 000 1.5H15.5a.75.75 0 00.75-.75V3.421a.75.75 0 00-1.5 0v2.138l-.385-.385A7 7 0 002.607 8.324a.75.75 0 002.081.252Z" clip-rule="evenodd" />
           </svg>
           Đồng bộ ngay
         </button>
@@ -1322,20 +2019,20 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2>
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" />
           </svg>
           Xác nhận xóa
         </h2>
         <button class="close-modal" onclick="closeModal('delete-modal')" aria-label="Đóng">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
           </svg>
         </button>
       </div>
       <div class="modal-body">
         <p>Bạn có chắc chắn muốn xóa điểm gas này?</p>
-        <p id="delete-item-info" style="font-weight: bold; margin-top: 10px;"></p>
+        <p id="delete-item-info" style="font-weight: bold; margin-top: 10px; color: var(--vnpost-blue);"></p>
       </div>
       <div class="modal-footer">
         <button class="btn-secondary" onclick="closeModal('delete-modal')">Hủy</button>
@@ -1349,25 +2046,26 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2>
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 0 1-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 0 1-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 0 1-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.83-.727.83-1.857 0-2.584ZM12 18a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.94 6.94a.75.75 0 11-1.061-1.061 3 3 0 112.871 5.026v.345a.75.75 0 01-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 108.94 6.94zM10 15a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
           </svg>
           Trợ giúp
         </h2>
         <button class="close-modal" onclick="closeModal('help-modal')" aria-label="Đóng">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
           </svg>
         </button>
       </div>
       <div class="modal-body">
-        <h3>Cách sử dụng:</h3>
-        <ul style="margin-left: 20px; margin-top: 10px;">
-          <li>Chọn điểm gas từ danh sách hoặc thêm mới</li>
-          <li>Nhập số tiền thu được (có thể nhập số và thêm '000' tự động)</li>
+        <h3 style="margin-bottom: 8px;">Cách sử dụng:</h3>
+        <ul style="margin-left: 20px; line-height: 1.7;">
+          <li>Chọn điểm gas từ danh sách gợi ý hoặc nhập tên mới</li>
+          <li>Nhập số tiền thu được (hỗ trợ nhập 500 tự động thêm '000')</li>
           <li>Chọn trạng thái đã nộp hoặc chưa nộp</li>
-          <li>Nhấn "Lưu thông tin" để lưu dữ liệu</li>
-          <li>Xuất dữ liệu văn bản từ menu để chia sẻ hoặc in ấn</li>
+          <li>Nhấn "Lưu thông tin" để gửi lên hệ thống</li>
+          <li>Dùng tính năng ngoại tuyến khi mất mạng, dữ liệu sẽ lưu vào hàng đợi</li>
+          <li>Xuất file dữ liệu hoặc tạo báo cáo cuối ca từ menu tiện ích</li>
         </ul>
       </div>
       <div class="modal-footer">
@@ -1381,15 +2079,15 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2>
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-            <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+            <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
           </svg>
-          Xem nhanh KQ
+          Xem nhanh kết quả ca
         </h2>
         <button class="close-modal" onclick="closeModal('quick-view-modal')" aria-label="Đóng">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
           </svg>
         </button>
       </div>
@@ -1419,22 +2117,22 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2>
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
           </svg>
           Thêm điểm ngoài ca
         </h2>
         <button class="close-modal" onclick="closeModal('out-of-hours-modal')" aria-label="Đóng">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
           </svg>
         </button>
       </div>
       <div class="modal-body">
-        <p>Hiện tại bạn đang ngoài giờ làm việc (6:30 - 18:30). Vui lòng chọn ca để thêm điểm:</p>
+        <p style="margin-bottom: 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.5;">Chọn ca làm việc có sẵn hoặc nhập ngày để thêm/bù điểm gas ngoài ca:</p>
 
         <div class="form-group">
-          <label for="out-of-hours-shift">Chọn ca:</label>
+          <label for="out-of-hours-shift">Chọn ca có sẵn:</label>
           <select id="out-of-hours-shift">
             <option value="">-- Chọn ca --</option>
           </select>
@@ -1461,23 +2159,23 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2>
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.451a.75.75 0 000-1.5H4.5a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-2.138l.385.385a7 7 0 0011.758-3.15.75.75 0 00-2.08-.892ZM4.688 8.576a5.5 5.5 0 019.201-2.466l.312.311h-2.451a.75.75 0 000 1.5H15.5a.75.75 0 00.75-.75V3.421a.75.75 0 00-1.5 0v2.138l-.385-.385A7 7 0 002.607 8.324a.75.75 0 002.081.252Z" clip-rule="evenodd" />
           </svg>
           Chuyển tất cả chưa nộp
         </h2>
         <button class="close-modal" onclick="closeModal('batch-status-modal')" aria-label="Đóng">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
           </svg>
         </button>
       </div>
       <div class="modal-body">
-        <p>Hành động này sẽ chuyển toàn bộ điểm gas có trạng thái "Chưa nộp" trong database sang "Đã nộp".</p>
+        <p>Hành động này sẽ chuyển toàn bộ điểm gas có trạng thái "Chưa nộp" trong hệ thống sang "Đã nộp".</p>
 
-        <div id="batch-status-info" style="margin-top: 15px; padding: 15px; background-color: var(--bg-tertiary); border-radius: var(--radius-sm); display: none;">
-          <p id="batch-status-summary"></p>
-          <p id="batch-status-details" style="font-size: 0.9rem; margin-top: 8px; color: var(--text-secondary);"></p>
+        <div id="batch-status-info" style="margin-top: 15px; padding: 12px 14px; background-color: var(--bg-tertiary); border-radius: var(--radius-sm); border: 1px solid var(--border-card); display: none;">
+          <p id="batch-status-summary" style="font-weight: 600;"></p>
+          <p id="batch-status-details" style="font-size: 0.95rem; margin-top: 6px; color: var(--text-secondary);"></p>
         </div>
 
         <div id="batch-status-progress" class="progress-bar-wrapper">
@@ -1499,14 +2197,15 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2>
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M2 4.25A2.25 2.25 0 014.25 2h11.5A2.25 2.25 0 0118 4.25v11.5A2.25 2.25 0 0115.75 18H4.25A2.25 2.25 0 012 15.75V4.25zM4.25 3.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h11.5a.75.75 0 00.75-.75V4.25a.75.75 0 00-.75-.75H4.25z" />
+            <path d="M6 6.5a.75.75 0 01.75-.75h6.5a.75.75 0 010 1.5h-6.5A.75.75 0 016 6.5zm0 3.5a.75.75 0 01.75-.75h6.5a.75.75 0 010 1.5h-6.5A.75.75 0 016 10zm0 3.5a.75.75 0 01.75-.75h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z" />
           </svg>
           Báo cáo cuối ca
         </h2>
         <button class="close-modal" onclick="closeModal('report-modal')" aria-label="Đóng">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
           </svg>
         </button>
       </div>
@@ -1544,10 +2243,10 @@
 
         <div id="expenses-list"></div>
 
-        <div id="report-summary" style="display: none;">
-          <h4>Tổng kết ca:</h4>
-          <p id="report-details" style="margin: 10px 0;"></p>
-          <p style="font-weight: bold; color: var(--primary);" id="report-total"></p>
+        <div id="report-summary" style="display: none; margin-top: 14px; padding: 12px; background: var(--bg-tertiary); border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
+          <h4 style="font-size: 15px; margin-bottom: 6px;">Tổng kết ca:</h4>
+          <p id="report-details" style="margin: 8px 0; font-size: 14px;"></p>
+          <p style="font-weight: bold; color: var(--vnpost-blue); font-size: 15.5px;" id="report-total"></p>
         </div>
       </div>
       <div class="modal-footer">
@@ -1584,25 +2283,41 @@ let isSyncingQueue = false;
 
 /* ========== HEROICONS SVG LIBRARY ========== */
 const ICONS = {
-  check: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd" /></svg>',
-  checkCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" /></svg>',
-  xCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" /></svg>',
-  warning: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>',
-  info: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>',
-  pencil: '<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" /><path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" /></svg>',
-  trash: '<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" /></svg>',
-  xMark: '<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" /></svg>',
-  pencilSquare: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" /><path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" /></svg>',
-  trendingUp: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M15.22 6.268a.75.75 0 0 1 .968-.431l5.942 2.28a.75.75 0 0 1 .431.97l-2.28 5.94a.75.75 0 1 1-1.4-.537l1.63-4.251-1.086.484a11.2 11.2 0 0 0-5.45 5.173.75.75 0 0 1-1.199.19L9 12.312l-6.22 6.22a.75.75 0 0 1-1.06-1.061l6.75-6.75a.75.75 0 0 1 1.06 0l3.606 3.606a12.695 12.695 0 0 1 5.68-4.974l1.086-.483-4.251-1.632a.75.75 0 0 1-.432-.97Z" clip-rule="evenodd" /></svg>',
-  documentText: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" /></svg>',
-  chartBar: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" /></svg>',
-  clipboard: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" /></svg>',
-  banknotes: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" /><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" /></svg>',
-  moon: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.7-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" /></svg>',
-  sun: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z" /></svg>',
-  cog: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" /></svg>',
-  questionMark: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 0 1-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 0 1-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 0 1-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.83-.727.83-1.857 0-2.584ZM12 18a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>',
-  xMarkSidebar: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" /></svg>'
+  check: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>',
+  checkCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>',
+  xCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" /></svg>',
+  warning: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg>',
+  info: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd" /></svg>',
+  pencil: '<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>',
+  trash: '<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" /></svg>',
+  xMark: '<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" /></svg>',
+  pencilSquare: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" /><path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" /></svg>',
+  trendingUp: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12.577 4.878a.75.75 0 01.919-.53l4.5 1.5a.75.75 0 01.504.707v4.5a.75.75 0 01-1.5 0V7.81l-4.22 4.22a.75.75 0 01-1.06 0L8.5 8.81l-5.72 5.72a.75.75 0 01-1.06-1.06l6.25-6.25a.75.75 0 011.06 0l3.22 3.22 3.44-3.44h-3.253a.75.75 0 01-.75-.75v-.382z" clip-rule="evenodd" /></svg>',
+  documentText: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.25a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z" clip-rule="evenodd" /></svg>',
+  chartBar: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M15.5 2A1.5 1.5 0 0014 3.5v13a1.5 1.5 0 001.5 1.5h1a1.5 1.5 0 001.5-1.5v-13A1.5 1.5 0 0016.5 2h-1zM9.5 6A1.5 1.5 0 008 7.5v9A1.5 1.5 0 009.5 18h1a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0010.5 6h-1zM3.5 10A1.5 1.5 0 002 11.5v5A1.5 1.5 0 003.5 18h1A1.5 1.5 0 006 16.5v-5A1.5 1.5 0 004.5 10h-1z" /></svg>',
+  clipboard: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M15.988 3.012A2.25 2.25 0 0118 5.25v6.5A2.25 2.25 0 0115.75 14H13.5v-1.5h2.25a.75.75 0 00.75-.75v-6.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 00-.75.75V7H6v-.75A2.25 2.25 0 018.25 3h7.738z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M2 9.25A2.25 2.25 0 014.25 7h7.5A2.25 2.25 0 0114 9.25v7.5A2.25 2.25 0 0111.75 19h-7.5A2.25 2.25 0 012 16.75v-7.5zm2.25-.75a.75.75 0 00-.75.75v7.5c0 .414.336.75.75.75h7.5a.75.75 0 00.75-.75v-7.5a.75.75 0 00-.75-.75h-7.5z" clip-rule="evenodd" /></svg>',
+  banknotes: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.75 10.818v2.614A3.13 3.13 0 0011.888 13c.482-.315.612-.648.612-.875 0-.247-.152-.619-.75-.807ZM9.25 6.568v2.614c-.482.315-.612.648-.612.875 0 .247.152.619.75.807A3.13 3.13 0 009.25 6.568Z" /><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16Zm.75-11.25a.75.75 0 00-1.5 0v.152A3.125 3.125 0 007.75 9.5c0 1.254.838 2.158 1.5 2.5v2.348c-.662-.342-1.5-1.246-1.5-2.5a.75.75 0 00-1.5 0c0 1.956 1.34 3.486 3 3.9v.502a.75.75 0 001.5 0v-.502c1.66-.414 3-1.944 3-3.9 0-1.254-.838-2.158-1.5-2.5V7.4c.662.342 1.5 1.246 1.5 2.5a.75.75 0 001.5 0c0-1.956-1.34-3.486-3-3.9v-.152Z" clip-rule="evenodd" /></svg>',
+  moon: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.455 2.676A8 8 0 0017.324 12.545a8 8 0 11-9.869-9.869z" clip-rule="evenodd" /></svg>',
+  sun: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zm-8-5a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5A.75.75 0 012 10zm13 0a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5A.75.75 0 0115 10zM4.343 4.343a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061L4.343 5.404a.75.75 0 010-1.06zm9.193 9.192a.75.75 0 011.06 0l1.061 1.061a.75.75 0 11-1.06 1.06l-1.061-1.06a.75.75 0 010-1.061zm0-9.192a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 01-1.061-1.06l1.06-1.061a.75.75 0 011.061 0zm-9.193 9.192a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0zM10 6a4 4 0 100 8 4 4 0 000-8z" /></svg>',
+  cog: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.34 1.804A1 1 0 019.32 1h1.36a1 1 0 01.98.804l.295 1.473c.497.144.961.353 1.383.619l1.417-.54a1 1 0 011.21.438l.68 1.178a1 1 0 01-.23 1.268l-1.122.955c.058.261.09.53.09.805s-.032.544-.09.805l1.122.955a1 1 0 01.23 1.268l-.68 1.178a1 1 0 01-1.21.438l-1.417-.54a5.955 5.955 0 01-1.383.619l-.295 1.473a1 1 0 01-.98.804H9.32a1 1 0 01-.98-.804l-.295-1.473a5.955 5.955 0 01-1.383-.619l-1.417.54a1 1 0 01-1.21-.438l-.68-1.178a1 1 0 01.23-1.268l1.122-.955a5.945 5.945 0 01-.09-.805c0-.275.032-.544.09-.805l-1.122-.955a1 1 0 01-.23-1.268l.68-1.178a1 1 0 011.21-.438l1.417.54c.422-.266.886-.475 1.383-.619l.295-1.473zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" /></svg>',
+  questionMark: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.94 6.94a.75.75 0 11-1.061-1.061 3 3 0 112.871 5.026v.345a.75.75 0 01-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 108.94 6.94zM10 15a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg>',
+  xMarkSidebar: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" /></svg>',
+  play: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" /></svg>',
+  pause: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M5.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75A.75.75 0 007.25 3h-1.5zM12.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75a.75.75 0 00-.75-.75h-1.5z" /></svg>',
+  stop: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M5.25 3A2.25 2.25 0 003 5.25v9.5A2.25 2.25 0 005.25 17h9.5A2.25 2.25 0 0017 14.75v-9.5A2.25 2.25 0 0014.75 3h-9.5z" /></svg>',
+  arrowPath: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.451a.75.75 0 000-1.5H4.5a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-2.138l.385.385a7 7 0 0011.758-3.15.75.75 0 00-2.08-.892ZM4.688 8.576a5.5 5.5 0 019.201-2.466l.312.311h-2.451a.75.75 0 000 1.5H15.5a.75.75 0 00.75-.75V3.421a.75.75 0 00-1.5 0v2.138l-.385-.385A7 7 0 002.607 8.324a.75.75 0 002.081.252Z" clip-rule="evenodd" /></svg>',
+  arrowUpTray: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v7.5a.75.75 0 01-1.5 0v-7.5A.75.75 0 0110 3z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M6.22 6.22a.75.75 0 011.06 0L10 8.94l2.72-2.72a.75.75 0 111.06 1.06l-3.25 3.25a.75.75 0 01-1.06 0L6.22 7.28a.75.75 0 010-1.06z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M2.5 12.25a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H3.25a.75.75 0 01-.75-.75zM3.25 15.25a.75.75 0 000 1.5h13.5a.75.75 0 000-1.5H3.25z" clip-rule="evenodd" /></svg>',
+  arrowDownTray: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v7.59l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M3.5 15.25a.75.75 0 000 1.5h13a.75.75 0 000-1.5h-13z" clip-rule="evenodd" /></svg>',
+  bookmarkSquare: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v11.5A2.25 2.25 0 004.25 18h11.5A2.25 2.25 0 0018 15.75V4.25A2.25 2.25 0 0015.75 2H4.25zm4 3a.75.75 0 00-.75.75v7.5a.75.75 0 001.2.6l1.8-1.35 1.8 1.35a.75.75 0 001.2-.6v-7.5A.75.75 0 0012.75 5h-4.5z" clip-rule="evenodd" /></svg>',
+  adjustmentsHorizontal: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.5 4.75a.75.75 0 01.75-.75h1.5a.75.75 0 01.75.75v.5h11.25a.75.75 0 010 1.5H5.5v.5a.75.75 0 01-.75.75h-1.5a.75.75 0 01-.75-.75v-2.25zm12 5.5a.75.75 0 01.75-.75h1.5a.75.75 0 01.75.75v2.25a.75.75 0 01-.75.75h-1.5a.75.75 0 01-.75-.75v-.5H3.25a.75.75 0 010-1.5H14.5v-.5zm-6 5.5a.75.75 0 01.75-.75h1.5a.75.75 0 01.75.75v.5h7.25a.75.75 0 010 1.5H9.75v.5a.75.75 0 01-.75.75h-1.5a.75.75 0 01-.75-.75v-2.25z" clip-rule="evenodd" /></svg>',
+  tag: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.5 2A2.5 2.5 0 002 4.5v3.879a2.5 2.5 0 00.732 1.767l7.072 7.072a2.5 2.5 0 003.536 0l3.879-3.879a2.5 2.5 0 000-3.536L10.146 2.732A2.5 2.5 0 008.379 2H4.5zm2.75 4a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z" clip-rule="evenodd" /></svg>',
+  magnifyingGlass: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" /></svg>',
+  checkBadge: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.403 12.652a3 3 0 000-5.304 3 3 0 00-3.75-3.751 3 3 0 00-5.305 0 3 3 0 00-3.751 3.75 3 3 0 000 5.305 3 3 0 003.75 3.751 3 3 0 005.305 0 3 3 0 003.751-3.75zm-2.546-4.46a.75.75 0 00-1.214-.883l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>',
+  shieldExclamation: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10.362 1.015a.75.75 0 00-.724 0A16.037 16.037 0 013.5 3.55a.75.75 0 00-.5.7v6.75c0 4.195 2.778 8.026 6.786 9.475a.75.75 0 00.428 0c4.008-1.449 6.786-5.28 6.786-9.475V4.25a.75.75 0 00-.5-.7 16.038 16.038 0 01-6.138-2.535zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg>',
+  userMinus: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M11 5a3 3 0 11-6 0 3 3 0 016 0zM2.615 16.428a1.224 1.224 0 01-.569-1.033A5.992 5.992 0 018 9.5c1.8 0 3.415.795 4.525 2.062a4.488 4.488 0 00-1.525.866A3.992 3.992 0 008 11a4.004 4.004 0 00-3.905 3.14 1.25 1.25 0 01-1.48.288zM14.75 14a.75.75 0 01.75-.75h3.5a.75.75 0 010 1.5h-3.5a.75.75 0 01-.75-.75z" /></svg>',
+  inbox: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M6.912 3a3 3 0 00-2.868 2.118l-2.411 7.838a3 3 0 00-.133.882V18a3 3 0 003 3h15a3 3 0 003-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0017.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0017.088 4.5H6.912a1.5 1.5 0 00-1.434 1.059L3.265 12.75H6.11a3 3 0 012.684 1.658l.256.513a1.5 1.5 0 001.342.829h3.218a1.5 1.5 0 001.342-.83l.256-.512a3 3 0 012.684-1.658h2.844Z" clip-rule="evenodd" /></svg>',
+  calendar: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" /></svg>',
+  clock: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" /></svg>'
 };
 
 function svgInline(key, extraClass) {
@@ -2357,7 +3072,8 @@ function getCachedData() {
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed?.data)) return null;
-    if (parsed.timestamp && Date.now() - parsed.timestamp < DATA_CACHE_TTL_MS) return parsed.data;
+    // Luôn trả về dữ liệu cache để hiển thị ngay lập tức, đặc biệt hữu ích khi mất mạng
+    return parsed.data;
   } catch (error) { console.warn('Không dùng được cache dữ liệu:', error); }
   return null;
 }
@@ -2416,14 +3132,21 @@ function showToast(message, type = 'success') {
   const toastIcon = document.getElementById('toast-icon');
 
   let iconKey = 'checkCircle';
-  if (type === 'error') iconKey = 'xCircle';
+  if (type === 'error' || type === 'danger') iconKey = 'xCircle';
   else if (type === 'warning') iconKey = 'warning';
   else if (type === 'info') iconKey = 'info';
 
-  toastIcon.innerHTML = ICONS[iconKey];
-  toastMessage.textContent = stripLeadingEmoji(message);
-  toast.className = `toast ${type} show`;
-  setTimeout(() => { toast.classList.remove('show'); }, 3000);
+  if (toastIcon) toastIcon.innerHTML = ICONS[iconKey] || '';
+  if (toastMessage) toastMessage.textContent = stripLeadingEmoji(message);
+  
+  if (toast) {
+    const toastClass = type === 'danger' ? 'error' : type;
+    toast.className = `toast toast-${toastClass} show`;
+    if (window.toastTimer) clearTimeout(window.toastTimer);
+    window.toastTimer = setTimeout(() => { 
+      toast.classList.remove('show'); 
+    }, 2400); // 2.4s auto-hide as requested
+  }
 }
 
 async function copyToClipboard(text) {
@@ -2500,9 +3223,7 @@ function openOutOfHoursModal() {
   vibrateShort();
   const shiftInfo = getCurrentShift();
   if (shiftInfo.start) {
-    showToast('Bạn đang trong ca làm việc, hãy sử dụng chức năng thêm điểm bình thường!', 'warning');
-    vibrateError();
-    return;
+    showToast('Lưu ý: Bạn đang trong ca làm việc, nhưng vẫn có thể chọn ca khác để thêm bù điểm.', 'info');
   }
   const shifts = new Set();
   allData.forEach(item => { if (item.ca) shifts.add(item.ca); });
@@ -2514,9 +3235,26 @@ function openOutOfHoursModal() {
     option.textContent = formatShiftDayLabel(shift);
     shiftSelect.appendChild(option);
   });
+
+  if (selectedOutOfHoursShift) {
+    let exists = false;
+    for (let opt of shiftSelect.options) {
+      if (opt.value === selectedOutOfHoursShift) {
+        exists = true;
+        break;
+      }
+    }
+    if (!exists) {
+      const opt = document.createElement('option');
+      opt.value = selectedOutOfHoursShift;
+      opt.textContent = formatShiftDayLabel(selectedOutOfHoursShift);
+      shiftSelect.appendChild(opt);
+    }
+    shiftSelect.value = selectedOutOfHoursShift;
+  }
+
   const today = new Date().toISOString().split('T')[0];
-  document.getElementById('custom-shift-date').value = today;
-  selectedOutOfHoursShift = null;
+  document.getElementById('custom-shift-date').value = selectedOutOfHoursShift || today;
   openModal('out-of-hours-modal');
 }
 
@@ -2529,11 +3267,33 @@ function useCustomShift() {
     return;
   }
   const dateObj = new Date(customDate);
+  if (isNaN(dateObj.getTime())) {
+    showToast('Ngày đã chọn không hợp lệ!', 'error');
+    vibrateError();
+    return;
+  }
   const year = dateObj.getFullYear();
   const month = String(dateObj.getMonth() + 1).padStart(2, '0');
   const day = String(dateObj.getDate()).padStart(2, '0');
-  selectedOutOfHoursShift = `${year}-${month}-${day}`;
-  document.getElementById('out-of-hours-shift').value = selectedOutOfHoursShift;
+  const shiftKey = `${year}-${month}-${day}`;
+  selectedOutOfHoursShift = shiftKey;
+
+  const shiftSelect = document.getElementById('out-of-hours-shift');
+  let optionExists = false;
+  for (let i = 0; i < shiftSelect.options.length; i++) {
+    if (shiftSelect.options[i].value === shiftKey) {
+      shiftSelect.selectedIndex = i;
+      optionExists = true;
+      break;
+    }
+  }
+  if (!optionExists) {
+    const newOption = document.createElement('option');
+    newOption.value = shiftKey;
+    newOption.textContent = `Ca ngày ${day}-${month}-${year}`;
+    shiftSelect.appendChild(newOption);
+    shiftSelect.value = shiftKey;
+  }
   showToast(`Đã chọn ca ngày ${day}-${month}-${year}`, 'success');
   vibrateSuccess();
 }
@@ -2541,17 +3301,44 @@ function useCustomShift() {
 function confirmOutOfHoursShift() {
   vibrateShort();
   const shiftSelect = document.getElementById('out-of-hours-shift');
-  const selectedShift = shiftSelect.value;
+  let selectedShift = shiftSelect ? shiftSelect.value : '';
+
   if (!selectedShift) {
-    showToast('Vui lòng chọn một ca!', 'error');
+    const customDate = document.getElementById('custom-shift-date')?.value;
+    if (customDate) {
+      const dateObj = new Date(customDate);
+      if (!isNaN(dateObj.getTime())) {
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        selectedShift = `${year}-${month}-${day}`;
+      }
+    }
+  }
+
+  if (!selectedShift && selectedOutOfHoursShift) {
+    selectedShift = selectedOutOfHoursShift;
+  }
+
+  if (!selectedShift) {
+    showToast('Vui lòng chọn một ca hoặc chọn ngày!', 'error');
     vibrateError();
     return;
   }
+
   selectedOutOfHoursShift = selectedShift;
   closeModal('out-of-hours-modal');
+  updateShiftInfo();
   showToast(`Đã chọn ca: ${formatShiftName(selectedShift)}. Bạn có thể thêm điểm gas bây giờ.`, 'success');
   vibrateSuccess();
-  document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+  document.querySelector('.card')?.scrollIntoView({ behavior: 'smooth' });
+}
+
+function exitOutOfHoursShift() {
+  vibrateShort();
+  selectedOutOfHoursShift = null;
+  updateShiftInfo();
+  showToast('Đã quay lại trạng thái ca hiện tại.', 'info');
 }
 
 function formatShiftName(shiftKey) {
@@ -2686,13 +3473,28 @@ function getCurrentShift() {
 }
 
 function updateShiftInfo() {
+  if (selectedOutOfHoursShift) {
+    currentShift = selectedOutOfHoursShift;
+    const shiftEl = document.getElementById('current-shift');
+    const timeEl = document.getElementById('shift-time');
+    if (shiftEl) shiftEl.textContent = `${formatShiftName(selectedOutOfHoursShift)} (Ngoài ca)`;
+    if (timeEl) {
+      timeEl.innerHTML = `${svgInline('calendar')} <span>Đang thêm điểm bù cho ca này</span> <button type="button" onclick="exitOutOfHoursShift()" style="color: var(--danger); font-weight: 600; text-decoration: underline; background: none; border: none; cursor: pointer; padding: 0 4px; font-size: 13px;">[Thoát ngoài ca]</button>`;
+    }
+    return;
+  }
+
   const shiftInfo = getCurrentShift();
   currentShift = shiftInfo.shiftKey;
-  document.getElementById('current-shift').textContent = shiftInfo.shift;
-  if (shiftInfo.start && shiftInfo.end) {
-    document.getElementById('shift-time').innerHTML = `${svgInline('checkCircle')} <span>${shiftInfo.start} - ${shiftInfo.end}</span>`;
-  } else {
-    document.getElementById('shift-time').innerHTML = `<span>Hiện tại không trong ca làm việc</span>`;
+  const shiftEl = document.getElementById('current-shift');
+  const timeEl = document.getElementById('shift-time');
+  if (shiftEl) shiftEl.textContent = shiftInfo.shift;
+  if (timeEl) {
+    if (shiftInfo.start && shiftInfo.end) {
+      timeEl.innerHTML = `${svgInline('checkCircle')} <span>${shiftInfo.start} - ${shiftInfo.end}</span>`;
+    } else {
+      timeEl.innerHTML = `<span>Hiện tại không trong ca làm việc</span> <button type="button" onclick="openOutOfHoursModal()" style="color: var(--primary); font-weight: 600; text-decoration: underline; background: none; border: none; cursor: pointer; padding: 0 4px; font-size: 13px;">[Thêm điểm ngoài ca]</button>`;
+    }
   }
 }
 
@@ -2725,20 +3527,35 @@ function calculateStats(data) {
 
 function displayStats(stats) {
   const container = document.getElementById('stats-container');
+  if (!container) return;
+  const countFormatted = (stats.count || 0).toLocaleString('vi-VN');
+  const totalFormatted = formatCurrencyCompact(stats.total);
+
   container.innerHTML = `
     <div class="stat-card">
-      <div class="stat-value">${stats.count}</div>
-      <div class="stat-label">Số giao dịch</div>
+      <div class="stat-icon-wrap stat-icon-blue">
+        ${svgInline('documentText')}
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">${countFormatted}</div>
+        <div class="stat-label">Số giao dịch</div>
+      </div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">${formatCurrencyCompact(stats.total)}</div>
-      <div class="stat-label">Tổng tiền</div>
+      <div class="stat-icon-wrap stat-icon-emerald">
+        ${svgInline('banknotes')}
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">${totalFormatted}</div>
+        <div class="stat-label">Tổng doanh thu</div>
+      </div>
     </div>
   `;
 }
 
 function renderQuickActions() {
   const container = document.getElementById('stats-container');
+  if (!container) return;
   let actionDiv = document.querySelector('.quick-actions-section');
   if (!actionDiv) {
     actionDiv = document.createElement('div');
@@ -2748,12 +3565,12 @@ function renderQuickActions() {
   actionDiv.innerHTML = `
     <div class="quick-actions-grid">
       <div class="action-buttons">
-        <button class="btn-diemtien" type="button" onclick="window.location.href='diemtien.html';">${svgInline('banknotes')} Đếm tiền</button>
-        <button class="btn-clipboard" type="button" onclick="window.location.href='clipboard.html';">${svgInline('clipboard')} Clipboard</button>
+        <button class="btn btn-diemtien" type="button" onclick="window.location.href='diemtien.html';">${svgInline('banknotes')} Đếm tiền</button>
+        <button class="btn btn-clipboard" type="button" onclick="window.location.href='clipboard.html';">${svgInline('clipboard')} Clipboard</button>
       </div>
       <div class="action-buttons">
-        <button class="btn-primary" type="button" onclick="exportToText()">${svgInline('documentText')} Xuất data</button>
-        <button class="btn-warning" type="button" onclick="openReportModal()">${svgInline('chartBar')} Báo cáo</button>
+        <button class="btn btn-primary" type="button" onclick="exportToText()">${svgInline('arrowUpTray')} Xuất data</button>
+        <button class="btn btn-warning" type="button" onclick="openReportModal()">${svgInline('chartBar')} Báo cáo</button>
       </div>
     </div>
   `;
@@ -2784,6 +3601,18 @@ function filterData() {
   if (diemFilter !== 'all') filteredData = filteredData.filter(item => item.ten_diem === diemFilter);
   if (trangThaiFilter !== 'all') filteredData = filteredData.filter(item => item.trang_thai === trangThaiFilter);
 
+  // Thêm các điểm đang chờ trong hàng đợi lên đầu danh sách để người dùng không bị mất dấu
+  const queue = getQueue();
+  let queueItems = queue.map(q => ({
+    ...q,
+    id: q.queueId,
+    isQueueItem: true
+  }));
+  if (shiftFilter !== 'all') queueItems = queueItems.filter(item => getShiftDateKey(item.ca) === shiftFilter);
+  if (diemFilter !== 'all') queueItems = queueItems.filter(item => item.ten_diem === diemFilter);
+  if (trangThaiFilter !== 'all') queueItems = queueItems.filter(item => item.trang_thai === trangThaiFilter);
+
+  filteredData = [...queueItems, ...filteredData];
   currentFilteredData = filteredData;
 
   const shiftInfo = getCurrentShift();
@@ -2806,17 +3635,28 @@ function appendRowsToTable(data, startIndex, endIndex) {
   for (let i = startIndex; i < endIndex; i++) {
     const row = data[i];
     const tr = document.createElement('tr');
-    tr.className = 'fade-in';
-
-    tr.innerHTML = `
-      <td data-label="Tên điểm">${escapeHTML(row.ten_diem)}</td>
-      <td data-label="Doanh thu" class="revenue-cell">${formatCurrency(row.so_tien)}</td>
-      <td data-label="Thao tác">
-        <div class="action-buttons">
+    tr.className = row.isQueueItem ? 'fade-in queue-row' : 'fade-in';
+    const queueBadge = row.isQueueItem 
+      ? `<span class="badge badge-warning" style="font-size:11px;margin-left:6px;background:var(--color-warning-bg,#fef3c7);color:var(--color-warning-text,#b45309);border:1px solid var(--color-warning-border,#fde68a);padding:2px 6px;border-radius:4px;font-weight:600;display:inline-flex;align-items:center;gap:3px;"><span style="width:6px;height:6px;border-radius:50%;background:#f59e0b;display:inline-block;"></span>Chờ đồng bộ</span>` 
+      : '';
+    const actions = row.isQueueItem
+      ? `<div class="action-buttons">
+          <button class="btn-danger btn-sm" onclick="removeFromQueue('${row.queueId}')" onmousedown="vibrateShort()" aria-label="Xóa khỏi hàng đợi" title="Xóa khỏi hàng đợi">${svgInline('trash')}</button>
+        </div>`
+      : `<div class="action-buttons">
           <button class="btn-secondary btn-sm" onclick="editItem('${row.id}')" onmousedown="vibrateShort()" aria-label="Sửa">${svgInline('pencil')}</button>
           <button class="btn-danger btn-sm" onclick="deleteItem('${row.id}')" onmousedown="vibrateShort()" aria-label="Xóa">${svgInline('trash')}</button>
+        </div>`;
+
+    tr.innerHTML = `
+      <td data-label="Tên điểm">
+        <div class="diem-name-row">
+          <span class="diem-name">${escapeHTML(row.ten_diem)}</span>
+          ${queueBadge}
         </div>
       </td>
+      <td data-label="Doanh thu" class="revenue-cell">${formatCurrency(row.so_tien)}</td>
+      <td data-label="Thao tác">${actions}</td>
     `;
     fragment.appendChild(tr);
   }
@@ -2922,11 +3762,14 @@ function updateFilters(data) {
   });
 }
 
-function resetForm() {
+function resetForm(keepOutOfHours = false) {
   closeSidebar();
   vibrateShort();
   editingId = null;
-  selectedOutOfHoursShift = null;
+  if (!keepOutOfHours) {
+    selectedOutOfHoursShift = null;
+    updateShiftInfo();
+  }
   document.getElementById('chon_diem').value = '';
   document.getElementById('ten_diem').value = '';
   document.getElementById('ten_diem').disabled = false;
@@ -2936,6 +3779,8 @@ function resetForm() {
   document.getElementById('trang_thai').value = 'Chưa nộp';
   document.getElementById('btn-submit-text').textContent = 'Lưu thông tin';
   document.getElementById('btn-cancel').style.display = 'none';
+  const btnQueueAdd = document.getElementById('btn-queue-add');
+  if (btnQueueAdd) btnQueueAdd.style.display = 'inline-flex';
   resetSaveLocationButton();
 }
 
@@ -3051,6 +3896,8 @@ function editItem(id) {
   document.getElementById('trang_thai').value = item.trang_thai || 'Chưa nộp';
   document.getElementById('btn-submit-text').textContent = 'Cập nhật';
   document.getElementById('btn-cancel').style.display = 'block';
+  const btnQueueAdd = document.getElementById('btn-queue-add');
+  if (btnQueueAdd) btnQueueAdd.style.display = 'none';
   if (hasExistingGPSLocation(item.ten_diem)) {
     const btn = document.getElementById('btn-save-location');
     btn.innerHTML = `<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" /></svg> Đã có vị trí`;
@@ -3103,6 +3950,7 @@ function openModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
     modal.style.display = 'flex';
+    modal.classList.add('open', 'active');
     document.body.style.overflow = 'hidden';
     document.body.classList.add('no-scroll');
   }
@@ -3112,8 +3960,9 @@ function closeModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
     modal.style.display = 'none';
-    if (!document.querySelector('.modal[style*="display: flex"]') &&
-        !document.getElementById('sidebar').classList.contains('open')) {
+    modal.classList.remove('open', 'active');
+    if (!document.querySelector('.modal.open, .modal.active, .modal[style*="display: flex"]') &&
+        !document.getElementById('sidebar')?.classList.contains('open')) {
       document.body.classList.remove('no-scroll');
       document.body.style.overflow = '';
     }
@@ -3121,6 +3970,53 @@ function closeModal(modalId) {
 }
 
 document.getElementById('btn-save-location').addEventListener('click', saveLocation);
+
+function luuVaoHangDoi() {
+  vibrateShort();
+  if (editingId) {
+    showToast('Chức năng sửa điểm chỉ áp dụng khi cập nhật trực tiếp lên máy chủ!', 'warning');
+    vibrateError();
+    return;
+  }
+
+  const ten_diem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
+  const so_tien = document.getElementById('so_tien').value;
+  const dia_chi = document.getElementById('dia_chi').value;
+  const ghi_chu = document.getElementById('ghi_chu').value;
+  const trang_thai = document.getElementById('trang_thai').value;
+
+  if (!ten_diem || !so_tien || !dia_chi) {
+    showToast('Vui lòng nhập đầy đủ thông tin trước khi lưu hàng đợi!', 'error');
+    vibrateError();
+    return;
+  }
+
+  const shiftInfo = getCurrentShift();
+  let shiftToUse = selectedOutOfHoursShift;
+  if (!shiftToUse) {
+    if (!shiftInfo.start) {
+      showToast('Hiện tại không trong ca làm việc! Vui lòng chọn "Thêm điểm ngoài ca" từ menu.', 'error');
+      vibrateError();
+      return;
+    }
+    shiftToUse = shiftInfo.shiftKey;
+  }
+
+  const data = {
+    ten_diem,
+    so_tien,
+    dia_chi,
+    ghi_chu,
+    trang_thai,
+    ca: shiftToUse,
+    timestamp: new Date().toISOString()
+  };
+
+  addToQueue(data);
+  showToast('Đã lưu điểm gas vào hàng đợi ngoại tuyến!', 'warning');
+  vibrateSuccess();
+  resetForm(true);
+}
 
 async function guiDuLieu() {
   vibrateShort();
@@ -3168,13 +4064,37 @@ async function guiDuLieu() {
   };
   if (editingId) data.action = 'update';
 
+  if (!navigator.onLine) {
+    if (!editingId) {
+      addToQueue(data);
+      showToast('Mất kết nối! Đã lưu vào hàng đợi để đồng bộ khi có mạng.', 'warning');
+      vibrateShort();
+      resetForm(true);
+    } else {
+      showToast('Cần kết nối mạng để cập nhật điểm trên máy chủ!', 'error');
+      vibrateError();
+    }
+    if (loader) loader.classList.add('hidden');
+    document.getElementById('btn-submit-text').textContent = editingId ? 'Cập nhật' : 'Lưu thông tin';
+    btnSubmit.disabled = false;
+    return;
+  }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
+
   try {
-    const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(data) });
+    const response = await fetch(scriptURL, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
     const result = await response.json();
     if (result.result === 'success') {
       showToast(editingId ? 'Đã cập nhật thành công!' : 'Đã lưu thành công!', 'success');
       vibrateSuccess();
-      resetForm();
+      resetForm(true);
       taiDuLieu();
     } else {
       // Server trả về lỗi - thêm vào hàng đợi nếu là thêm mới
@@ -3182,19 +4102,21 @@ async function guiDuLieu() {
         addToQueue(data);
         showToast('Lỗi khi lưu! Đã thêm vào hàng đợi để đồng bộ sau.', 'warning');
         vibrateError();
-        resetForm();
+        resetForm(true);
       } else {
         showToast('Có lỗi xảy ra khi lưu dữ liệu!', 'error');
         vibrateError();
       }
     }
   } catch (error) {
-    // Lỗi mạng - thêm vào hàng đợi nếu là thêm mới
+    clearTimeout(timeoutId);
+    // Lỗi mạng hoặc mạng không ổn định (timeout)
     if (!editingId) {
       addToQueue(data);
-      showToast('Mất kết nối! Đã thêm vào hàng đợi để đồng bộ khi có mạng.', 'warning');
-      vibrateError();
-      resetForm();
+      const isTimeout = error.name === 'AbortError';
+      showToast(isTimeout ? 'Mạng không ổn định! Đã lưu vào hàng đợi để đồng bộ sau.' : 'Mất kết nối! Đã thêm vào hàng đợi để đồng bộ khi có mạng.', 'warning');
+      vibrateShort();
+      resetForm(true);
     } else {
       showToast('Có lỗi xảy ra khi lưu dữ liệu!', 'error');
       vibrateError();
@@ -3328,6 +4250,9 @@ function setupModalCloseOnOutsideClick() {
 
 document.getElementById('scrollTopBtn').onclick = function() {
   vibrateShort();
+  if (editingId) {
+    resetForm(true);
+  }
   document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
   const inputDiem = document.getElementById('chon_diem');
   if (inputDiem) { inputDiem.focus(); inputDiem.select(); }
@@ -3437,6 +4362,7 @@ function addToQueue(data) {
   };
   queue.push(queueItem);
   saveQueue(queue);
+  filterData();
 }
 
 function removeFromQueue(queueId) {
@@ -3444,6 +4370,8 @@ function removeFromQueue(queueId) {
   const queue = getQueue();
   const newQueue = queue.filter(item => item.queueId !== queueId);
   saveQueue(newQueue);
+  filterData();
+  showToast('Đã xóa điểm khỏi hàng đợi.', 'info');
 }
 
 function updateQueueUI() {
@@ -3453,10 +4381,33 @@ function updateQueueUI() {
   const container = document.getElementById('queue-list-container');
   const emptyState = document.getElementById('queue-empty');
   const syncBtn = document.getElementById('btn-sync-queue');
+  const sidebarBadge = document.getElementById('sidebar-queue-badge');
+
+  if (sidebarBadge) {
+    if (queue.length > 0) {
+      sidebarBadge.style.display = 'inline-block';
+      sidebarBadge.textContent = queue.length;
+    } else {
+      sidebarBadge.style.display = 'none';
+    }
+  }
+
+  if (!btn || !badge || !container || !emptyState || !syncBtn) return;
   
+  // Đảm bảo nút hàng đợi ở bên trái luôn hiển thị
+  btn.style.display = 'flex';
+
+  if (!navigator.onLine) {
+    btn.classList.add('offline');
+  } else {
+    btn.classList.remove('offline');
+  }
+
   if (queue.length > 0) {
-    btn.style.display = 'flex';
+    btn.classList.add('has-items');
+    badge.style.display = 'flex';
     badge.textContent = queue.length;
+    btn.title = `Hàng đợi đồng bộ (${queue.length} điểm chờ gửi)`;
     emptyState.style.display = 'none';
     syncBtn.disabled = !navigator.onLine || isSyncingQueue;
     
@@ -3471,13 +4422,15 @@ function updateQueueUI() {
         </div>
         <div class="queue-item-amount">${formatCurrency(item.so_tien)}</div>
         <div class="queue-item-actions">
-          <button class="queue-item-delete" onclick="removeFromQueue('${item.queueId}')" aria-label="Xóa">${svgInline('trash')}</button>
+          <button class="queue-item-delete" onclick="removeFromQueue('${item.queueId}')" aria-label="Xóa khỏi hàng đợi" title="Xóa">${svgInline('trash')}</button>
         </div>
       `;
       container.appendChild(div);
     });
   } else {
-    btn.style.display = 'none';
+    btn.classList.remove('has-items');
+    badge.style.display = 'none';
+    btn.title = 'Hàng đợi ngoại tuyến (0 điểm)';
     emptyState.style.display = 'block';
     container.innerHTML = '';
     syncBtn.disabled = true;
@@ -3488,19 +4441,22 @@ function updateNetworkStatus() {
   const statusBar = document.getElementById('queue-status-bar');
   const statusText = document.getElementById('queue-status-text');
   const syncBtn = document.getElementById('btn-sync-queue');
+  const queueBtn = document.getElementById('queueBtn');
   
   if (navigator.onLine) {
-    statusBar.className = 'queue-status-bar online';
-    statusText.textContent = 'Đã kết nối mạng - Sẵn sàng đồng bộ';
-    if (getQueue().length > 0 && !isSyncingQueue) {
+    if (statusBar) statusBar.className = 'queue-status-bar online';
+    if (statusText) statusText.textContent = 'Đã kết nối mạng - Sẵn sàng đồng bộ';
+    if (queueBtn) queueBtn.classList.remove('offline');
+    if (syncBtn && getQueue().length > 0 && !isSyncingQueue) {
       syncBtn.disabled = false;
       // Tự động đồng bộ sau 2s khi có mạng trở lại
       setTimeout(syncQueue, 2000);
     }
   } else {
-    statusBar.className = 'queue-status-bar offline';
-    statusText.textContent = 'Mất kết nối mạng - Đang chờ mạng...';
-    syncBtn.disabled = true;
+    if (statusBar) statusBar.className = 'queue-status-bar offline';
+    if (statusText) statusText.textContent = 'Mất kết nối mạng - Đang chờ mạng...';
+    if (queueBtn) queueBtn.classList.add('offline');
+    if (syncBtn) syncBtn.disabled = true;
   }
 }
 
@@ -3516,11 +4472,13 @@ async function syncQueue() {
   isSyncingQueue = true;
   vibrateShort();
   const queueBtn = document.getElementById('queueBtn');
-  queueBtn.classList.add('syncing');
+  if (queueBtn) queueBtn.classList.add('syncing');
   
   const syncBtn = document.getElementById('btn-sync-queue');
-  syncBtn.disabled = true;
-  syncBtn.innerHTML = `<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" /></svg> Đang đồng bộ...`;
+  if (syncBtn) {
+    syncBtn.disabled = true;
+    syncBtn.innerHTML = `<svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.451a.75.75 0 000-1.5H4.5a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-2.138l.385.385a7 7 0 0011.758-3.15.75.75 0 00-2.08-.892ZM4.688 8.576a5.5 5.5 0 019.201-2.466l.312.311h-2.451a.75.75 0 000 1.5H15.5a.75.75 0 00.75-.75V3.421a.75.75 0 00-1.5 0v2.138l-.385-.385A7 7 0 002.607 8.324a.75.75 0 002.081.252Z" clip-rule="evenodd" /></svg> <span>Đang đồng bộ...</span>`;
+  }
 
   let successCount = 0;
   let duplicateCount = 0;
@@ -3532,6 +4490,7 @@ async function syncQueue() {
       const data = await res.json();
       if (Array.isArray(data)) {
         allData = data;
+        saveCachedData(data);
         updateCacheDiem();
       }
     }
@@ -3556,6 +4515,7 @@ async function syncQueue() {
     const dataToSend = { ...item };
     delete dataToSend.queueId;
     delete dataToSend.queueTime;
+    delete dataToSend.isQueueItem;
     
     try {
       const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(dataToSend) });
@@ -3575,8 +4535,10 @@ async function syncQueue() {
   }
   
   isSyncingQueue = false;
-  queueBtn.classList.remove('syncing');
-  syncBtn.innerHTML = `<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" /></svg> Đồng bộ ngay`;
+  if (queueBtn) queueBtn.classList.remove('syncing');
+  if (syncBtn) {
+    syncBtn.innerHTML = `<svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.451a.75.75 0 000-1.5H4.5a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-2.138l.385.385a7 7 0 0011.758-3.15.75.75 0 00-2.08-.892ZM4.688 8.576a5.5 5.5 0 019.201-2.466l.312.311h-2.451a.75.75 0 000 1.5H15.5a.75.75 0 00.75-.75V3.421a.75.75 0 00-1.5 0v2.138l-.385-.385A7 7 0 002.607 8.324a.75.75 0 002.081.252Z" clip-rule="evenodd" /></svg> <span>Đồng bộ ngay</span>`;
+  }
   
   if (successCount > 0 || duplicateCount > 0) {
     showToast(`Đồng bộ: ${successCount} thành công, ${duplicateCount} trùng lặp${failCount > 0 ? `, ${failCount} lỗi` : ''}`, 'success');
@@ -3591,6 +4553,7 @@ async function syncQueue() {
   }
   
   updateQueueUI();
+  filterData();
 }
 
 /* ========== KHỞI TẠO ========== */

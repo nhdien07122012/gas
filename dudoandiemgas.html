@@ -1,547 +1,930 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dự đoán điểm gas</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="icon.png">
-<link rel="apple-touch-icon" href="icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Dự đoán điểm gas">
-<style>
-  :root {
-    --primary: #0f9d58;
-    --primary-dark: #0b7d45;
-    --primary-light: #4cd67f;
-    --secondary: #34c759;
-    --secondary-dark: #2aa64a;
-    --danger: #ff3b30;
-    --warning: #ff9500;
-    --info: #5ac8fa;
-    --bg-secondary: #f3f7f2;
-    --bg-tertiary: #f7faf7;
-    --bg-card: #ffffff;
-    --bg-sidebar: #ffffff;
-    --bg-input: #ffffff;
-    --bg-hover: #eef7ec;
-    --text-primary: #0b3b2a;
-    --text-secondary: #576a5f;
-    --text-inverse: #ffffff;
-    --border-color: #e6efe8;
-    --border-light: #eef6ed;
-    --border-dark: #cfded0;
-    --shadow: 0 2px 10px rgba(0,0,0,0.08);
-    --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
-    --night-shift: #0b7d45;
-    --radius-xl: 28px;
-    --radius-lg: 20px;
-    --radius-md: 16px;
-    --radius-sm: 12px;
-    --radius-xs: 8px;
-    --sidebar-width: 280px;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Dự đoán điểm gas - Vietnam Post Gas</title>
 
-  @media (prefers-color-scheme: dark) {
+  <!-- Google Fonts: Be Vietnam Pro & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Dự đoán điểm gas">
+
+  <script>
+    // Theme initialization immediately to prevent flicker
+    (function() {
+      const savedTheme = localStorage.getItem('gas_theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
+  <style>
     :root {
-      --primary: #23b66a;
-      --primary-dark: #0b7d45;
-      --primary-light: #4cd67f;
-      --secondary: #34c759;
-      --secondary-dark: #26a64a;
-      --danger: #ff5252;
-      --warning: #ffa726;
-      --info: #42a5f5;
-      --bg-secondary: #121212;
-      --bg-tertiary: #191919;
-      --bg-card: #161616;
-      --bg-sidebar: #0b0b0b;
-      --bg-input: #161616;
-      --bg-hover: #1f1f1f;
-      --text-primary: #f2f2f2;
-      --text-secondary: #c7c7c7;
-      --text-inverse: #f5f5f5;
-      --border-color: #303030;
-      --border-light: #242424;
-      --border-dark: #3a3a3a;
-      --night-shift: #0b7d45;
-      --shadow: 0 2px 10px rgba(0,0,0,0.5);
-      --shadow-lg: 0 8px 25px rgba(0,0,0,0.55);
+      /* VNPost Primary Brand Colors */
+      --vnpost-blue: #005ba6;
+      --vnpost-blue-hover: #004b8a;
+      --vnpost-blue-light: #e6f0fa;
+      --vnpost-gold: #f59e0b;
+      --vnpost-gold-hover: #d97706;
+      --vnpost-gold-light: #fef3c7;
+
+      /* UI System Colors */
+      --primary: var(--vnpost-blue);
+      --primary-hover: var(--vnpost-blue-hover);
+      --primary-light: var(--vnpost-blue-light);
+      --secondary: #10b981;
+      --secondary-dark: #059669;
+      --emerald: #10b981;
+      --emerald-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --info: #0284c7;
+      --info-light: #e0f2fe;
+
+      /* Neutrals - Slate Scale */
+      --bg-primary: #f8fafc;
+      --bg-secondary: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-card-glass: rgba(255, 255, 255, 0.88);
+      --bg-sidebar: #ffffff;
+      --bg-input: #ffffff;
+      --bg-hover: #f1f5f9;
+      --bg-active: #e2e8f0;
+
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --text-inverse: #ffffff;
+
+      --border-color: #e2e8f0;
+      --border-focus: #005ba6;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+
+      --sidebar-width: 290px;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-  }
 
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
+    html.dark {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-card: #1e293b;
+      --bg-card-glass: rgba(30, 41, 59, 0.88);
+      --bg-sidebar: #1e293b;
+      --bg-input: #0f172a;
+      --bg-hover: #334155;
+      --bg-active: #334155;
 
-  body {
-    font-family: var(--font-family);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    line-height: 1.6;
-    padding: 20px;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-inverse: #0f172a;
 
-  body.no-scroll {
-    overflow: hidden;
-  }
+      --border-color: #334155;
+      --border-focus: #38bdf8;
 
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background: var(--bg-card);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
-    border: 1px solid var(--border-color);
-    overflow: hidden;
-  }
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
 
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -280px;
-    width: var(--sidebar-width);
-    height: 100%;
-    background: var(--bg-sidebar);
-    box-shadow: 2px 0 15px rgba(0,0,0,0.2);
-    z-index: 1001;
-    transition: left 0.3s ease;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-    border-right: 1px solid var(--border-color);
-    touch-action: pan-y;
-  }
-
-  .sidebar.open {
-    left: 0;
-  }
-  .sidebar.swiping {
-    transition: none !important;
-    will-change: left;
-  }
-
-  .sidebar-header {
-    padding: 20px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: var(--text-inverse);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 0 var(--radius-lg) 0 0;
-  }
-
-  .sidebar-header h2 {
-    font-size: 1.3rem;
-    font-weight: 600;
-  }
-
-  .sidebar-content {
-    padding: 20px;
-    flex: 1;
-  }
-
-  .sidebar-item {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 12px;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: var(--radius-md);
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: var(--transition);
-    border: 1px solid transparent;
-    width: 100%;
-    text-align: left;
-    font-size: 1rem;
-    font-weight: 500;
-    font-family: var(--font-family);
-  }
-
-  .sidebar-item:hover,
-  .sidebar-item.active {
-    background: var(--primary);
-    color: var(--text-inverse);
-    border-color: var(--primary-dark);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-  }
-
-  .sidebar-footer {
-    padding: 20px;
-    border-top: 1px solid var(--border-color);
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    text-align: center;
-  }
-
-  .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 1000;
-    display: none;
-    backdrop-filter: blur(2px);
-  }
-
-  .overlay.active {
-    display: block;
-  }
-  .overlay.swiping {
-    display: block !important;
-    transition: none !important;
-    pointer-events: none !important;
-  }
-
-  button {
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-family: var(--font-family);
-  }
-
-  .close-sidebar,
-  .menu-toggle {
-    background: none;
-    color: var(--text-inverse);
-    padding: 5px;
-    width: auto;
-    font-size: 1.5rem;
-  }
-
-  header {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: var(--text-inverse);
-    padding: 25px 30px;
-    text-align: center;
-    position: relative;
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  }
-
-  header h1 {
-    font-size: 1.8rem;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-weight: 600;
-  }
-
-  header p {
-    opacity: 0.9;
-  }
-
-  .menu-toggle {
-    position: absolute;
-    left: 20px;
-    top: 22px;
-  }
-
-  .summary-strip {
-    background: var(--night-shift);
-    color: var(--text-inverse);
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .card {
-    padding: 25px 30px;
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  .card:last-child {
-    border-bottom: none;
-  }
-
-  .stats-container {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(150px, 1fr));
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-
-  .stat-card {
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    text-align: center;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
-  }
-
-  .stat-value {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--primary);
-  }
-
-  .stat-label {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    margin-top: 5px;
-  }
-
-  .filter-group {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr 1fr auto;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-
-  .report-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  input,
-  select {
-    width: 100%;
-    padding: 14px 16px;
-    background: var(--bg-input);
-    color: var(--text-primary);
-    border: 1.5px solid var(--border-color);
-    border-radius: var(--radius-md);
-    font-size: 1rem;
-    font-family: var(--font-family);
-  }
-
-  input:focus,
-  select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(61, 142, 255, 0.2);
-  }
-
-  .btn-primary,
-  .btn-secondary,
-  .btn-success {
-    padding: 14px 16px;
-    min-height: 48px;
-  }
-
-  .btn-primary {
-    background: var(--primary);
-    color: var(--text-inverse);
-  }
-
-  .btn-primary:hover {
-    background: var(--primary-dark);
-    transform: translateY(-2px);
-  }
-
-  .btn-secondary {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-  }
-
-  .btn-success {
-    background: var(--secondary);
-    color: var(--text-inverse);
-  }
-
-  .table-container {
-    overflow-x: auto;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  th,
-  td {
-    padding: 14px 12px;
-    border-bottom: 1px solid var(--border-color);
-    text-align: left;
-    vertical-align: top;
-  }
-
-  th {
-    background: var(--bg-tertiary);
-    font-weight: 600;
-  }
-
-  tr:hover {
-    background: var(--bg-hover);
-  }
-
-  .point-name {
-    font-weight: 700;
-    color: var(--text-primary);
-  }
-
-  .muted {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-  }
-
-  .badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: var(--radius-xs);
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--text-inverse);
-    white-space: nowrap;
-  }
-
-  .badge-today { background: var(--secondary); }
-  .badge-overdue { background: var(--danger); }
-  .badge-soon { background: var(--info); }
-  .badge-unknown { background: var(--warning); }
-
-  .confidence {
-    min-width: 120px;
-  }
-
-  .confidence-bar {
-    width: 100%;
-    height: 8px;
-    background: var(--border-light);
-    border-radius: 999px;
-    overflow: hidden;
-    margin-top: 6px;
-  }
-
-  .confidence-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--warning), var(--secondary));
-    border-radius: 999px;
-  }
-
-  .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--text-secondary);
-  }
-
-  .toast {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) translateY(100px);
-    background: var(--primary);
-    color: var(--text-inverse);
-    padding: 16px 24px;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    z-index: 1002;
-    opacity: 0;
-    transition: var(--transition);
-    min-width: 280px;
-    text-align: center;
-    font-weight: 500;
-  }
-
-  .toast.show {
-    transform: translate(-50%, -50%) translateY(0);
-    opacity: 1;
-  }
-
-  .toast.error { background: var(--danger); }
-  .toast.success { background: var(--secondary); }
-
-  @media (max-width: 900px) {
-    .stats-container,
-    .filter-group,
-    .report-actions {
-      grid-template-columns: 1fr 1fr;
+      --primary-light: rgba(0, 91, 166, 0.25);
+      --emerald-light: rgba(16, 185, 129, 0.2);
+      --warning-light: rgba(245, 158, 11, 0.2);
+      --danger-light: rgba(239, 68, 68, 0.2);
+      --info-light: rgba(2, 132, 199, 0.2);
     }
-  }
 
-  @media (max-width: 768px) {
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     body {
-      padding: 15px;
+      font-family: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.5;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    header {
-      padding: 20px 18px;
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    body.no-scroll {
+      overflow: hidden;
     }
 
-    header h1 {
-      font-size: 1.45rem;
-      padding-left: 36px;
+    /* Heroicon base */
+    .hero-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
     }
 
-    .summary-strip,
+    /* ========== OVERLAY & SIDEBAR ========== */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s ease;
+    }
+
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      max-width: 85vw;
+      background-color: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      z-index: 1001;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.25rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(to bottom, var(--bg-card), var(--bg-sidebar));
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sidebar-logo {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      border-radius: var(--radius-sm);
+    }
+
+    .sidebar-title-group h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .sidebar-title-group p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .close-sidebar {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .close-sidebar:hover {
+      background-color: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .sidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      padding: 0.75rem 1rem;
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+      transition: var(--transition);
+    }
+
+    .sidebar-item:hover {
+      background-color: var(--bg-hover);
+      color: var(--text-primary);
+      transform: translateX(4px);
+    }
+
+    .sidebar-item.active {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+      position: relative;
+    }
+
+    .sidebar-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 15%;
+      bottom: 15%;
+      width: 3.5px;
+      background-color: var(--primary);
+      border-radius: 0 var(--radius-full) var(--radius-full) 0;
+    }
+
+    .sidebar-item .hero-icon {
+      color: inherit;
+    }
+
+    .sidebar-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ========== APP HEADER ========== */
+    .app-header {
+      background: var(--bg-card-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: var(--transition);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      text-align: center;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+    }
+
+    .menu-toggle {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      z-index: 2;
+    }
+
+    .menu-toggle:hover {
+      background-color: var(--bg-hover);
+      color: var(--primary);
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .header-logo {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .header-title-wrap {
+      text-align: center;
+    }
+    .header-title-wrap h1 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+    }
+
+    .header-title-wrap p {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    .header-actions {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 2;
+    }
+
+    .icon-btn {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .icon-btn:hover {
+      background: var(--bg-hover);
+      color: var(--primary);
+    }
+
+    /* ========== MAIN CONTAINER ========== */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 3rem;
+    }
+
+    /* Summary Strip */
+    .summary-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding: 0.65rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    #today-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+    }
+
+    #today-label::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--emerald);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.15); }
+    }
+
+    #last-updated {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    /* Cards */
     .card {
-      padding: 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.25rem;
+      transition: var(--transition);
     }
 
-    .stats-container,
-    .filter-group,
+    /* Stats Grid */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.85rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      text-align: left;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-card:nth-child(3) .stat-value {
+      color: var(--emerald);
+    }
+
+    .stat-card:nth-child(4) .stat-value {
+      color: var(--danger);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    /* Filter Controls */
+    .filter-group {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr 1.2fr auto;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .filter-group {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    input[type="search"], select {
+      height: 40px;
+      padding: 0 0.85rem;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text-primary);
+      background-color: var(--bg-input);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    input[type="search"]:focus, select:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(0, 91, 166, 0.12);
+    }
+
+    /* Buttons */
+    .btn-primary, .btn-secondary, .btn-success {
+      height: 44px;
+      padding: 0 1.25rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--vnpost-blue) 0%, #0284c7 100%);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 4px 12px rgba(0, 91, 166, 0.28);
+      filter: brightness(1.05);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+    }
+
+    .btn-success:hover {
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.28);
+      filter: brightness(1.05);
+    }
+
+    .btn-secondary {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .btn-primary:disabled, .btn-success:disabled, .btn-secondary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .report-actions {
-      grid-template-columns: 1fr;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* Table Container */
+    .table-container {
+      overflow-x: auto;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
     }
 
     table {
-      min-width: 880px;
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
     }
-  }
-</style>
-  <link rel="stylesheet" href="assets/hero-icons.css">
+
+    thead th {
+      background: var(--bg-secondary);
+      padding: 0.85rem 1rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: 0.95rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-primary);
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background-color: var(--bg-hover);
+    }
+
+    .point-name {
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.2rem;
+      font-size: 0.95rem;
+    }
+
+    .muted {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+    }
+
+    .badge-today {
+      background-color: var(--emerald-light);
+      color: var(--emerald-dark);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    .badge-overdue {
+      background-color: var(--danger-light);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+
+    .badge-soon {
+      background-color: var(--info-light);
+      color: var(--info);
+      border: 1px solid rgba(2, 132, 199, 0.35);
+    }
+
+    .badge-unknown {
+      background-color: var(--warning-light);
+      color: var(--warning-dark);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    /* Confidence bar */
+    .confidence {
+      min-width: 110px;
+    }
+
+    .confidence strong {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .confidence-bar {
+      width: 100%;
+      height: 6px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin-top: 0.35rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .confidence-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0284c7 0%, var(--emerald) 100%);
+      border-radius: var(--radius-full);
+      transition: width 0.4s ease;
+    }
+
+    /* Empty State */
+    .empty-state {
+      padding: 3rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .empty-state h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.35rem;
+    }
+
+    .empty-state p {
+      font-size: 0.875rem;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0.75rem 1.35rem;
+      border-radius: var(--radius-full);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      z-index: 3000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 90vw;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .toast.success {
+      background: #065f46;
+      border: 1px solid #10b981;
+    }
+
+    .toast.error {
+      background: #7f1d1d;
+      border: 1px solid #ef4444;
+    }
+
+    .toast.warning {
+      background: #78350f;
+      border: 1px solid #f59e0b;
+    }
+
+    .toast.info {
+      background: #0c4a6e;
+      border: 1px solid #0284c7;
+    }
+  </style>
 </head>
 <body>
+  <!-- Overlay cho sidebar -->
   <div class="overlay" id="sidebar-overlay"></div>
-  <div class="toast" id="toast"><span id="toast-message"></span></div>
 
+  <!-- Toast notification -->
+  <div class="toast" id="toast">
+    <span id="toast-message">Thông báo</span>
+  </div>
+
+  <!-- Sidebar Drawer -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <h2>MenuBar</h2>
-      <button class="close-sidebar" id="close-sidebar" type="button">&times;</button>
+      <div class="sidebar-brand">
+        <img src="icon.png" alt="VNPost" class="sidebar-logo" onerror="this.style.display='none'">
+        <div class="sidebar-title-group">
+          <h2>VNPost Gas</h2>
+          <p>Hệ thống hỗ trợ ca trực</p>
+        </div>
+      </div>
+      <button class="close-sidebar" id="close-sidebar" type="button" aria-label="Đóng menu">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+        </svg>
+      </button>
     </div>
+
     <div class="sidebar-content">
-      <button class="sidebar-item" type="button" onclick="window.location.href='index.html'">📋 Quản lý điểm gas</button>
-      <button class="sidebar-item" type="button" onclick="window.location.href='diemtien.html'">💵 Đếm tiền</button>
-      <button class="sidebar-item" type="button" onclick="window.location.href='vitri.html'">📍 Quản lý vị trí</button>
-      <button class="sidebar-item" type="button" onclick="window.location.href='tinhluong.html'">💰 Tính công & lương</button>
-      <button class="sidebar-item" type="button" onclick="window.location.href='tinhgascon.html'">💧 Tính tiền gas còn lại</button>
-      <button class="sidebar-item active" type="button">🔮 Dự đoán điểm gas</button>
-      <button class="sidebar-item" type="button" onclick="window.location.href='clipboard.html'">📋 Lưu Clipboard</button>
+      <button class="sidebar-item" type="button" onclick="closeSidebar(); window.location.href='index.html'">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11.47 3.84a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.06l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 0 0 1.061 1.06l8.69-8.69Z" />
+          <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
+        </svg>
+        Bảng điều khiển
+      </button>
+
+      <button class="sidebar-item" type="button" onclick="closeSidebar(); window.location.href='diemtien.html'">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
+          <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
+        </svg>
+        Đếm tiền
+      </button>
+
+      <button class="sidebar-item" type="button" onclick="closeSidebar(); window.location.href='vitri.html'">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+        </svg>
+        Quản lý vị trí
+      </button>
+
+      <button class="sidebar-item" type="button" onclick="closeSidebar(); window.location.href='tinhluong.html'">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 0 1-.921.42Z" />
+          <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a3.836 3.836 0 0 0-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 0 1-.921-.421l-.879-.66a.75.75 0 0 0-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 0 0 1.5 0v-.81a4.124 4.124 0 0 0 1.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 0 0-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 0 0 .933-1.175l-.415-.33a3.836 3.836 0 0 0-1.719-.755V6Z" clip-rule="evenodd" />
+        </svg>
+        Tính công & lương
+      </button>
+
+      <button class="sidebar-item" type="button" onclick="closeSidebar(); window.location.href='tinhgascon.html'">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="M10.5 3.798v5.02a3 3 0 0 1-.879 2.121l-2.377 2.377a9.845 9.845 0 0 1 5.091 1.013 8.315 8.315 0 0 0 5.713.636l.285-.071-3.954-3.955a3 3 0 0 1-.879-2.121v-5.02a23.614 23.614 0 0 0-3 0Zm4.5.138a.75.75 0 0 0 .093-1.495A24.837 24.837 0 0 0 12 2.25a25.048 25.048 0 0 0-3.093.191A.75.75 0 0 0 9 3.936v4.882a1.5 1.5 0 0 1-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.471-4.881L15.44 9.879A1.5 1.5 0 0 1 15 8.818V3.936Z" clip-rule="evenodd" />
+        </svg>
+        Tính tiền gas còn lại
+      </button>
+
+      <button class="sidebar-item active" type="button">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258a2.625 2.625 0 0 0-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" />
+        </svg>
+        Dự đoán điểm gas
+      </button>
+
+      <button class="sidebar-item" type="button" onclick="closeSidebar(); window.location.href='clipboard.html'">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" />
+        </svg>
+        Lưu Clipboard
+      </button>
     </div>
+
     <div class="sidebar-footer">
-      <p>Quản lý điểm gas &copy; 2026</p>
+      <span>VNPost Gas Analytics</span>
+      <span>v3.0</span>
     </div>
   </div>
 
-  <div class="container">
-    <header>
-      <button class="menu-toggle" id="menu-toggle" type="button">☰</button>
-      <h1>🔮 Dự đoán điểm gas</h1>
-      <p>Dựa trên lịch sử lấy gas để dự đoán các điểm có khả năng lấy trong hôm nay</p>
-    </header>
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-left">
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Mở menu">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        <a href="index.html" class="brand-link">
+          <div class="header-title-wrap">
+            <h1>Dự đoán điểm gas</h1>
+            <p>Phân tích chu kỳ lấy hàng</p>
+          </div>
+        </a>
+      </div>
 
+      <div class="header-actions">
+        <button class="icon-btn" onclick="toggleTheme()" aria-label="Đổi giao diện Sáng/Tối">
+          <svg id="theme-icon-sun" class="hero-icon" style="display:none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z" />
+          </svg>
+          <svg id="theme-icon-moon" class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.7-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
     <div class="summary-strip">
       <div id="today-label">Hôm nay</div>
       <div id="last-updated">Đang tải dữ liệu...</div>
@@ -582,12 +965,28 @@
           <option value="confidence">Độ tin cậy cao nhất</option>
           <option value="name">Tên điểm A-Z</option>
         </select>
-        <button class="btn-primary" id="reload-btn" type="button">🔄 Tải lại</button>
+        <button class="btn-primary" id="reload-btn" type="button">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" />
+          </svg>
+          Tải lại
+        </button>
       </div>
 
       <div class="report-actions">
-        <button class="btn-success" id="copy-today-btn" type="button">📋 Sao chép danh sách hôm nay</button>
-        <button class="btn-secondary" id="copy-all-btn" type="button">📄 Sao chép danh sách đang lọc</button>
+        <button class="btn-success" id="copy-today-btn" type="button">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" />
+          </svg>
+          Sao chép danh sách hôm nay
+        </button>
+        <button class="btn-secondary" id="copy-all-btn" type="button">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625Z" clip-rule="evenodd" />
+            <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+          </svg>
+          Sao chép danh sách đang lọc
+        </button>
       </div>
     </div>
 
@@ -608,562 +1007,500 @@
         </table>
         <div id="empty-state" class="empty-state" style="display: none;">
           <h3>Chưa có dữ liệu phù hợp</h3>
-          <p>Hãy thử đổi bộ lọc hoặc tải lại dữ liệu.</p>
+          <p>Hãy thử thay đổi từ khóa, chọn lại bộ lọc hoặc bấm Tải lại.</p>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 
-<script>
-const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
-let rawData = [];
-let predictionData = [];
-let filteredData = [];
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
+    let rawData = [];
+    let predictionData = [];
+    let filteredData = [];
+    const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-function openSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('sidebar-overlay');
-  if (!sidebar || !overlay) return;
-  if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
-  sidebar.style.left = '';
-  sidebar.style.transition = '';
-  overlay.style.opacity = '';
-  overlay.style.transition = '';
-  overlay.style.display = '';
-  if (!sidebar.classList.contains('open')) {
-    if (navigator.vibrate) navigator.vibrate(10);
-    sidebar.classList.add('open');
-    overlay.classList.add('active');
-    document.body.classList.add('no-scroll');
-  }
-}
-
-function closeSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('sidebar-overlay');
-  if (!sidebar || !overlay) return;
-  if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
-  sidebar.style.left = '';
-  sidebar.style.transition = '';
-  overlay.style.opacity = '';
-  overlay.style.transition = '';
-  overlay.style.display = '';
-  sidebar.classList.remove('open');
-  overlay.classList.remove('active');
-  document.body.classList.remove('no-scroll');
-}
-
-function toggleSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  if (sidebar && sidebar.classList.contains('open')) {
-    if (navigator.vibrate) navigator.vibrate(10);
-    closeSidebar();
-  } else {
-    openSidebar();
-  }
-}
-
-/* ========== VUỐT CẠNH TRÁI ĐỂ MỞ/ĐÓNG MENUBAR (IPHONE STYLE) ========== */
-function setupSidebarSwipe() {
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('sidebar-overlay');
-  if (!sidebar || !overlay) return;
-
-  const EDGE_THRESHOLD = 35; // Vùng cảm ứng mép trái màn hình (px)
-  let startX = 0;
-  let startY = 0;
-  let currentX = 0;
-  let currentY = 0;
-  let startTime = 0;
-  let isSwiping = false;
-  let isClosing = false;
-  let isDetermined = false;
-  let animTimeout = null;
-
-  window.sidebarSwipeCancelAnim = function() {
-    if (animTimeout) {
-      clearTimeout(animTimeout);
-      animTimeout = null;
-    }
-  };
-
-  function getSidebarWidth() {
-    return sidebar.offsetWidth || 280;
-  }
-
-  function handleTouchStart(e) {
-    if (e.touches.length !== 1) return;
-
-    const touch = e.touches[0];
-    const target = touch.target;
-    if (target && target.closest && target.closest('input, textarea, select')) return;
-
-    startX = touch.clientX;
-    startY = touch.clientY;
-    currentX = startX;
-    currentY = startY;
-    startTime = Date.now();
-    isDetermined = false;
-    isSwiping = false;
-
-    const isOpen = sidebar.classList.contains('open');
-
-    if (isOpen) {
-      isClosing = true;
-    } else {
-      if (startX <= EDGE_THRESHOLD) {
-        isClosing = false;
-      } else {
-        return;
+    // ========== THEME TOGGLE ==========
+    function updateThemeUI() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const sun = document.getElementById('theme-icon-sun');
+      const moon = document.getElementById('theme-icon-moon');
+      if (sun && moon) {
+        sun.style.display = isDark ? 'inline-block' : 'none';
+        moon.style.display = isDark ? 'none' : 'inline-block';
       }
     }
 
-    if (animTimeout) {
-      clearTimeout(animTimeout);
-      animTimeout = null;
-    }
-  }
-
-  function handleTouchMove(e) {
-    if (e.touches.length !== 1) return;
-
-    const touch = e.touches[0];
-    currentX = touch.clientX;
-    currentY = touch.clientY;
-    const deltaX = currentX - startX;
-    const deltaY = currentY - startY;
-
-    if (!isDetermined) {
-      const absX = Math.abs(deltaX);
-      const absY = Math.abs(deltaY);
-
-      if (absX < 8 && absY < 8) return;
-
-      isDetermined = true;
-
-      if (!isClosing) {
-        if (deltaX > 0 && absX > absY * 1.2) {
-          isSwiping = true;
-        } else {
-          isSwiping = false;
-          return;
-        }
-      } else {
-        if (deltaX < 0 && absX > absY * 1.2) {
-          isSwiping = true;
-        } else {
-          isSwiping = false;
-          return;
-        }
-      }
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('gas_theme', isDark ? 'dark' : 'light');
+      updateThemeUI();
+      showToast(isDark ? 'Đã bật chế độ tối' : 'Đã bật chế độ sáng', 'info');
     }
 
-    if (!isSwiping) return;
-
-    e.preventDefault();
-
-    const sidebarWidth = getSidebarWidth();
-
-    sidebar.classList.add('swiping');
-    overlay.classList.add('swiping');
-
-    if (!isClosing) {
-      const left = Math.min(0, -sidebarWidth + Math.max(0, deltaX));
-      const progress = Math.min(Math.max(deltaX / sidebarWidth, 0), 1);
-      sidebar.style.left = left + 'px';
-      overlay.style.opacity = progress.toFixed(3);
-    } else {
-      const left = Math.min(0, Math.max(-sidebarWidth, deltaX));
-      const progress = Math.min(Math.max(1 + (deltaX / sidebarWidth), 0), 1);
-      sidebar.style.left = left + 'px';
-      overlay.style.opacity = progress.toFixed(3);
-    }
-  }
-
-  function handleTouchEnd(e) {
-    if (!isSwiping) {
-      isDetermined = false;
-      return;
-    }
-
-    isSwiping = false;
-    isDetermined = false;
-
-    sidebar.classList.remove('swiping');
-    overlay.classList.remove('swiping');
-
-    const sidebarWidth = getSidebarWidth();
-    const deltaX = currentX - startX;
-    const duration = Math.max(Date.now() - startTime, 1);
-    const velocityX = deltaX / duration;
-
-    let shouldOpen = false;
-
-    if (!isClosing) {
-      shouldOpen = (deltaX > sidebarWidth * 0.3) || (velocityX > 0.3 && deltaX > 30);
-    } else {
-      const shouldClose = (deltaX < -sidebarWidth * 0.25) || (velocityX < -0.3 && deltaX < -30);
-      shouldOpen = !shouldClose;
-    }
-
-    sidebar.style.transition = 'left 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
-    overlay.style.transition = 'opacity 0.25s ease';
-
-    if (shouldOpen) {
-      sidebar.style.left = '0px';
-      overlay.style.opacity = '1';
-      if (navigator.vibrate) navigator.vibrate(10);
-
-      animTimeout = setTimeout(() => {
-        sidebar.style.left = '';
-        sidebar.style.transition = '';
-        overlay.style.opacity = '';
-        overlay.style.transition = '';
-        overlay.style.display = '';
+    // ========== SIDEBAR CONTROLS ==========
+    function openSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (!sidebar || !overlay) return;
+      if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
+      sidebar.style.left = '';
+      sidebar.style.transition = '';
+      overlay.style.opacity = '';
+      overlay.style.transition = '';
+      overlay.style.display = '';
+      if (!sidebar.classList.contains('open')) {
+        if (navigator.vibrate) navigator.vibrate(10);
         sidebar.classList.add('open');
         overlay.classList.add('active');
         document.body.classList.add('no-scroll');
-      }, 250);
-    } else {
-      sidebar.style.left = (-sidebarWidth) + 'px';
-      overlay.style.opacity = '0';
-
-      animTimeout = setTimeout(() => {
-        sidebar.style.left = '';
-        sidebar.style.transition = '';
-        overlay.style.opacity = '';
-        overlay.style.transition = '';
-        overlay.style.display = '';
-        sidebar.classList.remove('open');
-        overlay.classList.remove('active');
-        document.body.classList.remove('no-scroll');
-      }, 250);
-    }
-  }
-
-  window.addEventListener('touchstart', handleTouchStart, { passive: true });
-  window.addEventListener('touchmove', handleTouchMove, { passive: false });
-  window.addEventListener('touchend', handleTouchEnd, { passive: true });
-  window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
-}
-
-function showToast(message, type = 'success') {
-  const toast = document.getElementById('toast');
-  document.getElementById('toast-message').textContent = message;
-  toast.className = `toast ${type} show`;
-  setTimeout(() => toast.classList.remove('show'), 3000);
-}
-
-function escapeHTML(value) {
-  return String(value || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function normalizePointName(name) {
-  return String(name || '').trim().toLowerCase().replace(/\s+/g, ' ');
-}
-
-function startOfDay(date) {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
-
-function addDays(date, days) {
-  const d = new Date(date);
-  d.setDate(d.getDate() + days);
-  return d;
-}
-
-function diffDays(a, b) {
-  return Math.round((startOfDay(a) - startOfDay(b)) / MS_PER_DAY);
-}
-
-function formatDate(date) {
-  if (!date) return 'Chưa xác định';
-  return new Intl.DateTimeFormat('vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  }).format(date);
-}
-
-function formatCurrency(amount) {
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND'
-  }).format(Number(amount) || 0);
-}
-
-function getEntryDate(item) {
-  const source = item.timestamp || item.ngay || item.date || item.created_at;
-  if (!source) return null;
-  const date = new Date(source);
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
-function calculateConfidence(historyLength, intervals) {
-  if (historyLength < 2 || intervals.length === 0) return 0;
-  const sampleScore = Math.min(70, historyLength * 12);
-  const avg = intervals.reduce((sum, item) => sum + item, 0) / intervals.length;
-  const variance = intervals.reduce((sum, item) => sum + Math.pow(item - avg, 2), 0) / intervals.length;
-  const stableScore = Math.max(0, 30 - Math.sqrt(variance) * 4);
-  return Math.max(20, Math.min(100, Math.round(sampleScore + stableScore)));
-}
-
-function analyzePredictions(data) {
-  const pointMap = new Map();
-
-  data.forEach(item => {
-    const key = normalizePointName(item.ten_diem);
-    const date = getEntryDate(item);
-    if (!key || !date) return;
-
-    if (!pointMap.has(key)) {
-      pointMap.set(key, {
-        key,
-        displayName: String(item.ten_diem || '').trim(),
-        entries: []
-      });
-    }
-
-    const point = pointMap.get(key);
-    point.entries.push({ ...item, _date: date });
-    if (item.ten_diem && item.ten_diem.length > point.displayName.length) {
-      point.displayName = item.ten_diem;
-    }
-  });
-
-  const today = startOfDay(new Date());
-  const results = [];
-
-  pointMap.forEach(point => {
-    const entries = point.entries
-      .sort((a, b) => a._date - b._date)
-      .filter((item, index, arr) => {
-        if (index === 0) return true;
-        return startOfDay(item._date).getTime() !== startOfDay(arr[index - 1]._date).getTime();
-      });
-
-    const latest = entries[entries.length - 1];
-    const recentEntries = entries.slice(-6);
-    const intervals = [];
-
-    for (let i = 1; i < recentEntries.length; i++) {
-      const gap = diffDays(recentEntries[i]._date, recentEntries[i - 1]._date);
-      if (gap > 0 && gap <= 120) intervals.push(gap);
-    }
-
-    let status = 'unknown';
-    let statusText = 'Chưa đủ dữ liệu';
-    let nextDate = null;
-    let avgCycle = null;
-    let daysOffset = null;
-
-    if (intervals.length > 0) {
-      avgCycle = Math.max(1, Math.round(intervals.reduce((sum, gap) => sum + gap, 0) / intervals.length));
-      nextDate = startOfDay(addDays(latest._date, avgCycle));
-      daysOffset = diffDays(nextDate, today);
-
-      if (daysOffset === 0) {
-        status = 'today';
-        statusText = 'Hôm nay có khả năng lấy';
-      } else if (daysOffset < 0) {
-        status = 'overdue';
-        statusText = `Quá hạn ${Math.abs(daysOffset)} ngày`;
-      } else {
-        status = 'soon';
-        statusText = `Còn ${daysOffset} ngày`;
       }
     }
 
-    results.push({
-      key: point.key,
-      name: point.displayName || latest.ten_diem || point.key,
-      address: latest.dia_chi || '',
-      amount: latest.so_tien || '',
-      latestDate: latest._date,
-      historyCount: entries.length,
-      avgCycle,
-      nextDate,
-      daysOffset,
-      status,
-      statusText,
-      confidence: calculateConfidence(entries.length, intervals)
+    function closeSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (!sidebar || !overlay) return;
+      if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
+      sidebar.style.left = '';
+      sidebar.style.transition = '';
+      overlay.style.opacity = '';
+      overlay.style.transition = '';
+      overlay.style.display = '';
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+      document.body.classList.remove('no-scroll');
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar && sidebar.classList.contains('open')) {
+        if (navigator.vibrate) navigator.vibrate(10);
+        closeSidebar();
+      } else {
+        openSidebar();
+      }
+    }
+
+    // ========== TOUCH SWIPE CHO SIDEBAR ==========
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchCurrentX = 0;
+    let isSwiping = false;
+
+    function getSidebarWidth() {
+      const sidebar = document.getElementById('sidebar');
+      return sidebar ? sidebar.offsetWidth : 290;
+    }
+
+    function handleTouchStart(e) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchCurrentX = touchStartX;
+      isSwiping = false;
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar && sidebar.classList.contains('open')) {
+        isSwiping = true;
+      } else if (touchStartX < 30) {
+        isSwiping = true;
+      }
+    }
+
+    function handleTouchMove(e) {
+      if (!isSwiping) return;
+      touchCurrentX = e.touches[0].clientX;
+      const diffX = touchCurrentX - touchStartX;
+      const diffY = Math.abs(e.touches[0].clientY - touchStartY);
+      if (diffY > Math.abs(diffX) * 1.5) {
+        isSwiping = false;
+        return;
+      }
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      const width = getSidebarWidth();
+      if (!sidebar || !overlay) return;
+
+      if (!sidebar.classList.contains('open')) {
+        if (diffX > 0) {
+          const moveX = Math.min(diffX - width, 0);
+          sidebar.style.transition = 'none';
+          sidebar.style.left = moveX + 'px';
+          overlay.style.display = 'block';
+          overlay.style.opacity = (diffX / width) * 0.6;
+        }
+      } else {
+        if (diffX < 0) {
+          const moveX = Math.max(diffX, -width);
+          sidebar.style.transition = 'none';
+          sidebar.style.left = moveX + 'px';
+          overlay.style.opacity = ((width + diffX) / width) * 0.6;
+        }
+      }
+    }
+
+    function handleTouchEnd(e) {
+      if (!isSwiping) return;
+      isSwiping = false;
+      const diffX = touchCurrentX - touchStartX;
+      const sidebar = document.getElementById('sidebar');
+      const width = getSidebarWidth();
+      if (!sidebar) return;
+
+      sidebar.style.transition = '';
+      sidebar.style.left = '';
+
+      if (!sidebar.classList.contains('open')) {
+        if (diffX > width * 0.3) {
+          openSidebar();
+        } else {
+          closeSidebar();
+        }
+      } else {
+        if (diffX < -width * 0.3) {
+          closeSidebar();
+        } else {
+          openSidebar();
+        }
+      }
+    }
+
+    function setupSidebarSwipe() {
+      document.addEventListener('touchstart', handleTouchStart, { passive: true });
+      document.addEventListener('touchmove', handleTouchMove, { passive: true });
+      document.addEventListener('touchend', handleTouchEnd, { passive: true });
+    }
+
+    // ========== TOAST ==========
+    let toastTimeout = null;
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toast-message');
+      if (!toast || !toastMessage) return;
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastMessage.textContent = message;
+      toast.className = 'toast ' + type + ' show';
+
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2400);
+    }
+
+    // ========== HELPER FUNCTIONS ==========
+    function escapeHTML(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function normalizePointName(name) {
+      return String(name || '').trim().toLowerCase().replace(/\s+/g, ' ');
+    }
+
+    function startOfDay(date) {
+      const d = new Date(date);
+      d.setHours(0, 0, 0, 0);
+      return d;
+    }
+
+    function addDays(date, days) {
+      const d = new Date(date);
+      d.setDate(d.getDate() + days);
+      return d;
+    }
+
+    function diffDays(a, b) {
+      return Math.round((startOfDay(a) - startOfDay(b)) / MS_PER_DAY);
+    }
+
+    function formatDate(date) {
+      if (!date) return 'Chưa xác định';
+      return new Intl.DateTimeFormat('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }).format(date);
+    }
+
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+      }).format(Number(amount) || 0);
+    }
+
+    function getEntryDate(item) {
+      const source = item.timestamp || item.ngay || item.date || item.created_at;
+      if (!source) return null;
+      const date = new Date(source);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function calculateConfidence(historyLength, intervals) {
+      if (historyLength < 2 || intervals.length === 0) return 0;
+      const sampleScore = Math.min(70, historyLength * 12);
+      const avg = intervals.reduce((sum, item) => sum + item, 0) / intervals.length;
+      const variance = intervals.reduce((sum, item) => sum + Math.pow(item - avg, 2), 0) / intervals.length;
+      const stableScore = Math.max(0, 30 - Math.sqrt(variance) * 4);
+      return Math.max(20, Math.min(100, Math.round(sampleScore + stableScore)));
+    }
+
+    // ========== PHÂN TÍCH & DỰ ĐOÁN ==========
+    function analyzePredictions(data) {
+      const pointMap = new Map();
+
+      data.forEach(item => {
+        const key = normalizePointName(item.ten_diem);
+        const date = getEntryDate(item);
+        if (!key || !date) return;
+
+        if (!pointMap.has(key)) {
+          pointMap.set(key, {
+            key,
+            displayName: String(item.ten_diem || '').trim(),
+            entries: []
+          });
+        }
+
+        const point = pointMap.get(key);
+        point.entries.push({ ...item, _date: date });
+        if (item.ten_diem && item.ten_diem.length > point.displayName.length) {
+          point.displayName = item.ten_diem;
+        }
+      });
+
+      const today = startOfDay(new Date());
+      const results = [];
+
+      pointMap.forEach(point => {
+        const entries = point.entries
+          .sort((a, b) => a._date - b._date)
+          .filter((item, index, arr) => {
+            if (index === 0) return true;
+            return startOfDay(item._date).getTime() !== startOfDay(arr[index - 1]._date).getTime();
+          });
+
+        const latest = entries[entries.length - 1];
+        const recentEntries = entries.slice(-6);
+        const intervals = [];
+
+        for (let i = 1; i < recentEntries.length; i++) {
+          const gap = diffDays(recentEntries[i]._date, recentEntries[i - 1]._date);
+          if (gap > 0 && gap <= 120) intervals.push(gap);
+        }
+
+        let status = 'unknown';
+        let statusText = 'Chưa đủ dữ liệu';
+        let nextDate = null;
+        let avgCycle = null;
+        let daysOffset = null;
+
+        if (intervals.length > 0) {
+          avgCycle = Math.max(1, Math.round(intervals.reduce((sum, gap) => sum + gap, 0) / intervals.length));
+          nextDate = startOfDay(addDays(latest._date, avgCycle));
+          daysOffset = diffDays(nextDate, today);
+
+          if (daysOffset === 0) {
+            status = 'today';
+            statusText = 'Hôm nay có khả năng lấy';
+          } else if (daysOffset < 0) {
+            status = 'overdue';
+            statusText = 'Quá hạn ' + Math.abs(daysOffset) + ' ngày';
+          } else {
+            status = 'soon';
+            statusText = 'Còn ' + daysOffset + ' ngày';
+          }
+        }
+
+        results.push({
+          key: point.key,
+          name: point.displayName || latest.ten_diem || point.key,
+          address: latest.dia_chi || '',
+          amount: latest.so_tien || '',
+          latestDate: latest._date,
+          historyCount: entries.length,
+          avgCycle,
+          nextDate,
+          daysOffset,
+          status,
+          statusText,
+          confidence: calculateConfidence(entries.length, intervals)
+        });
+      });
+
+      return results;
+    }
+
+    function getPriority(item) {
+      if (item.status === 'today') return 0;
+      if (item.status === 'overdue') return 1;
+      if (item.status === 'soon') return 2;
+      return 3;
+    }
+
+    function applyFilters() {
+      const search = normalizePointName(document.getElementById('search-input').value);
+      const status = document.getElementById('status-filter').value;
+      const sort = document.getElementById('sort-select').value;
+
+      filteredData = predictionData.filter(item => {
+        const matchesSearch = !search ||
+          normalizePointName(item.name).includes(search) ||
+          normalizePointName(item.address).includes(search);
+        const matchesStatus = status === 'all' || item.status === status;
+        return matchesSearch && matchesStatus;
+      });
+
+      filteredData.sort((a, b) => {
+        if (sort === 'nextDate') {
+          return (a.nextDate?.getTime() || Number.MAX_SAFE_INTEGER) - (b.nextDate?.getTime() || Number.MAX_SAFE_INTEGER);
+        }
+        if (sort === 'confidence') {
+          return b.confidence - a.confidence || getPriority(a) - getPriority(b);
+        }
+        if (sort === 'name') {
+          return a.name.localeCompare(b.name, 'vi');
+        }
+        return getPriority(a) - getPriority(b) ||
+          (a.daysOffset ?? Number.MAX_SAFE_INTEGER) - (b.daysOffset ?? Number.MAX_SAFE_INTEGER) ||
+          b.confidence - a.confidence;
+      });
+
+      renderTable(filteredData);
+    }
+
+    function renderStats() {
+      const predictable = predictionData.filter(item => item.status !== 'unknown').length;
+      const today = predictionData.filter(item => item.status === 'today').length;
+      const overdue = predictionData.filter(item => item.status === 'overdue').length;
+
+      document.getElementById('stats-container').innerHTML = `
+        <div class="stat-card">
+          <div class="stat-value">${predictionData.length}</div>
+          <div class="stat-label">Điểm đã phân tích</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${predictable}</div>
+          <div class="stat-label">Có thể dự đoán</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${today}</div>
+          <div class="stat-label">Khả năng lấy hôm nay</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${overdue}</div>
+          <div class="stat-label">Quá hạn</div>
+        </div>
+      `;
+    }
+
+    function renderTable(data) {
+      const tbody = document.getElementById('prediction-body');
+      const emptyState = document.getElementById('empty-state');
+      tbody.innerHTML = '';
+      emptyState.style.display = data.length ? 'none' : 'block';
+
+      data.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>
+            <div class="point-name">${escapeHTML(item.name)}</div>
+            <div class="muted">${escapeHTML(item.address || 'Chưa có địa chỉ')}</div>
+            <div class="muted">${formatCurrency(item.amount)} · ${item.historyCount} lần ghi nhận</div>
+          </td>
+          <td>${formatDate(item.latestDate)}</td>
+          <td>${item.avgCycle ? (item.avgCycle + ' ngày/lần') : 'Cần thêm dữ liệu'}</td>
+          <td>${item.nextDate ? formatDate(item.nextDate) : 'Chưa dự đoán'}</td>
+          <td><span class="badge badge-${item.status}">${escapeHTML(item.statusText)}</span></td>
+          <td class="confidence">
+            <strong>${item.confidence}%</strong>
+            <div class="confidence-bar"><div class="confidence-fill" style="width: ${item.confidence}%"></div></div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function buildReport(data, title) {
+      if (!data.length) return title + '\nKhông có điểm gas phù hợp.';
+      const lines = data.map((item, index) => {
+        const nextDate = item.nextDate ? formatDate(item.nextDate) : 'chưa dự đoán';
+        const cycle = item.avgCycle ? (item.avgCycle + ' ngày/lần') : 'chưa đủ dữ liệu';
+        return (index + 1) + '. ' + item.name + ' - ' + (item.address || 'chưa có địa chỉ') + ' - gần nhất ' + formatDate(item.latestDate) + ' - chu kỳ ' + cycle + ' - dự đoán ' + nextDate + ' - ' + item.statusText;
+      });
+      return title + '\n' + lines.join('\n');
+    }
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+        }
+        showToast('Đã sao chép báo cáo!', 'success');
+      } catch (error) {
+        showToast('Không thể sao chép báo cáo!', 'error');
+      }
+    }
+
+    async function loadData() {
+      const reloadBtn = document.getElementById('reload-btn');
+      reloadBtn.disabled = true;
+      reloadBtn.innerHTML = '<svg class="hero-icon" style="animation: spin 1s linear infinite;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" /></svg> Đang tải...';
+      document.getElementById('last-updated').textContent = 'Đang tải dữ liệu...';
+
+      try {
+        const response = await fetch(scriptURL);
+        rawData = await response.json();
+        predictionData = analyzePredictions(Array.isArray(rawData) ? rawData : []);
+        renderStats();
+        applyFilters();
+        document.getElementById('last-updated').textContent = 'Cập nhật lúc ' + new Date().toLocaleString('vi-VN');
+      } catch (error) {
+        console.error(error);
+        showToast('Có lỗi khi tải dữ liệu dự đoán!', 'error');
+        document.getElementById('last-updated').textContent = 'Tải dữ liệu thất bại';
+      } finally {
+        reloadBtn.disabled = false;
+        reloadBtn.innerHTML = '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" /></svg> Tải lại';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateThemeUI();
+      document.getElementById('today-label').textContent = 'Hôm nay: ' + formatDate(new Date());
+      document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
+      document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
+      document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
+      setupSidebarSwipe();
+
+      document.getElementById('reload-btn').addEventListener('click', loadData);
+      document.getElementById('search-input').addEventListener('input', applyFilters);
+      document.getElementById('status-filter').addEventListener('change', applyFilters);
+      document.getElementById('sort-select').addEventListener('change', applyFilters);
+
+      document.getElementById('copy-today-btn').addEventListener('click', () => {
+        const todayItems = predictionData.filter(item => item.status === 'today');
+        copyText(buildReport(todayItems, 'Dự đoán điểm gas hôm nay (' + formatDate(new Date()) + ')'));
+      });
+
+      document.getElementById('copy-all-btn').addEventListener('click', () => {
+        copyText(buildReport(filteredData, 'Danh sách dự đoán điểm gas (' + formatDate(new Date()) + ')'));
+      });
+
+      loadData();
     });
-  });
-
-  return results;
-}
-
-function getPriority(item) {
-  if (item.status === 'today') return 0;
-  if (item.status === 'overdue') return 1;
-  if (item.status === 'soon') return 2;
-  return 3;
-}
-
-function applyFilters() {
-  const search = normalizePointName(document.getElementById('search-input').value);
-  const status = document.getElementById('status-filter').value;
-  const sort = document.getElementById('sort-select').value;
-
-  filteredData = predictionData.filter(item => {
-    const matchesSearch = !search ||
-      normalizePointName(item.name).includes(search) ||
-      normalizePointName(item.address).includes(search);
-    const matchesStatus = status === 'all' || item.status === status;
-    return matchesSearch && matchesStatus;
-  });
-
-  filteredData.sort((a, b) => {
-    if (sort === 'nextDate') {
-      return (a.nextDate?.getTime() || Number.MAX_SAFE_INTEGER) - (b.nextDate?.getTime() || Number.MAX_SAFE_INTEGER);
-    }
-    if (sort === 'confidence') {
-      return b.confidence - a.confidence || getPriority(a) - getPriority(b);
-    }
-    if (sort === 'name') {
-      return a.name.localeCompare(b.name, 'vi');
-    }
-    return getPriority(a) - getPriority(b) ||
-      (a.daysOffset ?? Number.MAX_SAFE_INTEGER) - (b.daysOffset ?? Number.MAX_SAFE_INTEGER) ||
-      b.confidence - a.confidence;
-  });
-
-  renderTable(filteredData);
-}
-
-function renderStats() {
-  const predictable = predictionData.filter(item => item.status !== 'unknown').length;
-  const today = predictionData.filter(item => item.status === 'today').length;
-  const overdue = predictionData.filter(item => item.status === 'overdue').length;
-
-  document.getElementById('stats-container').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-value">${predictionData.length}</div>
-      <div class="stat-label">Điểm đã phân tích</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">${predictable}</div>
-      <div class="stat-label">Có thể dự đoán</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">${today}</div>
-      <div class="stat-label">Khả năng lấy hôm nay</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">${overdue}</div>
-      <div class="stat-label">Quá hạn</div>
-    </div>
-  `;
-}
-
-function renderTable(data) {
-  const tbody = document.getElementById('prediction-body');
-  const emptyState = document.getElementById('empty-state');
-  tbody.innerHTML = '';
-  emptyState.style.display = data.length ? 'none' : 'block';
-
-  data.forEach(item => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>
-        <div class="point-name">${escapeHTML(item.name)}</div>
-        <div class="muted">${escapeHTML(item.address || 'Chưa có địa chỉ')}</div>
-        <div class="muted">${formatCurrency(item.amount)} · ${item.historyCount} lần ghi nhận</div>
-      </td>
-      <td>${formatDate(item.latestDate)}</td>
-      <td>${item.avgCycle ? `${item.avgCycle} ngày/lần` : 'Cần thêm dữ liệu'}</td>
-      <td>${item.nextDate ? formatDate(item.nextDate) : 'Chưa dự đoán'}</td>
-      <td><span class="badge badge-${item.status}">${escapeHTML(item.statusText)}</span></td>
-      <td class="confidence">
-        <strong>${item.confidence}%</strong>
-        <div class="confidence-bar"><div class="confidence-fill" style="width: ${item.confidence}%"></div></div>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function buildReport(data, title) {
-  if (!data.length) return `${title}\nKhông có điểm gas phù hợp.`;
-  const lines = data.map((item, index) => {
-    const nextDate = item.nextDate ? formatDate(item.nextDate) : 'chưa dự đoán';
-    const cycle = item.avgCycle ? `${item.avgCycle} ngày/lần` : 'chưa đủ dữ liệu';
-    return `${index + 1}. ${item.name} - ${item.address || 'chưa có địa chỉ'} - gần nhất ${formatDate(item.latestDate)} - chu kỳ ${cycle} - dự đoán ${nextDate} - ${item.statusText}`;
-  });
-  return `${title}\n${lines.join('\n')}`;
-}
-
-async function copyText(text) {
-  try {
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(text);
-    } else {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-    }
-    showToast('Đã sao chép báo cáo!');
-  } catch (error) {
-    showToast('Không thể sao chép báo cáo!', 'error');
-  }
-}
-
-async function loadData() {
-  const reloadBtn = document.getElementById('reload-btn');
-  reloadBtn.disabled = true;
-  reloadBtn.textContent = '⏳ Đang tải...';
-  document.getElementById('last-updated').textContent = 'Đang tải dữ liệu...';
-
-  try {
-    const response = await fetch(scriptURL);
-    rawData = await response.json();
-    predictionData = analyzePredictions(Array.isArray(rawData) ? rawData : []);
-    renderStats();
-    applyFilters();
-    document.getElementById('last-updated').textContent = `Cập nhật lúc ${new Date().toLocaleString('vi-VN')}`;
-  } catch (error) {
-    console.error(error);
-    showToast('Có lỗi khi tải dữ liệu dự đoán!', 'error');
-    document.getElementById('last-updated').textContent = 'Tải dữ liệu thất bại';
-  } finally {
-    reloadBtn.disabled = false;
-    reloadBtn.textContent = '🔄 Tải lại';
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('today-label').textContent = `Hôm nay: ${formatDate(new Date())}`;
-  document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
-  document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
-  document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
-  setupSidebarSwipe();
-  document.getElementById('reload-btn').addEventListener('click', loadData);
-  document.getElementById('search-input').addEventListener('input', applyFilters);
-  document.getElementById('status-filter').addEventListener('change', applyFilters);
-  document.getElementById('sort-select').addEventListener('change', applyFilters);
-  document.getElementById('copy-today-btn').addEventListener('click', () => {
-    const todayItems = predictionData.filter(item => item.status === 'today');
-    copyText(buildReport(todayItems, `Dự đoán điểm gas hôm nay (${formatDate(new Date())})`));
-  });
-  document.getElementById('copy-all-btn').addEventListener('click', () => {
-    copyText(buildReport(filteredData, `Danh sách dự đoán điểm gas (${formatDate(new Date())})`));
-  });
-  loadData();
-});
-</script>
-  <script src="assets/hero-icons.js" defer></script>
+  </script>
 </body>
 </html>

@@ -1,670 +1,866 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tính tiền gas còn lại</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tính tiền gas còn lại - Vietnam Post Gas</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Be Vietnam Pro & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<link rel="icon" type="image/png" href="icon.png">
-<link rel="apple-touch-icon" href="icon.png">
-<link rel="apple-touch-icon-precomposed" href="icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Tính gas còn lại">
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Tính gas còn lại">
 
-<style>
-  /* ========== ROBOTO FONT LOADING ========== */
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 300;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmSU5fCRc4EsA.woff2) format('woff2');
-  }
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxK.woff2) format('woff2');
-  }
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmEU9fCRc4EsA.woff2) format('woff2');
-  }
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 600;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfCRc4EsA.woff2) format('woff2');
-  }
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfCRc4EsA.woff2) format('woff2');
-  }
+  <script>
+    // Theme initialization immediately to prevent flicker
+    (function() {
+      const savedTheme = localStorage.getItem('gas_theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
 
-  /* ========== CSS VARIABLES FOR LIGHT MODE ========== */
-  :root {
-    --primary: #0f9d58;
-    --primary-dark: #0b7d45;
-    --primary-light: #4cd67f;
-    --secondary: #34c759;
-    --secondary-dark: #2aa64a;
-    --danger: #ff3b30;
-    --danger-dark: #e0352b;
-    --warning: #ff9500;
-    --warning-dark: #e08900;
-    --info: #5ac8fa;
-    --success: #34c759;
-
-    --bg-primary: #ffffff;
-    --bg-secondary: #f3f7f2;
-    --bg-tertiary: #f7faf7;
-    --bg-card: #ffffff;
-    --bg-sidebar: #ffffff;
-    --bg-modal: #ffffff;
-    --bg-input: #ffffff;
-    --bg-hover: #eef7ec;
-    --bg-active: #e8f8ea;
-
-    --text-primary: #0b3b2a;
-    --text-secondary: #576a5f;
-    --text-tertiary: #7a9184;
-    --text-inverse: #ffffff;
-    --text-muted: #adb5bd;
-
-    --border-color: #e6efe8;
-    --border-light: #eef6ed;
-    --border-dark: #cfded0;
-    --shadow: 0 2px 10px rgba(0,0,0,0.08);
-    --shadow-lg: 0 8px 25px rgba(0,0,0,0.12);
-    --shadow-dark: 0 2px 10px rgba(0,0,0,0.15);
-
-    --radius-xl: 28px;
-    --radius-lg: 20px;
-    --radius-md: 16px;
-    --radius-sm: 12px;
-    --radius-xs: 8px;
-    --radius-circle: 50%;
-
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-fast: all 0.15s ease;
-    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-
-    --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-  }
-
-  /* ========== HEROICONS BASE ========== */
-  .hero-icon {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    display: inline-block;
-    vertical-align: middle;
-    color: currentColor;
-  }
-  .hero-icon-sm { width: 16px; height: 16px; }
-  .hero-icon-md { width: 22px; height: 22px; }
-  .hero-icon-lg { width: 26px; height: 26px; }
-  .hero-icon-xl { width: 32px; height: 32px; }
-
-  /* ========== DARK MODE VARIABLES ========== */
-  @media (prefers-color-scheme: dark) {
+  <style>
     :root {
-      --primary: #23b66a;
-      --primary-dark: #0b7d45;
-      --primary-light: #4cd67f;
-      --secondary: #34c759;
-      --secondary-dark: #26a64a;
-      --danger: #ff5252;
-      --danger-dark: #ff3838;
-      --warning: #ffa726;
-      --warning-dark: #ff9800;
-      --info: #42a5f5;
-      --success: #30c75a;
+      /* VNPost Primary Brand Colors */
+      --vnpost-blue: #005ba6;
+      --vnpost-blue-hover: #004b8a;
+      --vnpost-blue-light: #e6f0fa;
+      --vnpost-gold: #f59e0b;
+      --vnpost-gold-hover: #d97706;
+      --vnpost-gold-light: #fef3c7;
 
-      --bg-primary: #0b0b0b;
-      --bg-secondary: #121212;
-      --bg-tertiary: #191919;
-      --bg-card: #161616;
-      --bg-sidebar: #0b0b0b;
-      --bg-modal: #161616;
-      --bg-input: #161616;
-      --bg-hover: #1f1f1f;
-      --bg-active: #292929;
+      /* UI System Colors */
+      --primary: var(--vnpost-blue);
+      --primary-hover: var(--vnpost-blue-hover);
+      --primary-light: var(--vnpost-blue-light);
+      --secondary: #0d9488;
+      --secondary-dark: #0f766e;
+      --emerald: #10b981;
+      --emerald-dark: #059669;
+      --emerald-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-dark: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-dark: #dc2626;
+      --danger-light: #fee2e2;
+      --info: #0284c7;
 
-      --text-primary: #f2f2f2;
-      --text-secondary: #c7c7c7;
-      --text-tertiary: #a5a5a5;
-      --text-inverse: #f5f5f5;
-      --text-muted: #999999;
+      /* Neutrals - Slate Scale */
+      --bg-primary: #f8fafc;
+      --bg-secondary: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-card-glass: rgba(255, 255, 255, 0.85);
+      --bg-sidebar: #ffffff;
+      --bg-modal: #ffffff;
+      --bg-input: #ffffff;
+      --bg-hover: #f1f5f9;
+      --bg-active: #e2e8f0;
 
-      --border-color: #303030;
-      --border-light: #242424;
-      --border-dark: #3a3a3a;
-      --shadow: 0 2px 10px rgba(0,0,0,0.5);
-      --shadow-lg: 0 8px 25px rgba(0,0,0,0.55);
-      --shadow-dark: 0 2px 10px rgba(0,0,0,0.6);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --text-inverse: #ffffff;
+
+      --border-color: #e2e8f0;
+      --border-focus: #005ba6;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+      --shadow-glow: 0 0 20px rgba(0, 91, 166, 0.15);
+
+      --sidebar-width: 290px;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    header { color: #ffffff !important; }
-    header h1, header p { color: #ffffff !important; }
-    .menu-toggle { color: #ffffff !important; }
-    .sidebar-header h2 { color: #ffffff !important; }
-    .close-sidebar { color: #ffffff !important; }
-    .sidebar-item { color: #ffffff !important; }
-    .sidebar-footer p { color: rgba(255, 255, 255, 0.8) !important; }
-  }
+    html.dark {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-card: #1e293b;
+      --bg-card-glass: rgba(30, 41, 59, 0.88);
+      --bg-sidebar: #1e293b;
+      --bg-modal: #1e293b;
+      --bg-input: #0f172a;
+      --bg-hover: #334155;
+      --bg-active: #334155;
 
-  /* ========== CSS RESET & BASE STYLES ========== */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-inverse: #0f172a;
 
-  html {
-    font-size: 16px;
-    transition: background-color 0.5s ease;
-    font-family: var(--font-family);
-  }
+      --border-color: #334155;
+      --border-focus: #38bdf8;
 
-  body {
-    font-family: var(--font-family);
-    background-color: var(--bg-secondary);
-    color: var(--text-primary);
-    line-height: 1.6;
-    padding: 20px;
-    min-height: 100vh;
-    transition: var(--transition-slow);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-weight: 400;
-  }
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+      --shadow-glow: 0 0 20px rgba(56, 189, 248, 0.15);
 
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-    background: var(--bg-card);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
-    overflow: hidden;
-    transition: var(--transition);
-    border: 1px solid var(--border-color);
-  }
+      --primary-light: rgba(0, 91, 166, 0.25);
+      --warning-light: rgba(245, 158, 11, 0.2);
+      --emerald-light: rgba(16, 185, 129, 0.2);
+      --danger-light: rgba(239, 68, 68, 0.2);
+    }
 
-  /* ========== SIDEBAR STYLES ========== */
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -280px;
-    width: 280px;
-    height: 100%;
-    background: var(--bg-sidebar);
-    box-shadow: 2px 0 15px rgba(0,0,0,0.2);
-    z-index: 1001;
-    transition: left 0.3s ease;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-    border-right: 1px solid var(--border-color);
-    touch-action: pan-y;
-  }
-  .sidebar.open { left: 0; }
-  .sidebar.swiping {
-    transition: none !important;
-    will-change: left;
-  }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-  .sidebar-header {
-    padding: 20px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: var(--text-inverse);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 0 var(--radius-lg) 0 0;
-  }
-  .sidebar-header h2 { font-size: 1.3rem; font-weight: 600; }
+    body {
+      font-family: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.5;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
-  .close-sidebar {
-    background: none;
-    border: none;
-    color: var(--text-inverse);
-    cursor: pointer;
-    padding: 0;
-    width: auto;
-    transition: var(--transition-fast);
-    font-family: var(--font-family);
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .close-sidebar .hero-icon { width: 24px; height: 24px; }
-  .close-sidebar:hover { opacity: 0.9; transform: scale(1.1); }
+    /* Heroicon base */
+    .hero-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
 
-  .sidebar-content { padding: 20px; flex: 1; }
+    /* ========== OVERLAY & SIDEBAR ========== */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s ease;
+    }
 
-  .sidebar-item {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 12px;
-    width: 100%;
-    padding: 14px 16px;
-    background: none;
-    border: 1px solid transparent;
-    border-radius: var(--radius-md);
-    color: var(--text-primary);
-    font-size: 1rem;
-    cursor: pointer;
-    transition: var(--transition-fast);
-    font-family: var(--font-family);
-    font-weight: 500;
-    text-align: left;
-    margin-bottom: 8px;
-  }
-  .sidebar-item .hero-icon { color: var(--primary); }
-  .sidebar-item:hover {
-    background: var(--bg-hover);
-    border-color: var(--border-color);
-    transform: translateX(5px);
-  }
-  .sidebar-item.active {
-    background: var(--bg-active);
-    border-color: var(--primary);
-    color: var(--primary);
-  }
-  .sidebar-item.active .hero-icon { color: var(--primary); }
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
 
-  .sidebar-footer {
-    padding: 20px;
-    border-top: 1px solid var(--border-color);
-    text-align: center;
-  }
-  .sidebar-footer p {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-  }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      max-width: 85vw;
+      background-color: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      z-index: 1001;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+    }
 
-  /* ========== HEADER STYLES ========== */
-  header {
-    padding: 25px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: var(--text-inverse);
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  }
+    .sidebar.open {
+      transform: translateX(0);
+    }
 
-  header h1 {
-    font-size: 1.8rem;
-    font-weight: 600;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  header h1 .hero-icon { width: 28px; height: 28px; }
-
-  header p {
-    font-size: 0.95rem;
-    opacity: 0.9;
-    margin-top: 5px;
-  }
-
-  .menu-toggle {
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: var(--text-inverse);
-    cursor: pointer;
-    border-radius: var(--radius-sm);
-    padding: 8px 10px;
-    transition: var(--transition-fast);
-    font-family: var(--font-family);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .menu-toggle .hero-icon { width: 22px; height: 22px; }
-  .menu-toggle:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
-  }
-
-  /* ========== CARD & FORM STYLES ========== */
-  .card {
-    padding: 25px;
-    border-bottom: 1px solid var(--border-color);
-  }
-  .card:last-child { border-bottom: none; }
-
-  .card h2 {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .card h2 .hero-icon { color: var(--primary); width: 24px; height: 24px; }
-
-  .form-group { margin-bottom: 18px; }
-
-  .form-group label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 500;
-    margin-bottom: 8px;
-    color: var(--text-primary);
-    font-size: 0.95rem;
-  }
-  .form-group label .hero-icon {
-    color: var(--primary);
-    width: 18px;
-    height: 18px;
-  }
-
-  input[type="text"],
-  input[type="number"],
-  input[type="date"],
-  select {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    font-family: var(--font-family);
-    font-size: 1rem;
-    background-color: var(--bg-input);
-    color: var(--text-primary);
-    transition: var(--transition-fast);
-  }
-  input[type="text"]:focus,
-  input[type="number"]:focus,
-  input[type="date"]:focus,
-  select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(15, 157, 88, 0.1);
-  }
-
-  /* ========== BUTTON STYLES ========== */
-  .button-group {
-    display: flex;
-    gap: 12px;
-    margin-top: 25px;
-  }
-
-  button {
-    font-family: var(--font-family);
-    cursor: pointer;
-    transition: var(--transition-fast);
-    font-weight: 600;
-  }
-
-  .btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-  .btn .hero-icon { width: 18px; height: 18px; }
-
-  .btn-primary {
-    background-color: var(--primary);
-    color: var(--text-inverse);
-    flex: 1;
-  }
-  .btn-primary:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(15, 157, 88, 0.3);
-  }
-
-  .btn-secondary {
-    background-color: var(--bg-tertiary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-    flex: 1;
-  }
-  .btn-secondary:hover {
-    background-color: var(--bg-hover);
-    transform: translateY(-2px);
-    border-color: var(--border-dark);
-  }
-
-  /* ========== RESULT DISPLAY ========== */
-  .result-box {
-    margin-top: 25px;
-    padding: 20px;
-    background-color: var(--bg-tertiary);
-    border-radius: var(--radius-md);
-    border: 2px solid var(--primary);
-    display: none;
-  }
-  .result-box.show {
-    display: block;
-    animation: slideIn 0.3s ease-out;
-  }
-
-  .result-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border-color);
-  }
-  .result-item:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-  }
-
-  .result-label {
-    font-weight: 500;
-    color: var(--text-secondary);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .result-label .hero-icon { width: 18px; height: 18px; }
-
-  .result-value {
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--primary);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .result-value .hero-icon { width: 18px; height: 18px; }
-  .result-value.success { color: var(--success); }
-  .result-value.warning { color: var(--warning); }
-  .result-value.error { color: var(--danger); }
-
-  /* ========== TOAST STYLES ========== */
-  .toast {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%) translateY(100px);
-    background: var(--primary);
-    color: var(--text-inverse);
-    padding: 16px 24px;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    z-index: 1002;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    opacity: 0;
-    transition: var(--transition);
-    min-width: 280px;
-    text-align: center;
-    justify-content: center;
-    border: 1px solid var(--primary-dark);
-    font-family: var(--font-family);
-    font-weight: 500;
-  }
-  .toast.show {
-    transform: translate(-50%, -50%) translateY(0);
-    opacity: 1;
-  }
-  .toast.success { background: var(--secondary); border-color: var(--secondary-dark); }
-  .toast.error { background: var(--danger); border-color: var(--danger-dark); }
-  .toast.warning { background: var(--warning); border-color: var(--warning-dark); }
-  .toast.info { background: var(--info); border-color: var(--info); }
-  .toast-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .toast-icon .hero-icon { width: 20px; height: 20px; }
-
-  /* ========== OVERLAY ========== */
-  .overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    display: none;
-  }
-  .overlay.active { display: block; }
-  .overlay.swiping {
-    display: block !important;
-    transition: none !important;
-    pointer-events: none !important;
-  }
-
-  /* ========== MODAL STYLES ========== */
-  .modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-  }
-  .modal-content {
-    background: var(--bg-modal);
-    border-radius: var(--radius-lg);
-    width: 90%;
-    max-width: 500px;
-    box-shadow: var(--shadow-lg);
-    padding: 20px;
-  }
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    gap: 10px;
-  }
-  .modal-header h2 {
-    font-size: 1.4rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0;
-  }
-  .modal-header h2 .hero-icon { color: var(--primary); width: 24px; height: 24px; }
-  .modal-close {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--text-secondary);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px;
-    border-radius: var(--radius-xs);
-    transition: var(--transition-fast);
-  }
-  .modal-close .hero-icon { width: 22px; height: 22px; }
-  .modal-close:hover { color: var(--text-primary); background: var(--bg-hover); }
-
-  .help-section-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 15px;
-    margin-bottom: 10px;
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-  .help-section-title .hero-icon { color: var(--primary); width: 20px; height: 20px; }
-
-  /* ========== ANIMATIONS ========== */
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-
-  /* ========== RESPONSIVE STYLES ========== */
-  @media (max-width: 768px) {
-    body { padding: 15px; }
-    header {
-      padding: 20px;
-      flex-direction: row;
-      justify-content: flex-start;
+    .sidebar-header {
+      padding: 1.25rem 1.25rem 1rem;
+      display: flex;
       align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(to bottom, var(--bg-card), var(--bg-sidebar));
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sidebar-logo {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      border-radius: var(--radius-sm);
+    }
+
+    .sidebar-title-group h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .sidebar-title-group p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .close-sidebar {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .close-sidebar:hover {
+      background-color: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .sidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      padding: 0.75rem 1rem;
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
       text-align: left;
+      transition: var(--transition);
+    }
+
+    .sidebar-item:hover {
+      background-color: var(--bg-hover);
+      color: var(--text-primary);
+      transform: translateX(4px);
+    }
+
+    .sidebar-item.active {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
       position: relative;
     }
-    header .menu-toggle {
+
+    .sidebar-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 15%;
+      bottom: 15%;
+      width: 3.5px;
+      background-color: var(--primary);
+      border-radius: 0 var(--radius-full) var(--radius-full) 0;
+    }
+
+    .sidebar-item .hero-icon {
+      color: inherit;
+    }
+
+    .sidebar-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ========== APP HEADER ========== */
+    .app-header {
+      background: var(--bg-card-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: var(--transition);
+    }
+
+    .header-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      text-align: center;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+    }
+
+    .menu-toggle {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      z-index: 2;
+    }
+
+    .header-actions {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 2;
+    }
+
+    .menu-toggle:hover {
+      background-color: var(--bg-hover);
+      color: var(--primary);
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .header-logo {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .header-title-wrap {
+      text-align: center;
+    }
+    .header-title-wrap h1 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+    }
+
+    .header-title-wrap p {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .icon-btn {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .icon-btn:hover {
+      background: var(--bg-hover);
+      color: var(--primary);
+    }
+
+    /* ========== MAIN CONTAINER ========== */
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 3rem;
+    }
+
+    /* Header hero banner */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(0, 91, 166, 0.08) 0%, rgba(245, 158, 11, 0.08) 100%);
+      border: 1px solid rgba(0, 91, 166, 0.15);
+      border-radius: var(--radius-xl);
+      padding: 1.25rem 1.25rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hero-banner-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, var(--vnpost-blue), #0284c7);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 91, 166, 0.3);
       flex-shrink: 0;
-      margin-right: 10px;
-      padding: 8px;
     }
-    header > div { flex: 1; text-align: center; }
-    header h1 { font-size: 1.5rem; margin: 0; justify-content: center; }
-    header p { margin-top: 3px; }
-    .container { max-width: 100%; }
-    .card { padding: 20px; }
-    .button-group { flex-direction: column; }
-    .btn { width: 100%; }
-  }
 
-  @media (prefers-color-scheme: dark) {
-    .result-box { border-color: var(--primary-light); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+    .hero-banner-icon .hero-icon {
+      width: 26px;
+      height: 26px;
     }
-    .result-box.show { animation: none; }
-    button:hover { transform: none !important; }
-  }
-</style>
+
+    .hero-banner-text h2 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.2rem;
+    }
+
+    .hero-banner-text p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Card styling */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.25rem;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .card-title .hero-icon {
+      color: var(--primary);
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Form inputs */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group label .hero-icon {
+      color: var(--primary);
+      width: 1rem;
+      height: 1rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      height: 40px;
+      padding: 0 0.85rem;
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: inherit;
+      color: var(--text-primary);
+      background-color: var(--bg-input);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .input-wrapper input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 4px rgba(0, 91, 166, 0.12);
+    }
+
+    .input-wrapper .input-unit {
+      position: absolute;
+      right: 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .input-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* Button Group */
+    .button-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn {
+      height: 40px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--vnpost-blue) 0%, #0284c7 100%);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 4px 12px rgba(0, 91, 166, 0.28);
+      filter: brightness(1.05);
+    }
+
+    .btn-secondary {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    /* Result Box & Items */
+    .result-box {
+      display: none;
+      flex-direction: column;
+      gap: 0.85rem;
+      animation: fadeInSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .result-box.show {
+      display: flex;
+    }
+
+    @keyframes fadeInSlide {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 1.1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      transition: var(--transition);
+    }
+
+    .result-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .result-label .hero-icon {
+      color: var(--text-muted);
+    }
+
+    .result-value {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .result-value.success {
+      color: var(--emerald-dark);
+      background-color: var(--emerald-light);
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .result-value.warning {
+      color: var(--warning-dark);
+      background-color: var(--warning-light);
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .result-highlight-card {
+      background: linear-gradient(135deg, rgba(0, 91, 166, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
+      border: 1.5px solid var(--primary);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-content {
+      background: var(--bg-modal);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 520px;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-lg);
+      animation: modalSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .modal-header h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .modal-header h2 .hero-icon {
+      color: var(--primary);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      background-color: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .help-section-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    .help-section-title .hero-icon {
+      color: var(--primary);
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+
+    .help-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      margin: 0.5rem 0;
+      font-family: 'Inter', monospace;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-full);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      z-index: 3000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 90vw;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .toast.success {
+      background: #065f46;
+      border: 1px solid #10b981;
+    }
+
+    .toast.warning {
+      background: #78350f;
+      border: 1px solid #f59e0b;
+    }
+
+    .toast.error {
+      background: #7f1d1d;
+      border: 1px solid #ef4444;
+    }
+
+    .toast.info {
+      background: #0c4a6e;
+      border: 1px solid #0284c7;
+    }
+
+    .toast-icon .hero-icon {
+      width: 1.15rem;
+      height: 1.15rem;
+    }
+  </style>
 </head>
 <body>
   <!-- Overlay cho sidebar -->
@@ -676,168 +872,224 @@
     <span id="toast-message">Thông báo</span>
   </div>
 
-  <!-- Sidebar -->
+  <!-- Sidebar Drawer -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <h2>MenuBar</h2>
+      <div class="sidebar-brand">
+        <img src="icon.png" alt="VNPost" class="sidebar-logo" onerror="this.style.display='none'">
+        <div class="sidebar-title-group">
+          <h2>VNPost Gas</h2>
+          <p>Hệ thống hỗ trợ ca trực</p>
+        </div>
+      </div>
       <button class="close-sidebar" id="close-sidebar" aria-label="Đóng menu">
         <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
         </svg>
       </button>
     </div>
+
     <div class="sidebar-content">
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z" clip-rule="evenodd" />
-          <path fill-rule="evenodd" d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V9.375Zm2.25 4.125a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75ZM6 16.5a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11.47 3.84a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.06l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 0 0 1.061 1.06l8.69-8.69Z" />
+          <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
         </svg>
-        Quản lý điểm gas
+        Bảng điều khiển
       </button>
+
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='diemtien.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
           <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
         </svg>
         Đếm tiền
       </button>
+
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='vitri.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
           <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
         </svg>
         Quản lý vị trí
       </button>
+
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='tinhluong.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
           <path d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 0 1-.921.42Z" />
           <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a3.836 3.836 0 0 0-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 0 1-.921-.421l-.879-.66a.75.75 0 0 0-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 0 0 1.5 0v-.81a4.124 4.124 0 0 0 1.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 0 0-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 0 0 .933-1.175l-.415-.33a3.836 3.836 0 0 0-1.719-.755V6Z" clip-rule="evenodd" />
         </svg>
         Tính công & lương
       </button>
+
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='dudoandiemgas.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258a2.625 2.625 0 0 0-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" />
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5Z" clip-rule="evenodd" />
         </svg>
         Dự đoán điểm gas
       </button>
+
       <button class="sidebar-item active" type="button">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
           <path fill-rule="evenodd" d="M10.5 3.798v5.02a3 3 0 0 1-.879 2.121l-2.377 2.377a9.845 9.845 0 0 1 5.091 1.013 8.315 8.315 0 0 0 5.713.636l.285-.071-3.954-3.955a3 3 0 0 1-.879-2.121v-5.02a23.614 23.614 0 0 0-3 0Zm4.5.138a.75.75 0 0 0 .093-1.495A24.837 24.837 0 0 0 12 2.25a25.048 25.048 0 0 0-3.093.191A.75.75 0 0 0 9 3.936v4.882a1.5 1.5 0 0 1-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.471-4.881L15.44 9.879A1.5 1.5 0 0 1 15 8.818V3.936Z" clip-rule="evenodd" />
         </svg>
         Tính tiền gas còn lại
       </button>
+
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='clipboard.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
           <path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" />
         </svg>
         Lưu Clipboard
       </button>
+
       <button class="sidebar-item" onclick="openModal('help-modal')">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
           <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 0 1-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 0 1-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 0 1-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.83-.727.83-1.857 0-2.584ZM12 18a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
         </svg>
-        Trợ giúp
-      </button>
-      <button class="sidebar-item" onclick="resetForm()">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-        </svg>
-        Đóng
+        Hướng dẫn & Công thức
       </button>
     </div>
+
     <div class="sidebar-footer">
-      <p>Quản lý điểm gas &copy; 2025</p>
+      <span>VNPost Gas System</span>
+      <span>v3.0</span>
     </div>
   </div>
 
-  <div class="container">
-    <header>
-      <button class="menu-toggle" id="menu-toggle" aria-label="Mở menu">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
-        </svg>
-      </button>
-      <div>
-        <h1>
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M10.5 3.798v5.02a3 3 0 0 1-.879 2.121l-2.377 2.377a9.845 9.845 0 0 1 5.091 1.013 8.315 8.315 0 0 0 5.713.636l.285-.071-3.954-3.955a3 3 0 0 1-.879-2.121v-5.02a23.614 23.614 0 0 0-3 0Zm4.5.138a.75.75 0 0 0 .093-1.495A24.837 24.837 0 0 0 12 2.25a25.048 25.048 0 0 0-3.093.191A.75.75 0 0 0 9 3.936v4.882a1.5 1.5 0 0 1-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.471-4.881L15.44 9.879A1.5 1.5 0 0 1 15 8.818V3.936Z" clip-rule="evenodd" />
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-left">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Mở menu">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
           </svg>
-          Tính tiền gas còn lại
-        </h1>
-        <p>Tính toán số tiền cần trừ dựa trên khối lượng gas còn lại</p>
+        </button>
+        <a href="index.html" class="brand-link">
+          <div class="header-title-wrap">
+            <h1>Tính gas còn lại</h1>
+            <p>Trừ tiền bình 45kg</p>
+          </div>
+        </a>
       </div>
-    </header>
 
-    <div class="card">
-      <h2>
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
-          <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+      <div class="header-actions">
+        <button class="icon-btn" onclick="toggleTheme()" aria-label="Đổi giao diện Sáng/Tối">
+          <svg id="theme-icon-sun" class="hero-icon" style="display:none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z" />
+          </svg>
+          <svg id="theme-icon-moon" class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.7-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        <button class="icon-btn" onclick="openModal('help-modal')" aria-label="Xem hướng dẫn">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 0 1-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 0 1-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 0 1-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.83-.727.83-1.857 0-2.584ZM12 18a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div class="hero-banner">
+      <div class="hero-banner-icon">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="M10.5 3.798v5.02a3 3 0 0 1-.879 2.121l-2.377 2.377a9.845 9.845 0 0 1 5.091 1.013 8.315 8.315 0 0 0 5.713.636l.285-.071-3.954-3.955a3 3 0 0 1-.879-2.121v-5.02a23.614 23.614 0 0 0-3 0Zm4.5.138a.75.75 0 0 0 .093-1.495A24.837 24.837 0 0 0 12 2.25a25.048 25.048 0 0 0-3.093.191A.75.75 0 0 0 9 3.936v4.882a1.5 1.5 0 0 1-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.471-4.881L15.44 9.879A1.5 1.5 0 0 1 15 8.818V3.936Z" clip-rule="evenodd" />
         </svg>
-        Nhập thông tin
-      </h2>
+      </div>
+      <div class="hero-banner-text">
+        <h2>Tính tiền gas còn lại (45kg)</h2>
+        <p>Tự động quy đổi khối lượng gas còn thừa sang tiền trừ và số tiền thực tế khách hàng cần thanh toán.</p>
+      </div>
+    </div>
+
+    <!-- Thông tin nhập -->
+    <div class="card">
+      <div class="card-title">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a3.836 3.836 0 0 0-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 0 1-.921-.421l-.879-.66a.75.75 0 0 0-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 0 0 1.5 0v-.81a4.124 4.124 0 0 0 1.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 0 0-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 0 0 .933-1.175l-.415-.33a3.836 3.836 0 0 0-1.719-.755V6Z" clip-rule="evenodd" />
+        </svg>
+        Thông số bình gas 45kg
+      </div>
 
       <div class="form-group">
         <label for="gia_binh">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
             <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
           </svg>
-          Giá bán bình gas 45kg (VND):
+          Giá bán bình gas 45kg (VNĐ):
         </label>
-        <input
-          id="gia_binh"
-          type="number"
-          placeholder="VD: 1780 (tự động thêm 000)"
-          value=""
-          min="0"
-          onchange="autoMultiplyThousand(this)"
-          onblur="autoMultiplyThousand(this)"
-        >
+        <div class="input-wrapper">
+          <input
+            id="gia_binh"
+            type="number"
+            placeholder="VD: 1780 (tự động thêm 000)"
+            value=""
+            min="0"
+            onchange="autoMultiplyThousand(this)"
+            onblur="autoMultiplyThousand(this)"
+          >
+          <span class="input-unit">đ</span>
+        </div>
+        <div class="input-hint">
+          <svg class="hero-icon" style="width: 1rem; height: 1rem;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clip-rule="evenodd" />
+          </svg>
+          Gõ 1780 sẽ tự động chuyển thành 1.780.000đ khi rời ô nhập.
+        </div>
       </div>
 
       <div class="form-group">
         <label for="kg_binh_con">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path fill-rule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v.756a49.106 49.106 0 0 1 9.152 1 .75.75 0 0 1-.152 1.485h-1.42l2.79 3.458a.75.75 0 1 1-1.16.95l-2.79-3.457a45.877 45.877 0 0 0-6.42 1.665v10.268h2.25a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1 0-1.5h2.25V7.267a45.877 45.877 0 0 0-6.42-1.665l-2.79 3.457a.75.75 0 0 1-1.16-.95l2.79-3.458H3.75a.75.75 0 0 1-.152-1.485 49.106 49.106 0 0 1 9.152-1V3a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
           </svg>
-          Khối lượng bình có gas hiện tại (kg):
+          Khối lượng bình có gas hiện tại:
         </label>
-        <input
-          id="kg_binh_con"
-          type="number"
-          placeholder="VD: 45.5"
-          step="0.1"
-          min="0"
-        >
+        <div class="input-wrapper">
+          <input
+            id="kg_binh_con"
+            type="number"
+            placeholder="VD: 45.5"
+            step="0.1"
+            min="0"
+          >
+          <span class="input-unit">kg</span>
+        </div>
       </div>
 
       <div class="form-group">
         <label for="kg_vo_gas">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
             <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm6.133 2.845a.75.75 0 0 1 1.06 0l1.72 1.72 1.72-1.72a.75.75 0 1 1 1.06 1.06l-1.72 1.72 1.72 1.72a.75.75 0 1 1-1.06 1.06L12 15.685l-1.72 1.72a.75.75 0 1 1-1.06-1.06l1.72-1.72-1.72-1.72a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
           </svg>
-          Khối lượng vỏ gas rỗng (kg):
+          Khối lượng vỏ gas rỗng (dập trên quai/thân):
         </label>
-        <input
-          id="kg_vo_gas"
-          type="number"
-          placeholder="VD: 42"
-          step="0.1"
-          min="0"
-        >
+        <div class="input-wrapper">
+          <input
+            id="kg_vo_gas"
+            type="number"
+            placeholder="VD: 42.0"
+            step="0.1"
+            min="0"
+          >
+          <span class="input-unit">kg</span>
+        </div>
       </div>
 
       <div class="button-group">
         <button class="btn btn-primary" onclick="tinhTienGas()">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path fill-rule="evenodd" d="M6.32 1.827a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V4.757c0-1.47 1.073-2.756 2.57-2.93ZM7.5 11.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75v-.008Zm.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V15a.75.75 0 0 0-.75-.75H8.25Zm-.75 6a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75V20.25Zm3.75-3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75H11.25Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm3.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75h-.008Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm3.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75h-.008Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008ZM15.75 6a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V6.75a.75.75 0 0 0-.75-.75h-.008Z" clip-rule="evenodd" />
           </svg>
           Tính toán
         </button>
         <button class="btn btn-secondary" onclick="resetForm()">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" />
           </svg>
           Làm lại
@@ -847,47 +1099,65 @@
 
     <!-- Kết quả hiển thị -->
     <div id="result" class="card">
+      <div class="card-title">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 0 1 8.25-8.25.75.75 0 0 1 .75.75v6.75H18a.75.75 0 0 1 .75.75 8.25 8.25 0 0 1-16.5 0Z" clip-rule="evenodd" />
+          <path fill-rule="evenodd" d="M12.75 3a.75.75 0 0 1 .75-.75 8.25 8.25 0 0 1 8.25 8.25.75.75 0 0 1-.75.75h-7.5a.75.75 0 0 1-.75-.75V3Z" clip-rule="evenodd" />
+        </svg>
+        Kết quả tính toán
+      </div>
+
       <div class="result-box" id="result-box">
         <div class="result-item">
-          <span class="result-label">Khối lượng gas còn:</span>
+          <span class="result-label">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" d="M10.5 3.798v5.02a3 3 0 0 1-.879 2.121l-2.377 2.377a9.845 9.845 0 0 1 5.091 1.013 8.315 8.315 0 0 0 5.713.636l.285-.071-3.954-3.955a3 3 0 0 1-.879-2.121v-5.02a23.614 23.614 0 0 0-3 0Z" clip-rule="evenodd" />
+            </svg>
+            Khối lượng gas còn:
+          </span>
           <span class="result-value" id="kg-gas-con">-</span>
         </div>
 
         <div class="result-item">
-          <span class="result-label">Điều kiện (> 2kg):</span>
+          <span class="result-label">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+            </svg>
+            Điều kiện trừ (> 2kg):
+          </span>
           <span class="result-value" id="dieu-kien">-</span>
         </div>
 
-        <div class="result-item" id="tien-item" style="display: none;">
-          <span class="result-label">
-            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <div class="result-item" id="tien-item" style="display: none; background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.3);">
+          <span class="result-label" style="color: var(--emerald-dark);">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
               <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
             </svg>
-            Tiền cần trừ:
+            Số tiền trừ lại:
           </span>
           <span class="result-value success" id="tien-can-tru">-</span>
         </div>
 
-        <div class="result-item" id="khong-tru-item" style="display: none; border-color: var(--warning);">
-          <span class="result-label" style="color: var(--warning);">
-            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <div class="result-item" id="khong-tru-item" style="display: none; background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.3);">
+          <span class="result-label" style="color: var(--warning-dark);">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
             </svg>
-            Kết quả:
+            Kết luận:
           </span>
           <span class="result-value warning" id="khong-tru-msg">-</span>
         </div>
 
-        <div class="result-item" id="khach-tra-item" style="display: none; border-top: 2px solid var(--primary); padding-top: 15px; margin-top: 15px;">
-          <span class="result-label" style="font-weight: 700; color: var(--primary);">
-            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <div class="result-item result-highlight-card" id="khach-tra-item" style="display: none;">
+          <span class="result-label" style="font-weight: 700; color: var(--primary); font-size: 1rem;">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path d="M4.5 3.75a3 3 0 0 0-3 3v.75h21v-.75a3 3 0 0 0-3-3h-15Z" />
               <path fill-rule="evenodd" d="M22.5 9.75h-21v7.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-7.5Zm-18 3.75a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" />
             </svg>
-            Khách phải trả:
+            Khách phải thanh toán:
           </span>
-          <span class="result-value" id="khach-phai-tra" style="font-size: 1.3rem;">-</span>
+          <span class="result-value" id="khach-phai-tra" style="font-size: 1.35rem; color: var(--primary); font-weight: 800;">-</span>
         </div>
       </div>
     </div>
@@ -897,497 +1167,439 @@
       <div class="modal-content">
         <div class="modal-header">
           <h2>
-            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 0 1-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 0 1-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 0 1-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.83-.727.83-1.857 0-2.584ZM12 18a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
             </svg>
-            Trợ giúp
+            Hướng dẫn & Công thức
           </h2>
           <button class="modal-close" onclick="closeModal('help-modal')" aria-label="Đóng">
-            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
             </svg>
           </button>
         </div>
 
-        <div style="max-height: calc(85vh - 100px); overflow-y: auto;">
+        <div>
           <h3 class="help-section-title">
-            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path d="M11.25 4.533A9.707 9.707 0 0 0 6 3a9.735 9.735 0 0 0-3.25.555.75.75 0 0 0-.5.707v14.25a.75.75 0 0 0 1 .707A8.237 8.237 0 0 1 6 18.75c1.995 0 3.823.707 5.25 1.886V4.533ZM12.75 20.636A8.214 8.214 0 0 1 18 18.75c.966 0 1.89.166 2.75.47a.75.75 0 0 0 1-.708V4.262a.75.75 0 0 0-.5-.707A9.735 9.735 0 0 0 18 3a9.707 9.707 0 0 0-5.25 1.533v16.103Z" />
             </svg>
             Cách sử dụng:
           </h3>
-          <ol style="margin-left: 20px; margin-top: 10px;">
-            <li>Nhập giá bán của bình gas 45kg</li>
-            <li>Nhập khối lượng bình có gas hiện tại (bình nguyên, chứa gas)</li>
-            <li>Nhập khối lượng vỏ gas rỗng (trọng lượng khi chưa có gas)</li>
-            <li>Nhấn "Tính toán" để xem kết quả</li>
+          <ol style="margin-left: 1.25rem; font-size: 0.9rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.4rem;">
+            <li>Nhập giá bán bình gas 45kg (VD: 1780 tự động thành 1.780.000đ).</li>
+            <li>Nhập khối lượng bình gas thực tế còn lại (đặt cả bình lên cân).</li>
+            <li>Nhập khối lượng vỏ gas rỗng (xem số dập nổi trên thân/quai bình).</li>
+            <li>Bấm <strong>Tính toán</strong> để xem kết quả và tự động sao chép văn bản.</li>
           </ol>
 
           <h3 class="help-section-title">
-            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M6.32 1.827a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V4.757c0-1.47 1.073-2.756 2.57-2.93ZM7.5 11.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75v-.008Zm.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V15a.75.75 0 0 0-.75-.75H8.25Zm-.75 6a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75V20.25Zm3.75-3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75H11.25Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm3.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75h-.008Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm3.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75h-.008Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008ZM15.75 6a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V6.75a.75.75 0 0 0-.75-.75h-.008Z" clip-rule="evenodd" />
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" d="M6.32 1.827a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V4.757c0-1.47 1.073-2.756 2.57-2.93ZM7.5 11.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75v-.008Zm.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V15a.75.75 0 0 0-.75-.75H8.25Zm-.75 6a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75V20.25Z" clip-rule="evenodd" />
             </svg>
-            Công thức tính:
+            Công thức tính chuẩn:
           </h3>
-          <p style="background: var(--bg-tertiary); padding: 12px; border-radius: var(--radius-sm); margin: 10px 0; font-family: monospace; font-size: 0.9rem;">
-            Khối lượng gas còn = Khối lượng bình - Khối lượng vỏ
-          </p>
-          <p style="background: var(--bg-tertiary); padding: 12px; border-radius: var(--radius-sm); margin: 10px 0; font-family: monospace; font-size: 0.9rem;">
-            Tiền trừ = (Khối lượng gas còn) × (Giá bán) ÷ 45
-          </p>
+          <div class="help-box">Khối lượng gas còn = Khối lượng bình - Khối lượng vỏ</div>
+          <div class="help-box">Tiền trừ = (Khối lượng gas còn × Giá bán) ÷ 45</div>
+          <div class="help-box">Khách phải trả = Giá bán - Tiền trừ</div>
 
           <h3 class="help-section-title">
-            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
             </svg>
-            Lưu ý:
+            Quy định trừ tiền:
           </h3>
-          <ul style="margin-left: 20px; margin-top: 10px;">
-            <li style="margin-bottom: 8px;"><strong>Giá bán: Nhập chỉ phần chính (VD: 1780), tự động thêm 000 → 1780000</strong></li>
-            <li style="margin-bottom: 8px;"><strong>Chỉ tính tiền nếu khối lượng gas còn > 2kg</strong></li>
-            <li style="margin-bottom: 8px;">Nếu khối lượng gas ≤ 2kg thì không trừ tiền</li>
-            <li style="margin-bottom: 8px;">Giá bán phải > 0 để có thể tính toán</li>
-            <li>Các giá trị được tính với độ chính xác 2 chữ số thập phân</li>
+          <ul style="margin-left: 1.25rem; font-size: 0.875rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.4rem;">
+            <li><strong>Chỉ trừ tiền nếu lượng gas còn lại &gt; 2.0kg</strong>.</li>
+            <li>Nếu gas còn lại &le; 2.0kg: không áp dụng khấu trừ tiền (khách trả đủ 100% giá bán).</li>
+            <li>Sau khi tính thành công, hệ thống tự động copy câu tóm tắt (VD: <em>Trừ 4.2kg = 166k</em>) để dán nhanh vào sổ sách/tin nhắn.</li>
           </ul>
         </div>
 
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-          <button class="btn btn-primary" style="width: 100%;" onclick="closeModal('help-modal')">Đóng</button>
+        <div style="margin-top: 1.5rem;">
+          <button class="btn btn-primary" style="width: 100%;" onclick="closeModal('help-modal')">Đã hiểu & Đóng</button>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 
-<script>
-// ========== HEROICONS LIBRARY ==========
-const ICONS = {
-  checkCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" /></svg>',
-  xCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" /></svg>',
-  warning: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>',
-  info: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>'
-};
+  <script>
+    // ========== HEROICONS LIBRARY ==========
+    const ICONS = {
+      checkCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" /></svg>',
+      xCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" /></svg>',
+      warning: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>',
+      info: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>'
+    };
 
-function stripLeadingEmoji(str) {
-  if (!str) return '';
-  return str.replace(/^[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{2B00}-\u{2BFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}\u{200D}\s]+/u, '').trim() || str.trim();
-}
-
-// ========== HÀM TOGGLE SIDEBAR ==========
-function openSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('sidebar-overlay');
-  if (!sidebar || !overlay) return;
-  if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
-  sidebar.style.left = '';
-  sidebar.style.transition = '';
-  overlay.style.opacity = '';
-  overlay.style.transition = '';
-  overlay.style.display = '';
-  if (!sidebar.classList.contains('open')) {
-    if (navigator.vibrate) navigator.vibrate(10);
-    sidebar.classList.add('open');
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-}
-
-function closeSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('sidebar-overlay');
-  if (!sidebar || !overlay) return;
-  if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
-  sidebar.style.left = '';
-  sidebar.style.transition = '';
-  overlay.style.opacity = '';
-  overlay.style.transition = '';
-  overlay.style.display = '';
-  sidebar.classList.remove('open');
-  overlay.classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-function toggleSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  if (sidebar && sidebar.classList.contains('open')) {
-    if (navigator.vibrate) navigator.vibrate(10);
-    closeSidebar();
-  } else {
-    openSidebar();
-  }
-}
-
-/* ========== VUỐT CẠNH TRÁI ĐỂ MỞ/ĐÓNG MENUBAR (IPHONE STYLE) ========== */
-function setupSidebarSwipe() {
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('sidebar-overlay');
-  if (!sidebar || !overlay) return;
-
-  const EDGE_THRESHOLD = 35; // Vùng cảm ứng mép trái màn hình (px)
-  let startX = 0;
-  let startY = 0;
-  let currentX = 0;
-  let currentY = 0;
-  let startTime = 0;
-  let isSwiping = false;
-  let isClosing = false;
-  let isDetermined = false;
-  let animTimeout = null;
-
-  window.sidebarSwipeCancelAnim = function() {
-    if (animTimeout) {
-      clearTimeout(animTimeout);
-      animTimeout = null;
+    function stripLeadingEmoji(str) {
+      if (!str) return '';
+      return str.replace(/^[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{2B00}-\u{2BFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}\u{200D}\s]+/u, '').trim() || str.trim();
     }
-  };
 
-  function getSidebarWidth() {
-    return sidebar.offsetWidth || 280;
-  }
-
-  function handleTouchStart(e) {
-    if (e.touches.length !== 1) return;
-
-    const touch = e.touches[0];
-    const target = touch.target;
-    if (target && target.closest && target.closest('input, textarea, select')) return;
-
-    startX = touch.clientX;
-    startY = touch.clientY;
-    currentX = startX;
-    currentY = startY;
-    startTime = Date.now();
-    isDetermined = false;
-    isSwiping = false;
-
-    const isOpen = sidebar.classList.contains('open');
-
-    if (isOpen) {
-      isClosing = true;
-    } else {
-      if (startX <= EDGE_THRESHOLD) {
-        isClosing = false;
-      } else {
-        return;
+    // ========== THEME TOGGLE ==========
+    function updateThemeUI() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const sun = document.getElementById('theme-icon-sun');
+      const moon = document.getElementById('theme-icon-moon');
+      if (sun && moon) {
+        sun.style.display = isDark ? 'inline-block' : 'none';
+        moon.style.display = isDark ? 'none' : 'inline-block';
       }
     }
 
-    if (animTimeout) {
-      clearTimeout(animTimeout);
-      animTimeout = null;
-    }
-  }
-
-  function handleTouchMove(e) {
-    if (e.touches.length !== 1) return;
-
-    const touch = e.touches[0];
-    currentX = touch.clientX;
-    currentY = touch.clientY;
-    const deltaX = currentX - startX;
-    const deltaY = currentY - startY;
-
-    if (!isDetermined) {
-      const absX = Math.abs(deltaX);
-      const absY = Math.abs(deltaY);
-
-      if (absX < 8 && absY < 8) return;
-
-      isDetermined = true;
-
-      if (!isClosing) {
-        if (deltaX > 0 && absX > absY * 1.2) {
-          isSwiping = true;
-        } else {
-          isSwiping = false;
-          return;
-        }
-      } else {
-        if (deltaX < 0 && absX > absY * 1.2) {
-          isSwiping = true;
-        } else {
-          isSwiping = false;
-          return;
-        }
-      }
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('gas_theme', isDark ? 'dark' : 'light');
+      updateThemeUI();
+      showToast(isDark ? 'Đã bật chế độ tối' : 'Đã bật chế độ sáng', 'info');
     }
 
-    if (!isSwiping) return;
-
-    e.preventDefault();
-
-    const sidebarWidth = getSidebarWidth();
-
-    sidebar.classList.add('swiping');
-    overlay.classList.add('swiping');
-
-    if (!isClosing) {
-      const left = Math.min(0, -sidebarWidth + Math.max(0, deltaX));
-      const progress = Math.min(Math.max(deltaX / sidebarWidth, 0), 1);
-      sidebar.style.left = left + 'px';
-      overlay.style.opacity = progress.toFixed(3);
-    } else {
-      const left = Math.min(0, Math.max(-sidebarWidth, deltaX));
-      const progress = Math.min(Math.max(1 + (deltaX / sidebarWidth), 0), 1);
-      sidebar.style.left = left + 'px';
-      overlay.style.opacity = progress.toFixed(3);
-    }
-  }
-
-  function handleTouchEnd(e) {
-    if (!isSwiping) {
-      isDetermined = false;
-      return;
-    }
-
-    isSwiping = false;
-    isDetermined = false;
-
-    sidebar.classList.remove('swiping');
-    overlay.classList.remove('swiping');
-
-    const sidebarWidth = getSidebarWidth();
-    const deltaX = currentX - startX;
-    const duration = Math.max(Date.now() - startTime, 1);
-    const velocityX = deltaX / duration;
-
-    let shouldOpen = false;
-
-    if (!isClosing) {
-      shouldOpen = (deltaX > sidebarWidth * 0.3) || (velocityX > 0.3 && deltaX > 30);
-    } else {
-      const shouldClose = (deltaX < -sidebarWidth * 0.25) || (velocityX < -0.3 && deltaX < -30);
-      shouldOpen = !shouldClose;
-    }
-
-    sidebar.style.transition = 'left 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
-    overlay.style.transition = 'opacity 0.25s ease';
-
-    if (shouldOpen) {
-      sidebar.style.left = '0px';
-      overlay.style.opacity = '1';
-      if (navigator.vibrate) navigator.vibrate(10);
-
-      animTimeout = setTimeout(() => {
-        sidebar.style.left = '';
-        sidebar.style.transition = '';
-        overlay.style.opacity = '';
-        overlay.style.transition = '';
-        overlay.style.display = '';
+    // ========== HÀM TOGGLE SIDEBAR ==========
+    function openSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (!sidebar || !overlay) return;
+      if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
+      sidebar.style.left = '';
+      sidebar.style.transition = '';
+      overlay.style.opacity = '';
+      overlay.style.transition = '';
+      overlay.style.display = '';
+      if (!sidebar.classList.contains('open')) {
+        if (navigator.vibrate) navigator.vibrate(10);
         sidebar.classList.add('open');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
-      }, 250);
-    } else {
-      sidebar.style.left = (-sidebarWidth) + 'px';
-      overlay.style.opacity = '0';
+      }
+    }
 
-      animTimeout = setTimeout(() => {
-        sidebar.style.left = '';
-        sidebar.style.transition = '';
-        overlay.style.opacity = '';
-        overlay.style.transition = '';
-        overlay.style.display = '';
-        sidebar.classList.remove('open');
-        overlay.classList.remove('active');
+    function closeSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (!sidebar || !overlay) return;
+      if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
+      sidebar.style.left = '';
+      sidebar.style.transition = '';
+      overlay.style.opacity = '';
+      overlay.style.transition = '';
+      overlay.style.display = '';
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      if (!sidebar) return;
+      if (sidebar.classList.contains('open')) {
+        closeSidebar();
+      } else {
+        openSidebar();
+      }
+    }
+
+    // ========== TOUCH SWIPE CHO SIDEBAR ==========
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchCurrentX = 0;
+    let isSwiping = false;
+
+    function getSidebarWidth() {
+      const sidebar = document.getElementById('sidebar');
+      return sidebar ? sidebar.offsetWidth : 290;
+    }
+
+    function handleTouchStart(e) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchCurrentX = touchStartX;
+      isSwiping = false;
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar && sidebar.classList.contains('open')) {
+        isSwiping = true;
+      } else if (touchStartX < 30) {
+        isSwiping = true;
+      }
+    }
+
+    function handleTouchMove(e) {
+      if (!isSwiping) return;
+      touchCurrentX = e.touches[0].clientX;
+      const diffX = touchCurrentX - touchStartX;
+      const diffY = Math.abs(e.touches[0].clientY - touchStartY);
+      if (diffY > Math.abs(diffX) * 1.5) {
+        isSwiping = false;
+        return;
+      }
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      const width = getSidebarWidth();
+      if (!sidebar || !overlay) return;
+
+      if (!sidebar.classList.contains('open')) {
+        if (diffX > 0) {
+          const moveX = Math.min(diffX - width, 0);
+          sidebar.style.transition = 'none';
+          sidebar.style.left = moveX + 'px';
+          overlay.style.display = 'block';
+          overlay.style.opacity = (diffX / width) * 0.6;
+        }
+      } else {
+        if (diffX < 0) {
+          const moveX = Math.max(diffX, -width);
+          sidebar.style.transition = 'none';
+          sidebar.style.left = moveX + 'px';
+          overlay.style.opacity = ((width + diffX) / width) * 0.6;
+        }
+      }
+    }
+
+    function handleTouchEnd(e) {
+      if (!isSwiping) return;
+      isSwiping = false;
+      const diffX = touchCurrentX - touchStartX;
+      const sidebar = document.getElementById('sidebar');
+      const width = getSidebarWidth();
+      if (!sidebar) return;
+
+      sidebar.style.transition = '';
+      sidebar.style.left = '';
+
+      if (!sidebar.classList.contains('open')) {
+        if (diffX > width * 0.3) {
+          openSidebar();
+        } else {
+          closeSidebar();
+        }
+      } else {
+        if (diffX < -width * 0.3) {
+          closeSidebar();
+        } else {
+          openSidebar();
+        }
+      }
+    }
+
+    function setupSidebarSwipe() {
+      document.addEventListener('touchstart', handleTouchStart, { passive: true });
+      document.addEventListener('touchmove', handleTouchMove, { passive: true });
+      document.addEventListener('touchend', handleTouchEnd, { passive: true });
+    }
+
+    function goTo(page) {
+      closeSidebar();
+      window.location.href = page;
+    }
+
+    // ========== HÀM MỞ/ĐÓNG MODAL ==========
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'none';
         document.body.style.overflow = '';
-      }, 250);
+      }
     }
-  }
 
-  window.addEventListener('touchstart', handleTouchStart, { passive: true });
-  window.addEventListener('touchmove', handleTouchMove, { passive: false });
-  window.addEventListener('touchend', handleTouchEnd, { passive: true });
-  window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
-}
+    // ========== HÀM HIỂN THỊ TOAST ==========
+    let toastTimeout = null;
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toast-message');
+      const toastIcon = document.getElementById('toast-icon');
+      if (!toast || !toastMessage || !toastIcon) return;
 
-// ========== HÀM ĐIỀU HƯỚNG ==========
-function goTo(page) {
-  closeSidebar();
-  window.location.href = page;
-}
+      if (toastTimeout) clearTimeout(toastTimeout);
 
-// ========== HÀM MỞ/ĐÓNG MODAL ==========
-function openModal(modalId) {
-  const modal = document.getElementById(modalId);
-  if (modal) {
-    modal.style.display = 'flex';
-  }
-}
+      let iconKey = 'info';
+      if (type === 'success') iconKey = 'checkCircle';
+      else if (type === 'error') iconKey = 'xCircle';
+      else if (type === 'warning') iconKey = 'warning';
 
-function closeModal(modalId) {
-  const modal = document.getElementById(modalId);
-  if (modal) {
-    modal.style.display = 'none';
-  }
-}
+      toastIcon.innerHTML = ICONS[iconKey] || ICONS.info;
+      toastMessage.textContent = stripLeadingEmoji(message);
+      toast.className = 'toast show ' + type;
 
-// ========== HÀM HIỂN THỊ TOAST ==========
-function showToast(message, type = 'info') {
-  const toast = document.getElementById('toast');
-  const toastMessage = document.getElementById('toast-message');
-  const toastIcon = document.getElementById('toast-icon');
-
-  let iconKey = 'info';
-  if (type === 'success') iconKey = 'checkCircle';
-  else if (type === 'error') iconKey = 'xCircle';
-  else if (type === 'warning') iconKey = 'warning';
-
-  toastIcon.innerHTML = ICONS[iconKey];
-  toastMessage.textContent = stripLeadingEmoji(message);
-  toast.className = 'toast show ' + type;
-
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 3000);
-}
-
-// ========== HÀM ĐỊNH DẠNG TIỀN TỆ ==========
-function formatCurrency(value) {
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }).format(value);
-}
-
-function formatKText(value) {
-  const roundedK = Math.round(value / 1000);
-  return `${roundedK}k`;
-}
-
-async function copyTextToClipboard(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch (error) {
-    showToast('Không thể sao chép clipboard.', 'warning');
-    console.error('Clipboard error:', error);
-  }
-}
-
-// ========== HÀM TÍNH TIỀN GAS ==========
-function tinhTienGas() {
-  const giaBinh = parseFloat(document.getElementById('gia_binh').value);
-  const kgBinhCon = parseFloat(document.getElementById('kg_binh_con').value);
-  const kgVoGas = parseFloat(document.getElementById('kg_vo_gas').value);
-
-  // Validation
-  if (isNaN(giaBinh) || isNaN(kgBinhCon) || isNaN(kgVoGas)) {
-    showToast('Vui lòng nhập đầy đủ thông tin!', 'error');
-    return;
-  }
-
-  if (giaBinh <= 0) {
-    showToast('Giá bán phải lớn hơn 0!', 'error');
-    return;
-  }
-
-  if (kgBinhCon < 0 || kgVoGas < 0) {
-    showToast('Khối lượng không thể âm!', 'error');
-    return;
-  }
-
-  if (kgVoGas >= kgBinhCon) {
-    showToast('Khối lượng vỏ phải nhỏ hơn khối lượng bình!', 'error');
-    return;
-  }
-
-  // Tính toán
-  const kgGasCon = kgBinhCon - kgVoGas;
-  const kgGasConRounded = Math.round(kgGasCon * 100) / 100;
-
-  // Hiển thị kết quả
-  const resultBox = document.getElementById('result-box');
-  const kgGasConEl = document.getElementById('kg-gas-con');
-  const dieuKienEl = document.getElementById('dieu-kien');
-  const tienItem = document.getElementById('tien-item');
-  const khongTruItem = document.getElementById('khong-tru-item');
-  const tienCanTru = document.getElementById('tien-can-tru');
-  const khongTruMsg = document.getElementById('khong-tru-msg');
-
-  kgGasConEl.textContent = kgGasConRounded + ' kg';
-
-  if (kgGasConRounded > 2) {
-    // Icon check nhỏ trước text
-    dieuKienEl.innerHTML = `${ICONS.checkCircle} <span>Đạt điều kiện (> 2kg)</span>`;
-    dieuKienEl.className = 'result-value success';
-
-    // Tính tiền cần trừ
-    const tien = (kgGasConRounded * giaBinh) / 45;
-    const tienRounded = Math.round(tien * 100) / 100;
-
-    // Tính tiền khách phải trả
-    const khachPhaiTra = giaBinh - tienRounded;
-    const khachPhaiTraRounded = Math.round(khachPhaiTra * 100) / 100;
-
-    tienCanTru.textContent = formatCurrency(tienRounded);
-    document.getElementById('khach-phai-tra').textContent = formatCurrency(khachPhaiTraRounded);
-
-    tienItem.style.display = 'flex';
-    khongTruItem.style.display = 'none';
-    document.getElementById('khach-tra-item').style.display = 'flex';
-
-    const copyText = `Trừ ${kgGasConRounded}kg = ${formatKText(tienRounded)}`;
-    copyTextToClipboard(copyText);
-
-    showToast('Tính toán thành công! Text đã được sao chép.', 'success');
-  } else {
-    dieuKienEl.innerHTML = `${ICONS.xCircle} <span>Không đạt điều kiện (≤ 2kg)</span>`;
-    dieuKienEl.className = 'result-value warning';
-
-    // Nếu không trừ tiền, khách phải trả toàn bộ giá bán
-    const khachPhaiTraRounded = Math.round(giaBinh * 100) / 100;
-    document.getElementById('khach-phai-tra').textContent = formatCurrency(khachPhaiTraRounded);
-
-    khongTruMsg.textContent = 'Không trừ tiền (gas còn ≤ 2kg)';
-    tienItem.style.display = 'none';
-    khongTruItem.style.display = 'flex';
-    document.getElementById('khach-tra-item').style.display = 'flex';
-
-    showToast('Gas còn ≤ 2kg, không trừ tiền', 'warning');
-  }
-
-  resultBox.classList.add('show');
-}
-
-// ========== HÀM TỰ ĐỘNG NHÂN 1000 CHO GIÁ BÁN ==========
-function autoMultiplyThousand(element) {
-  if (!element.value || element.value.trim() === '') {
-    return;
-  }
-
-  const value = parseInt(element.value, 10);
-
-  if (value >= 100000) {
-    return;
-  }
-
-  if (value > 0 && value < 100000) {
-    element.value = value * 1000;
-  }
-}
-
-// ========== HÀM RESET FORM ==========
-function resetForm() {
-  document.getElementById('gia_binh').value = '';
-  document.getElementById('kg_binh_con').value = '';
-  document.getElementById('kg_vo_gas').value = '';
-  document.getElementById('result-box').classList.remove('show');
-}
-
-// ========== SỰ KIỆN ==========
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
-  document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
-  document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
-  setupSidebarSwipe();
-
-  document.getElementById('kg_vo_gas').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      tinhTienGas();
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2400);
     }
-  });
-});
-</script>
+
+    // ========== HÀM ĐỊNH DẠNG TIỀN TỆ ==========
+    function formatCurrency(value) {
+      return new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(value);
+    }
+
+    function formatKText(value) {
+      const roundedK = Math.round(value / 1000);
+      return roundedK + 'k';
+    }
+
+    async function copyTextToClipboard(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (error) {
+        console.error('Clipboard error:', error);
+      }
+    }
+
+    // ========== HÀM TÍNH TIỀN GAS ==========
+    function tinhTienGas() {
+      const giaBinh = parseFloat(document.getElementById('gia_binh').value);
+      const kgBinhCon = parseFloat(document.getElementById('kg_binh_con').value);
+      const kgVoGas = parseFloat(document.getElementById('kg_vo_gas').value);
+
+      // Validation
+      if (isNaN(giaBinh) || isNaN(kgBinhCon) || isNaN(kgVoGas)) {
+        showToast('Vui lòng nhập đầy đủ thông tin!', 'error');
+        return;
+      }
+
+      if (giaBinh <= 0) {
+        showToast('Giá bán phải lớn hơn 0!', 'error');
+        return;
+      }
+
+      if (kgBinhCon < 0 || kgVoGas < 0) {
+        showToast('Khối lượng không thể âm!', 'error');
+        return;
+      }
+
+      if (kgVoGas >= kgBinhCon) {
+        showToast('Khối lượng vỏ phải nhỏ hơn khối lượng bình!', 'error');
+        return;
+      }
+
+      // Tính toán
+      const kgGasCon = kgBinhCon - kgVoGas;
+      const kgGasConRounded = Math.round(kgGasCon * 100) / 100;
+
+      // Hiển thị kết quả
+      const resultBox = document.getElementById('result-box');
+      const kgGasConEl = document.getElementById('kg-gas-con');
+      const dieuKienEl = document.getElementById('dieu-kien');
+      const tienItem = document.getElementById('tien-item');
+      const khongTruItem = document.getElementById('khong-tru-item');
+      const tienCanTru = document.getElementById('tien-can-tru');
+      const khongTruMsg = document.getElementById('khong-tru-msg');
+
+      kgGasConEl.textContent = kgGasConRounded + ' kg';
+
+      if (kgGasConRounded > 2) {
+        dieuKienEl.innerHTML = ICONS.checkCircle + ' <span>Đạt điều kiện (&gt; 2kg)</span>';
+        dieuKienEl.className = 'result-value success';
+
+        // Tính tiền cần trừ
+        const tien = (kgGasConRounded * giaBinh) / 45;
+        const tienRounded = Math.round(tien * 100) / 100;
+
+        // Tính tiền khách phải trả
+        const khachPhaiTra = giaBinh - tienRounded;
+        const khachPhaiTraRounded = Math.round(khachPhaiTra * 100) / 100;
+
+        tienCanTru.textContent = formatCurrency(tienRounded);
+        document.getElementById('khach-phai-tra').textContent = formatCurrency(khachPhaiTraRounded);
+
+        tienItem.style.display = 'flex';
+        khongTruItem.style.display = 'none';
+        document.getElementById('khach-tra-item').style.display = 'flex';
+
+        const copyText = 'Trừ ' + kgGasConRounded + 'kg = ' + formatKText(tienRounded);
+        copyTextToClipboard(copyText);
+
+        showToast('Đã tính & sao chép: "' + copyText + '"', 'success');
+      } else {
+        dieuKienEl.innerHTML = ICONS.xCircle + ' <span>Không đạt điều kiện (&le; 2kg)</span>';
+        dieuKienEl.className = 'result-value warning';
+
+        // Nếu không trừ tiền, khách phải trả toàn bộ giá bán
+        const khachPhaiTraRounded = Math.round(giaBinh * 100) / 100;
+        document.getElementById('khach-phai-tra').textContent = formatCurrency(khachPhaiTraRounded);
+
+        khongTruMsg.textContent = 'Không trừ tiền (gas còn ≤ 2kg)';
+        tienItem.style.display = 'none';
+        khongTruItem.style.display = 'flex';
+        document.getElementById('khach-tra-item').style.display = 'flex';
+
+        showToast('Gas còn ≤ 2kg, không trừ tiền', 'warning');
+      }
+
+      resultBox.classList.add('show');
+    }
+
+    // ========== HÀM TỰ ĐỘNG NHÂN 1000 CHO GIÁ BÁN ==========
+    function autoMultiplyThousand(element) {
+      if (!element.value || element.value.trim() === '') {
+        return;
+      }
+
+      const value = parseInt(element.value, 10);
+
+      if (value >= 100000) {
+        return;
+      }
+
+      if (value > 0 && value < 100000) {
+        element.value = value * 1000;
+      }
+    }
+
+    // ========== HÀM RESET FORM ==========
+    function resetForm() {
+      document.getElementById('gia_binh').value = '';
+      document.getElementById('kg_binh_con').value = '';
+      document.getElementById('kg_vo_gas').value = '';
+      document.getElementById('result-box').classList.remove('show');
+      showToast('Đã đặt lại dữ liệu nhập', 'info');
+    }
+
+    // ========== SỰ KIỆN ==========
+    document.addEventListener('DOMContentLoaded', function() {
+      updateThemeUI();
+
+      const menuToggle = document.getElementById('menu-toggle');
+      if (menuToggle) menuToggle.addEventListener('click', toggleSidebar);
+
+      const overlay = document.getElementById('sidebar-overlay');
+      if (overlay) overlay.addEventListener('click', closeSidebar);
+
+      const closeBtn = document.getElementById('close-sidebar');
+      if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+
+      setupSidebarSwipe();
+
+      const kgVoGas = document.getElementById('kg_vo_gas');
+      if (kgVoGas) {
+        kgVoGas.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            tinhTienGas();
+          }
+        });
+      }
+
+      // Close modal on outside click
+      const helpModal = document.getElementById('help-modal');
+      if (helpModal) {
+        helpModal.addEventListener('click', function(e) {
+          if (e.target === helpModal) {
+            closeModal('help-modal');
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>
