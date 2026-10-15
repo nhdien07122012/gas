@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Quản lý tiền thu điểm gas theo ca - VNPost Gas</title>
 
 <!-- Google Fonts: Be Vietnam Pro & Inter for ultra-crisp Vietnamese typography -->
@@ -17,7 +17,7 @@
 <meta name="apple-mobile-web-app-title" content="Quản lý điểm gas">
 
 <style>
-  body, html { touch-action: manipulation; }
+  body, html, input, select, textarea, button { touch-action: manipulation; }
 
   /* ============================================================
      VNPost Gas Management - Modern Clean Design System
@@ -795,19 +795,24 @@
     align-items: center;
   }
 
+  /* Chống iOS Safari tự động zoom màn hình trên thiết bị di động (yêu cầu font-size >= 16px) */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
   .filter-header select,
   .filter-header input,
   .filter-group select,
   .form-input,
   .form-group input,
   .form-group select {
-    height: 42px;
+    height: 44px;
     padding: 8px 12px;
     border: 1px solid var(--border-input);
     border-radius: var(--radius-sm);
     background-color: var(--bg-input);
     font-family: inherit;
-    font-size: 14.5px;
+    font-size: 16px !important;
     color: var(--text-main);
     outline: none;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -1201,19 +1206,19 @@
     border: 1px solid #334155;
   }
 
-  /* ========== FLOATING ACTION BUTTONS (VỊ TRÍ BÊN TRÁI) ========== */
-  /* Nút thêm điểm gas (+) nằm góc dưới bên trái */
+  /* ========== FLOATING ACTION BUTTONS (ĐỐI DIỆN 2 BÊN) ========== */
+  /* Nút thêm điểm gas (+) nằm góc dưới bên trái (to hơn và nhích lên trên một chút cho dễ bấm) */
   #scrollTopBtn {
     position: fixed;
-    bottom: 24px;
-    left: 20px; /* Đặt ở bên trái theo yêu cầu */
-    width: 52px;
-    height: 52px;
+    bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+    left: 24px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--vnpost-blue), var(--vnpost-blue-hover));
     color: #ffffff;
     border: 2px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 6px 18px rgba(0, 91, 166, 0.45);
+    box-shadow: 0 8px 22px rgba(0, 91, 166, 0.45);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1222,28 +1227,29 @@
     transition: var(--transition);
   }
   #scrollTopBtn .hero-icon {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
   }
   #scrollTopBtn:hover {
     transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 10px 24px -2px rgba(0, 91, 166, 0.55);
+    box-shadow: 0 12px 28px -2px rgba(0, 91, 166, 0.55);
   }
   #scrollTopBtn:active { transform: scale(0.92); }
 
-  /* Nút hàng đợi đồng bộ khi mất mạng/mạng không ổn định, nằm ngay trên nút dấu + ở bên trái */
+  /* Nút hàng đợi đồng bộ dời sang bên phải đối diện với button (+) */
   #queueBtn {
     position: fixed;
-    bottom: 86px; /* Xếp ngay trên nút dấu + ở bên trái */
-    left: 20px;
-    width: 52px;
-    height: 52px;
+    bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+    right: 24px;
+    left: auto;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: var(--bg-card);
     border: 2px solid var(--vnpost-yellow, #f59e0b);
     color: var(--vnpost-yellow, #f59e0b);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
-    display: flex; /* Luôn hiển thị ở bên trái */
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+    display: flex; /* Luôn hiển thị ở bên phải */
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -1251,13 +1257,13 @@
     transition: var(--transition);
   }
   #queueBtn .hero-icon {
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
   }
   #queueBtn:hover {
     transform: translateY(-2px) scale(1.05);
     border-color: var(--color-warning-hover, #d97706);
-    box-shadow: 0 10px 24px -2px rgba(245, 158, 11, 0.35);
+    box-shadow: 0 12px 28px -2px rgba(245, 158, 11, 0.35);
   }
   #queueBtn:active { transform: scale(0.92); }
   #queueBtn.has-items {
@@ -1658,10 +1664,22 @@
     .filter-header { flex-direction: column; align-items: stretch; }
     .filter-header select, .filter-header input, .filter-toggle { width: 100%; }
     .quick-actions-grid { grid-template-columns: 1fr; }
-    #scrollTopBtn { bottom: 16px; left: 16px; width: 48px; height: 48px; }
-    #scrollTopBtn .hero-icon { width: 26px; height: 26px; }
-    #queueBtn { bottom: 74px; left: 16px; width: 48px; height: 48px; }
-    #queueBtn .hero-icon { width: 24px; height: 24px; }
+    #scrollTopBtn {
+      bottom: calc(26px + env(safe-area-inset-bottom, 0px));
+      left: 16px;
+      width: 56px;
+      height: 56px;
+    }
+    #scrollTopBtn .hero-icon { width: 30px; height: 30px; }
+    #queueBtn {
+      bottom: calc(26px + env(safe-area-inset-bottom, 0px));
+      right: 16px;
+      left: auto;
+      width: 56px;
+      height: 56px;
+    }
+    #queueBtn .hero-icon { width: 28px; height: 28px; }
+    input, select, textarea { font-size: 16px !important; }
   }
 
   /* ========== PRINT STYLES ========== */
@@ -4394,7 +4412,7 @@ function updateQueueUI() {
 
   if (!btn || !badge || !container || !emptyState || !syncBtn) return;
   
-  // Đảm bảo nút hàng đợi ở bên trái luôn hiển thị
+  // Đảm bảo nút hàng đợi ở bên phải luôn hiển thị
   btn.style.display = 'flex';
 
   if (!navigator.onLine) {
@@ -4621,6 +4639,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const statusBadges = document.querySelectorAll('.status-toggle');
   statusBadges.forEach(badge => {
     badge.addEventListener('mousedown', function() { vibrateShort(); });
+  });
+
+  // Khôi phục vị trí trang và tránh lỗi giật/zoom của iOS Safari khi đóng bàn phím ảo
+  document.addEventListener('focusout', function(e) {
+    if (e.target && ['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) {
+      window.scrollTo({ top: window.scrollY, behavior: 'smooth' });
+    }
   });
 
   setInterval(updateShiftInfo, 60000);
