@@ -1206,8 +1206,26 @@
     border: 1px solid #334155;
   }
 
-  /* ========== FLOATING ACTION BUTTONS (ĐỐI DIỆN 2 BÊN) ========== */
-  /* Nút thêm điểm gas (+) nằm góc dưới bên trái (to hơn và nhích lên trên một chút cho dễ bấm) */
+  /* ========================================================================
+     FLOATING ACTION BUTTONS — 2 nút nổi góc màn hình
+     ========================================================================
+
+     📌 NÚT (+) THÊM ĐIỂM GAS — góc DƯỚI-TRÁI
+        - Dời lên/xuống  → thay đổi "bottom" trong #scrollTopBtn  (vd: 32px → 50px = lên cao hơn)
+        - Dời trái/phải  → thay đổi "left"   trong #scrollTopBtn  (vd: 24px → 40px = sang phải hơn)
+        - Kích thước     → thay đổi "width" & "height" trong #scrollTopBtn  (hiện: 60px)
+
+     📌 NÚT HÀNG ĐỢI (⏱) — góc DƯỚI-PHẢI
+        ẨN mặc định, chỉ TỰ ĐỘNG HIỆN khi có 1 trong 3 tình huống sau:
+          1. Có điểm gas đang chờ gửi lên server  → class "has-items"
+          2. Mất kết nối mạng                      → class "offline"
+          3. Đang trong quá trình đồng bộ          → class "syncing"
+        - Dời lên/xuống  → thay đổi "bottom" trong #queueBtn  (vd: 32px → 50px = lên cao hơn)
+        - Dời trái/phải  → thay đổi "right"  trong #queueBtn  (vd: 24px → 40px = vào trong hơn)
+        - Kích thước     → thay đổi "width" & "height" trong #queueBtn  (hiện: 60px)
+     ======================================================================== */
+
+  /* --- NÚT (+) THÊM ĐIỂM GAS ---------------------------------------------- */
   #scrollTopBtn {
     position: fixed;
     bottom: calc(32px + env(safe-area-inset-bottom, 0px));
@@ -1236,20 +1254,20 @@
   }
   #scrollTopBtn:active { transform: scale(0.92); }
 
-  /* Nút hàng đợi đồng bộ dời sang bên phải đối diện với button (+) */
+  /* --- NÚT HÀNG ĐỢI (⏱) --------------------------------------------------- */
   #queueBtn {
     position: fixed;
-    bottom: calc(32px + env(safe-area-inset-bottom, 0px));
-    right: 24px;
+    bottom: calc(32px + env(safe-area-inset-bottom, 0px)); /* ← CHỈNH VỊ TRÍ DỌC Ở ĐÂY */
+    right: 24px;                                            /* ← CHỈNH VỊ TRÍ NGANG Ở ĐÂY */
     left: auto;
-    width: 60px;
+    width: 60px;   /* ← CHỈNH KÍCH THƯỚC Ở ĐÂY */
     height: 60px;
     border-radius: 50%;
     background: var(--bg-card);
     border: 2px solid var(--vnpost-yellow, #f59e0b);
     color: var(--vnpost-yellow, #f59e0b);
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
-    display: flex; /* Luôn hiển thị ở bên phải */
+    display: none; /* ← ẨN MẶC ĐỊNH — chỉ hiện khi có vấn đề (xem 3 class bên dưới) */
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -1266,15 +1284,26 @@
     box-shadow: 0 12px 28px -2px rgba(245, 158, 11, 0.35);
   }
   #queueBtn:active { transform: scale(0.92); }
+  /* Hiện khi: có điểm chờ gửi */
   #queueBtn.has-items {
+    display: flex;
     background: var(--color-warning-bg);
     border-color: var(--color-warning);
     animation: queuePulse 2s ease-in-out infinite;
   }
+  /* Hiện khi: mất mạng */
   #queueBtn.offline {
+    display: flex;
     background: var(--color-danger-bg);
     border-color: var(--color-danger);
     color: var(--color-danger);
+  }
+  /* Hiện khi: đang đồng bộ */
+  #queueBtn.syncing {
+    display: flex;
+  }
+  #queueBtn.syncing .hero-icon {
+    animation: queueSyncSpin 1s linear infinite;
   }
   @keyframes queuePulse {
     0%, 100% { box-shadow: 0 6px 18px rgba(245, 158, 11, 0.3); }
@@ -1283,9 +1312,6 @@
   @keyframes queueSyncSpin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
-  }
-  #queueBtn.syncing .hero-icon {
-    animation: queueSyncSpin 1s linear infinite;
   }
 
   .queue-badge {
@@ -1826,7 +1852,7 @@
             <h1 class="brand-title">Quản lý điểm gas</h1>
             <span class="version-tag">v3.0</span>
           </div>
-          <span class="brand-subtitle">Theo dõi &amp; quản lý thu chi theo ca làm việc</span>
+          <span class="brand-subtitle">Theo dõi &amp; quản lý gas theo ca</span>
         </div>
       </div>
     </header>
@@ -4509,9 +4535,8 @@ function updateQueueUI() {
   }
 
   if (!btn || !badge || !container || !emptyState || !syncBtn) return;
-  
-  // Đảm bảo nút hàng đợi ở bên phải luôn hiển thị
-  btn.style.display = 'flex';
+  // Hiển thị nút hàng đợi được kiểm soát hoàn toàn qua CSS class (has-items / offline / syncing)
+  // Không dùng style.display trực tiếp ở đây
 
   if (!navigator.onLine) {
     btn.classList.add('offline');
