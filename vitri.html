@@ -445,6 +445,59 @@
     .container { border-radius: var(--radius-lg); }
     .location-grid { padding: 12px; }
   }
+
+  /* ========== FLOATING TOAST (Pill Style 2.4s) ========== */
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-40px);
+    padding: 10px 18px;
+    border-radius: 9999px;
+    font-size: 13.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.14), 0 4px 6px -4px rgba(0, 0, 0, 0.08);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 9999;
+    max-width: 90%;
+    text-align: center;
+    white-space: nowrap;
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1px solid #334155;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+
+  .toast.success, .toast.toast-success {
+    background: #064e3b;
+    color: #ecfdf5;
+    border: 1px solid #059669;
+  }
+  .toast.warning, .toast.toast-warning {
+    background: #78350f;
+    color: #fffbeb;
+    border: 1px solid #d97706;
+  }
+  .toast.error, .toast.danger, .toast.toast-error {
+    background: #7f1d1d;
+    color: #fef2f2;
+    border: 1px solid #dc2626;
+  }
+  .toast.info, .toast.toast-info {
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1px solid #334155;
+  }
 </style>
 <script>
   (() => {
@@ -472,7 +525,6 @@
         <div class="header-text">
           <div class="header-title-row">
             <h1>Quản lý vị trí điểm gas</h1>
-            <span class="header-badge">VNPost</span>
           </div>
           <p class="header-subtitle">Tọa độ GPS và điều hướng Google Maps</p>
         </div>
@@ -508,12 +560,19 @@
 
   <a href="index.html" class="back-button" title="Quay về trang chính" aria-label="Quay về trang chính"></a>
 
+  <!-- Toast notification (Modern Floating Pill) -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toast-icon"></span>
+    <span id="toast-message"></span>
+  </div>
+
   <script>
 // ========== HEROICONS LIBRARY ==========
 const ICONS = {
   checkCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" /></svg>',
   xCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" /></svg>',
   warning: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>',
+  info: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd" /></svg>',
   arrowPath: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" /></svg>',
   buildingStorefront: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5.223 2.25c-.497 0-.974.198-1.325.55l-1.3 1.298A3.75 3.75 0 0 0 7.5 9.75c.627.47 1.406.75 2.25.75.844 0 1.623-.28 2.25-.75a3.75 3.75 0 0 0 6.75-2.25c0-.362-.05-.714-.146-1.048l-1.3-1.3a1.875 1.875 0 0 0-1.325-.549H5.223Z" /><path d="M2.25 11.25v8.25a1.5 1.5 0 0 0 1.5 1.5h3.75v-3.75a2.25 2.25 0 0 1 4.5 0v3.75h3.75a1.5 1.5 0 0 0 1.5-1.5v-8.25a4.865 4.865 0 0 1-2.25.75 4.86 4.86 0 0 1-2.25-.75 4.861 4.861 0 0 1-2.25.75 4.86 4.86 0 0 1-2.25-.75 4.86 4.86 0 0 1-2.25.75A4.865 4.865 0 0 1 2.25 11.25Z" /></svg>',
   mapPin: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" /></svg>',
@@ -706,52 +765,31 @@ async function copyToClipboard(text) {
 }
 
 function showToast(message, type = 'success') {
-  let toast = document.getElementById('toast-notification');
+  let toast = document.getElementById('toast');
   if (!toast) {
     toast = document.createElement('div');
-    toast.id = 'toast-notification';
-    toast.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: ${type === 'success' ? 'var(--secondary)' : (type === 'warning' ? 'var(--warning)' : 'var(--danger)')};
-      color: var(--text-inverse);
-      padding: 12px 20px;
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-lg);
-      z-index: 1000;
-      opacity: 0;
-      transform: translateY(-20px);
-      transition: opacity 0.3s, transform 0.3s;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid ${type === 'success' ? 'var(--secondary-dark)' : (type === 'warning' ? 'var(--warning-dark)' : 'var(--danger-dark)')};
-      font-family: 'Segoe UI', 'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
-    `;
+    toast.id = 'toast';
+    toast.className = 'toast';
+    toast.innerHTML = '<span class="toast-icon" id="toast-icon"></span><span id="toast-message"></span>';
     document.body.appendChild(toast);
   }
+  const toastMessage = document.getElementById('toast-message') || toast.querySelector('#toast-message') || toast;
+  const toastIcon = document.getElementById('toast-icon') || toast.querySelector('#toast-icon');
 
-  // Chọn icon
   let iconKey = 'checkCircle';
-  if (type === 'error') iconKey = 'xCircle';
+  if (type === 'error' || type === 'danger') iconKey = 'xCircle';
   else if (type === 'warning') iconKey = 'warning';
+  else if (type === 'info') iconKey = 'info';
 
-  toast.innerHTML = `${ICONS[iconKey]}<span></span>`;
-  const span = toast.querySelector('span');
-  if (span) span.textContent = stripLeadingEmoji(message);
+  if (toastIcon) toastIcon.innerHTML = ICONS[iconKey] || '';
+  if (toastMessage) toastMessage.textContent = stripLeadingEmoji(message);
 
-  toast.style.opacity = '1';
-  toast.style.transform = 'translateY(0)';
-
-  setTimeout(() => {
-    toast.style.opacity = '0';
-    toast.style.transform = 'translateY(-20px)';
-    setTimeout(() => {
-      if (toast.parentNode) document.body.removeChild(toast);
-    }, 300);
-  }, 3000);
+  const toastClass = type === 'danger' ? 'error' : type;
+  toast.className = `toast toast-${toastClass} show`;
+  if (window.toastTimer) clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2400);
 }
 
 async function taiDuLieu() {
