@@ -3106,6 +3106,9 @@ function applyDataToView(data) {
   allData = Array.isArray(data) ? data : [];
   currentFilteredData = allData;
   updateCacheDiem();
+  if (typeof cleanQueueAgainstAllData === 'function') {
+    cleanQueueAgainstAllData();
+  }
 
   const diemList = document.getElementById('diem-list');
   if (diemList) {
@@ -3630,7 +3633,12 @@ function filterData() {
   if (diemFilter !== 'all') queueItems = queueItems.filter(item => item.ten_diem === diemFilter);
   if (trangThaiFilter !== 'all') queueItems = queueItems.filter(item => item.trang_thai === trangThaiFilter);
 
-  filteredData = [...queueItems, ...filteredData];
+  // Chỉ thêm các mục trong queue thực sự CHƯA có trong filteredData (tránh hiển thị trùng lặp trên giao diện)
+  const nonDuplicateQueueItems = typeof isItemDuplicate === 'function'
+    ? queueItems.filter(q => !isItemDuplicate(q, filteredData))
+    : queueItems;
+
+  filteredData = [...nonDuplicateQueueItems, ...filteredData];
   currentFilteredData = filteredData;
 
   const shiftInfo = getCurrentShift();
@@ -3997,16 +4005,22 @@ function luuVaoHangDoi() {
     return;
   }
 
-  const ten_diem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
-  const so_tien = document.getElementById('so_tien').value;
-  const dia_chi = document.getElementById('dia_chi').value;
-  const ghi_chu = document.getElementById('ghi_chu').value;
+  const ten_diem = (document.getElementById('ten_diem').value || document.getElementById('chon_diem').value).trim();
+  let so_tien = document.getElementById('so_tien').value.trim();
+  const dia_chi = document.getElementById('dia_chi').value.trim();
+  const ghi_chu = document.getElementById('ghi_chu').value.trim();
   const trang_thai = document.getElementById('trang_thai').value;
 
   if (!ten_diem || !so_tien || !dia_chi) {
     showToast('Vui lòng nhập đầy đủ thông tin trước khi lưu hàng đợi!', 'error');
     vibrateError();
     return;
+  }
+
+  // Tự động thêm 000 nếu nhập số tắt (<= 3 chữ số)
+  if (/^\d+$/.test(so_tien) && so_tien.length > 0 && so_tien.length <= 3) {
+    so_tien = so_tien + '000';
+    document.getElementById('so_tien').value = so_tien;
   }
 
   const shiftInfo = getCurrentShift();
@@ -4030,10 +4044,12 @@ function luuVaoHangDoi() {
     timestamp: new Date().toISOString()
   };
 
-  addToQueue(data);
-  showToast('Đã lưu điểm gas vào hàng đợi ngoại tuyến!', 'warning');
-  vibrateSuccess();
-  resetForm(true);
+  const added = addToQueue(data);
+  if (added) {
+    showToast('Đã lưu điểm gas vào hàng đợi ngoại tuyến!', 'warning');
+    vibrateSuccess();
+    resetForm(true);
+  }
 }
 
 async function guiDuLieu() {
@@ -4044,10 +4060,10 @@ async function guiDuLieu() {
   const loader = document.getElementById('page-loader');
   if (loader) loader.classList.remove('hidden');
 
-  const ten_diem = document.getElementById('ten_diem').value || document.getElementById('chon_diem').value;
-  const so_tien = document.getElementById('so_tien').value;
-  const dia_chi = document.getElementById('dia_chi').value;
-  const ghi_chu = document.getElementById('ghi_chu').value;
+  const ten_diem = (document.getElementById('ten_diem').value || document.getElementById('chon_diem').value).trim();
+  let so_tien = document.getElementById('so_tien').value.trim();
+  const dia_chi = document.getElementById('dia_chi').value.trim();
+  const ghi_chu = document.getElementById('ghi_chu').value.trim();
   const trang_thai = document.getElementById('trang_thai').value;
 
   if (!ten_diem || !so_tien || !dia_chi) {
@@ -4055,6 +4071,12 @@ async function guiDuLieu() {
     vibrateError();
     if (loader) loader.classList.add('hidden');
     return;
+  }
+
+  // Tự động thêm 000 nếu nhập số tắt (<= 3 chữ số)
+  if (/^\d+$/.test(so_tien) && so_tien.length > 0 && so_tien.length <= 3) {
+    so_tien = so_tien + '000';
+    document.getElementById('so_tien').value = so_tien;
   }
 
   if (!editingId) {
@@ -4084,10 +4106,12 @@ async function guiDuLieu() {
 
   if (!navigator.onLine) {
     if (!editingId) {
-      addToQueue(data);
-      showToast('Mất kết nối! Đã lưu vào hàng đợi để đồng bộ khi có mạng.', 'warning');
-      vibrateShort();
-      resetForm(true);
+      const added = addToQueue(data);
+      if (added) {
+        showToast('Mất kết nối! Đã lưu vào hàng đợi để đồng bộ khi có mạng.', 'warning');
+        vibrateShort();
+        resetForm(true);
+      }
     } else {
       showToast('Cần kết nối mạng để cập nhật điểm trên máy chủ!', 'error');
       vibrateError();
@@ -4098,8 +4122,9 @@ async function guiDuLieu() {
     return;
   }
 
+  // 25s timeout để tránh abort sớm khi Google Apps Script đang ghi dữ liệu vào Google Sheet
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 8000);
+  const timeoutId = setTimeout(() => controller.abort(), 25000);
 
   try {
     const response = await fetch(scriptURL, {
@@ -4113,14 +4138,16 @@ async function guiDuLieu() {
       showToast(editingId ? 'Đã cập nhật thành công!' : 'Đã lưu thành công!', 'success');
       vibrateSuccess();
       resetForm(true);
-      taiDuLieu();
+      await taiDuLieu();
     } else {
-      // Server trả về lỗi - thêm vào hàng đợi nếu là thêm mới
+      // Server trả về lỗi - thêm vào hàng đợi nếu là thêm mới và chưa tồn tại
       if (!editingId) {
-        addToQueue(data);
-        showToast('Lỗi khi lưu! Đã thêm vào hàng đợi để đồng bộ sau.', 'warning');
-        vibrateError();
-        resetForm(true);
+        const added = addToQueue(data);
+        if (added) {
+          showToast('Lỗi máy chủ! Đã thêm vào hàng đợi để đồng bộ sau.', 'warning');
+          vibrateError();
+          resetForm(true);
+        }
       } else {
         showToast('Có lỗi xảy ra khi lưu dữ liệu!', 'error');
         vibrateError();
@@ -4130,11 +4157,13 @@ async function guiDuLieu() {
     clearTimeout(timeoutId);
     // Lỗi mạng hoặc mạng không ổn định (timeout)
     if (!editingId) {
-      addToQueue(data);
       const isTimeout = error.name === 'AbortError';
-      showToast(isTimeout ? 'Mạng không ổn định! Đã lưu vào hàng đợi để đồng bộ sau.' : 'Mất kết nối! Đã thêm vào hàng đợi để đồng bộ khi có mạng.', 'warning');
-      vibrateShort();
-      resetForm(true);
+      const added = addToQueue(data);
+      if (added) {
+        showToast(isTimeout ? 'Mạng chậm/chập chờn! Đã lưu vào hàng đợi đồng bộ.' : 'Mất kết nối! Đã thêm vào hàng đợi để đồng bộ khi có mạng.', 'warning');
+        vibrateShort();
+        resetForm(true);
+      }
     } else {
       showToast('Có lỗi xảy ra khi lưu dữ liệu!', 'error');
       vibrateError();
@@ -4358,6 +4387,53 @@ if (systemThemeMedia.addEventListener) {
 applySavedTheme();
 
 /* ========== QUẢN LÝ HÀNG ĐỢI ========== */
+
+function normalizeMoney(val) {
+  if (val === null || val === undefined) return 0;
+  if (typeof val === 'number') {
+    if (val > 0 && val <= 999) return val * 1000;
+    return Math.round(val);
+  }
+  const str = String(val).replace(/[^\d]/g, '');
+  if (!str) return 0;
+  const num = parseInt(str, 10);
+  if (num > 0 && num <= 999) return num * 1000;
+  return num;
+}
+
+function isItemDuplicate(item, list) {
+  if (!item || !Array.isArray(list) || list.length === 0) return false;
+
+  const itemTen = (item.ten_diem || '').trim().toLowerCase();
+  const itemCaKey = getShiftDateKey(item.ca) || String(item.ca || '').trim();
+  const itemTien = normalizeMoney(item.so_tien);
+
+  return list.some(target => {
+    if (!target) return false;
+    // Bỏ qua nếu cùng một item trong queue (tránh tự so khớp với chính mình)
+    if (item.queueId && target.queueId && item.queueId === target.queueId) {
+      return false;
+    }
+    const targetTen = (target.ten_diem || '').trim().toLowerCase();
+    const targetCaKey = getShiftDateKey(target.ca) || String(target.ca || '').trim();
+    const targetTien = normalizeMoney(target.so_tien);
+
+    return itemTen === targetTen && itemCaKey === targetCaKey && itemTien === targetTien;
+  });
+}
+
+function cleanQueueAgainstAllData() {
+  if (!Array.isArray(allData) || allData.length === 0) return;
+  const queue = getQueue();
+  if (queue.length === 0) return;
+
+  const cleaned = queue.filter(item => !isItemDuplicate(item, allData));
+  if (cleaned.length !== queue.length) {
+    saveQueue(cleaned);
+    console.log(`[Queue] Đã tự động dọn dẹp ${queue.length - cleaned.length} điểm gas đã tồn tại trên máy chủ.`);
+  }
+}
+
 function getQueue() {
   try {
     return JSON.parse(localStorage.getItem(QUEUE_STORAGE_KEY) || '[]');
@@ -4372,15 +4448,37 @@ function saveQueue(queue) {
 }
 
 function addToQueue(data) {
-  const queue = getQueue();
-  const queueItem = {
+  const normalizedData = {
     ...data,
+    ten_diem: (data.ten_diem || '').trim(),
+    dia_chi: (data.dia_chi || '').trim(),
+    ghi_chu: (data.ghi_chu || '').trim(),
+    so_tien: normalizeMoney(data.so_tien)
+  };
+
+  // Kiểm tra nếu điểm đã tồn tại trên cơ sở dữ liệu máy chủ
+  if (isItemDuplicate(normalizedData, allData)) {
+    showToast('Điểm gas này đã được lưu trên hệ thống từ trước!', 'info');
+    filterData();
+    return false;
+  }
+
+  const queue = getQueue();
+  // Kiểm tra nếu điểm đã nằm trong hàng đợi chờ đồng bộ
+  if (isItemDuplicate(normalizedData, queue)) {
+    showToast('Điểm gas này đã có trong hàng đợi đồng bộ!', 'warning');
+    return false;
+  }
+
+  const queueItem = {
+    ...normalizedData,
     queueId: Date.now().toString() + Math.random().toString(36).substr(2, 5),
     queueTime: new Date().toISOString()
   };
   queue.push(queueItem);
   saveQueue(queue);
   filterData();
+  return true;
 }
 
 function removeFromQueue(queueId) {
@@ -4455,6 +4553,8 @@ function updateQueueUI() {
   }
 }
 
+let syncQueueTimeoutId = null;
+
 function updateNetworkStatus() {
   const statusBar = document.getElementById('queue-status-bar');
   const statusText = document.getElementById('queue-status-text');
@@ -4467,10 +4567,19 @@ function updateNetworkStatus() {
     if (queueBtn) queueBtn.classList.remove('offline');
     if (syncBtn && getQueue().length > 0 && !isSyncingQueue) {
       syncBtn.disabled = false;
-      // Tự động đồng bộ sau 2s khi có mạng trở lại
-      setTimeout(syncQueue, 2000);
+    }
+    // Tránh kích hoạt đồng bộ nhiều lần liên tiếp khi mạng chập chờn (debounce 2s)
+    if (getQueue().length > 0 && !isSyncingQueue) {
+      if (syncQueueTimeoutId) clearTimeout(syncQueueTimeoutId);
+      syncQueueTimeoutId = setTimeout(() => {
+        syncQueue();
+      }, 2000);
     }
   } else {
+    if (syncQueueTimeoutId) {
+      clearTimeout(syncQueueTimeoutId);
+      syncQueueTimeoutId = null;
+    }
     if (statusBar) statusBar.className = 'queue-status-bar offline';
     if (statusText) statusText.textContent = 'Mất kết nối mạng - Đang chờ mạng...';
     if (queueBtn) queueBtn.classList.add('offline');
@@ -4502,6 +4611,7 @@ async function syncQueue() {
   let duplicateCount = 0;
   let failCount = 0;
   
+  // Tải dữ liệu mới nhất từ máy chủ để đối chiếu trùng lặp trước khi gửi
   try {
     const res = await fetch(`${scriptURL}?t=${Date.now()}`, { cache: 'no-store' });
     if (res.ok) {
@@ -4510,20 +4620,30 @@ async function syncQueue() {
         allData = data;
         saveCachedData(data);
         updateCacheDiem();
+        cleanQueueAgainstAllData();
       }
     }
   } catch(e) {
     console.warn("Không tải được dữ liệu mới để check trùng", e);
   }
 
+  // Lấy lại danh sách queue sau khi đã clean
+  queue = getQueue();
+  if (queue.length === 0) {
+    isSyncingQueue = false;
+    if (queueBtn) queueBtn.classList.remove('syncing');
+    if (syncBtn) {
+      syncBtn.innerHTML = `<svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.451a.75.75 0 000-1.5H4.5a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-2.138l.385.385a7 7 0 0011.758-3.15.75.75 0 00-2.08-.892ZM4.688 8.576a5.5 5.5 0 019.201-2.466l.312.311h-2.451a.75.75 0 000 1.5H15.5a.75.75 0 00.75-.75V3.421a.75.75 0 00-1.5 0v2.138l-.385-.385A7 7 0 002.607 8.324a.75.75 0 002.081.252Z" clip-rule="evenodd" /></svg> <span>Đồng bộ ngay</span>`;
+    }
+    updateQueueUI();
+    filterData();
+    closeModal('queue-modal');
+    return;
+  }
+
   for (const item of [...queue]) {
-    const isDuplicate = allData.some(d => 
-      d.ten_diem === item.ten_diem && 
-      d.ca === item.ca && 
-      String(d.so_tien) === String(item.so_tien)
-    );
-    
-    if (isDuplicate) {
+    // Kiểm tra chính xác xem điểm này đã có trên Google Sheets chưa
+    if (isItemDuplicate(item, allData)) {
       duplicateCount++;
       queue = queue.filter(q => q.queueId !== item.queueId);
       saveQueue(queue);
@@ -4536,13 +4656,25 @@ async function syncQueue() {
     delete dataToSend.isQueueItem;
     
     try {
-      const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(dataToSend) });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 25000);
+      const response = await fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify(dataToSend),
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
       const result = await response.json();
       
       if (result.result === 'success') {
         successCount++;
         queue = queue.filter(q => q.queueId !== item.queueId);
         saveQueue(queue);
+        // Cập nhật ngay vào allData cục bộ để các item tiếp theo không bị trùng lặp
+        allData.unshift({
+          ...dataToSend,
+          id: result.id || ('sync_' + Date.now() + Math.random().toString(36).substr(2, 4))
+        });
       } else {
         failCount++;
       }
@@ -4559,12 +4691,18 @@ async function syncQueue() {
   }
   
   if (successCount > 0 || duplicateCount > 0) {
-    showToast(`Đồng bộ: ${successCount} thành công, ${duplicateCount} trùng lặp${failCount > 0 ? `, ${failCount} lỗi` : ''}`, 'success');
+    const msg = [
+      successCount > 0 ? `${successCount} thành công` : '',
+      duplicateCount > 0 ? `${duplicateCount} đã có trên hệ thống` : '',
+      failCount > 0 ? `${failCount} lỗi` : ''
+    ].filter(Boolean).join(', ');
+    
+    showToast(`Đồng bộ xong: ${msg}`, 'success');
     vibrateSuccess();
     if (queue.length === 0) {
       closeModal('queue-modal');
     }
-    taiDuLieu();
+    await taiDuLieu();
   } else if (failCount > 0) {
     showToast(`Đồng bộ thất bại ${failCount} điểm. Vui lòng thử lại sau.`, 'error');
     vibrateError();
