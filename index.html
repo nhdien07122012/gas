@@ -516,7 +516,7 @@
 
   .brand-title {
     margin: 0;
-    font-size: 19px;
+    font-size: 20.5px;
     font-weight: 700;
     color: var(--vnpost-blue);
     letter-spacing: -0.015em;
@@ -524,9 +524,9 @@
   }
 
   .version-tag {
-    font-size: 11.5px;
+    font-size: 12.5px;
     font-weight: 700;
-    padding: 2px 7px;
+    padding: 2px 8px;
     border-radius: 9999px;
     background: var(--vnpost-blue-light);
     color: var(--vnpost-blue);
@@ -536,11 +536,11 @@
   }
 
   .brand-subtitle {
-    font-size: 13px;
-    color: var(--text-muted);
-    font-weight: 400;
+    font-size: 14.5px;
+    color: var(--text-secondary);
+    font-weight: 500;
     line-height: 1.35;
-    margin-top: 1px;
+    margin-top: 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -552,8 +552,9 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 10px;
-    padding: 12px 20px;
+    gap: 8px;
+    padding: 8px 16px;
+    min-height: 42px;
     background: var(--bg-subtle, var(--bg-tertiary));
     border-bottom: 1px solid var(--border-card);
     font-size: 14px;
@@ -599,6 +600,37 @@
     color: var(--text-secondary);
     font-size: 13.5px;
     font-weight: 500;
+  }
+
+  .btn-out-of-hours {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 11px;
+    border-radius: 9999px;
+    background: var(--vnpost-blue-light, rgba(0, 91, 170, 0.08));
+    color: var(--vnpost-blue, #005baa);
+    border: 1px solid var(--vnpost-blue-border, rgba(0, 91, 170, 0.25));
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition-fast);
+    white-space: nowrap;
+    line-height: 1.2;
+  }
+  .btn-out-of-hours:hover {
+    background: var(--vnpost-blue, #005baa);
+    color: #ffffff;
+    border-color: var(--vnpost-blue, #005baa);
+  }
+  .btn-out-of-hours:active {
+    transform: scale(0.96);
+  }
+  .btn-out-of-hours .hero-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
   }
 
   /* ========== CARDS ========== */
@@ -1694,7 +1726,7 @@
     body { padding: 8px; }
     .container { border-radius: var(--radius-lg); }
     .app-header { padding: 12px 14px; }
-    .shift-info { padding: 10px 14px; }
+    .shift-info { padding: 7px 12px; }
     .card { padding: 14px; }
     .stats-container { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .button-group { grid-template-columns: 1fr; }
@@ -3531,13 +3563,19 @@ function getCurrentShift() {
 }
 
 function updateShiftInfo() {
+  const dotEl = document.querySelector('.shift-status-pill .status-dot');
   if (selectedOutOfHoursShift) {
     currentShift = selectedOutOfHoursShift;
     const shiftEl = document.getElementById('current-shift');
     const timeEl = document.getElementById('shift-time');
+    if (dotEl) {
+      dotEl.style.background = 'var(--color-warning, #f59e0b)';
+      dotEl.style.boxShadow = 'none';
+      dotEl.style.animation = 'none';
+    }
     if (shiftEl) shiftEl.textContent = `${formatShiftName(selectedOutOfHoursShift)} (Ngoài ca)`;
     if (timeEl) {
-      timeEl.innerHTML = `${svgInline('calendar')} <span>Đang thêm điểm bù cho ca này</span> <button type="button" onclick="exitOutOfHoursShift()" style="color: var(--danger); font-weight: 600; text-decoration: underline; background: none; border: none; cursor: pointer; padding: 0 4px; font-size: 13px;">[Thoát ngoài ca]</button>`;
+      timeEl.innerHTML = `${svgInline('calendar')} <span>Điểm bù ca</span> <button type="button" onclick="exitOutOfHoursShift()" style="color: var(--color-danger, #ef4444); font-weight: 600; text-decoration: underline; background: none; border: none; cursor: pointer; padding: 0 4px; font-size: 13px;">[Thoát]</button>`;
     }
     return;
   }
@@ -3549,9 +3587,19 @@ function updateShiftInfo() {
   if (shiftEl) shiftEl.textContent = shiftInfo.shift;
   if (timeEl) {
     if (shiftInfo.start && shiftInfo.end) {
+      if (dotEl) {
+        dotEl.style.background = 'var(--color-success, #10b981)';
+        dotEl.style.boxShadow = '';
+        dotEl.style.animation = '';
+      }
       timeEl.innerHTML = `${svgInline('checkCircle')} <span>${shiftInfo.start} - ${shiftInfo.end}</span>`;
     } else {
-      timeEl.innerHTML = `<span>Hiện tại không trong ca làm việc</span> <button type="button" onclick="openOutOfHoursModal()" style="color: var(--primary); font-weight: 600; text-decoration: underline; background: none; border: none; cursor: pointer; padding: 0 4px; font-size: 13px;">[Thêm điểm ngoài ca]</button>`;
+      if (dotEl) {
+        dotEl.style.background = 'var(--text-muted, #94a3b8)';
+        dotEl.style.boxShadow = 'none';
+        dotEl.style.animation = 'none';
+      }
+      timeEl.innerHTML = `<button type="button" class="btn-out-of-hours" onclick="openOutOfHoursModal()"><svg class="hero-icon hero-icon-xs" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg> Thêm điểm ngoài ca</button>`;
     }
   }
 }
