@@ -81,7 +81,7 @@
       --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
       --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
 
-      --sidebar-width: 290px;
+      --sidebar-width: 310px;
       --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -207,14 +207,14 @@
     }
 
     .sidebar-title-group h2 {
-      font-size: 1rem;
+      font-size: 19px;
       font-weight: 700;
       color: var(--text-primary);
       line-height: 1.2;
     }
 
     .sidebar-title-group p {
-      font-size: 0.75rem;
+      font-size: 13px;
       color: var(--text-muted);
       font-weight: 500;
     }
@@ -249,19 +249,25 @@
     .sidebar-item {
       display: flex;
       align-items: center;
-      gap: 0.875rem;
-      padding: 0.75rem 1rem;
+      gap: 14px;
+      padding: 12px 16px;
       width: 100%;
       background: transparent;
       border: none;
       border-radius: var(--radius-md);
       color: var(--text-secondary);
-      font-size: 0.9rem;
-      font-weight: 500;
+      font-size: 16.5px;
+      font-weight: 600;
       font-family: inherit;
       cursor: pointer;
       text-align: left;
       transition: var(--transition);
+    }
+
+    .sidebar-item .hero-icon {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
     }
 
     .sidebar-item:hover {
@@ -373,20 +379,26 @@
 
     .header-title-wrap {
       text-align: center;
+      padding: 0 44px;
+      min-width: 0;
     }
     .header-title-wrap h1 {
-      font-size: 17px;
+      font-size: 20.5px;
       font-weight: 700;
-      color: var(--text-primary);
+      color: var(--vnpost-blue);
       letter-spacing: -0.015em;
       line-height: 1.25;
     }
+    html.dark .header-title-wrap h1 {
+      color: #38bdf8;
+    }
 
     .header-title-wrap p {
-      font-size: 12px;
+      font-size: 14.5px;
       color: var(--text-muted);
-      font-weight: 400;
-      line-height: 1.3;
+      font-weight: 500;
+      line-height: 1.35;
+      margin-top: 2px;
     }
 
     .header-actions {
@@ -484,7 +496,7 @@
     /* Stats Grid */
     .stats-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 0.85rem;
       margin-bottom: 1.25rem;
     }
@@ -493,7 +505,7 @@
       background: var(--bg-secondary);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 1rem;
+      padding: 0.9rem 1rem;
       text-align: left;
       transition: var(--transition);
     }
@@ -504,27 +516,58 @@
     }
 
     .stat-value {
-      font-size: 18px;
+      font-size: 22px;
       font-weight: 800;
       color: var(--text-primary);
-      line-height: 1.2;
-      margin-bottom: 0.25rem;
+      line-height: 1.15;
+      margin-bottom: 0.2rem;
     }
 
+    .stat-card.stat-today,
+    .stat-card:nth-child(3) {
+      background: var(--emerald-light);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+    .stat-card.stat-today .stat-value,
     .stat-card:nth-child(3) .stat-value {
-      color: var(--emerald);
+      color: var(--emerald-dark);
+    }
+    html.dark .stat-card.stat-today,
+    html.dark .stat-card:nth-child(3) {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+    html.dark .stat-card.stat-today .stat-value,
+    html.dark .stat-card:nth-child(3) .stat-value {
+      color: #34d399;
     }
 
+    .stat-card.stat-overdue,
+    .stat-card:nth-child(4) {
+      background: var(--danger-light);
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+    .stat-card.stat-overdue .stat-value,
     .stat-card:nth-child(4) .stat-value {
       color: var(--danger);
     }
+    html.dark .stat-card.stat-overdue,
+    html.dark .stat-card:nth-child(4) {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+    html.dark .stat-card.stat-overdue .stat-value,
+    html.dark .stat-card:nth-child(4) .stat-value {
+      color: #f87171;
+    }
 
     .stat-label {
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.03em;
+      line-height: 1.25;
     }
 
     /* Filter Controls */
@@ -535,16 +578,10 @@
       margin-bottom: 1rem;
     }
 
-    @media (max-width: 768px) {
-      .filter-group {
-        grid-template-columns: 1fr;
-      }
-    }
-
     input[type="search"], select {
-      height: 40px;
+      height: 42px;
       padding: 0 0.85rem;
-      font-size: 13px;
+      font-size: 13.5px;
       font-family: inherit;
       color: var(--text-primary);
       background-color: var(--bg-input);
@@ -561,8 +598,8 @@
 
     /* Buttons */
     .btn-primary, .btn-secondary, .btn-success {
-      height: 44px;
-      padding: 0 1.25rem;
+      height: 42px;
+      padding: 0 1.15rem;
       border: none;
       border-radius: var(--radius-md);
       font-size: 0.9rem;
@@ -617,7 +654,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 0.75rem;
-      padding-top: 0.5rem;
+      padding-top: 0.75rem;
       border-top: 1px solid var(--border-color);
     }
 
@@ -673,6 +710,10 @@
       font-size: 0.78rem;
       color: var(--text-muted);
       line-height: 1.35;
+    }
+
+    .mobile-badge {
+      display: none;
     }
 
     /* Badges */
@@ -805,6 +846,289 @@
     .toast.info {
       background: #0c4a6e;
       border: 1px solid #0284c7;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* ========== RESPONSIVE MOBILE OPTIMIZATIONS ========== */
+    @media (max-width: 768px) {
+      .container {
+        padding: 0.85rem 0.75rem 2.5rem;
+      }
+      .card {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        margin-bottom: 0.85rem;
+      }
+      .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.65rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 0.6rem 0.5rem 2rem;
+      }
+
+      .card {
+        padding: 0.75rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 0.65rem;
+      }
+
+      /* Summary Strip */
+      .summary-strip {
+        padding: 0.45rem 0.65rem;
+        margin-bottom: 0.65rem;
+        font-size: 0.76rem;
+        border-radius: var(--radius-md);
+      }
+      #today-label {
+        font-size: 0.8rem;
+      }
+      #last-updated {
+        font-size: 0.72rem;
+      }
+
+      /* Stats 2x2 compact */
+      .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .stat-card {
+        padding: 0.55rem 0.7rem;
+        border-radius: var(--radius-md);
+      }
+
+      .stat-value {
+        font-size: 1.25rem;
+        margin-bottom: 0.1rem;
+      }
+
+      .stat-label {
+        font-size: 10.5px;
+        line-height: 1.2;
+      }
+
+      /* Filters: Row 1 = Search + Reload, Row 2 = Status + Sort */
+      .filter-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+      }
+
+      #search-input {
+        flex: 1 1 calc(100% - 95px);
+        min-width: 0;
+        height: 38px;
+        font-size: 13px;
+        padding: 0 0.65rem;
+      }
+
+      #reload-btn {
+        flex: 0 0 auto;
+        height: 38px;
+        padding: 0 0.75rem;
+        font-size: 12.5px;
+        gap: 0.3rem;
+      }
+
+      #status-filter, #sort-select {
+        flex: 1 1 calc(50% - 0.25rem);
+        min-width: 0;
+        height: 38px;
+        font-size: 12px;
+        padding: 0 0.45rem;
+      }
+
+      /* Copy Actions: 2 buttons in 1 row side-by-side */
+      .report-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        padding-top: 0.6rem;
+      }
+
+      .report-actions button {
+        height: 38px;
+        padding: 0 0.45rem;
+        font-size: 12px;
+        gap: 0.35rem;
+      }
+
+      .report-actions button .hero-icon {
+        width: 15px;
+        height: 15px;
+      }
+
+      /* Transform Table into Card List */
+      .table-container {
+        border: none;
+        overflow: visible;
+        background: transparent;
+      }
+
+      table {
+        display: block;
+        width: 100%;
+        border: none;
+      }
+
+      thead {
+        display: none;
+      }
+
+      tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+        width: 100%;
+      }
+
+      tr.prediction-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 0.75rem 0.85rem;
+        gap: 0.45rem 0.65rem;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+      }
+
+      tr.prediction-row.status-today {
+        border-left: 4.5px solid var(--emerald);
+      }
+      tr.prediction-row.status-overdue {
+        border-left: 4.5px solid var(--danger);
+      }
+      tr.prediction-row.status-soon {
+        border-left: 4.5px solid var(--info);
+      }
+      tr.prediction-row.status-unknown {
+        border-left: 4.5px solid var(--border-color);
+      }
+
+      .col-point {
+        grid-column: 1 / -1;
+        padding: 0 0 0.45rem 0;
+        border-bottom: 1px dashed var(--border-color);
+      }
+
+      .point-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-bottom: 0.2rem;
+      }
+
+      .point-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.3;
+      }
+
+      .mobile-badge {
+        display: inline-flex;
+        font-size: 11px;
+        padding: 0.2rem 0.55rem;
+        flex-shrink: 0;
+      }
+
+      .point-address {
+        font-size: 12px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        margin-top: 0.15rem;
+      }
+
+      .point-meta {
+        font-size: 12px;
+        color: var(--vnpost-blue);
+        font-weight: 600;
+        margin-top: 0.15rem;
+      }
+      html.dark .point-meta {
+        color: #38bdf8;
+      }
+
+      /* Hide table status column on mobile since it's in point-header */
+      .col-status {
+        display: none;
+      }
+
+      /* Compact Metric Cells */
+      .col-next, .col-cycle, .col-latest, .col-confidence {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: var(--bg-secondary);
+        padding: 0.35rem 0.55rem;
+        border-radius: var(--radius-sm);
+        border: none;
+        font-size: 12.5px;
+        font-weight: 600;
+        min-height: 44px;
+      }
+
+      .col-next::before,
+      .col-cycle::before,
+      .col-latest::before,
+      .col-confidence::before {
+        content: attr(data-label);
+        font-size: 9.5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        letter-spacing: 0.03em;
+        margin-bottom: 1px;
+      }
+
+      /* Highlight next date */
+      tr.prediction-row.status-today .col-next {
+        background: var(--emerald-light);
+        color: var(--emerald-dark);
+        font-weight: 700;
+      }
+      tr.prediction-row.status-overdue .col-next {
+        background: var(--danger-light);
+        color: var(--danger);
+        font-weight: 700;
+      }
+      html.dark tr.prediction-row.status-today .col-next {
+        background: rgba(16, 185, 129, 0.2);
+        color: #34d399;
+      }
+      html.dark tr.prediction-row.status-overdue .col-next {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+      }
+
+      .confidence-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+      .confidence-wrap strong {
+        font-size: 12px;
+      }
+      .confidence-wrap .confidence-bar {
+        flex: 1;
+        height: 5px;
+        margin-top: 0;
+      }
     }
   </style>
 </head>
@@ -940,11 +1264,11 @@
           <div class="stat-value">0</div>
           <div class="stat-label">Có thể dự đoán</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card stat-today">
           <div class="stat-value">0</div>
           <div class="stat-label">Khả năng lấy hôm nay</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card stat-overdue">
           <div class="stat-value">0</div>
           <div class="stat-label">Quá hạn</div>
         </div>
@@ -978,14 +1302,14 @@
           <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" />
           </svg>
-          Sao chép danh sách hôm nay
+          Sao chép hôm nay
         </button>
         <button class="btn-secondary" id="copy-all-btn" type="button">
           <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625Z" clip-rule="evenodd" />
             <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
           </svg>
-          Sao chép danh sách đang lọc
+          Sao chép đang lọc
         </button>
       </div>
     </div>
@@ -996,9 +1320,9 @@
           <thead>
             <tr>
               <th>Điểm gas</th>
-              <th>Lần lấy gần nhất</th>
+              <th>Gần nhất</th>
               <th>Chu kỳ</th>
-              <th>Dự đoán tiếp theo</th>
+              <th>Dự đoán</th>
               <th>Trạng thái</th>
               <th>Độ tin cậy</th>
             </tr>
@@ -1090,7 +1414,7 @@
 
     function getSidebarWidth() {
       const sidebar = document.getElementById('sidebar');
-      return sidebar ? sidebar.offsetWidth : 290;
+      return sidebar ? sidebar.offsetWidth : 310;
     }
 
     function handleTouchStart(e) {
@@ -1386,11 +1710,11 @@
           <div class="stat-value">${predictable}</div>
           <div class="stat-label">Có thể dự đoán</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card stat-today">
           <div class="stat-value">${today}</div>
           <div class="stat-label">Khả năng lấy hôm nay</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card stat-overdue">
           <div class="stat-value">${overdue}</div>
           <div class="stat-label">Quá hạn</div>
         </div>
@@ -1405,19 +1729,25 @@
 
       data.forEach(item => {
         const tr = document.createElement('tr');
+        tr.className = 'prediction-row status-' + item.status;
         tr.innerHTML = `
-          <td>
-            <div class="point-name">${escapeHTML(item.name)}</div>
-            <div class="muted">${escapeHTML(item.address || 'Chưa có địa chỉ')}</div>
-            <div class="muted">${formatCurrency(item.amount)} · ${item.historyCount} lần ghi nhận</div>
+          <td class="col-point">
+            <div class="point-header">
+              <div class="point-name">${escapeHTML(item.name)}</div>
+              <span class="badge badge-${item.status} mobile-badge">${escapeHTML(item.statusText)}</span>
+            </div>
+            ${item.address ? `<div class="muted point-address">${escapeHTML(item.address)}</div>` : ''}
+            <div class="muted point-meta">${formatCurrency(item.amount)} · ${item.historyCount} lần ghi nhận</div>
           </td>
-          <td>${formatDate(item.latestDate)}</td>
-          <td>${item.avgCycle ? (item.avgCycle + ' ngày/lần') : 'Cần thêm dữ liệu'}</td>
-          <td>${item.nextDate ? formatDate(item.nextDate) : 'Chưa dự đoán'}</td>
-          <td><span class="badge badge-${item.status}">${escapeHTML(item.statusText)}</span></td>
-          <td class="confidence">
-            <strong>${item.confidence}%</strong>
-            <div class="confidence-bar"><div class="confidence-fill" style="width: ${item.confidence}%"></div></div>
+          <td class="col-latest" data-label="Gần nhất">${formatDate(item.latestDate)}</td>
+          <td class="col-cycle" data-label="Chu kỳ">${item.avgCycle ? (item.avgCycle + ' ngày/lần') : 'Chưa đủ dữ liệu'}</td>
+          <td class="col-next" data-label="Dự đoán">${item.nextDate ? formatDate(item.nextDate) : 'Chưa dự đoán'}</td>
+          <td class="col-status"><span class="badge badge-${item.status}">${escapeHTML(item.statusText)}</span></td>
+          <td class="col-confidence" data-label="Độ tin cậy">
+            <div class="confidence-wrap">
+              <strong>${item.confidence}%</strong>
+              <div class="confidence-bar"><div class="confidence-fill" style="width: ${item.confidence}%"></div></div>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
