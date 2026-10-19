@@ -1005,7 +1005,57 @@
       <div id="preview-time"></div>
     </div>
 
-    <!-- 1. CARD THIẾT LẬP CHU KỲ & LƯƠNG CƠ SỞ (ĐẶT Ở TRÊN CÙNG ĐỂ NGƯỜI DÙNG DỄ CHỌN VÀ TÍNH) -->
+    <!-- 1. CARD KẾT QUẢ TÍNH LƯƠNG (ĐẶT LÊN ĐẦU THEO YÊU CẦU) -->
+    <div id="salary-result" style="display: none;">
+      <!-- Khối tóm tắt Tổng lương nổi bật với viền đỏ -->
+      <div class="salary-summary-card" tabindex="-1">
+        <div class="salary-badge">
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
+            <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
+          </svg>
+          KẾT QUẢ TÍNH LƯƠNG
+        </div>
+        <div class="salary-amount-label">TỔNG LƯƠNG TẠM TÍNH</div>
+        <div class="salary-amount" id="tong-luong">0 VND</div>
+        <div class="salary-period" id="thoi-gian-tinh">Thời gian tính: </div>
+
+        <!-- 3 Ô thống kê nhanh -->
+        <div class="stats-container" id="stats-container"></div>
+
+        <button class="btn-copy-salary" onclick="copySalaryToClipboard()">
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" />
+          </svg>
+          Sao chép kết quả tính lương
+        </button>
+      </div>
+
+      <!-- Bảng kê chi tiết công thức tính lương -->
+      <div class="card">
+        <h3 class="card-title">
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+            <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+          </svg>
+          Chi tiết công thức tính
+        </h3>
+        <ul id="chi-tiet-luong" class="breakdown-list"></ul>
+      </div>
+    </div>
+
+    <!-- Trạng thái khi chưa có kết quả tính lương -->
+    <div id="empty-state" class="empty-state card">
+      <div class="empty-icon">
+        <svg class="hero-icon hero-icon-xl" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="M6.912 3a3 3 0 0 0-2.868 2.118l-2.411 7.838a3 3 0 0 0-.133.882V18a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0 0 17.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0 0 17.088 4.5H6.912a1.5 1.5 0 0 0-1.434 1.059L3.265 12.75H6.11a3 3 0 0 1 2.684 1.658l.256.513a1.5 1.5 0 0 0 1.342.829h3.218a1.5 1.5 0 0 0 1.342-.83l.256-.512a3 3 0 0 1 2.684-1.658h2.844Z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <h3>Chưa có kết quả tính lương</h3>
+      <p>Chọn chu kỳ và nhấn "Tính lương" để hiển thị chi tiết số tiền nhận được</p>
+    </div>
+
+    <!-- 2. CARD THIẾT LẬP CHU KỲ & LƯƠNG CƠ SỞ (ĐẶT SAU KẾT QUẢ) -->
     <div class="card">
       <h2 class="card-title">
         <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -1061,87 +1111,13 @@
       </div>
     </div>
 
-    <!-- 2. CARD KẾT QUẢ TÍNH LƯƠNG (TÂM ĐIỂM TỔNG LƯƠNG NHẬN ĐƯỢC) -->
-    <div id="salary-result" style="display: none;">
-      <!-- Khối tóm tắt Tổng lương thực nhận nổi bật -->
-      <div class="salary-summary-card" tabindex="-1">
-        <div class="salary-badge">
-          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
-            <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
-          </svg>
-          KẾT QUẢ TÍNH LƯƠNG
-        </div>
-        <div class="salary-amount-label">TỔNG LƯƠNG TẠM TÍNH</div>
-        <div class="salary-amount" id="tong-luong">0 VND</div>
-        <div class="salary-period" id="thoi-gian-tinh">Thời gian tính: </div>
-
-        <!-- 3 Ô thống kê nhanh -->
-        <div class="stats-container" id="stats-container"></div>
-
-        <button class="btn-copy-salary" onclick="copySalaryToClipboard()">
-          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" />
-          </svg>
-          Sao chép kết quả tính lương
-        </button>
-      </div>
-
-      <!-- Bảng kê chi tiết công thức tính lương -->
-      <div class="card">
-        <h3 class="card-title">
-          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
-            <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
-          </svg>
-          Chi tiết công thức tính
-        </h3>
-        <ul id="chi-tiet-luong" class="breakdown-list"></ul>
-      </div>
-    </div>
-
-    <!-- Trạng thái khi chưa có kết quả tính lương -->
-    <div id="empty-state" class="empty-state card">
-      <div class="empty-icon">
-        <svg class="hero-icon hero-icon-xl" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path fill-rule="evenodd" d="M6.912 3a3 3 0 0 0-2.868 2.118l-2.411 7.838a3 3 0 0 0-.133.882V18a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0 0 17.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0 0 17.088 4.5H6.912a1.5 1.5 0 0 0-1.434 1.059L3.265 12.75H6.11a3 3 0 0 1 2.684 1.658l.256.513a1.5 1.5 0 0 0 1.342.829h3.218a1.5 1.5 0 0 0 1.342-.83l.256-.512a3 3 0 0 1 2.684-1.658h2.844Z" clip-rule="evenodd" />
-        </svg>
-      </div>
-      <h3>Chưa có kết quả tính lương</h3>
-      <p>Chọn chu kỳ và nhấn "Tính lương" để hiển thị chi tiết số tiền nhận được</p>
-    </div>
-
-    <!-- 3. CARD CHI TIẾT CÁC CA LÀM VIỆC -->
-    <div class="card">
-      <h2 class="card-title">
-        <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />
-          <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z" clip-rule="evenodd" />
-        </svg>
-        Chi tiết các ca làm việc
-      </h2>
-      <div class="table-container">
-        <table id="bang-cong">
-          <thead>
-            <tr>
-              <th>STT</th>
-              <th>Ngày làm việc</th>
-              <th>Số điểm gas</th>
-              <th>Tổng tiền thu</th>
-              <th>Trạng thái nộp</th>
-            </tr>
-          </thead>
-          <tbody id="bang-cong-body"></tbody>
-        </table>
-        <div id="empty-cong" class="empty-state" style="display: none;">
-          <div class="empty-icon">
-            <svg class="hero-icon hero-icon-xl" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path fill-rule="evenodd" d="M6.912 3a3 3 0 0 0-2.868 2.118l-2.411 7.838a3 3 0 0 0-.133.882V18a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0 0 17.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0 0 17.088 4.5H6.912a1.5 1.5 0 0 0-1.434 1.059L3.265 12.75H6.11a3 3 0 0 1 2.684 1.658l.256.513a1.5 1.5 0 0 0 1.342.829h3.218a1.5 1.5 0 0 0 1.342-.83l.256-.512a3 3 0 0 1 2.684-1.658h2.844Z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <h3>Không có dữ liệu ca làm việc</h3>
-          <p id="empty-message">Hệ thống chưa tìm thấy ca làm việc nào</p>
-        </div>
+    <!-- Hidden compatibility elements for shifts table (đã bỏ hiển thị khỏi giao diện) -->
+    <div style="display: none !important;" aria-hidden="true">
+      <table id="bang-cong">
+        <tbody id="bang-cong-body"></tbody>
+      </table>
+      <div id="empty-cong">
+        <p id="empty-message"></p>
       </div>
     </div>
   </div>
