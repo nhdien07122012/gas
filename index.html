@@ -105,7 +105,7 @@
     --radius-xs: 6px;
     --radius-circle: 50%;
 
-    --sidebar-width: 290px;
+    --sidebar-width: 310px;
     --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     --transition-fast: all 0.12s ease;
     --transition-slow: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1376,8 +1376,9 @@
 
   .sidebar {
     position: fixed;
-    top: 0; left: -300px;
+    top: 0; left: -330px;
     width: var(--sidebar-width);
+    max-width: 85vw;
     height: 100%;
     background: var(--bg-sidebar);
     box-shadow: var(--shadow-float);
@@ -1393,7 +1394,7 @@
   .sidebar.swiping { transition: none !important; will-change: left; }
 
   .sidebar-header {
-    padding: 16px 20px;
+    padding: 18px 20px;
     background: linear-gradient(135deg, var(--vnpost-blue), var(--vnpost-blue-hover));
     color: #ffffff;
     display: flex;
@@ -1401,9 +1402,10 @@
     align-items: center;
   }
   .sidebar-header h2 {
-    font-size: 17.5px;
+    font-size: 19px;
     font-weight: 700;
     color: #ffffff;
+    letter-spacing: -0.2px;
   }
 
   .close-sidebar {
@@ -1411,36 +1413,39 @@
     border: none;
     color: #ffffff;
     cursor: pointer;
-    padding: 4px;
-    border-radius: 6px;
+    padding: 6px;
+    border-radius: 8px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.15s ease;
+    transition: opacity 0.15s ease, background-color 0.15s ease;
   }
-  .close-sidebar:hover { opacity: 0.8; }
+  .close-sidebar:hover {
+    background: rgba(255, 255, 255, 0.15);
+    opacity: 1;
+  }
 
   .sidebar-content {
-    padding: 12px;
+    padding: 12px 14px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     flex: 1;
   }
 
   .sidebar-item {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     width: 100%;
-    padding: 10px 14px;
+    padding: 12px 16px;
     border: 1px solid transparent;
     border-radius: var(--radius-sm);
     background: transparent;
     color: var(--text-secondary);
     font-family: inherit;
-    font-size: 14.5px;
-    font-weight: 500;
+    font-size: 16.5px;
+    font-weight: 600;
     cursor: pointer;
     text-align: left;
     transition: var(--transition-fast);
@@ -1450,17 +1455,23 @@
     color: var(--vnpost-blue);
   }
   .sidebar-item:active { transform: scale(0.98); }
-  .sidebar-item .hero-icon {
+  .sidebar-item .hero-icon,
+  .sidebar-item #theme-icon svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
     color: var(--text-muted);
   }
-  .sidebar-item:hover .hero-icon {
+  .sidebar-item:hover .hero-icon,
+  .sidebar-item:hover #theme-icon svg {
     color: var(--vnpost-blue);
   }
 
   .sidebar-footer {
-    padding: 14px 20px;
+    padding: 16px 20px;
     border-top: 1px solid var(--border-card);
-    font-size: 12.5px;
+    font-size: 13.5px;
+    font-weight: 500;
     color: var(--text-muted);
     text-align: center;
   }
@@ -1770,7 +1781,7 @@
           <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
         </svg>
         <span>Hàng đợi đồng bộ</span>
-        <span id="sidebar-queue-badge" class="badge" style="display:none;margin-left:auto;background:var(--color-danger,#ef4444);color:#ffffff;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:700;">0</span>
+        <span id="sidebar-queue-badge" class="badge" style="display:none;margin-left:auto;background:var(--color-danger,#ef4444);color:#ffffff;font-size:12px;padding:3px 9px;border-radius:12px;font-weight:700;">0</span>
       </button>
       <button class="sidebar-item" onclick="openBatchStatusModal()">
         <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
