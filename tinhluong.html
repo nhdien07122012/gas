@@ -15,685 +15,761 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Tính công lương">
+
 <style>
-  /* ========== VNPOST BRAND DESIGN SYSTEM (LIGHT MODE) ========== */
   :root {
-    --vnpost-blue: #005ba6;
+    /* VNPost Brand Colors */
+    --vnpost-blue: #005baa;
     --vnpost-blue-dark: #00457c;
     --vnpost-blue-hover: #004680;
-    --vnpost-blue-light: #e8f2fa;
-    --vnpost-blue-border: #bfdbfe;
+    --vnpost-blue-light: rgba(0, 91, 170, 0.08);
+    --vnpost-blue-border: rgba(0, 91, 170, 0.22);
     --vnpost-yellow: #f59e0b;
     --vnpost-yellow-light: #fef3c7;
-    --vnpost-yellow-border: #fde68a;
 
-    --primary: #005ba6;
+    --primary: #005baa;
     --primary-dark: #004680;
-    --primary-light: #e8f2fa;
+    --primary-light: rgba(0, 91, 170, 0.08);
     --secondary: #10b981;
     --secondary-dark: #059669;
     --danger: #ef4444;
-    --danger-dark: #dc2626;
+    --danger-light: #fee2e2;
     --warning: #f59e0b;
-    --warning-dark: #d97706;
+    --warning-light: #fef3c7;
     --info: #0284c7;
-    --success: #10b981;
+    --info-light: #e0f2fe;
 
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-tertiary: #f1f5f9;
+    /* Neutrals - Slate Scale */
+    --bg-primary: #f8fafc;
+    --bg-secondary: #f1f5f9;
+    --bg-tertiary: #e2e8f0;
     --bg-card: #ffffff;
+    --bg-card-glass: rgba(255, 255, 255, 0.94);
     --bg-sidebar: #ffffff;
-    --bg-modal: #ffffff;
     --bg-input: #ffffff;
     --bg-hover: #f1f5f9;
     --bg-active: #e2e8f0;
 
     --text-primary: #0f172a;
     --text-secondary: #334155;
-    --text-tertiary: #64748b;
+    --text-muted: #64748b;
     --text-inverse: #ffffff;
-    --text-muted: #94a3b8;
 
     --border-color: #e2e8f0;
-    --border-light: #f1f5f9;
     --border-dark: #cbd5e1;
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
-    --shadow-dark: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --border-focus: #005baa;
 
-    --radius-xl: 28px;
-    --radius-lg: 20px;
-    --radius-md: 16px;
-    --radius-sm: 12px;
-    --radius-xs: 8px;
-    --radius-circle: 50%;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
 
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --radius-xl: 18px;
+    --radius-lg: 14px;
+    --radius-md: 10px;
+    --radius-sm: 8px;
+    --radius-full: 9999px;
+
+    --sidebar-width: 310px;
+    --transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     --transition-fast: all 0.15s ease;
-    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-
-    --opacity-disabled: 0.6;
-    --opacity-hover: 0.9;
-    --opacity-active: 0.8;
 
     --font-family: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-family-mono: 'Roboto Mono', 'SFMono-Regular', Consolas, monospace;
+  }
+
+  html.dark, html[data-theme="dark"] {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-card: #1e293b;
+    --bg-card-glass: rgba(30, 41, 59, 0.94);
+    --bg-sidebar: #1e293b;
+    --bg-input: #0f172a;
+    --bg-hover: #334155;
+    --bg-active: #475569;
+
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-inverse: #ffffff;
+
+    --border-color: #334155;
+    --border-dark: #475569;
+    --border-focus: #38bdf8;
+    --vnpost-blue: #38bdf8;
+    --vnpost-blue-light: rgba(56, 189, 248, 0.14);
+    --vnpost-blue-border: rgba(56, 189, 248, 0.3);
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: var(--font-family);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
   }
 
   /* ========== HEROICONS BASE ========== */
   .hero-icon {
     width: 20px;
     height: 20px;
-    flex-shrink: 0;
     display: inline-block;
     vertical-align: middle;
-    color: currentColor;
+    flex-shrink: 0;
   }
   .hero-icon-sm { width: 16px; height: 16px; }
-  .hero-icon-md { width: 22px; height: 22px; }
-  .hero-icon-lg { width: 26px; height: 26px; }
-  .hero-icon-xl { width: 32px; height: 32px; }
-  .hero-icon-2xl { width: 40px; height: 40px; }
+  .hero-icon-lg { width: 24px; height: 24px; }
+  .hero-icon-xl { width: 36px; height: 36px; }
 
-  /* ========== DARK MODE VARIABLES ========== */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      color-scheme: dark;
-      --vnpost-blue: #38bdf8;
-      --vnpost-blue-dark: #0284c7;
-      --vnpost-blue-hover: #0284c7;
-      --vnpost-blue-light: rgba(56, 189, 248, 0.14);
-      --vnpost-blue-border: rgba(56, 189, 248, 0.3);
-      --vnpost-yellow: #fbbf24;
-      --vnpost-yellow-light: rgba(251, 191, 36, 0.14);
-      --vnpost-yellow-border: rgba(251, 191, 36, 0.3);
-
-      --primary: #38bdf8;
-      --primary-dark: #0284c7;
-      --primary-light: rgba(56, 189, 248, 0.14);
-      --secondary: #34d399;
-      --secondary-dark: #10b981;
-      --danger: #f87171;
-      --danger-dark: #ef4444;
-      --warning: #fbbf24;
-      --warning-dark: #f59e0b;
-      --info: #38bdf8;
-      --success: #34d399;
-
-      --bg-primary: #1e293b;
-      --bg-secondary: #0f172a;
-      --bg-tertiary: #1e293b;
-      --bg-card: #1e293b;
-      --bg-sidebar: #0f172a;
-      --bg-modal: #1e293b;
-      --bg-input: #0f172a;
-      --bg-hover: #334155;
-      --bg-active: #475569;
-
-      --text-primary: #f8fafc;
-      --text-secondary: #cbd5e1;
-      --text-tertiary: #94a3b8;
-      --text-inverse: #ffffff;
-      --text-muted: #64748b;
-
-      --border-color: #334155;
-      --border-light: #1e293b;
-      --border-dark: #475569;
-      --shadow: 0 2px 10px rgba(0,0,0,0.45);
-      --shadow-lg: 0 8px 25px rgba(0,0,0,0.55);
-      --shadow-dark: 0 2px 10px rgba(0,0,0,0.6);
-    }
-
-    header {
-      background: linear-gradient(135deg, #00457c 0%, #002d54 100%) !important;
-      color: #ffffff !important;
-    }
-    header h1, header p { color: #ffffff !important; }
-    header a { color: #ffffff !important; }
-
-    .money-particle { text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
+  /* ========== SIDEBAR (Off-canvas Drawer) ========== */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s;
+  }
+  .overlay.active {
+    opacity: 1;
+    visibility: visible;
   }
 
-  /* ========== CSS RESET & BASE STYLES ========== */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html {
-    font-size: 16px;
-    background-color: var(--bg-secondary);
-    transition: background-color 0.5s ease;
-    font-family: var(--font-family);
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-dark) var(--bg-tertiary);
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -330px;
+    width: var(--sidebar-width);
+    max-width: 85vw;
+    height: 100%;
+    background: var(--bg-sidebar);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    transition: left 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+    touch-action: pan-y;
   }
+  .sidebar.open { left: 0; }
 
-  body {
-    font-family: var(--font-family);
-    background-color: var(--bg-secondary);
-    color: var(--text-primary);
-    line-height: 1.6;
-    padding: 20px;
-    min-height: 100vh;
-    transition: var(--transition-slow);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-weight: 400;
+  .sidebar-header {
+    padding: 16px 18px;
+    background: linear-gradient(135deg, var(--vnpost-blue), var(--vnpost-blue-dark));
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: var(--bg-card);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
-    overflow: hidden;
-    transition: var(--transition);
-    border: 1px solid var(--border-color);
+  .sidebar-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: -0.2px;
   }
+  .close-sidebar {
+    background: rgba(255, 255, 255, 0.18);
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    line-height: 1;
+    transition: var(--transition-fast);
+  }
+  .close-sidebar:hover { background: rgba(255, 255, 255, 0.3); }
 
-  header {
-    background: linear-gradient(135deg, var(--vnpost-blue, #005ba6) 0%, #00457c 100%);
-    color: var(--text-inverse);
-    padding: 25px 30px;
+  .sidebar-content {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+    overflow-y: auto;
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 11px 14px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 15.5px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: var(--transition-fast);
+    text-decoration: none;
+  }
+  .sidebar-item:hover {
+    background: var(--bg-hover);
+    color: var(--vnpost-blue);
+  }
+  .sidebar-item.active {
+    background: var(--vnpost-blue-light);
+    color: var(--vnpost-blue);
+    font-weight: 700;
+  }
+  .sidebar-item .hero-icon {
+    width: 21px;
+    height: 21px;
+    color: var(--text-muted);
+  }
+  .sidebar-item:hover .hero-icon,
+  .sidebar-item.active .hero-icon {
+    color: var(--vnpost-blue);
+  }
+  .sidebar-footer {
+    padding: 14px 18px;
+    border-top: 1px solid var(--border-color);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
     text-align: center;
-    position: relative;
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
 
-  header h1 {
-    font-size: 17px;
-    margin-bottom: 3px;
+  /* ========== APP HEADER (Sticky top bar đồng bộ toàn hệ thống) ========== */
+  .app-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 64px;
+  }
+  .header-left {
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    width: 100%;
+  }
+  .menu-toggle {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    cursor: pointer;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    z-index: 2;
+  }
+  .menu-toggle:hover {
+    background-color: var(--bg-hover);
+    color: var(--vnpost-blue);
+  }
+  .brand-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: inherit;
+  }
+  .header-title-wrap {
+    text-align: center;
+    padding: 0 46px;
+    min-width: 0;
+  }
+  .header-title-wrap h1 {
+    font-size: 20.5px;
     font-weight: 700;
-    font-family: var(--font-family);
+    color: var(--vnpost-blue);
     letter-spacing: -0.015em;
     line-height: 1.25;
+    margin: 0;
   }
-  header h1 .hero-icon { width: 20px; height: 20px; }
-
-  header p {
-    opacity: 0.9;
-    font-size: 12px;
-    font-weight: 400;
-    font-family: var(--font-family);
+  html.dark .header-title-wrap h1,
+  html[data-theme="dark"] .header-title-wrap h1 {
+    color: #38bdf8;
+  }
+  .header-title-wrap p {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
     line-height: 1.3;
+    margin-top: 2px;
   }
-
-  /* Nút back ở góc trên trái header */
-  .back-link-top {
+  .header-actions {
     position: absolute;
-    left: 30px;
-    top: 30px;
-    color: var(--text-inverse);
-    text-decoration: none;
-    display: inline-flex;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 6px;
-    border-radius: var(--radius-sm);
-    transition: var(--transition-fast);
-    background: rgba(255,255,255,0.1);
+    z-index: 2;
   }
-  .back-link-top:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
-  .back-link-top .hero-icon { width: 22px; height: 22px; }
-
-  .card {
-    padding: 25px 30px;
-    border-bottom: 1px solid var(--border-color);
-    transition: var(--transition);
-  }
-  .card:last-child { border-bottom: none; }
-
-  .card h2 { 
-    display: flex; 
-    align-items: center; 
-    gap: 8px; 
-    font-size: 15px; 
-    font-weight: 700;
-    color: var(--text-primary);
-  }
-  .card h2 .hero-icon { color: var(--primary); width: 18px; height: 18px; }
-
-  /* PHẦN TỔNG LƯƠNG TẠM TÍNH Ở ĐẦU */
-  .salary-preview {
-    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
-    border-radius: var(--radius-lg);
-    padding: 16px;
-    margin-bottom: 20px;
-    text-align: center;
-    border-left: 4px solid var(--secondary);
-    display: none;
+  .icon-btn {
+    background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    font-family: var(--font-family);
-  }
-  .salary-preview.show { display: block; animation: fadeIn 0.5s ease-out; }
-  .salary-preview h3 {
-    font-size: 13.5px;
     color: var(--text-secondary);
-    margin-bottom: 8px;
-    font-weight: 600;
-    font-family: var(--font-family);
+    cursor: pointer;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    transition: var(--transition-fast);
   }
-  .preview-amount {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--secondary);
-    margin: 8px 0;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    font-family: var(--font-family);
-  }
-  .preview-time {
-    font-size: 12px;
-    color: var(--text-secondary);
-    font-family: var(--font-family);
-    font-weight: 400;
+  .icon-btn:hover {
+    background: var(--bg-hover);
+    color: var(--vnpost-blue);
   }
 
-  .form-group { margin-bottom: 16px; }
+  /* ========== MAIN CONTAINER ========== */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px 14px 40px;
+  }
 
-  label {
+  /* ========== CARDS ========== */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+  }
+  .card-title {
+    font-size: 16.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .hero-icon {
+    color: var(--vnpost-blue);
+  }
+
+  /* Form Elements */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .form-group label {
     display: block;
     margin-bottom: 6px;
-    font-size: 12.5px;
+    font-size: 13.5px;
     font-weight: 600;
     color: var(--text-primary);
-    font-family: var(--font-family);
+  }
+  .cycle-selects {
+    display: flex;
+    gap: 8px;
+  }
+  .cycle-selects select {
+    flex: 1;
+    min-width: 0;
+  }
+  .form-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 5px;
+    font-style: italic;
   }
 
   input, select {
     width: 100%;
-    padding: 10px 14px;
+    height: 42px;
+    padding: 0 12px;
     background: var(--bg-input);
     color: var(--text-primary);
-    border: 1.5px solid var(--border-color);
-    border-radius: var(--radius-md);
-    font-size: 13px;
-    transition: var(--transition);
-    font-family: var(--font-family);
-    font-weight: 400;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: var(--transition-fast);
   }
   input:focus, select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(0, 91, 166, 0.18);
-    background: var(--bg-input);
+    border-color: var(--vnpost-blue);
+    box-shadow: 0 0 0 3px rgba(0, 91, 170, 0.12);
   }
-  input::placeholder { color: var(--text-muted); font-family: var(--font-family); }
 
+  /* Button Group */
   .button-group {
     display: flex;
     gap: 10px;
-    margin-top: 20px;
     flex-wrap: wrap;
   }
-
-  button {
-    flex: 1;
-    padding: 10px 16px;
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: 13px;
+  button, .btn {
+    height: 42px;
+    padding: 0 16px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
     font-weight: 600;
+    font-family: inherit;
     cursor: pointer;
-    transition: var(--transition);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    font-family: var(--font-family);
-    min-width: 140px;
-    height: 40px;
+    gap: 6px;
+    transition: var(--transition-fast);
+    white-space: nowrap;
   }
+  button:active, .btn:active { transform: scale(0.98); }
 
   .btn-primary {
-    background: linear-gradient(135deg, #005ba6, #004680);
-    color: var(--text-inverse);
+    background: var(--vnpost-blue);
+    color: #ffffff;
+    flex: 1.2;
+    min-width: 140px;
   }
   .btn-primary:hover {
-    background: linear-gradient(135deg, #004680, #003666);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 91, 166, 0.25);
+    background: var(--vnpost-blue-dark);
+    box-shadow: 0 4px 12px rgba(0, 91, 170, 0.25);
   }
-
   .btn-secondary {
-    background-color: var(--bg-tertiary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-secondary);
   }
   .btn-secondary:hover {
-    background-color: var(--bg-hover);
-    transform: translateY(-2px);
-    border-color: var(--border-dark);
+    background: var(--bg-hover);
+    color: var(--text-primary);
+  }
+  .btn-outline {
+    background: transparent;
+    border-color: var(--border-color);
+    color: var(--text-muted);
+  }
+  .btn-outline:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
   }
 
-  .btn-success {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: var(--text-inverse);
+  /* ========== CARD KẾT QUẢ TÍNH LƯƠNG (Nổi bật viền đỏ như index.html & Focus) ========== */
+  .salary-summary-card {
+    background: var(--bg-card);
+    border: 2px solid var(--danger, #ef4444) !important;
+    border-radius: var(--radius-md);
+    padding: 22px 20px 20px;
+    text-align: center;
+    margin-bottom: 16px;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.16), 0 4px 16px rgba(239, 68, 68, 0.1) !important;
+    position: relative;
+    overflow: hidden;
+    outline: none;
+    transition: all 0.25s ease;
   }
-  .btn-success:hover {
-    background: linear-gradient(135deg, #059669, #047857);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  .salary-summary-card:focus,
+  .salary-summary-card:focus-visible {
+    border-color: #dc2626 !important;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.28), 0 6px 20px rgba(239, 68, 68, 0.2) !important;
+  }
+  .salary-summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ef4444, #f87171);
+  }
+  .salary-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 12px;
+    border-radius: 9999px;
+    background: rgba(239, 68, 68, 0.12);
+    color: var(--danger, #ef4444);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .salary-amount-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .salary-amount {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: var(--danger, #ef4444);
+    line-height: 1.15;
+    margin: 6px 0 4px;
+    letter-spacing: -0.02em;
+    word-break: break-all;
+  }
+  html.dark .salary-amount,
+  html[data-theme="dark"] .salary-amount {
+    color: #f87171;
+  }
+  html.dark .salary-summary-card,
+  html[data-theme="dark"] .salary-summary-card {
+    border-color: #f87171 !important;
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.22), 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+  }
+  html.dark .salary-summary-card:focus,
+  html[data-theme="dark"] .salary-summary-card:focus,
+  html.dark .salary-summary-card:focus-visible,
+  html[data-theme="dark"] .salary-summary-card:focus-visible {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.35), 0 6px 20px rgba(0, 0, 0, 0.5) !important;
+  }
+  html.dark .salary-badge,
+  html[data-theme="dark"] .salary-badge {
+    background: rgba(248, 113, 113, 0.2);
+    color: #fca5a5;
+  }
+  .salary-period {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
   }
 
-  .btn-warning {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: var(--text-inverse);
-  }
-  .btn-warning:hover {
-    background: linear-gradient(135deg, #d97706, #b45309);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
-  }
-
-  .btn-info {
-    background: linear-gradient(135deg, #0284c7, #0369a1);
-    color: var(--text-inverse);
-  }
-  .btn-info:hover {
-    background: linear-gradient(135deg, #0369a1, #075985);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
-  }
-
+  /* 3 Stats pill in Result */
   .stats-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 14px 0 16px;
   }
   .stat-card {
-    flex: 1;
-    min-width: 150px;
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    text-align: center;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
+    background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-  }
-  .stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary-light);
+    border-radius: var(--radius-sm);
+    padding: 10px 8px;
+    text-align: center;
   }
   .stat-value {
-    font-size: 18px;
+    font-size: 1.15rem;
     font-weight: 700;
-    color: var(--primary);
-    font-family: var(--font-family);
+    color: var(--text-primary);
+    line-height: 1.25;
+    margin-bottom: 2px;
+  }
+  .stat-card:nth-child(3) .stat-value {
+    color: var(--danger, #ef4444);
+  }
+  html.dark .stat-card:nth-child(3) .stat-value,
+  html[data-theme="dark"] .stat-card:nth-child(3) .stat-value {
+    color: #f87171;
   }
   .stat-label {
-    font-size: 11px;
-    color: var(--text-secondary);
-    margin-top: 3px;
-    font-family: var(--font-family);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-  }
-
-  .table-container {
-    overflow-x: auto;
-    margin-top: 10px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
-  }
-  table { width: 100%; border-collapse: collapse; margin-top: 0; }
-  th {
-    background-color: var(--bg-tertiary);
-    padding: 10px 12px;
-    text-align: left;
-    font-size: 12px;
+    font-size: 11.5px;
+    color: var(--text-muted);
     font-weight: 600;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    border-bottom: 2px solid var(--border-color);
-    font-family: var(--font-family);
+    line-height: 1.2;
   }
-  td {
-    padding: 10px 12px;
-    font-size: 13px;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-primary);
-    font-family: var(--font-family);
-    font-weight: 400;
-  }
-  tr:last-child td { border-bottom: none; }
-  tr:hover { background-color: var(--bg-hover); }
 
-  .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--text-secondary);
-    font-family: var(--font-family);
-  }
-  .empty-state h3 {
-    display: flex;
+  .btn-copy-salary {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    height: 42px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #ffffff;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    margin-bottom: 8px;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
   }
-  .empty-state h3 .hero-icon { color: var(--text-tertiary); opacity: 0.75; }
-  .empty-state p { margin-top: 10px; font-weight: 400; }
+  .btn-copy-salary:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+  }
 
-  .salary-summary {
-    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
-    border-radius: var(--radius-lg);
-    padding: 25px;
-    margin: 20px 0;
-    text-align: center;
-    border-left: 5px solid var(--secondary);
+  /* Breakdown List (Thanh lịch, bảng kê sạch sẽ) */
+  .breakdown-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
     border: 1px solid var(--border-color);
-  }
-  .salary-amount {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--secondary);
-    margin: 15px 0;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    font-family: var(--font-family);
-  }
-  .salary-breakdown {
-    margin-top: 20px;
-    padding: 15px;
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    text-align: left;
-    font-family: var(--font-family);
-  }
-  .salary-breakdown h4 {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 10px;
-  }
-  .salary-breakdown ul { margin-left: 20px; margin-top: 10px; }
-  .salary-breakdown li { margin-bottom: 8px; color: var(--text-primary); font-family: var(--font-family); }
-
-  /* HIỆU ỨNG TIỀN/VÀNG RƠI */
-  .money-rain {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 9999;
+    border-radius: var(--radius-sm);
     overflow: hidden;
   }
-  .money-particle {
-    position: absolute;
-    font-size: 24px;
-    user-select: none;
-    pointer-events: none;
-    opacity: 0;
-    animation: moneyFall linear forwards;
-    font-family: var(--font-family);
+  .breakdown-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-card);
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    gap: 12px;
   }
-  @keyframes moneyFall {
-    0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  .breakdown-list li:nth-child(even) {
+    background: var(--bg-secondary);
+  }
+  .breakdown-list li:last-child {
+    border-bottom: none;
+    background: rgba(239, 68, 68, 0.08);
+    color: var(--danger, #ef4444);
+    font-weight: 700;
+    font-size: 15px;
+  }
+  html.dark .breakdown-list li:last-child,
+  html[data-theme="dark"] .breakdown-list li:last-child {
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.15);
+  }
+  .breakdown-list li strong {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+  .breakdown-list li:last-child strong {
+    color: var(--danger, #ef4444);
+    font-size: 16px;
+  }
+  html.dark .breakdown-list li:last-child strong,
+  html[data-theme="dark"] .breakdown-list li:last-child strong {
+    color: #f87171;
   }
 
-  /* ========== TOAST ========== */
+  /* Empty State */
+  .empty-state {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--text-muted);
+  }
+  .empty-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    opacity: 0.6;
+    display: flex;
+    justify-content: center;
+  }
+  .empty-state h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .empty-state p {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* Table Container */
+  .table-container {
+    overflow-x: auto;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    margin-top: 10px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 13.5px;
+  }
+  thead th {
+    background: var(--bg-secondary);
+    padding: 10px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    vertical-align: middle;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background-color: var(--bg-hover); }
+
+  /* Toast Notification */
   .toast {
     position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%) translateY(100px);
-    background: var(--primary);
-    color: var(--text-inverse);
-    padding: 16px 24px;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    z-index: 1002;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50px);
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 9999px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 3000;
     opacity: 0;
-    transition: var(--transition);
-    min-width: 280px;
-    text-align: center;
-    justify-content: center;
-    border: 1px solid var(--primary-dark);
-    font-family: var(--font-family);
-    font-weight: 500;
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    max-width: 90vw;
+    white-space: nowrap;
   }
-  .toast.show { transform: translate(-50%, -50%) translateY(0); opacity: 1; }
-  .toast.success { background: #10b981; border-color: #059669; }
-  .toast.error { background: #ef4444; border-color: #dc2626; }
-  .toast.warning { background: #f59e0b; border-color: #d97706; }
-  .toast.info { background: #005ba6; border-color: #004680; }
-  .toast-icon { display: inline-flex; align-items: center; justify-content: center; }
-  .toast-icon .hero-icon { width: 20px; height: 20px; }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
+  .toast.success { background: #065f46; border: 1px solid #10b981; }
+  .toast.error { background: #7f1d1d; border: 1px solid #ef4444; }
+  .toast.warning { background: #78350f; border: 1px solid #f59e0b; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .fade-in { animation: fadeIn 0.4s ease-out; }
-
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-track { background: var(--bg-tertiary); border-radius: var(--radius-sm); }
-  ::-webkit-scrollbar-thumb {
-    background: var(--border-dark);
-    border-radius: var(--radius-sm);
-    border: 2px solid var(--bg-tertiary);
-  }
-  ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
-
-  /* Floating back button */
-  .back-link-floating {
-    position: fixed;
-    right: 30px;
-    bottom: 30px;
-    z-index: 999;
-    background: var(--primary);
-    color: var(--text-inverse);
-    border: none;
-    border-radius: var(--radius-circle);
-    width: 56px;
-    height: 56px;
-    box-shadow: var(--shadow-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition);
-    text-decoration: none;
-    border: 2px solid var(--primary-dark);
-  }
-  .back-link-floating .hero-icon { width: 26px; height: 26px; }
-  .back-link-floating:hover {
-    background: var(--primary-dark);
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 10px 20px rgba(0, 91, 166, 0.28);
-  }
-
-  @media (max-width: 768px) {
-    body { padding: 15px; }
-    header { padding: 20px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
-    header h1 { font-size: 16.5px; }
-    header h1 .hero-icon { width: 24px; height: 24px; }
-    .back-link-top { left: 16px; top: 16px; }
-    .card { padding: 20px; }
-    .button-group {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .button-group button:last-child { grid-column: span 2; }
-    .stats-container { flex-direction: column; }
-    .stat-card { border-radius: var(--radius-md); }
-    .salary-amount { font-size: 20px; }
-    .preview-amount { font-size: 20px; }
-    th, td { padding: 8px 10px; font-size: 12px; }
-    .money-particle { font-size: 20px; }
-    .table-container { border-radius: var(--radius-sm); }
-    table { min-width: 600px; }
-  }
-
-  @media (max-width: 480px) {
-    body { padding: 10px; }
-    header { padding: 18px 15px; border-radius: var(--radius-md) var(--radius-md) 0 0; }
-    header h1 { font-size: 16px; }
-    .back-link-top { left: 12px; top: 14px; }
-    .card { padding: 18px 15px; }
-    input, select { padding: 10px 12px; font-size: 13px; border-radius: var(--radius-sm); }
-    button { padding: 10px 14px; min-height: 40px; font-size: 13px; border-radius: var(--radius-sm); }
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .btn-secondary { border-color: var(--border-dark); }
-    .table-container { border-color: var(--border-dark); }
-    .stat-card { border-color: var(--border-dark); }
-    input::placeholder { color: var(--text-muted); }
-    .container { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
-    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
-    ::-webkit-scrollbar-thumb { background: var(--text-muted); }
-    ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
-    tr:hover { background-color: var(--bg-tertiary); }
-    .card { border-color: var(--border-color); }
-    option {
-      background-color: var(--bg-modal);
-      color: var(--text-primary);
-      font-family: var(--font-family);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
-    .fade-in { animation: none; }
-    .toast { transition: opacity 0.1s; }
-    button:hover, .stat-card:hover { transform: none !important; }
-    .money-particle { display: none !important; }
-  }
-
-  h1, h2, h3, h4, h5, h6 { font-weight: 600; font-family: var(--font-family); }
-  strong, b { font-weight: 700; font-family: var(--font-family); }
-
-  .text-small { font-size: 0.875rem; font-weight: 400; font-family: var(--font-family); }
-  .text-medium { font-size: 1rem; font-weight: 500; font-family: var(--font-family); }
-  .text-large { font-size: 1.125rem; font-weight: 600; font-family: var(--font-family); }
-
-  /* ========== PAGE LOADING OVERLAY ========== */
+  /* Page Loading Overlay */
   .page-loader-overlay {
     position: fixed;
     inset: 0;
@@ -701,11 +777,10 @@
     align-items: center;
     justify-content: center;
     background-color: var(--bg-primary);
-    background: var(--bg-primary);
     z-index: 10000;
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.35s ease, visibility 0.35s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
   }
   .page-loader-overlay.hidden {
     opacity: 0;
@@ -718,108 +793,104 @@
     aspect-ratio: 1;
     border-radius: 50%;
     border: 3.5px solid var(--border-color);
-    border-top-color: var(--primary);
-    animation: spin 0.8s linear infinite;
+    border-top-color: var(--vnpost-blue);
+    animation: loader-spin 0.8s linear infinite;
   }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
+  @keyframes loader-spin { to { transform: rotate(360deg); } }
+
+  /* Money rain container */
+  .money-rain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+  }
+  .money-particle {
+    position: absolute;
+    user-select: none;
+    opacity: 0;
+    animation: moneyFall linear forwards;
+  }
+  @keyframes moneyFall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
   }
 
-  /* Đồng bộ theme thủ công */
-  html[data-theme="dark"], html.dark {
-    color-scheme: dark;
-    --vnpost-blue: #38bdf8;
-    --vnpost-blue-dark: #0284c7;
-    --vnpost-blue-hover: #0284c7;
-    --vnpost-blue-light: rgba(56, 189, 248, 0.14);
-    --vnpost-blue-border: rgba(56, 189, 248, 0.3);
-    --vnpost-yellow: #fbbf24;
-    --vnpost-yellow-light: rgba(251, 191, 36, 0.14);
-    --vnpost-yellow-border: rgba(251, 191, 36, 0.3);
-
-    --primary: #38bdf8;
-    --primary-dark: #0284c7;
-    --primary-light: rgba(56, 189, 248, 0.14);
-    --secondary: #34d399;
-    --secondary-dark: #10b981;
-    --danger: #f87171;
-    --danger-dark: #ef4444;
-    --warning: #fbbf24;
-    --warning-dark: #f59e0b;
-    --info: #38bdf8;
-    --success: #34d399;
-
-    --bg-primary: #1e293b;
-    --bg-secondary: #0f172a;
-    --bg-tertiary: #1e293b;
-    --bg-card: #1e293b;
-    --bg-sidebar: #0f172a;
-    --bg-modal: #1e293b;
-    --bg-input: #0f172a;
-    --bg-hover: #334155;
-    --bg-active: #475569;
-
-    --text-primary: #f8fafc;
-    --text-secondary: #cbd5e1;
-    --text-tertiary: #94a3b8;
-    --text-inverse: #ffffff;
-    --text-muted: #64748b;
-
-    --border-color: #334155;
-    --border-light: #1e293b;
-    --border-dark: #475569;
-    --shadow: 0 2px 10px rgba(0,0,0,0.45);
-    --shadow-lg: 0 8px 25px rgba(0,0,0,0.55);
-    --shadow-dark: 0 2px 10px rgba(0,0,0,0.6);
-  }
-  html[data-theme="dark"] header, html.dark header {
-    background: linear-gradient(135deg, #00457c 0%, #002d54 100%) !important;
-  }
-  html[data-theme="light"] {
-    color-scheme: light;
-    --vnpost-blue: #005ba6;
-    --vnpost-blue-dark: #00457c;
-    --vnpost-blue-hover: #004680;
-    --vnpost-blue-light: #e8f2fa;
-    --vnpost-blue-border: #bfdbfe;
-    --vnpost-yellow: #f59e0b;
-    --vnpost-yellow-light: #fef3c7;
-    --vnpost-yellow-border: #fde68a;
-
-    --primary: #005ba6;
-    --primary-dark: #004680;
-    --primary-light: #e8f2fa;
-    --secondary: #10b981;
-    --secondary-dark: #059669;
-    --danger: #ef4444;
-    --danger-dark: #dc2626;
-    --warning: #f59e0b;
-    --warning-dark: #d97706;
-    --info: #0284c7;
-    --success: #10b981;
-
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-tertiary: #f1f5f9;
-    --bg-card: #ffffff;
-    --bg-sidebar: #ffffff;
-    --bg-modal: #ffffff;
-    --bg-input: #ffffff;
-    --bg-hover: #f1f5f9;
-    --bg-active: #e2e8f0;
-
-    --text-primary: #0f172a;
-    --text-secondary: #334155;
-    --text-tertiary: #64748b;
-    --text-inverse: #ffffff;
-    --text-muted: #94a3b8;
-
-    --border-color: #e2e8f0;
-    --border-light: #f1f5f9;
-    --border-dark: #cbd5e1;
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
-    --shadow-dark: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  /* ========== MOBILE RESPONSIVE ========== */
+  @media (max-width: 640px) {
+    .container {
+      padding: 12px 10px 30px;
+    }
+    .header-inner {
+      padding: 10px 12px;
+      min-height: 58px;
+    }
+    .header-title-wrap h1 {
+      font-size: 18px;
+    }
+    .header-title-wrap p {
+      font-size: 12.5px;
+    }
+    .card {
+      padding: 14px 14px;
+      margin-bottom: 12px;
+    }
+    .form-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .cycle-selects select, input {
+      height: 40px;
+      font-size: 13.5px;
+    }
+    .salary-summary-card {
+      padding: 16px 14px 16px;
+    }
+    .salary-amount {
+      font-size: 2.1rem;
+    }
+    .stats-container {
+      gap: 6px;
+    }
+    .stat-card {
+      padding: 8px 4px;
+    }
+    .stat-value {
+      font-size: 1rem;
+    }
+    .stat-label {
+      font-size: 10.5px;
+    }
+    .btn-copy-salary {
+      max-width: 100%;
+      height: 40px;
+    }
+    .button-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .button-group button:first-child {
+      grid-column: span 2;
+    }
+    button, .btn {
+      height: 40px;
+      font-size: 13px;
+    }
+    .breakdown-list li {
+      padding: 9px 10px;
+      font-size: 12.5px;
+    }
+    .breakdown-list li:last-child {
+      font-size: 13.5px;
+    }
+    thead th, tbody td {
+      padding: 8px 8px;
+      font-size: 12.5px;
+    }
   }
 </style>
 <script>
@@ -844,160 +915,206 @@
   <!-- Container cho hiệu ứng tiền rơi -->
   <div class="money-rain" id="money-rain"></div>
 
+  <!-- Toast notification -->
   <div class="toast" id="toast">
     <span class="toast-icon" id="toast-icon"></span>
     <span id="toast-message">Đã sao chép vào clipboard!</span>
   </div>
 
-  <div class="container">
-    <header>
-      <a href="index.html" class="back-link-top" aria-label="Quay về trang chủ">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+  <!-- Sidebar Overlay -->
+  <div class="overlay" id="sidebar-overlay"></div>
+
+  <!-- Sidebar Drawer đồng bộ với toàn hệ thống -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Danh mục quản lý</h2>
+      <button class="close-sidebar" id="close-sidebar" aria-label="Đóng menu">&times;</button>
+    </div>
+    <div class="sidebar-content">
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd" /></svg>
+        Quản lý điểm gas
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='diemtien.html'">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
+          <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
         </svg>
-      </a>
-      <h1>Tính công và lương</h1>
-      <p>Tính lương dựa trên số ca làm việc thực tế</p>
-    </header>
+        Đếm tiền
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='vitri.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19.02 10.11 18.934l.004-.002.01-.005a20.086 20.086 0 001.838-1.295A21.36 21.36 0 0015.5 12.87c1.336-1.614 2-3.435 2-5.37a7.5 7.5 0 10-15 0c0 1.935.664 3.756 2 5.37a21.36 21.36 0 003.548 4.762 20.086 20.086 0 001.838 1.295l.01.005.004.002.001.001ZM10 10.5a3 3 0 100-6 3 3 0 000 6Z" clip-rule="evenodd" /></svg>
+        Quản lý vị trí
+      </button>
+      <button class="sidebar-item active" type="button">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h.01a1 1 0 100-2H10zm3 0a1 1 0 100 2h.01a1 1 0 100-2H13z" clip-rule="evenodd" /></svg>
+        Tính công &amp; lương
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='tinhgascon.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-2 4a2 2 0 100 4 2 2 0 000-4z" clip-rule="evenodd" /></svg>
+        Tính tiền gas còn lại
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='dudoandiemgas.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.577 4.878a.75.75 0 01.919-.53l4.5 1.5a.75.75 0 01.504.707v4.5a.75.75 0 01-1.5 0V7.81l-4.22 4.22a.75.75 0 01-1.06 0L8.5 8.81l-5.72 5.72a.75.75 0 01-1.06-1.06l6.25-6.25a.75.75 0 011.06 0l3.22 3.22 3.44-3.44h-3.253a.75.75 0 01-.75-.75v-.382z" clip-rule="evenodd" /></svg>
+        Dự đoán điểm gas
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='clipboard.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M15.988 3.012A2.25 2.25 0 0118 5.25v6.5A2.25 2.25 0 0115.75 14H13.5v-1.5h2.25a.75.75 0 00.75-.75v-6.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 00-.75.75V7H6v-.75A2.25 2.25 0 018.25 3h7.738z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M2 9.25A2.25 2.25 0 014.25 7h7.5A2.25 2.25 0 0114 9.25v7.5A2.25 2.25 0 0111.75 19h-7.5A2.25 2.25 0 012 16.75v-7.5zm2.25-.75a.75.75 0 00-.75.75v7.5c0 .414.336.75.75.75h7.5a.75.75 0 00.75-.75v-7.5a.75.75 0 00-.75-.75h-7.5z" clip-rule="evenodd" /></svg>
+        Lưu Clipboard
+      </button>
+      <button class="sidebar-item" id="theme-toggle-sidebar" type="button" onclick="toggleTheme()">
+        <span id="theme-icon-sidebar" style="display:inline-flex;align-items:center;justify-content:center;"></span>
+        <span id="theme-text-sidebar">Chế độ tối</span>
+      </button>
+    </div>
+    <div class="sidebar-footer">
+      <p>Quản lý điểm gas &copy; 2026</p>
+    </div>
+  </div>
 
-    <div class="card">
-      <!-- PHẦN TỔNG LƯƠNG TẠM TÍNH - ĐÃ DI CHUYỂN LÊN ĐẦU -->
-      <div class="salary-preview" id="salary-preview">
-        <h3>
-          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
+  <!-- Header (Sticky top bar chuẩn toàn hệ thống) -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-left">
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Mở menu">
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
           </svg>
-          Tổng lương tạm tính
-        </h3>
-        <div class="preview-amount" id="preview-amount">0 đ</div>
-        <p class="preview-time" id="preview-time">Thời gian tính: </p>
+        </button>
+        <a href="index.html" class="brand-link">
+          <div class="header-title-wrap">
+            <h1>Tính công &amp; lương</h1>
+            <p>Tính lương dựa trên số ca làm việc thực tế</p>
+          </div>
+        </a>
       </div>
 
-      <div class="form-group" id="group-luong-thang" style="display: none;">
-        <label for="luong-thang">Lương tháng (VND):</label>
-        <input type="number" id="luong-thang" value="5500000" placeholder="Nhập lương tháng">
+      <div class="header-actions">
+        <button class="icon-btn" onclick="toggleTheme()" aria-label="Đổi giao diện Sáng/Tối">
+          <span id="theme-icon-header"></span>
+        </button>
       </div>
+    </div>
+  </header>
 
-      <div class="form-group" id="group-chu-ky" style="display: none;">
-        <label for="ngay-bat-dau">Chu kỳ lương (từ ngày):</label>
-        <div style="display: flex; gap: 10px;">
-          <select id="ngay-bat-dau" style="flex: 1;">
-            <option value="5" selected>Ngày 05</option>
-            <option value="1">Ngày 01</option>
-            <option value="10">Ngày 10</option>
-            <option value="15">Ngày 15</option>
-            <option value="20">Ngày 20</option>
-            <option value="25">Ngày 25</option>
-            <option value="28">Ngày 28</option>
-          </select>
-          <select id="thang-bat-dau" style="flex: 1;"></select>
-          <select id="nam-bat-dau" style="flex: 1;"></select>
+  <!-- Container chính -->
+  <div class="container">
+    <!-- Hidden compatibility elements for existing JS -->
+    <div id="salary-preview" style="display: none !important;">
+      <div id="preview-amount">0 đ</div>
+      <div id="preview-time"></div>
+    </div>
+
+    <!-- 1. CARD THIẾT LẬP CHU KỲ & LƯƠNG CƠ SỞ (ĐẶT Ở TRÊN CÙNG ĐỂ NGƯỜI DÙNG DỄ CHỌN VÀ TÍNH) -->
+    <div class="card">
+      <h2 class="card-title">
+        <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
+        </svg>
+        Thiết lập chu kỳ &amp; Lương cơ sở
+      </h2>
+
+      <div class="form-grid">
+        <div class="form-group" id="group-luong-thang">
+          <label for="luong-thang">Lương cơ sở tháng (VND):</label>
+          <input type="number" id="luong-thang" value="5500000" placeholder="Nhập lương tháng">
         </div>
-        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 5px; font-family: var(--font-family);">
-          <i>Lương được tính từ ngày X tháng này đến ngày X tháng sau (30 ngày)</i>
-        </p>
+
+        <div class="form-group" id="group-chu-ky">
+          <label for="ngay-bat-dau">Chu kỳ tính lương (từ ngày):</label>
+          <div class="cycle-selects">
+            <select id="ngay-bat-dau">
+              <option value="5" selected>Ngày 05</option>
+              <option value="1">Ngày 01</option>
+              <option value="10">Ngày 10</option>
+              <option value="15">Ngày 15</option>
+              <option value="20">Ngày 20</option>
+              <option value="25">Ngày 25</option>
+              <option value="28">Ngày 28</option>
+            </select>
+            <select id="thang-bat-dau"></select>
+            <select id="nam-bat-dau"></select>
+          </div>
+          <p class="form-hint">Chu kỳ tính từ ngày được chọn đến cùng ngày của tháng sau</p>
+        </div>
       </div>
 
       <div class="button-group">
-        <button class="btn-primary" onclick="tinhLuong()" id="btn-tinh-luong">
-          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <button class="btn btn-primary" onclick="tinhLuong()" id="btn-tinh-luong">
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path fill-rule="evenodd" d="M6.32 1.827a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V4.757c0-1.47 1.073-2.756 2.57-2.93ZM7.5 11.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75v-.008Zm.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V15a.75.75 0 0 0-.75-.75H8.25Zm-.75 6a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75V20.25Zm3.75-3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75H11.25Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm3.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75h-.008Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm3.75 3a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V18a.75.75 0 0 0-.75-.75h-.008Zm-.75-3a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008ZM15.75 6a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V6.75a.75.75 0 0 0-.75-.75h-.008Z" clip-rule="evenodd" />
           </svg>
           Tính lương
         </button>
-        <button class="btn-info" onclick="autoFillLastCycle()">
-          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <button class="btn btn-secondary" onclick="autoFillLastCycle()">
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .913-.143Z" clip-rule="evenodd" />
           </svg>
-          Tự động điền
+          Tự động điền chu kỳ
         </button>
-        <button class="btn-secondary" onclick="resetForm()">
-          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <button class="btn btn-outline" onclick="resetForm()">
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" />
           </svg>
           Làm mới
         </button>
-        <button class="btn-info" onclick="toggleSettings()">
-          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
-          </svg>
-          Cài đặt
-        </button>
-        <button class="btn-warning" onclick="testLoadData()">
-          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
-          </svg>
-          Test dữ liệu
-        </button>
       </div>
-
-      <script>
-        function toggleSettings() {
-          const groupLuong = document.getElementById('group-luong-thang');
-          const groupChuKy = document.getElementById('group-chu-ky');
-          if (groupLuong.style.display === 'none') {
-            groupLuong.style.display = 'block';
-            groupChuKy.style.display = 'block';
-          } else {
-            groupLuong.style.display = 'none';
-            groupChuKy.style.display = 'none';
-          }
-        }
-      </script>
     </div>
 
-    <div class="card">
-      <h2 style="margin-bottom: 15px; color: var(--text-primary); display: none;">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
-        </svg>
-        Kết quả tính lương
-      </h2>
-
-      <div class="stats-container" id="stats-container" style="display: none;"></div>
-
-      <div id="salary-result" style="display: none;">
-        <div class="salary-summary">
-          <h3 style="color: var(--text-primary);">Tổng lương tạm tính</h3>
-          <div class="salary-amount" id="tong-luong">0 VND</div>
-          <p id="thoi-gian-tinh" style="color: var(--text-secondary);">Thời gian tính: </p>
+    <!-- 2. CARD KẾT QUẢ TÍNH LƯƠNG (TÂM ĐIỂM TỔNG LƯƠNG NHẬN ĐƯỢC) -->
+    <div id="salary-result" style="display: none;">
+      <!-- Khối tóm tắt Tổng lương thực nhận nổi bật -->
+      <div class="salary-summary-card" tabindex="-1">
+        <div class="salary-badge">
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
+            <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
+          </svg>
+          KẾT QUẢ TÍNH LƯƠNG
         </div>
+        <div class="salary-amount-label">TỔNG LƯƠNG TẠM TÍNH</div>
+        <div class="salary-amount" id="tong-luong">0 VND</div>
+        <div class="salary-period" id="thoi-gian-tinh">Thời gian tính: </div>
 
-        <div class="salary-breakdown">
-          <h4 style="color: var(--text-primary);">
-            <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
-              <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
-            </svg>
-            Chi tiết tính lương:
-          </h4>
-          <ul id="chi-tiet-luong"></ul>
-        </div>
+        <!-- 3 Ô thống kê nhanh -->
+        <div class="stats-container" id="stats-container"></div>
 
-        <div class="button-group">
-          <button class="btn-success" onclick="copySalaryToClipboard()">
-            <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" />
-            </svg>
-            Sao chép kết quả
-          </button>
-        </div>
+        <button class="btn-copy-salary" onclick="copySalaryToClipboard()">
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" />
+          </svg>
+          Sao chép kết quả tính lương
+        </button>
       </div>
 
-      <div id="empty-state" class="empty-state">
-        <h3>
-          <svg class="hero-icon hero-icon-xl" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M6.912 3a3 3 0 0 0-2.868 2.118l-2.411 7.838a3 3 0 0 0-.133.882V18a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0 0 17.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0 0 17.088 4.5H6.912a1.5 1.5 0 0 0-1.434 1.059L3.265 12.75H6.11a3 3 0 0 1 2.684 1.658l.256.513a1.5 1.5 0 0 0 1.342.829h3.218a1.5 1.5 0 0 0 1.342-.83l.256-.512a3 3 0 0 1 2.684-1.658h2.844Z" clip-rule="evenodd" />
+      <!-- Bảng kê chi tiết công thức tính lương -->
+      <div class="card">
+        <h3 class="card-title">
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+            <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
           </svg>
-          Chưa có kết quả tính lương
+          Chi tiết công thức tính
         </h3>
-        <p>Hãy nhấn "Tính lương" để xem kết quả</p>
+        <ul id="chi-tiet-luong" class="breakdown-list"></ul>
       </div>
     </div>
 
+    <!-- Trạng thái khi chưa có kết quả tính lương -->
+    <div id="empty-state" class="empty-state card">
+      <div class="empty-icon">
+        <svg class="hero-icon hero-icon-xl" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="M6.912 3a3 3 0 0 0-2.868 2.118l-2.411 7.838a3 3 0 0 0-.133.882V18a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0 0 17.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0 0 17.088 4.5H6.912a1.5 1.5 0 0 0-1.434 1.059L3.265 12.75H6.11a3 3 0 0 1 2.684 1.658l.256.513a1.5 1.5 0 0 0 1.342.829h3.218a1.5 1.5 0 0 0 1.342-.83l.256-.512a3 3 0 0 1 2.684-1.658h2.844Z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <h3>Chưa có kết quả tính lương</h3>
+      <p>Chọn chu kỳ và nhấn "Tính lương" để hiển thị chi tiết số tiền nhận được</p>
+    </div>
+
+    <!-- 3. CARD CHI TIẾT CÁC CA LÀM VIỆC -->
     <div class="card">
-      <h2 style="margin-bottom: 15px; color: var(--text-primary);">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <h2 class="card-title">
+        <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />
           <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z" clip-rule="evenodd" />
         </svg>
@@ -1017,33 +1134,27 @@
           <tbody id="bang-cong-body"></tbody>
         </table>
         <div id="empty-cong" class="empty-state" style="display: none;">
-          <h3>
-            <svg class="hero-icon hero-icon-xl" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <div class="empty-icon">
+            <svg class="hero-icon hero-icon-xl" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path fill-rule="evenodd" d="M6.912 3a3 3 0 0 0-2.868 2.118l-2.411 7.838a3 3 0 0 0-.133.882V18a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0 0 17.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0 0 17.088 4.5H6.912a1.5 1.5 0 0 0-1.434 1.059L3.265 12.75H6.11a3 3 0 0 1 2.684 1.658l.256.513a1.5 1.5 0 0 0 1.342.829h3.218a1.5 1.5 0 0 0 1.342-.83l.256-.512a3 3 0 0 1 2.684-1.658h2.844Z" clip-rule="evenodd" />
             </svg>
-            Không có dữ liệu ca làm việc
-          </h3>
+          </div>
+          <h3>Không có dữ liệu ca làm việc</h3>
           <p id="empty-message">Hệ thống chưa tìm thấy ca làm việc nào</p>
         </div>
       </div>
     </div>
   </div>
 
-  <a href="index.html" class="back-link-floating" aria-label="Quay về trang chủ">
-    <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-    </svg>
-  </a>
-
 <script>
 // ========== HEROICONS LIBRARY ==========
 const ICONS = {
   checkCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" /></svg>',
-  xCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" /></svg>',
+  xCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" /></svg>',
   warning: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>',
   info: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>',
   checkSmall: '<svg class="hero-icon hero-icon-sm" style="color:var(--secondary);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" /></svg>',
-  clockSmall: '<svg class="hero-icon hero-icon-sm" style="color:var(--warning);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" /></svg>',
+  clockSmall: '<svg class="hero-icon hero-icon-sm" style="color:var(--warning);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75-4.365 9.75-9.75 9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" /></svg>',
   banknotes: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" /><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" /></svg>'
 };
 
@@ -1053,10 +1164,101 @@ function svgInline(key, extraClass) {
   return svg.replace('class="hero-icon', `class="hero-icon ${extraClass}`);
 }
 
-// Loại bỏ emoji ở đầu chuỗi thông báo (nếu còn sót)
 function stripLeadingEmoji(str) {
   if (!str) return '';
   return str.replace(/^[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{2B00}-\u{2BFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}\u{200D}\s]+/u, '').trim() || str.trim();
+}
+
+// ========== THEME CONTROLLER ==========
+const THEME_ICONS = {
+  sun: '<svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/></svg>',
+  moon: '<svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>'
+};
+
+function updateThemeUI(theme) {
+  const isDark = theme === 'dark';
+  const headerIcon = document.getElementById('theme-icon-header');
+  const sidebarIcon = document.getElementById('theme-icon-sidebar');
+  const sidebarText = document.getElementById('theme-text-sidebar');
+
+  const iconSvg = isDark ? THEME_ICONS.sun : THEME_ICONS.moon;
+  if (headerIcon) headerIcon.innerHTML = iconSvg;
+  if (sidebarIcon) sidebarIcon.innerHTML = iconSvg;
+  if (sidebarText) sidebarText.textContent = isDark ? 'Chế độ sáng' : 'Chế độ tối';
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  if (next === 'dark') {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+  localStorage.setItem('gas_theme', next);
+  updateThemeUI(next);
+}
+
+// ========== SIDEBAR DRAWER CONTROLLER ==========
+function openSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (sidebar) sidebar.classList.add('open');
+  if (overlay) overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (sidebar) sidebar.classList.remove('open');
+  if (overlay) overlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar && sidebar.classList.contains('open')) {
+    closeSidebar();
+  } else {
+    openSidebar();
+  }
+}
+
+function setupSidebarSwipe() {
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const sidebar = document.getElementById('sidebar');
+
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 60) {
+      if (diffX > 0 && touchStartX < 35) {
+        openSidebar();
+      } else if (diffX < 0 && sidebar && sidebar.classList.contains('open')) {
+        closeSidebar();
+      }
+    }
+  }, { passive: true });
+}
+
+function toggleSettings() {
+  const groupLuong = document.getElementById('group-luong-thang');
+  const groupChuKy = document.getElementById('group-chu-ky');
+  if (!groupLuong || !groupChuKy) return;
+  const isHidden = window.getComputedStyle(groupLuong).display === 'none';
+  groupLuong.style.display = isHidden ? 'block' : 'none';
+  groupChuKy.style.display = isHidden ? 'block' : 'none';
 }
 
 const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
@@ -1074,14 +1276,14 @@ function showToast(message, type = 'success') {
   else if (type === 'warning') iconKey = 'warning';
   else if (type === 'info') iconKey = 'info';
 
-  toastIcon.innerHTML = ICONS[iconKey];
-  toastMessage.textContent = stripLeadingEmoji(message);
+  if (toastIcon) toastIcon.innerHTML = ICONS[iconKey];
+  if (toastMessage) toastMessage.textContent = stripLeadingEmoji(message);
   toast.className = `toast ${type} show`;
 
   setTimeout(() => { toast.classList.remove('show'); }, 3000);
 }
 
-// ========== HIỆU ỨNG TIỀN RƠI (giữ nguyên emoji vì là hiệu ứng hình ảnh) ==========
+// ========== HIỆU ỨNG TIỀN RƠI ==========
 function createMoneyRain() {
   const moneyRain = document.getElementById('money-rain');
   const moneySymbols = ['💰', '💵', '💸', '🪙', '💎', '💶', '💷', '💴', '🤑', '💳'];
@@ -1204,54 +1406,6 @@ function autoFillLastCycle() {
   showToast(`Đã điền chu kỳ: ${selectedDay}/${startMonth}/${startYear} - ${selectedDay}/${endMonth}/${endYear}`, 'success');
 }
 
-async function testLoadData() {
-  console.log('=== BẮT ĐẦU TEST DỮ LIỆU ===');
-  console.log('URL API:', scriptURL);
-
-  try {
-    const response = await fetch(scriptURL + '?t=' + Date.now());
-    console.log('Response status:', response.status);
-    console.log('Response ok:', response.ok);
-
-    const text = await response.text();
-    console.log('Response text (first 500 chars):', text.substring(0, 500));
-
-    try {
-      const data = JSON.parse(text);
-      console.log('Parsed data type:', typeof data);
-      console.log('Parsed data length:', Array.isArray(data) ? data.length : 'Not an array');
-      console.log('Sample data (first item):', Array.isArray(data) && data.length > 0 ? data[0] : 'No data');
-
-      if (Array.isArray(data) && data.length > 0) {
-        const sample = data[0];
-        console.log('Data structure:', Object.keys(sample));
-        console.log('Ca field value:', sample.ca);
-        console.log('Ca field type:', typeof sample.ca);
-
-        const hasCaCount = data.filter(item => item.ca && item.ca.trim() !== '').length;
-        console.log('Số bản ghi có trường ca:', hasCaCount);
-
-        const caSet = new Set();
-        data.forEach(item => {
-          if (item.ca && item.ca.trim() !== '') caSet.add(item.ca);
-        });
-        console.log('Số ca duy nhất:', caSet.size);
-        console.log('Danh sách ca:', Array.from(caSet));
-
-        alert(`TEST DỮ LIỆU:\n- Tổng bản ghi: ${data.length}\n- Có trường "ca": ${hasCaCount}\n- Số ca duy nhất: ${caSet.size}\n- Xem Console để biết chi tiết`);
-      } else {
-        alert('Dữ liệu trống hoặc không phải mảng!');
-      }
-    } catch (parseError) {
-      console.error('Lỗi parse JSON:', parseError);
-      alert('Lỗi parse JSON! Xem Console để biết chi tiết.');
-    }
-  } catch (fetchError) {
-    console.error('Lỗi fetch:', fetchError);
-    alert('Lỗi khi tải dữ liệu! Xem Console để biết chi tiết.');
-  }
-}
-
 function hideLoader() {
   const loader = document.getElementById('page-loader');
   if (loader && !loader.classList.contains('hidden')) {
@@ -1264,7 +1418,6 @@ async function taiDuLieu() {
   const loader = document.getElementById('page-loader');
   if (loader) loader.classList.remove('hidden');
 
-  // 1. Tải tức thì từ bộ nhớ đệm cache nếu có
   try {
     const cached = localStorage.getItem('gas_cached_raw_data');
     if (cached) {
@@ -1279,7 +1432,6 @@ async function taiDuLieu() {
     console.warn('Lỗi đọc cache lương:', e);
   }
 
-  // 2. Fetch dữ liệu mới nhất với timeout 5 giây
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
@@ -1339,14 +1491,14 @@ function analyzeCaData() {
 
   const caMap = new Map();
 
-  allData.forEach((item, index) => {
+  allData.forEach((item) => {
     if (!item.ca) return;
 
     const caValue = item.ca.toString().trim();
     if (!caValue) return;
 
-    let caDate;
     try {
+      let caDate;
       if (caValue.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) caDate = new Date(caValue);
       else caDate = new Date(caValue);
 
@@ -1389,7 +1541,6 @@ function analyzeCaData() {
   displayWorkingDays(caLamViecList);
 }
 
-// ========== BẢNG CÔNG (dùng SVG cho ✅ và ⏳) ==========
 function displayWorkingDays(caLamViec) {
   const bangCongBody = document.getElementById('bang-cong-body');
   const emptyCong = document.getElementById('empty-cong');
@@ -1409,7 +1560,6 @@ function displayWorkingDays(caLamViec) {
 
   caLamViec.forEach((ca, index) => {
     const tr = document.createElement('tr');
-    tr.className = 'fade-in';
 
     const caDate = new Date(ca.ngay);
     const day = String(caDate.getDate()).padStart(2, '0');
@@ -1419,15 +1569,15 @@ function displayWorkingDays(caLamViec) {
     tr.innerHTML = `
       <td>${index + 1}</td>
       <td>
-        <div style="font-weight: 600; color: var(--text-primary); font-family: var(--font-family);">${day}-${month}-${year}</div>
-        <div style="font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-family);">Ca ${day}-${month}</div>
+        <div style="font-weight: 600; color: var(--text-primary);">${day}-${month}-${year}</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Ca ${day}-${month}</div>
       </td>
-      <td style="color: var(--text-primary); font-family: var(--font-family);">${ca.diemGas.length}</td>
-      <td style="color: var(--text-primary); font-family: var(--font-family);">${formatCurrency(ca.tongTien)}</td>
+      <td style="color: var(--text-primary); font-weight: 600;">${ca.diemGas.length}</td>
+      <td style="color: var(--text-primary); font-weight: 600;">${formatCurrency(ca.tongTien)}</td>
       <td>
         <div style="display: flex; flex-direction: column; gap: 4px;">
-          <span style="display:inline-flex;align-items:center;gap:6px;color:var(--secondary);font-size:0.85rem;font-family:var(--font-family);">${ICONS.checkSmall} Đã nộp: ${ca.daNopCount}</span>
-          <span style="display:inline-flex;align-items:center;gap:6px;color:var(--warning);font-size:0.85rem;font-family:var(--font-family);">${ICONS.clockSmall} Chưa nộp: ${ca.chuaNopCount}</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;color:var(--secondary);font-size:0.85rem;">${ICONS.checkSmall} Đã nộp: ${ca.daNopCount}</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;color:var(--warning);font-size:0.85rem;">${ICONS.clockSmall} Chưa nộp: ${ca.chuaNopCount}</span>
         </div>
       </td>
     `;
@@ -1437,13 +1587,15 @@ function displayWorkingDays(caLamViec) {
 
 async function tinhLuong() {
   const btn = document.getElementById('btn-tinh-luong');
-  const originalHTML = btn.innerHTML;
+  const originalHTML = btn ? btn.innerHTML : '';
   const loader = document.getElementById('page-loader');
 
   try {
     if (loader) loader.classList.remove('hidden');
-    btn.innerHTML = `<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" /></svg> Đang tính...`;
-    btn.disabled = true;
+    if (btn) {
+      btn.innerHTML = `<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" /></svg> Đang tính...`;
+      btn.disabled = true;
+    }
 
     const luongThang = parseInt(document.getElementById('luong-thang').value);
     const ngayBatDau = parseInt(document.getElementById('ngay-bat-dau').value);
@@ -1507,8 +1659,10 @@ async function tinhLuong() {
     showToast('Có lỗi khi tính lương!', 'error');
   } finally {
     if (loader) loader.classList.add('hidden');
-    btn.innerHTML = originalHTML;
-    btn.disabled = false;
+    if (btn) {
+      btn.innerHTML = originalHTML;
+      btn.disabled = false;
+    }
   }
 }
 
@@ -1530,12 +1684,12 @@ function displaySalaryResult(
 
   statsContainer.innerHTML = `
     <div class="stat-card">
-      <div class="stat-value">${soNgayLamViecThucTe}</div>
+      <div class="stat-value">${soNgayLamViecThucTe} ca</div>
       <div class="stat-label">Số ca làm việc</div>
     </div>
     <div class="stat-card">
       <div class="stat-value">${formatCurrency(luongThang)}</div>
-      <div class="stat-label">Lương tháng</div>
+      <div class="stat-label">Lương cơ sở</div>
     </div>
     <div class="stat-card">
       <div class="stat-value">${formatCurrency(tongLuong)}</div>
@@ -1547,11 +1701,11 @@ function displaySalaryResult(
   const previewAmount = document.getElementById('preview-amount');
   const previewTime = document.getElementById('preview-time');
 
-  previewAmount.textContent = formatCurrency(tongLuong);
+  if (previewAmount) previewAmount.textContent = formatCurrency(tongLuong);
   const startStr = startDate.toLocaleDateString('vi-VN');
   const endStr = endDate.toLocaleDateString('vi-VN');
-  previewTime.textContent = `Thời gian tính: Từ ${startStr} đến ${endStr}`;
-  salaryPreview.classList.add('show');
+  if (previewTime) previewTime.textContent = `Thời gian tính: Từ ${startStr} đến ${endStr}`;
+  if (salaryPreview) salaryPreview.classList.add('show');
 
   document.getElementById('tong-luong').textContent = formatCurrency(tongLuong);
   document.getElementById('thoi-gian-tinh').textContent = `Thời gian tính: Từ ${startStr} đến ${endStr}`;
@@ -1559,20 +1713,28 @@ function displaySalaryResult(
   const chiTietLuong = document.getElementById('chi-tiet-luong');
 
   chiTietLuong.innerHTML = `
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Lương tháng: ${formatCurrency(luongThang)}</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Chu kỳ: ${startStr} đến ${endStr}</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày trong tháng: ${soNgayTrongThang} ngày</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Lương mỗi ngày: ${formatCurrency(luongTheoNgay)}</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày làm việc thực tế: ${soNgayLamViecThucTe} ngày</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày nghỉ trong tháng: ${soNgayNghiTrongThang} ngày</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Số ngày đi làm việc (đã trừ 1 ngày miễn công): ${soNgayDiLamViec} ngày</li>
-    <li style="margin-bottom: 8px; font-family: var(--font-family);">Tổng tiền thu được: ${formatCurrency(tongTienThu)}</li>
-    <li style="margin-bottom: 8px; font-weight: bold; font-family: var(--font-family);">Tổng lương tạm tính: ${formatCurrency(tongLuong)}</li>
+    <li><span>Lương tháng:</span> <strong>${formatCurrency(luongThang)}</strong></li>
+    <li><span>Chu kỳ:</span> <span>${startStr} đến ${endStr}</span></li>
+    <li><span>Số ngày trong tháng:</span> <span>${soNgayTrongThang} ngày</span></li>
+    <li><span>Lương mỗi ngày:</span> <span>${formatCurrency(luongTheoNgay)}</span></li>
+    <li><span>Số ngày làm việc thực tế:</span> <strong>${soNgayLamViecThucTe} ca</strong></li>
+    <li><span>Số ngày nghỉ trong tháng:</span> <span>${soNgayNghiTrongThang} ngày</span></li>
+    <li><span>Số ngày đi làm việc (đã trừ 1 ngày miễn công):</span> <strong>${soNgayDiLamViec} ngày</strong></li>
+    <li><span>Tổng tiền thu được:</span> <span>${formatCurrency(tongTienThu)}</span></li>
+    <li><span>Tổng lương tạm tính:</span> <strong>${formatCurrency(tongLuong)}</strong></li>
   `;
 
-  document.getElementById('salary-result').style.display = 'block';
+  const resultContainer = document.getElementById('salary-result');
+  resultContainer.style.display = 'block';
   document.getElementById('empty-state').style.display = 'none';
   displayWorkingDays(caLamViec);
+
+  // Focus vào phần kết quả tính lương & cuộn mượt mà
+  setTimeout(() => {
+    const summaryCard = document.querySelector('.salary-summary-card') || resultContainer;
+    summaryCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    summaryCard.focus({ preventScroll: true });
+  }, 100);
 }
 
 async function copySalaryToClipboard() {
@@ -1580,23 +1742,20 @@ async function copySalaryToClipboard() {
   const tongLuong = document.getElementById('tong-luong').textContent;
   const thoiGianTinh = document.getElementById('thoi-gian-tinh').textContent;
 
-  const ngayBatDau = parseInt(document.getElementById('ngay-bat-dau').value);
   const thangBatDau = parseInt(document.getElementById('thang-bat-dau').value);
   const namBatDau = parseInt(document.getElementById('nam-bat-dau').value);
 
-  const ngayBatDauChuKy = new Date(namBatDau, thangBatDau - 1, ngayBatDau);
-  let ngayKetThucChuKy;
-  if (thangBatDau === 12) {
-    ngayKetThucChuKy = new Date(namBatDau + 1, 0, ngayBatDau);
-  } else {
-    ngayKetThucChuKy = new Date(namBatDau, thangBatDau, ngayBatDau);
-  }
-  ngayKetThucChuKy = new Date(ngayKetThucChuKy.getTime() - 1);
+  const ngayBatDauChuKy = new Date(namBatDau, thangBatDau - 1, 1);
+  const ngayKetThucChuKy = new Date(namBatDau, thangBatDau, 0);
 
-  const soCa = caLamViecList.filter(ca => {
+  const caLamViecTrongChuKy = caLamViecList.filter(ca => {
     const caDate = new Date(ca.ngay);
-    return caDate >= ngayBatDauChuKy && caDate <= ngayKetThucChuKy;
-  }).length;
+    const normalizedCaDate = new Date(caDate.getFullYear(), caDate.getMonth(), caDate.getDate());
+    const normalizedStartDate = new Date(ngayBatDauChuKy.getFullYear(), ngayBatDauChuKy.getMonth(), ngayBatDauChuKy.getDate());
+    const normalizedEndDate = new Date(ngayKetThucChuKy.getFullYear(), ngayKetThucChuKy.getMonth(), ngayKetThucChuKy.getDate());
+    return normalizedCaDate >= normalizedStartDate && normalizedCaDate <= normalizedEndDate;
+  });
+  const soCa = caLamViecTrongChuKy.length;
 
   const content = `
 TÍNH LƯƠNG THEO SỐ CA LÀM VIỆC
@@ -1621,7 +1780,8 @@ function resetForm() {
   document.getElementById('ngay-bat-dau').value = '5';
   populateMonthYearSelectors();
 
-  document.getElementById('salary-preview').classList.remove('show');
+  const salaryPreview = document.getElementById('salary-preview');
+  if (salaryPreview) salaryPreview.classList.remove('show');
   document.getElementById('salary-result').style.display = 'none';
   document.getElementById('empty-state').style.display = 'block';
 
@@ -1634,6 +1794,19 @@ function resetForm() {
 document.addEventListener('DOMContentLoaded', function() {
   console.log('=== TRANG TÍNH LƯƠNG ĐANG KHỞI ĐỘNG ===');
 
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+  updateThemeUI(currentTheme);
+
+  const menuToggle = document.getElementById('menu-toggle');
+  const closeSidebarBtn = document.getElementById('close-sidebar');
+  const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+  if (menuToggle) menuToggle.addEventListener('click', openSidebar);
+  if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
+  if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+
+  setupSidebarSwipe();
+
   populateMonthYearSelectors();
   autoFillLastCycle();
 
@@ -1644,9 +1817,12 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   setTimeout(hideLoader, 2000);
-  document.getElementById('luong-thang').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') tinhLuong();
-  });
+  const luongThangInput = document.getElementById('luong-thang');
+  if (luongThangInput) {
+    luongThangInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') tinhLuong();
+    });
+  }
 });
 </script>
 </body>
