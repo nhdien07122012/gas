@@ -119,7 +119,7 @@
     color: var(--text-primary);
     line-height: 1.5;
     min-height: 100vh;
-    padding: 0;
+    padding: 16px;
     margin: 0;
     -webkit-font-smoothing: antialiased;
   }
@@ -205,48 +205,67 @@
   .close-sidebar:hover { background: rgba(255, 255, 255, 0.3); }
 
   .sidebar-content {
-    padding: 10px 12px;
+    padding: 12px 14px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
     flex: 1;
     overflow-y: auto;
   }
   .sidebar-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    width: 100%;
-    padding: 11px 14px;
-    border: none;
-    border-radius: var(--radius-sm);
-    background: transparent;
-    color: var(--text-secondary);
-    font-family: inherit;
-    font-size: 15.5px;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: left;
-    transition: var(--transition-fast);
-    text-decoration: none;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    gap: 14px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 48px !important;
+    padding: 12px 16px !important;
+    border: 1px solid transparent !important;
+    border-radius: var(--radius-sm) !important;
+    background: transparent !important;
+    color: var(--text-secondary) !important;
+    font-family: inherit !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: var(--transition-fast) !important;
+    text-decoration: none !important;
+    box-sizing: border-box !important;
+    line-height: 1.3 !important;
   }
   .sidebar-item:hover {
-    background: var(--bg-hover);
-    color: var(--vnpost-blue);
+    background: var(--bg-hover) !important;
+    color: var(--vnpost-blue) !important;
   }
+  .sidebar-item:active { transform: scale(0.98); }
   .sidebar-item.active {
-    background: var(--vnpost-blue-light);
-    color: var(--vnpost-blue);
-    font-weight: 700;
+    background: var(--vnpost-blue-light) !important;
+    color: var(--vnpost-blue) !important;
+    font-weight: 700 !important;
   }
-  .sidebar-item .hero-icon {
-    width: 21px;
-    height: 21px;
+  .sidebar-item .hero-icon,
+  .sidebar-item #theme-icon-sidebar,
+  .sidebar-item #theme-icon-sidebar svg {
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+    flex-shrink: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     color: var(--text-muted);
   }
   .sidebar-item:hover .hero-icon,
+  .sidebar-item:hover #theme-icon-sidebar svg,
   .sidebar-item.active .hero-icon {
-    color: var(--vnpost-blue);
+    color: var(--vnpost-blue) !important;
+  }
+  .sidebar-item span:not(#theme-icon-sidebar) {
+    text-align: left !important;
+    flex: 1;
   }
   .sidebar-footer {
     padding: 14px 18px;
@@ -257,32 +276,33 @@
     text-align: center;
   }
 
-  /* ========== APP HEADER (Sticky top bar đồng bộ toàn hệ thống) ========== */
+  /* ========== MAIN CONTAINER ========== */
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid var(--border-color);
+  }
+  .container-body {
+    padding: 18px 18px 30px;
+  }
+
+  /* ========== APP HEADER (VNPost Brand Style - Đồng bộ 100% với index.html) ========== */
   .app-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 20px;
     background: var(--bg-card);
     border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: var(--shadow-sm);
-  }
-  .header-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     position: relative;
-    min-height: 64px;
-  }
-  .header-left {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     text-align: center;
-    width: 100%;
   }
+
   .menu-toggle {
     position: absolute;
     left: 16px;
@@ -290,84 +310,79 @@
     transform: translateY(-50%);
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
+    border-radius: 10px;
     color: var(--text-primary);
+    width: 40px;
+    height: 40px;
+    padding: 0;
     cursor: pointer;
-    width: 38px;
-    height: 38px;
-    border-radius: var(--radius-sm);
-    display: flex;
+    transition: var(--transition-fast);
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: var(--transition-fast);
+    flex-shrink: 0;
     z-index: 2;
   }
   .menu-toggle:hover {
-    background-color: var(--bg-hover);
+    background: var(--bg-hover);
     color: var(--vnpost-blue);
+    border-color: var(--vnpost-blue-border);
   }
-  .brand-link {
+  .menu-toggle:active {
+    transform: translateY(-50%) scale(0.96);
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    padding: 0 44px;
+    min-width: 0;
+  }
+
+  .brand-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-width: 0;
+  }
+
+  .brand-title-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    text-decoration: none;
-    color: inherit;
+    gap: 8px;
+    flex-wrap: wrap;
   }
-  .header-title-wrap {
-    text-align: center;
-    padding: 0 46px;
-    min-width: 0;
-  }
-  .header-title-wrap h1 {
+
+  .brand-title {
+    margin: 0;
     font-size: 20.5px;
     font-weight: 700;
     color: var(--vnpost-blue);
     letter-spacing: -0.015em;
     line-height: 1.25;
-    margin: 0;
-  }
-  html.dark .header-title-wrap h1,
-  html[data-theme="dark"] .header-title-wrap h1 {
-    color: #38bdf8;
-  }
-  .header-title-wrap p {
-    font-size: 14px;
-    color: var(--text-muted);
-    font-weight: 500;
-    line-height: 1.3;
-    margin-top: 2px;
-  }
-  .header-actions {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    z-index: 2;
-  }
-  .icon-btn {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-    cursor: pointer;
-    width: 38px;
-    height: 38px;
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition-fast);
-  }
-  .icon-btn:hover {
-    background: var(--bg-hover);
-    color: var(--vnpost-blue);
   }
 
-  /* ========== MAIN CONTAINER ========== */
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 16px 14px 40px;
+  html.dark .brand-title,
+  html[data-theme="dark"] .brand-title {
+    color: #38bdf8;
+  }
+
+  .brand-subtitle {
+    font-size: 14.5px;
+    color: var(--text-muted);
+    font-weight: 500;
+    line-height: 1.35;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* ========== CARDS ========== */
@@ -446,7 +461,7 @@
     gap: 10px;
     flex-wrap: wrap;
   }
-  button, .btn {
+  .button-group button, .btn {
     height: 42px;
     padding: 0 16px;
     border: 1px solid transparent;
@@ -462,7 +477,7 @@
     transition: var(--transition-fast);
     white-space: nowrap;
   }
-  button:active, .btn:active { transform: scale(0.98); }
+  .button-group button:active, .btn:active { transform: scale(0.98); }
 
   .btn-primary {
     background: var(--vnpost-blue);
@@ -803,7 +818,7 @@
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 990;
     overflow: hidden;
   }
   .money-particle {
@@ -821,17 +836,30 @@
 
   /* ========== MOBILE RESPONSIVE ========== */
   @media (max-width: 640px) {
+    body {
+      padding: 8px;
+    }
     .container {
-      padding: 12px 10px 30px;
+      border-radius: var(--radius-lg);
     }
-    .header-inner {
-      padding: 10px 12px;
-      min-height: 58px;
+    .container-body {
+      padding: 12px 10px 24px;
     }
-    .header-title-wrap h1 {
+    .app-header {
+      padding: 12px 14px;
+    }
+    .menu-toggle {
+      left: 12px;
+      width: 36px;
+      height: 36px;
+    }
+    .brand {
+      padding: 0 40px;
+    }
+    .brand-title {
       font-size: 18px;
     }
-    .header-title-wrap p {
+    .brand-subtitle {
       font-size: 12.5px;
     }
     .card {
@@ -876,7 +904,7 @@
     .button-group button:first-child {
       grid-column: span 2;
     }
-    button, .btn {
+    .button-group button, .btn {
       height: 40px;
       font-size: 13px;
     }
@@ -933,34 +961,34 @@
     <div class="sidebar-content">
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html'">
         <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd" /></svg>
-        Quản lý điểm gas
+        <span>Quản lý điểm gas</span>
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='diemtien.html'">
         <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
           <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
         </svg>
-        Đếm tiền
+        <span>Đếm tiền</span>
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='vitri.html'">
         <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19.02 10.11 18.934l.004-.002.01-.005a20.086 20.086 0 001.838-1.295A21.36 21.36 0 0015.5 12.87c1.336-1.614 2-3.435 2-5.37a7.5 7.5 0 10-15 0c0 1.935.664 3.756 2 5.37a21.36 21.36 0 003.548 4.762 20.086 20.086 0 001.838 1.295l.01.005.004.002.001.001ZM10 10.5a3 3 0 100-6 3 3 0 000 6Z" clip-rule="evenodd" /></svg>
-        Quản lý vị trí
+        <span>Quản lý vị trí</span>
       </button>
       <button class="sidebar-item active" type="button">
         <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h.01a1 1 0 100-2H10zm3 0a1 1 0 100 2h.01a1 1 0 100-2H13z" clip-rule="evenodd" /></svg>
-        Tính công &amp; lương
+        <span>Tính công &amp; lương</span>
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='tinhgascon.html'">
         <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-2 4a2 2 0 100 4 2 2 0 000-4z" clip-rule="evenodd" /></svg>
-        Tính tiền gas còn lại
+        <span>Tính tiền gas còn lại</span>
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='dudoandiemgas.html'">
         <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.577 4.878a.75.75 0 01.919-.53l4.5 1.5a.75.75 0 01.504.707v4.5a.75.75 0 01-1.5 0V7.81l-4.22 4.22a.75.75 0 01-1.06 0L8.5 8.81l-5.72 5.72a.75.75 0 01-1.06-1.06l6.25-6.25a.75.75 0 011.06 0l3.22 3.22 3.44-3.44h-3.253a.75.75 0 01-.75-.75v-.382z" clip-rule="evenodd" /></svg>
-        Dự đoán điểm gas
+        <span>Dự đoán điểm gas</span>
       </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='clipboard.html'">
         <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M15.988 3.012A2.25 2.25 0 0118 5.25v6.5A2.25 2.25 0 0115.75 14H13.5v-1.5h2.25a.75.75 0 00.75-.75v-6.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 00-.75.75V7H6v-.75A2.25 2.25 0 018.25 3h7.738z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M2 9.25A2.25 2.25 0 014.25 7h7.5A2.25 2.25 0 0114 9.25v7.5A2.25 2.25 0 0111.75 19h-7.5A2.25 2.25 0 012 16.75v-7.5zm2.25-.75a.75.75 0 00-.75.75v7.5c0 .414.336.75.75.75h7.5a.75.75 0 00.75-.75v-7.5a.75.75 0 00-.75-.75h-7.5z" clip-rule="evenodd" /></svg>
-        Lưu Clipboard
+        <span>Lưu Clipboard</span>
       </button>
       <button class="sidebar-item" id="theme-toggle-sidebar" type="button" onclick="toggleTheme()">
         <span id="theme-icon-sidebar" style="display:inline-flex;align-items:center;justify-content:center;"></span>
@@ -972,38 +1000,32 @@
     </div>
   </div>
 
-  <!-- Header (Sticky top bar chuẩn toàn hệ thống) -->
-  <header class="app-header">
-    <div class="header-inner">
-      <div class="header-left">
-        <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Mở menu">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path fill-rule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
-          </svg>
-        </button>
-        <a href="index.html" class="brand-link">
-          <div class="header-title-wrap">
-            <h1>Tính công &amp; lương</h1>
-            <p>Tính lương dựa trên số ca làm việc thực tế</p>
-          </div>
-        </a>
-      </div>
-
-      <div class="header-actions">
-        <button class="icon-btn" onclick="toggleTheme()" aria-label="Đổi giao diện Sáng/Tối">
-          <span id="theme-icon-header"></span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Container chính -->
+  <!-- Container chính (Chuẩn đồng bộ với index.html) -->
   <div class="container">
-    <!-- Hidden compatibility elements for existing JS -->
-    <div id="salary-preview" style="display: none !important;">
-      <div id="preview-amount">0 đ</div>
-      <div id="preview-time"></div>
-    </div>
+    <!-- Header (VNPost Brand Identity - Đồng bộ 100% với index.html) -->
+    <header class="app-header">
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Mở menu">
+        <svg class="hero-icon hero-icon-md" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <div class="brand">
+        <div class="brand-info">
+          <div class="brand-title-row">
+            <h1 class="brand-title">Tính công &amp; lương</h1>
+          </div>
+          <span class="brand-subtitle">Tính lương dựa trên số ca làm việc thực tế</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container-body">
+      <!-- Hidden compatibility elements for existing JS -->
+      <span id="theme-icon-header" style="display: none !important;"></span>
+      <div id="salary-preview" style="display: none !important;">
+        <div id="preview-amount">0 đ</div>
+        <div id="preview-time"></div>
+      </div>
 
     <!-- 1. CARD KẾT QUẢ TÍNH LƯƠNG (ĐẶT LÊN ĐẦU THEO YÊU CẦU) -->
     <div id="salary-result" style="display: none;">
@@ -1120,7 +1142,8 @@
         <p id="empty-message"></p>
       </div>
     </div>
-  </div>
+  </div><!-- /.container-body -->
+</div><!-- /.container -->
 
 <script>
 // ========== HEROICONS LIBRARY ==========
