@@ -219,6 +219,16 @@
     margin: 0;
     line-height: 1.25;
     letter-spacing: -0.015em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .header-count {
+    font-size: 15px;
+    font-weight: 600;
+    opacity: 0.88;
+    letter-spacing: normal;
   }
   .header-badge {
     background: var(--vnpost-gold);
@@ -537,7 +547,7 @@
       <div class="header-brand">
         <div class="header-text">
           <div class="header-title-row">
-            <h1>Quản lý vị trí điểm gas</h1>
+            <h1>Quản lý vị trí điểm gas <span class="header-count" id="header-count"></span></h1>
           </div>
           <p class="header-subtitle">Tọa độ GPS và điều hướng Google Maps</p>
         </div>
@@ -709,24 +719,9 @@ function displayVitri(data) {
 }
 
 function updateResultCount(count) {
-  const header = document.querySelector('h1');
-  if (header) {
-    // Lấy text node bên trong h1 (không lấy SVG)
-    const textContent = Array.from(header.childNodes)
-      .filter(node => node.nodeType === Node.TEXT_NODE)
-      .map(node => node.textContent)
-      .join('')
-      .replace(/\(\d+\)$/, '')
-      .trim();
-    const suffix = count > 0 ? ` (${count})` : '';
-    // Cập nhật text node cuối cùng
-    const textNodes = Array.from(header.childNodes).filter(node => node.nodeType === Node.TEXT_NODE);
-    if (textNodes.length > 0) {
-      // Cập nhật node cuối cùng
-      textNodes[textNodes.length - 1].textContent = `\n      ${textContent}${suffix}\n    `;
-    } else {
-      header.appendChild(document.createTextNode(` ${textContent}${suffix}`));
-    }
+  const countEl = document.getElementById('header-count');
+  if (countEl) {
+    countEl.textContent = (typeof count === 'number' && count > 0) ? `(${count})` : '';
   }
 }
 
@@ -839,12 +834,8 @@ function loadCachedVitriData() {
     }
 
     if (list && list.length > 0) {
-      console.log(`Đã nạp ${list.length} bản ghi từ cache`);
-      const gpsPoints = applyVitriData(list);
-      const loader = document.getElementById('page-loader');
-      if (loader && gpsPoints.length > 0) {
-        loader.classList.add('hidden');
-      }
+      console.log(`Đã nạp sẵn ${list.length} bản ghi từ cache`);
+      applyVitriData(list);
       return true;
     }
   } catch (err) {
@@ -855,10 +846,8 @@ function loadCachedVitriData() {
 
 async function taiDuLieu() {
   const loader = document.getElementById('page-loader');
-  // Chỉ hiển thị loader khi chưa có dữ liệu nào được nạp
-  if (loader && (!vitriData || vitriData.length === 0)) {
-    loader.classList.remove('hidden');
-  }
+  if (loader) loader.classList.remove('hidden');
+  const startTime = Date.now();
 
   try {
     console.log('Đang tải dữ liệu...');
@@ -945,7 +934,12 @@ async function taiDuLieu() {
       showToast('Không thể cập nhật dữ liệu mới nhất (đang dùng bản lưu offline)', 'warning');
     }
   } finally {
-    if (loader) loader.classList.add('hidden');
+    const elapsed = Date.now() - startTime;
+    const minDuration = 450; // Hiển thị mượt mà tối thiểu 450ms
+    const delay = Math.max(0, minDuration - elapsed);
+    setTimeout(() => {
+      if (loader) loader.classList.add('hidden');
+    }, delay);
   }
 }
 
