@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Quản lý vị trí điểm gas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -266,6 +266,10 @@
     display: flex;
     align-items: center;
   }
+  /* Chống iOS Safari tự động zoom màn hình trên iPhone (yêu cầu font-size >= 16px) */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
   .search-group input {
     width: 100%;
     padding: 10px 12px 10px 38px;
@@ -273,7 +277,7 @@
     border: 1px solid var(--border-card);
     border-radius: var(--radius-md);
     color: var(--text-main);
-    font-size: 13.5px;
+    font-size: 16px !important;
     font-family: inherit;
     outline: none;
     transition: var(--transition);
@@ -462,6 +466,7 @@
     body { padding: 8px; }
     .container { border-radius: var(--radius-lg); }
     .location-grid { padding: 12px; }
+    input, select, textarea { font-size: 16px !important; }
   }
 
   /* ========== FLOATING TOAST (Pill Style 2.4s) ========== */
@@ -954,11 +959,21 @@ document.addEventListener('click', e => {
   }
 });
 
+// Khôi phục vị trí trang và tránh lỗi giật/zoom của iOS Safari khi đóng bàn phím ảo
+document.addEventListener('focusout', function(e) {
+  if (e.target && ['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) {
+    window.scrollTo({ top: window.scrollY, behavior: 'smooth' });
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   console.log('=== TRANG QUẢN LÝ VỊ TRÍ KHỞI ĐỘNG ===');
   loadCachedVitriData();
   taiDuLieu();
-  setTimeout(() => document.getElementById('search')?.focus(), 500);
+  const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  if (!isTouchDevice) {
+    setTimeout(() => document.getElementById('search')?.focus(), 500);
+  }
 });
 
 window.addEventListener('online', () => {
