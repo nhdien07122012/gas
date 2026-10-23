@@ -409,32 +409,40 @@
     gap: 8px;
   }
 
-  /* Page Loader */
+  /* Page Loading Overlay (Đồng bộ 100% với index.html) */
   .page-loader-overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(15, 23, 42, 0.35);
-    backdrop-filter: blur(3px);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-page);
     display: flex;
-    align-items: center;
     justify-content: center;
-    z-index: 3000;
+    align-items: center;
+    z-index: 9999;
     opacity: 1;
-    transition: opacity 0.2s;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
   }
   .page-loader-overlay.hidden {
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
   }
+
   .loader {
-    width: 38px;
-    height: 38px;
-    border: 3.5px solid rgba(255, 255, 255, 0.25);
-    border-top-color: var(--vnpost-gold);
+    width: 32px;
+    height: 32px;
+    aspect-ratio: 1;
     border-radius: 50%;
-    animation: spin 0.75s linear infinite;
+    border: 3px solid var(--border-card);
+    border-top-color: var(--vnpost-blue);
+    animation: loader-spin 0.8s linear infinite;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes loader-spin {
+    to { transform: rotate(360deg); }
+  }
 
   .back-button {
     display: none;
@@ -504,6 +512,11 @@
     const savedTheme = localStorage.getItem('gas_theme');
     if (savedTheme === 'dark' || savedTheme === 'light') {
       document.documentElement.setAttribute('data-theme', savedTheme);
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
     }
   })();
 </script>
@@ -792,9 +805,60 @@ function showToast(message, type = 'success') {
   }, 2400);
 }
 
+function applyVitriData(data) {
+  if (!Array.isArray(data)) return [];
+  allData = data;
+  vitriData = allData.filter(row => extractGPS(row.ghi_chu) !== null);
+
+  const uniqueMap = new Map();
+  vitriData.forEach(row => {
+    const gps = extractGPS(row.ghi_chu);
+    if (gps) {
+      const key = `${row.ten_diem || ''}_${gps.lat}_${gps.lng}`;
+      if (!uniqueMap.has(key)) uniqueMap.set(key, row);
+    }
+  });
+  vitriData = Array.from(uniqueMap.values());
+  currentFilteredData = vitriData;
+  displayVitri(vitriData);
+  return vitriData;
+}
+
+function loadCachedVitriData() {
+  try {
+    // 1. Thử đọc từ cache riêng của vitri
+    let raw = localStorage.getItem('gas_vitri_cache');
+    let parsed = raw ? JSON.parse(raw) : null;
+    let list = Array.isArray(parsed?.data) ? parsed.data : null;
+
+    // 2. Nếu chưa có, đọc ngay từ cache chung của index.html ('gas_point_cached_data_v2')
+    if (!list) {
+      raw = localStorage.getItem('gas_point_cached_data_v2');
+      parsed = raw ? JSON.parse(raw) : null;
+      list = Array.isArray(parsed?.data) ? parsed.data : (Array.isArray(parsed) ? parsed : null);
+    }
+
+    if (list && list.length > 0) {
+      console.log(`Đã nạp ${list.length} bản ghi từ cache`);
+      const gpsPoints = applyVitriData(list);
+      const loader = document.getElementById('page-loader');
+      if (loader && gpsPoints.length > 0) {
+        loader.classList.add('hidden');
+      }
+      return true;
+    }
+  } catch (err) {
+    console.warn('Lỗi đọc cache dữ liệu vị trí:', err);
+  }
+  return false;
+}
+
 async function taiDuLieu() {
   const loader = document.getElementById('page-loader');
-  if (loader) loader.classList.remove('hidden');
+  // Chỉ hiển thị loader khi chưa có dữ liệu nào được nạp
+  if (loader && (!vitriData || vitriData.length === 0)) {
+    loader.classList.remove('hidden');
+  }
 
   try {
     console.log('Đang tải dữ liệu...');
@@ -823,23 +887,16 @@ async function taiDuLieu() {
 
     if (!Array.isArray(data)) throw new Error('Dữ liệu không phải mảng');
 
-    allData = data;
-    console.log(`Đã tải ${allData.length} bản ghi`);
+    console.log(`Đã tải ${data.length} bản ghi từ máy chủ`);
 
-    vitriData = allData.filter(row => extractGPS(row.ghi_chu) !== null);
+    // Lưu vào cache để nạp tức thì trong các lần truy cập tiếp theo
+    try {
+      localStorage.setItem('gas_vitri_cache', JSON.stringify({ data: data, timestamp: Date.now() }));
+    } catch (e) {
+      console.warn('Không thể lưu cache vị trí:', e);
+    }
 
-    const uniqueMap = new Map();
-    vitriData.forEach(row => {
-      const gps = extractGPS(row.ghi_chu);
-      if (gps) {
-        const key = `${row.ten_diem || ''}_${gps.lat}_${gps.lng}`;
-        if (!uniqueMap.has(key)) uniqueMap.set(key, row);
-      }
-    });
-    vitriData = Array.from(uniqueMap.values());
-
-    currentFilteredData = vitriData;
-    displayVitri(vitriData);
+    applyVitriData(data);
 
     if (vitriData.length === 0) {
       showToast('Không có điểm gas nào có tọa độ GPS', 'warning');
@@ -849,37 +906,44 @@ async function taiDuLieu() {
 
   } catch (error) {
     console.error('Lỗi tải dữ liệu:', error);
-    const emptyState = document.getElementById('empty-state');
-    emptyState.style.display = 'block';
-    emptyState.innerHTML = `
-      <h3>
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="color: var(--danger);">
-          <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" />
-        </svg>
-        Lỗi khi tải dữ liệu
-      </h3>
-      <p>Không thể kết nối đến nguồn dữ liệu. Vui lòng thử lại sau.</p>
-      <p style="font-size: 0.9rem; margin-top: 10px;">
-        <em>Chi tiết lỗi: ${escapeHtml(error.message)}</em>
-      </p>
-      <button onclick="taiDuLieu()" style="
-        margin-top: 15px;
-        padding: 8px 16px;
-        background: var(--primary);
-        color: var(--text-inverse);
-        border: none;
-        border-radius: var(--radius-sm);
-        cursor: pointer;
-        font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-family: inherit;
-      ">
-        ${ICONS.arrowPath} Thử lại
-      </button>
-    `;
-    showToast('Không thể tải dữ liệu từ Google Sheets!', 'error');
+    // Nếu chưa có dữ liệu hiển thị (kể cả từ cache) thì mới hiển thị empty-state lỗi
+    if (!vitriData || vitriData.length === 0) {
+      const emptyState = document.getElementById('empty-state');
+      if (emptyState) {
+        emptyState.style.display = 'block';
+        emptyState.innerHTML = `
+          <h3>
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="color: var(--danger);">
+              <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" />
+            </svg>
+            Lỗi khi tải dữ liệu
+          </h3>
+          <p>Không thể kết nối đến nguồn dữ liệu. Vui lòng thử lại sau.</p>
+          <p style="font-size: 0.9rem; margin-top: 10px;">
+            <em>Chi tiết lỗi: ${escapeHtml(error.message)}</em>
+          </p>
+          <button onclick="taiDuLieu()" style="
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: var(--primary);
+            color: var(--text-inverse);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+          ">
+            ${ICONS.arrowPath} Thử lại
+          </button>
+        `;
+      }
+      showToast('Không thể tải dữ liệu từ Google Sheets!', 'error');
+    } else {
+      showToast('Không thể cập nhật dữ liệu mới nhất (đang dùng bản lưu offline)', 'warning');
+    }
   } finally {
     if (loader) loader.classList.add('hidden');
   }
@@ -898,6 +962,7 @@ document.addEventListener('click', e => {
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('=== TRANG QUẢN LÝ VỊ TRÍ KHỞI ĐỘNG ===');
+  loadCachedVitriData();
   taiDuLieu();
   setTimeout(() => document.getElementById('search')?.focus(), 500);
 });
