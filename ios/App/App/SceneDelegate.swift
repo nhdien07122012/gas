@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
             handleShortcutItem(shortcutItem)
         }
 
-        // Xử lý Deep Link từ Widget
+        // Xử lý Deep Link từ Widget (Cold Start)
         if let url = connectionOptions.urlContexts.first?.url {
             handleDeepLink(url)
         }
@@ -84,6 +84,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
                 }
             })();
             """, retries: 10)
+        } else if url.host == "diemtien" || urlStr.contains("diemtien") {
+            triggerQuickAction(jsCode: """
+            (function() {
+                window.location.href = 'diemtien.html';
+                return true;
+            })();
+            """, retries: 10)
+        } else if url.host == "report" || urlStr.contains("report") {
+            triggerQuickAction(jsCode: """
+            (function() {
+                if (typeof openReportModal === 'function') {
+                    openReportModal();
+                    return true;
+                } else {
+                    window.location.href = 'index.html?action=report';
+                    return true;
+                }
+            })();
+            """, retries: 10)
         }
     }
 
@@ -118,7 +137,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
                 }
             })();
             """, retries: 10)
-            return true
         }
         return false
     }

@@ -1,6 +1,6 @@
 {
   "appId": "com.vnpost.gasmanager",
-  "appName": "VNPost Gas Manager",
+  "appName": "Gas Manager",
   "webDir": "www",
   "ios": {
     "backgroundColor": "#005ba6",

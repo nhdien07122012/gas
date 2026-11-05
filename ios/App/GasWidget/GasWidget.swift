@@ -85,7 +85,7 @@ struct GasWidgetProvider: TimelineProvider {
         let currentDate = Date()
         let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: currentDate) ?? currentDate.addingTimeInterval(900)
 
-        // 1. Thử đọc dữ liệu đồng bộ nhanh từ Shared UserDefaults / File
+        // 1. Thử đọc dữ liệu đồng bộ nhanh từ Shared UserDefaults
         if let localEntry = loadLocalCache(), currentDate.timeIntervalSince(localEntry.date) < 300 {
             let timeline = Timeline(entries: [localEntry], policy: .after(nextUpdate))
             completion(timeline)
@@ -220,7 +220,6 @@ struct GasWidgetProvider: TimelineProvider {
 
     private func formatShiftDisplay(_ rawCa: String) -> String {
         if rawCa.isEmpty { return "Ca hôm nay" }
-        // Cắt ISO date dạng 2025-10-25T17:00:00.000Z thành dd-MM
         let parts = rawCa.prefix(10).split(separator: "-")
         if parts.count == 3 {
             return "Ca \(parts[2])-\(parts[1])"
@@ -245,7 +244,7 @@ struct GasWidgetProvider: TimelineProvider {
     }
 }
 
-// MARK: - SwiftUI Views for Widget
+// MARK: - Widget 1 Views: Tổng quan Ca & Doanh thu
 
 struct GasWidgetSmallView: View {
     let entry: GasShiftEntry
@@ -256,7 +255,7 @@ struct GasWidgetSmallView: View {
             HStack(spacing: 5) {
                 Image(systemName: "flame.fill")
                     .font(.system(size: 13, weight: .bold))
-                    .foregroundColor(Color(red: 239/255, green: 68/255, blue: 68/255)) // Gas Red
+                    .foregroundColor(Color(red: 239/255, green: 68/255, blue: 68/255))
 
                 Text(entry.shiftName)
                     .font(.system(size: 12, weight: .semibold))
@@ -266,7 +265,7 @@ struct GasWidgetSmallView: View {
                 Spacer()
 
                 Circle()
-                    .fill(Color(red: 16/255, green: 185/255, blue: 129/255)) // Live Green
+                    .fill(Color(red: 16/255, green: 185/255, blue: 129/255))
                     .frame(width: 6, height: 6)
             }
 
@@ -276,7 +275,7 @@ struct GasWidgetSmallView: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text(entry.totalFormatted)
                     .font(.system(size: 19, weight: .heavy, design: .rounded))
-                    .foregroundColor(Color(red: 16/255, green: 185/255, blue: 129/255)) // Emerald
+                    .foregroundColor(Color(red: 16/255, green: 185/255, blue: 129/255))
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
 
@@ -326,7 +325,7 @@ struct GasWidgetMediumView: View {
                         .font(.system(size: 15, weight: .bold))
                         .foregroundColor(Color(red: 239/255, green: 68/255, blue: 68/255))
 
-                    Text("VNPost Gas")
+                    Text("Gas Manager")
                         .font(.system(size: 13, weight: .bold))
                         .foregroundColor(.primary)
 
@@ -430,8 +429,6 @@ struct GasWidgetMediumView: View {
     }
 }
 
-// MARK: - Widget View Entrypoint
-
 struct GasWidgetEntryView: View {
     var entry: GasWidgetProvider.Entry
     @Environment(\.widgetFamily) var family
@@ -449,6 +446,99 @@ struct GasWidgetEntryView: View {
     }
 }
 
+// MARK: - Widget 2 Views: Thao tác nhanh 1 chạm (Gợi ý 2 với Báo cáo cuối ca)
+
+struct GasQuickActionsWidgetView: View {
+    var entry: GasWidgetProvider.Entry
+
+    var body: some View {
+        VStack(spacing: 10) {
+            // Thanh tiêu đề
+            HStack(spacing: 6) {
+                Image(systemName: "flame.fill")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundColor(Color(red: 239/255, green: 68/255, blue: 68/255))
+                Text("Gas Manager • Thao tác nhanh")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(.primary)
+                Spacer()
+                Text(entry.shiftName)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
+            }
+
+            // 4 Nút chức năng 1 chạm
+            HStack(spacing: 8) {
+                // 1. Thêm điểm gas
+                QuickActionButton(
+                    title: "Thêm điểm",
+                    icon: "plus.circle.fill",
+                    color: Color(red: 239/255, green: 68/255, blue: 68/255), // Red
+                    url: "gasmanager://add_point"
+                )
+
+                // 2. Đếm tiền
+                QuickActionButton(
+                    title: "Đếm tiền",
+                    icon: "banknote.fill",
+                    color: Color(red: 0/255, green: 91/255, blue: 166/255), // Blue
+                    url: "gasmanager://diemtien"
+                )
+
+                // 3. Clipboard
+                QuickActionButton(
+                    title: "Clipboard",
+                    icon: "doc.on.clipboard.fill",
+                    color: Color(red: 139/255, green: 92/255, blue: 246/255), // Purple
+                    url: "gasmanager://clipboard"
+                )
+
+                // 4. Báo cáo cuối ca (Thay thế bản đồ theo yêu cầu người dùng)
+                QuickActionButton(
+                    title: "Báo cáo ca",
+                    icon: "chart.bar.fill",
+                    color: Color(red: 245/255, green: 158/255, blue: 11/255), // Amber
+                    url: "gasmanager://report"
+                )
+            }
+        }
+        .padding(12)
+        .widgetBackground(Color(UIColor.systemBackground))
+    }
+}
+
+struct QuickActionButton: View {
+    let title: String
+    let icon: String
+    let color: Color
+    let url: String
+
+    var body: some View {
+        Link(destination: URL(string: url)!) {
+            VStack(spacing: 6) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(color.opacity(0.14))
+                        .frame(width: 48, height: 48)
+
+                    Image(systemName: icon)
+                        .font(.system(size: 23, weight: .semibold))
+                        .foregroundColor(color)
+                }
+
+                Text(title)
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(.primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.85)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 4)
+        }
+    }
+}
+
 // Extension hỗ trợ containerBackground cho iOS 17+ và fallback cho iOS 15-16
 extension View {
     @ViewBuilder
@@ -463,8 +553,9 @@ extension View {
     }
 }
 
-// MARK: - Widget Definition
+// MARK: - Widget Definitions
 
+// Widget 1: Tổng quan Ca & Doanh thu
 struct GasShiftWidget: Widget {
     let kind: String = "GasShiftWidget"
 
@@ -478,9 +569,26 @@ struct GasShiftWidget: Widget {
     }
 }
 
+// Widget 2: Thao tác nhanh 1 chạm (Thêm điểm, Đếm tiền, Clipboard, Báo cáo cuối ca)
+struct GasQuickActionsWidget: Widget {
+    let kind: String = "GasQuickActionsWidget"
+
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind, provider: GasWidgetProvider()) { entry in
+            GasQuickActionsWidgetView(entry: entry)
+        }
+        .configurationDisplayName("Thao tác nhanh 1 chạm")
+        .description("Mở nhanh: Thêm điểm gas, Đếm tiền, Clipboard và Báo cáo cuối ca.")
+        .supportedFamilies([.systemMedium])
+    }
+}
+
+// MARK: - Widget Bundle (Xuất cả 2 widget ra Widget Gallery của iOS)
+
 @main
 struct GasWidgetBundle: WidgetBundle {
     var body: some Widget {
         GasShiftWidget()
+        GasQuickActionsWidget()
     }
 }

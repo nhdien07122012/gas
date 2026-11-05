@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Quản lý tiền thu điểm gas theo ca - VNPost Gas</title>
+<title>Quản lý tiền thu điểm gas theo ca - Gas Manager</title>
 
 <!-- Google Fonts: Be Vietnam Pro & Inter for ultra-crisp Vietnamese typography -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1956,7 +1956,7 @@
       </button>
     </div>
     <div class="sidebar-footer">
-      <p>VNPost Gas Manager &copy; 2026</p>
+      <p>Gas Manager &copy; 2026</p>
     </div>
   </div>
 
@@ -5041,15 +5041,22 @@ window.quickActionAddPoint = function() {
   }
 };
 
-// Kiểm tra query parameter ?action=add_point khi mở ứng dụng từ trang khác
+// Kiểm tra query parameter ?action=add_point hoặc ?action=report khi mở ứng dụng từ trang khác
 (function checkQuickActionParam() {
   const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('action') === 'add_point') {
+  const action = urlParams.get('action');
+  if (action === 'add_point') {
     setTimeout(() => {
       if (typeof window.quickActionAddPoint === 'function') {
         window.quickActionAddPoint();
       }
     }, 350);
+  } else if (action === 'report') {
+    setTimeout(() => {
+      if (typeof window.openReportModal === 'function') {
+        window.openReportModal();
+      }
+    }, 450);
   }
 })();
 
