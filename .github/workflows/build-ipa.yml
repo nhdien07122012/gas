@@ -35,18 +35,19 @@ jobs:
           cp -r *.png www/ 2>/dev/null || true
           cp -r assets/* www/assets/ 2>/dev/null || true
 
-      - name: Generate Native iOS Project on macOS
+      - name: Sync Web Assets to Native iOS Project on macOS
         run: |
-          rm -rf ios
-          npx cap add ios
           npx cap sync ios
 
-      - name: Apply Custom Native iOS Files (AppIcon, Info.plist, SceneDelegate)
+      - name: Apply Custom Native iOS Files (AppIcon, Info.plist, SceneDelegate, GasWidget)
         run: |
           mkdir -p ios/App/App/Assets.xcassets/AppIcon.appiconset
           cp -r resources/ios/AppIcon/* ios/App/App/Assets.xcassets/AppIcon.appiconset/
           cp resources/ios/Info.plist ios/App/App/Info.plist
           cp resources/ios/SceneDelegate.swift ios/App/App/SceneDelegate.swift
+          cp resources/ios/project.pbxproj ios/App/App.xcodeproj/project.pbxproj
+          mkdir -p ios/App/GasWidget
+          cp -r resources/ios/GasWidget/* ios/App/GasWidget/
 
       - name: Build iOS App with Xcode (Unsigned)
         run: |

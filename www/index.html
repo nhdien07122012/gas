@@ -3710,7 +3710,33 @@ function calculateStats(data) {
   return stats;
 }
 
+
+function syncWidgetData(stats) {
+  try {
+    const shiftInfo = (typeof getCurrentShift === 'function') ? getCurrentShift() : null;
+    const shiftName = (shiftInfo && shiftInfo.shift) ? shiftInfo.shift : (currentShift || 'Ca hiện tại');
+    const widgetData = {
+      shift: shiftName,
+      count: stats.count || 0,
+      total: stats.total || 0,
+      totalFormatted: formatCurrencyCompact(stats.total || 0),
+      daNop: stats.daNop || 0,
+      chuaNop: stats.chuaNop || 0,
+      updatedAt: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+    };
+
+    localStorage.setItem('gas_widget_data', JSON.stringify(widgetData));
+
+    if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.gasWidgetBridge) {
+      window.webkit.messageHandlers.gasWidgetBridge.postMessage(widgetData);
+    }
+  } catch (e) {
+    console.warn('syncWidgetData error:', e);
+  }
+}
+
 function displayStats(stats) {
+  syncWidgetData(stats);
   const container = document.getElementById('stats-container');
   if (!container) return;
   const countFormatted = (stats.count || 0).toLocaleString('vi-VN');
