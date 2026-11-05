@@ -13,18 +13,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Verify Xcode Version
+      - name: Verify Environment
         run: |
           xcodebuild -version
+          node -v
+          npm -v
 
-      - name: Set up Node.js (Node 22 required for Capacitor 8)
+      - name: Set up Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
       - name: Install dependencies
         run: |
-          node -v
           npm install
 
       - name: Prepare web assets
@@ -34,9 +35,11 @@ jobs:
           cp -r *.png www/ 2>/dev/null || true
           cp -r assets/* www/assets/ 2>/dev/null || true
 
-      - name: Sync Capacitor iOS
+      - name: Generate Native iOS Project on macOS
         run: |
-          npx cap sync ios --verbose
+          rm -rf ios
+          npx cap add ios
+          npx cap sync ios
 
       - name: Build iOS App with Xcode (Unsigned)
         run: |
