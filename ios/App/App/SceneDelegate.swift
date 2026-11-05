@@ -1,4 +1,5 @@
 import UIKit
+import WebKit
 import Capacitor
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -13,12 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connectionOptions)
 
-        // Cho phép bàn phím mở khi focus programmatic mà không cần người dùng chạm trực tiếp
-        if let bridgeVC = window?.rootViewController as? CAPBridgeViewController {
-            bridgeVC.webView?.capacitor.setKeyboardShouldRequireUserInteraction(false)
-        }
-
-        // Xử lý 3D Touch / Quick Action khi ứng dụng khởi động từ đầu (Cold Start)
+        // Xử lý 3D Touch Quick Action khi khởi động ứng dụng (Cold Start)
         if let shortcutItem = connectionOptions.shortcutItem {
             handleShortcutItem(shortcutItem)
         }
@@ -32,7 +28,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         SceneDelegateProxy.shared.scene(scene, continue: userActivity)
     }
 
-    // Xử lý 3D Touch / Quick Action khi ứng dụng đang chạy ngầm hoặc đã mở (Warm Start)
+    // Xử lý 3D Touch Quick Action khi ứng dụng đang chạy ngầm hoặc đã mở (Warm Start)
     func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         let handled = handleShortcutItem(shortcutItem)
         completionHandler(handled)
@@ -56,8 +52,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
             return
         }
-
-        bridgeVC.webView?.capacitor.setKeyboardShouldRequireUserInteraction(false)
 
         let js = """
         (function() {
