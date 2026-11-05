@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Quản lý vị trí điểm gas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+
+<style>
+  /* ========== VNPOST DESIGN SYSTEM ========== */
+  :root {
+    --vnpost-blue: #005ba6;
+    --vnpost-blue-dark: #00457c;
+    --vnpost-blue-light: rgba(0, 91, 166, 0.08);
+    --vnpost-gold: #f59e0b;
+    --vnpost-gold-dark: #d97706;
+    --vnpost-gold-light: rgba(245, 158, 11, 0.12);
+
+    --primary: var(--vnpost-blue);
+    --primary-dark: var(--vnpost-blue-dark);
+    --primary-light: var(--vnpost-blue-light);
+
+    --color-success: #10b981;
+    --color-success-light: rgba(16, 185, 129, 0.12);
+    --color-warning: #f59e0b;
+    --color-warning-light: rgba(245, 158, 11, 0.12);
+    --color-danger: #ef4444;
+    --color-danger-light: rgba(239, 68, 68, 0.12);
+
+    --bg-page: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-secondary: #f1f5f9;
+    --bg-tertiary: #e2e8f0;
+    --bg-input: #ffffff;
+    --bg-hover: #f1f5f9;
+
+    --border-card: #e2e8f0;
+    --border-light: #f1f5f9;
+    --border-dark: #cbd5e1;
+
+    --text-main: #0f172a;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --text-tertiary: #94a3b8;
+    --text-inverse: #ffffff;
+
+    --font-family: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+
+    --radius-xs: 6px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+
+    --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+    --shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+
+    --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --bg-page: #0b0f19;
+    --bg-card: #131b2e;
+    --bg-secondary: #1a243b;
+    --bg-tertiary: #22304d;
+    --bg-input: #1a243b;
+    --bg-hover: #22304d;
+
+    --border-card: #1e293b;
+    --border-light: #1a243b;
+    --border-dark: #334155;
+
+    --text-main: #f8fafc;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-tertiary: #64748b;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg-page: #0b0f19;
+      --bg-card: #131b2e;
+      --bg-secondary: #1a243b;
+      --bg-tertiary: #22304d;
+      --bg-input: #1a243b;
+      --bg-hover: #22304d;
+
+      --border-card: #1e293b;
+      --border-light: #1a243b;
+      --border-dark: #334155;
+
+      --text-main: #f8fafc;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-tertiary: #64748b;
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-family);
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    line-height: 1.5;
+    padding: 16px;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-card);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+
+  .hero-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
+    color: currentColor;
+  }
+  .hero-icon-sm { width: 16px; height: 16px; }
+
+  /* App Header (Centered Title) */
+  .app-header {
+    background: linear-gradient(135deg, var(--vnpost-blue) 0%, #00457c 100%);
+    color: white;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+  }
+
+  .menu-back {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    flex-shrink: 0;
+    z-index: 2;
+  }
+  .menu-back:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: translateY(-50%) translateX(-2px);
+  }
+
+  .header-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    padding: 0 44px;
+  }
+  .header-logo-wrap {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-md);
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
+  }
+  .header-logo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  .header-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .header-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .header-title-row h1 {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .header-count {
+    font-size: 15px;
+    font-weight: 600;
+    opacity: 0.88;
+    letter-spacing: normal;
+  }
+  .header-badge {
+    background: var(--vnpost-gold);
+    color: #78350f;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .header-subtitle {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+
+  /* Search Bar */
+  .search-section {
+    padding: 14px 18px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-card);
+  }
+  .search-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--text-muted);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+  }
+  /* Chống iOS Safari tự động zoom màn hình trên iPhone (yêu cầu font-size >= 16px) */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+  .search-group input {
+    width: 100%;
+    padding: 10px 12px 10px 38px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    color: var(--text-main);
+    font-size: 16px !important;
+    font-family: inherit;
+    outline: none;
+    transition: var(--transition);
+  }
+  .search-group input:focus {
+    border-color: var(--vnpost-blue);
+    box-shadow: 0 0 0 3px var(--vnpost-blue-light);
+  }
+
+  /* Location Grid */
+  .location-grid {
+    padding: 18px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .location-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .location-card:hover {
+    border-color: var(--vnpost-blue);
+    box-shadow: var(--shadow);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    background: var(--vnpost-blue-light);
+    color: var(--vnpost-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .card-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.3;
+  }
+  .card-address {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .card-address span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    font-size: 11.5px;
+  }
+  .gps-label {
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .badge-gps {
+    font-family: var(--font-mono);
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    padding: 2px 8px;
+    border-radius: 9999px;
+    color: var(--vnpost-blue);
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: var(--transition-fast);
+  }
+  .badge-gps:hover {
+    background: var(--vnpost-blue-light);
+    border-color: var(--vnpost-blue);
+  }
+
+  .btn-maps {
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--vnpost-blue) 0%, #0284c7 100%);
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+  }
+  .btn-maps:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+  }
+
+  /* Empty State */
+  #empty-state {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    display: none;
+  }
+  #empty-state h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* Page Loading Overlay (Đồng bộ 100% với index.html) */
+  .page-loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-page);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .page-loader-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .loader {
+    width: 32px;
+    height: 32px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 3px solid var(--border-card);
+    border-top-color: var(--vnpost-blue);
+    animation: loader-spin 0.8s linear infinite;
+  }
+  @keyframes loader-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .back-button {
+    display: none;
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 8px; }
+    .container { border-radius: var(--radius-lg); }
+    .location-grid { padding: 12px; }
+    input, select, textarea { font-size: 16px !important; }
+  }
+
+  /* ========== FLOATING TOAST (Pill Style 2.4s) ========== */
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-40px);
+    padding: 10px 18px;
+    border-radius: 9999px;
+    font-size: 13.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.14), 0 4px 6px -4px rgba(0, 0, 0, 0.08);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 9999;
+    max-width: 90%;
+    text-align: center;
+    white-space: nowrap;
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1px solid #334155;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+
+  .toast.success, .toast.toast-success {
+    background: #064e3b;
+    color: #ecfdf5;
+    border: 1px solid #059669;
+  }
+  .toast.warning, .toast.toast-warning {
+    background: #78350f;
+    color: #fffbeb;
+    border: 1px solid #d97706;
+  }
+  .toast.error, .toast.danger, .toast.toast-error {
+    background: #7f1d1d;
+    color: #fef2f2;
+    border: 1px solid #dc2626;
+  }
+  .toast.info, .toast.toast-info {
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1px solid #334155;
+  }
+</style>
+<script>
+  (() => {
+    const savedTheme = localStorage.getItem('gas_theme');
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  })();
+</script>
+</head>
+<body>
+  <!-- Page Loading Overlay -->
+  <div id="page-loader" class="page-loader-overlay" aria-live="polite" aria-label="Đang tải dữ liệu">
+    <div class="loader"></div>
+  </div>
+
+  <div class="container">
+    <header class="app-header">
+      <button class="menu-back" onclick="window.location.href='index.html'" aria-label="Quay lại">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <div class="header-brand">
+        <div class="header-text">
+          <div class="header-title-row">
+            <h1>Quản lý vị trí điểm gas <span class="header-count" id="header-count"></span></h1>
+          </div>
+          <p class="header-subtitle">Tọa độ GPS và điều hướng Google Maps</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="search-section">
+      <div class="search-group">
+        <span class="search-icon">
+          <svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+          </svg>
+        </span>
+        <input id="search" placeholder="Tìm kiếm tên điểm, địa chỉ hoặc ghi chú...">
+      </div>
+    </div>
+
+    <div id="location-grid" class="location-grid"></div>
+
+    <div id="empty-state">
+      <h3>
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19.02 10.11 18.934l.004-.002.01-.005a20.086 20.086 0 001.838-1.295A21.36 21.36 0 0015.5 12.87c1.336-1.614 2-3.435 2-5.37a7.5 7.5 0 10-15 0c0 1.935.664 3.756 2 5.37a21.36 21.36 0 003.548 4.762 20.086 20.086 0 001.838 1.295l.01.005.004.002.001.001ZM10 10.5a3 3 0 100-6 3 3 0 000 6Z" clip-rule="evenodd" />
+        </svg>
+        Chưa có vị trí nào được lưu
+      </h3>
+      <p>Hãy sử dụng chức năng lưu vị trí GPS trên trang chính để bắt đầu.</p>
+      <p style="font-size: 11.5px; margin-top: 6px; color: var(--text-muted);">
+        <em>Lưu ý: Chỉ những điểm gas có tọa độ GPS mới hiển thị ở đây.</em>
+      </p>
+    </div>
+  </div>
+
+  <a href="index.html" class="back-button" title="Quay về trang chính" aria-label="Quay về trang chính"></a>
+
+  <!-- Toast notification (Modern Floating Pill) -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toast-icon"></span>
+    <span id="toast-message"></span>
+  </div>
+
+  <script>
+// ========== HEROICONS LIBRARY ==========
+const ICONS = {
+  checkCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" /></svg>',
+  xCircle: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" /></svg>',
+  warning: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" /></svg>',
+  info: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd" /></svg>',
+  arrowPath: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" /></svg>',
+  buildingStorefront: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5.223 2.25c-.497 0-.974.198-1.325.55l-1.3 1.298A3.75 3.75 0 0 0 7.5 9.75c.627.47 1.406.75 2.25.75.844 0 1.623-.28 2.25-.75a3.75 3.75 0 0 0 6.75-2.25c0-.362-.05-.714-.146-1.048l-1.3-1.3a1.875 1.875 0 0 0-1.325-.549H5.223Z" /><path d="M2.25 11.25v8.25a1.5 1.5 0 0 0 1.5 1.5h3.75v-3.75a2.25 2.25 0 0 1 4.5 0v3.75h3.75a1.5 1.5 0 0 0 1.5-1.5v-8.25a4.865 4.865 0 0 1-2.25.75 4.86 4.86 0 0 1-2.25-.75 4.861 4.861 0 0 1-2.25.75 4.86 4.86 0 0 1-2.25-.75 4.86 4.86 0 0 1-2.25.75A4.865 4.865 0 0 1 2.25 11.25Z" /></svg>',
+  mapPin: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" /></svg>',
+  globeAlt: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.721 12.752a9.711 9.711 0 0 0-.945-5.003 12.754 12.754 0 0 1-4.339 2.708 18.991 18.991 0 0 1-.214 4.772 17.165 17.165 0 0 0 5.498-2.477ZM14.634 15.55a17.324 17.324 0 0 0 .332-4.647c-.952.227-1.945.347-2.966.347-1.021 0-2.014-.12-2.966-.347a17.515 17.515 0 0 0 .332 4.647 17.385 17.385 0 0 0 5.268 0ZM9.772 17.119a18.963 18.963 0 0 0 4.456 0A17.182 17.182 0 0 1 12 21.724a17.18 17.18 0 0 1-2.228-4.605ZM7.777 15.23a18.87 18.87 0 0 1-.214-4.773 12.753 12.753 0 0 1-4.34-2.708 9.711 9.711 0 0 0-.944 5.004 17.165 17.165 0 0 0 5.498 2.477ZM21.356 14.752a9.765 9.765 0 0 1-7.478 6.817 18.64 18.64 0 0 0 1.988-4.718 18.627 18.627 0 0 0 5.49-2.098ZM2.644 14.752c1.682.971 3.53 1.688 5.49 2.099a18.64 18.64 0 0 0 1.988 4.718 9.765 9.765 0 0 1-7.478-6.816ZM13.878 2.43a9.755 9.755 0 0 1 6.116 3.986 11.267 11.267 0 0 1-3.746 2.504 18.63 18.63 0 0 0-2.37-6.49ZM12 2.276a17.152 17.152 0 0 1 2.805 7.121c-.897.23-1.837.353-2.805.353-.968 0-1.908-.122-2.805-.353A17.151 17.151 0 0 1 12 2.276ZM10.122 2.43a18.629 18.629 0 0 0-2.37 6.49 11.266 11.266 0 0 1-3.746-2.504 9.754 9.754 0 0 1 6.116-3.985Z" /></svg>',
+  clipboard: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" /></svg>',
+  map: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.161 2.58a1.875 1.875 0 0 1 1.678 0l4.993 2.498c.106.052.23.052.336 0l3.869-1.935A1.875 1.875 0 0 1 21.75 4.82v12.485c0 .71-.401 1.36-1.037 1.677l-4.875 2.437a1.875 1.875 0 0 1-1.676 0l-4.994-2.497a.375.375 0 0 0-.336 0l-3.868 1.935A1.875 1.875 0 0 1 2.25 19.18V6.695c0-.71.401-1.36 1.036-1.677l4.875-2.437ZM9 6a.75.75 0 0 1 .75.75V15a.75.75 0 0 1-1.5 0V6.75A.75.75 0 0 1 9 6Zm6.75 3a.75.75 0 0 0-1.5 0v8.25a.75.75 0 0 0 1.5 0V9Z" clip-rule="evenodd" /></svg>'
+};
+
+// Loại bỏ emoji ở đầu chuỗi thông báo (nếu còn sót)
+function stripLeadingEmoji(str) {
+  if (!str) return '';
+  return str.replace(/^[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{2B00}-\u{2BFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}\u{200D}\s]+/u, '').trim() || str.trim();
+}
+
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
+let allData = [];
+let vitriData = [];
+let currentFilteredData = [];
+
+function extractGPS(note) {
+  const noteStr = note == null ? '' : String(note);
+  if (!noteStr.trim()) return null;
+  const match = noteStr.match(/\[GPS:\s*([\d.]+),\s*([\d.]+)\]/);
+  if (match) {
+    const lat = parseFloat(match[1]);
+    const lng = parseFloat(match[2]);
+    if (!isNaN(lat) && !isNaN(lng)) {
+      return {
+        lat: lat.toFixed(6),
+        lng: lng.toFixed(6),
+        rawLat: lat,
+        rawLng: lng
+      };
+    }
+  }
+  return null;
+}
+
+function escapeHtml(text) {
+  if (text == null) return '';
+  const str = String(text);
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function displayVitri(data) {
+  const gridContainer = document.getElementById('location-grid');
+  const emptyState = document.getElementById('empty-state');
+
+  if (!data || data.length === 0) {
+    if (gridContainer) gridContainer.innerHTML = '';
+    if (emptyState) emptyState.style.display = 'block';
+    return;
+  }
+
+  if (gridContainer) gridContainer.innerHTML = '';
+  let count = 0;
+
+  data.forEach(row => {
+    const gps = extractGPS(row.ghi_chu);
+    if (!gps) return;
+
+    count++;
+    const card = document.createElement('div');
+    card.className = 'location-card fade-in';
+
+    const tenDiem = escapeHtml(row.ten_diem) || 'Chưa có tên';
+    const diaChi = escapeHtml(row.dia_chi) || 'Chưa có địa chỉ';
+
+    card.innerHTML = `
+      <div>
+        <div class="card-header">
+          <div class="card-icon">${ICONS.buildingStorefront}</div>
+          <div class="card-info">
+            <div class="card-title">${tenDiem}</div>
+            <div class="card-address">${ICONS.mapPin} <span>${diaChi}</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-details">
+        <span class="gps-label">${ICONS.globeAlt} Tọa độ GPS:</span>
+        <div class="badge-gps badge" data-coords="${gps.lat}, ${gps.lng}" title="Nhấn để sao chép tọa độ">
+          ${ICONS.clipboard} ${gps.lat}, ${gps.lng}
+        </div>
+      </div>
+
+      <a class="btn-maps" href="https://maps.google.com/?q=${gps.rawLat},${gps.rawLng}" target="_blank" title="Mở Google Maps dẫn đường">
+        ${ICONS.map} Mở Google Maps
+      </a>
+    `;
+
+    if (gridContainer) gridContainer.appendChild(card);
+  });
+
+  if (count === 0) {
+    if (emptyState) {
+      emptyState.style.display = 'block';
+      emptyState.innerHTML = `
+        <h3>
+          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M6.912 3a3 3 0 0 0-2.868 2.118l-2.411 7.838a3 3 0 0 0-.133.882V18a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0 0 17.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0 0 17.088 4.5H6.912a1.5 1.5 0 0 0-1.434 1.059L3.265 12.75H6.11a3 3 0 0 1 2.684 1.658l.256.513a1.5 1.5 0 0 0 1.342.829h3.218a1.5 1.5 0 0 0 1.342-.83l.256-.512a3 3 0 0 1 2.684-1.658h2.844Z" clip-rule="evenodd" />
+          </svg>
+          Không tìm thấy vị trí
+        </h3>
+        <p>Không có điểm gas nào có tọa độ GPS trong dữ liệu hiện tại.</p>
+        <p style="font-size: 0.9rem; margin-top: 10px;">
+          <em>Lưu ý: Chỉ những điểm gas có tọa độ GPS mới hiển thị ở đây.</em>
+        </p>
+      `;
+    }
+  } else {
+    if (emptyState) emptyState.style.display = 'none';
+  }
+
+  updateResultCount(count);
+}
+
+function updateResultCount(count) {
+  const countEl = document.getElementById('header-count');
+  if (countEl) {
+    countEl.textContent = (typeof count === 'number' && count > 0) ? `(${count})` : '';
+  }
+}
+
+function filterVitri() {
+  const query = document.getElementById('search').value.toLowerCase().trim();
+  if (!query) {
+    currentFilteredData = vitriData;
+    displayVitri(vitriData);
+    return;
+  }
+
+  const filtered = vitriData.filter(row => {
+    const searchableText = `
+      ${row.ten_diem || ''}
+      ${row.dia_chi || ''}
+      ${row.ghi_chu || ''}
+    `.toLowerCase();
+    return searchableText.includes(query);
+  });
+
+  currentFilteredData = filtered;
+  displayVitri(filtered);
+}
+
+async function copyToClipboard(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      showToast(`Đã sao chép: ${text}`, 'success');
+    } else {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.select();
+      const success = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      if (success) {
+        showToast(`Đã sao chép: ${text}`, 'success');
+      } else {
+        showToast('Không thể sao chép vào clipboard', 'error');
+      }
+    }
+  } catch (err) {
+    console.error('Lỗi sao chép:', err);
+    showToast('Lỗi khi sao chép', 'error');
+  }
+}
+
+function showToast(message, type = 'success') {
+  let toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.className = 'toast';
+    toast.innerHTML = '<span class="toast-icon" id="toast-icon"></span><span id="toast-message"></span>';
+    document.body.appendChild(toast);
+  }
+  const toastMessage = document.getElementById('toast-message') || toast.querySelector('#toast-message') || toast;
+  const toastIcon = document.getElementById('toast-icon') || toast.querySelector('#toast-icon');
+
+  let iconKey = 'checkCircle';
+  if (type === 'error' || type === 'danger') iconKey = 'xCircle';
+  else if (type === 'warning') iconKey = 'warning';
+  else if (type === 'info') iconKey = 'info';
+
+  if (toastIcon) toastIcon.innerHTML = ICONS[iconKey] || '';
+  if (toastMessage) toastMessage.textContent = stripLeadingEmoji(message);
+
+  const toastClass = type === 'danger' ? 'error' : type;
+  toast.className = `toast toast-${toastClass} show`;
+  if (window.toastTimer) clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2400);
+}
+
+function applyVitriData(data) {
+  if (!Array.isArray(data)) return [];
+  allData = data;
+  vitriData = allData.filter(row => extractGPS(row.ghi_chu) !== null);
+
+  const uniqueMap = new Map();
+  vitriData.forEach(row => {
+    const gps = extractGPS(row.ghi_chu);
+    if (gps) {
+      const key = `${row.ten_diem || ''}_${gps.lat}_${gps.lng}`;
+      if (!uniqueMap.has(key)) uniqueMap.set(key, row);
+    }
+  });
+  vitriData = Array.from(uniqueMap.values());
+  currentFilteredData = vitriData;
+  displayVitri(vitriData);
+  return vitriData;
+}
+
+function loadCachedVitriData() {
+  try {
+    // 1. Thử đọc từ cache riêng của vitri
+    let raw = localStorage.getItem('gas_vitri_cache');
+    let parsed = raw ? JSON.parse(raw) : null;
+    let list = Array.isArray(parsed?.data) ? parsed.data : null;
+
+    // 2. Nếu chưa có, đọc ngay từ cache chung của index.html ('gas_point_cached_data_v2')
+    if (!list) {
+      raw = localStorage.getItem('gas_point_cached_data_v2');
+      parsed = raw ? JSON.parse(raw) : null;
+      list = Array.isArray(parsed?.data) ? parsed.data : (Array.isArray(parsed) ? parsed : null);
+    }
+
+    if (list && list.length > 0) {
+      console.log(`Đã nạp sẵn ${list.length} bản ghi từ cache`);
+      applyVitriData(list);
+      return true;
+    }
+  } catch (err) {
+    console.warn('Lỗi đọc cache dữ liệu vị trí:', err);
+  }
+  return false;
+}
+
+async function taiDuLieu() {
+  const loader = document.getElementById('page-loader');
+  if (loader) loader.classList.remove('hidden');
+  const startTime = Date.now();
+
+  try {
+    console.log('Đang tải dữ liệu...');
+    const url = scriptURL + '?t=' + Date.now();
+    const response = await fetch(url);
+
+    if (!response.ok) throw new Error(`Lỗi HTTP ${response.status}`);
+
+    const text = await response.text();
+    let data;
+
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      const fixedText = text.trim();
+      if (fixedText.startsWith('[') && fixedText.endsWith(']')) {
+        data = JSON.parse(fixedText);
+      } else {
+        throw new Error('Dữ liệu không phải JSON hợp lệ');
+      }
+    }
+
+    if (data && typeof data === 'object' && !Array.isArray(data) && data.data && Array.isArray(data.data)) {
+      data = data.data;
+    }
+
+    if (!Array.isArray(data)) throw new Error('Dữ liệu không phải mảng');
+
+    console.log(`Đã tải ${data.length} bản ghi từ máy chủ`);
+
+    // Lưu vào cache để nạp tức thì trong các lần truy cập tiếp theo
+    try {
+      localStorage.setItem('gas_vitri_cache', JSON.stringify({ data: data, timestamp: Date.now() }));
+    } catch (e) {
+      console.warn('Không thể lưu cache vị trí:', e);
+    }
+
+    applyVitriData(data);
+
+    if (vitriData.length === 0) {
+      showToast('Không có điểm gas nào có tọa độ GPS', 'warning');
+    } else {
+      showToast(`Đã tải ${vitriData.length} vị trí có GPS`, 'success');
+    }
+
+  } catch (error) {
+    console.error('Lỗi tải dữ liệu:', error);
+    // Nếu chưa có dữ liệu hiển thị (kể cả từ cache) thì mới hiển thị empty-state lỗi
+    if (!vitriData || vitriData.length === 0) {
+      const emptyState = document.getElementById('empty-state');
+      if (emptyState) {
+        emptyState.style.display = 'block';
+        emptyState.innerHTML = `
+          <h3>
+            <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="color: var(--danger);">
+              <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" />
+            </svg>
+            Lỗi khi tải dữ liệu
+          </h3>
+          <p>Không thể kết nối đến nguồn dữ liệu. Vui lòng thử lại sau.</p>
+          <p style="font-size: 0.9rem; margin-top: 10px;">
+            <em>Chi tiết lỗi: ${escapeHtml(error.message)}</em>
+          </p>
+          <button onclick="taiDuLieu()" style="
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: var(--primary);
+            color: var(--text-inverse);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+          ">
+            ${ICONS.arrowPath} Thử lại
+          </button>
+        `;
+      }
+      showToast('Không thể tải dữ liệu từ Google Sheets!', 'error');
+    } else {
+      showToast('Không thể cập nhật dữ liệu mới nhất (đang dùng bản lưu offline)', 'warning');
+    }
+  } finally {
+    const elapsed = Date.now() - startTime;
+    const minDuration = 450; // Hiển thị mượt mà tối thiểu 450ms
+    const delay = Math.max(0, minDuration - elapsed);
+    setTimeout(() => {
+      if (loader) loader.classList.add('hidden');
+    }, delay);
+  }
+}
+
+document.getElementById('search').addEventListener('input', filterVitri);
+document.getElementById('search').addEventListener('keypress', e => { if (e.key === 'Enter') filterVitri(); });
+
+document.addEventListener('click', e => {
+  const badge = e.target.closest('.badge');
+  if (badge) {
+    const coords = badge.getAttribute('data-coords') || badge.textContent.trim();
+    if (coords) copyToClipboard(coords);
+  }
+});
+
+// Khôi phục vị trí trang và tránh lỗi giật/zoom của iOS Safari khi đóng bàn phím ảo
+document.addEventListener('focusout', function(e) {
+  if (e.target && ['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) {
+    window.scrollTo({ top: window.scrollY, behavior: 'smooth' });
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('=== TRANG QUẢN LÝ VỊ TRÍ KHỞI ĐỘNG ===');
+  loadCachedVitriData();
+  taiDuLieu();
+  const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  if (!isTouchDevice) {
+    setTimeout(() => document.getElementById('search')?.focus(), 500);
+  }
+});
+
+window.addEventListener('online', () => {
+  console.log('Kết nối mạng được khôi phục, tải lại dữ liệu...');
+  taiDuLieu();
+});
+</script>
+</body>
+</html>

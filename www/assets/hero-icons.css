@@ -1,0 +1,11 @@
+:root {
+  --hero-icon-size: 24px;
+}
+
+.hero-icon {
+  display: inline-block;
+  width: var(--hero-icon-size);
+  height: var(--hero-icon-size);
+  fill: currentColor;
+  vertical-align: middle;
+}

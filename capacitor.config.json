@@ -1,0 +1,25 @@
+{
+  "appId": "com.vnpost.gasmanager",
+  "appName": "VNPost Gas Manager",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#005ba6"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#005ba6",
+      "androidSplashResourceName": "splash",
+      "showSpinner": false,
+      "launchAutoHide": true
+    },
+    "StatusBar": {
+      "style": "dark",
+      "backgroundColor": "#005ba6"
+    }
+  }
+}

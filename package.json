@@ -1,0 +1,30 @@
+{
+  "name": "gas",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sync": "npm run copy && npx cap sync android",
+    "copy": "xcopy /E /Y /I *.html www\\ && xcopy /E /Y /I *.png www\\ && xcopy /E /Y /I assets www\\assets\\",
+    "open:android": "npx cap open android",
+    "build:android": "npm run sync && npx cap open android"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nhdien07122012/gas.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nhdien07122012/gas/issues"
+  },
+  "homepage": "https://github.com/nhdien07122012/gas#readme",
+  "dependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/cli": "^8.6.0",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/ios": "^8.6.0"
+  }
+}
