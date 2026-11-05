@@ -1,13 +1,11 @@
 {
   "name": "gas",
   "version": "1.0.0",
-  "description": "",
+  "description": "VNPost Gas Manager - iOS App",
   "main": "index.js",
   "scripts": {
-    "sync": "npm run copy && npx cap sync android",
-    "copy": "xcopy /E /Y /I *.html www\\ && xcopy /E /Y /I *.png www\\ && xcopy /E /Y /I assets www\\assets\\",
-    "open:android": "npx cap open android",
-    "build:android": "npm run sync && npx cap open android"
+    "sync": "npm run copy && npx cap sync ios",
+    "copy": "xcopy /E /Y /I *.html www\\ && xcopy /E /Y /I *.png www\\ && xcopy /E /Y /I assets www\\assets\\"
   },
   "repository": {
     "type": "git",
@@ -22,7 +20,6 @@
   },
   "homepage": "https://github.com/nhdien07122012/gas#readme",
   "dependencies": {
-    "@capacitor/android": "^8.6.0",
     "@capacitor/cli": "^8.6.0",
     "@capacitor/core": "^8.6.0",
     "@capacitor/ios": "^8.6.0"
