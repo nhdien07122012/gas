@@ -337,7 +337,7 @@
     background-color: var(--bg-app);
     color: var(--text-main);
     line-height: 1.5;
-    padding: 16px;
+    padding: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px));
     min-height: 100vh;
     transition: background-color 0.25s ease, color 0.25s ease;
     -webkit-font-smoothing: antialiased;
@@ -1316,7 +1316,7 @@
   /* --- NÚT (+) THÊM ĐIỂM GAS ---------------------------------------------- */
   #scrollTopBtn {
     position: fixed;
-    bottom: calc(-4px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
     left: 33px;
     width: 60px;
     height: 60px;
@@ -1345,7 +1345,7 @@
   /* --- NÚT HÀNG ĐỢI (⏱) --------------------------------------------------- */
   #queueBtn {
     position: fixed;
-    bottom: calc(0px + env(safe-area-inset-bottom, 0px)); /* ← CHỈNH VỊ TRÍ DỌC Ở ĐÂY */
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px)); /* ← CHỈNH VỊ TRÍ DỌC Ở ĐÂY */
     right: 33px;                                            /* ← CHỈNH VỊ TRÍ NGANG Ở ĐÂY */
     left: auto;
     width: 60px;   /* ← CHỈNH KÍCH THƯỚC Ở ĐÂY */
@@ -1485,7 +1485,7 @@
   .sidebar.swiping { transition: none !important; will-change: left; }
 
   .sidebar-header {
-    padding: 18px 20px;
+    padding: calc(18px + env(safe-area-inset-top, 0px)) 20px 18px;
     background: linear-gradient(135deg, var(--vnpost-blue), var(--vnpost-blue-hover));
     color: #ffffff;
     display: flex;
@@ -1559,7 +1559,7 @@
   }
 
   .sidebar-footer {
-    padding: 16px 20px;
+    padding: 16px 20px calc(16px + env(safe-area-inset-bottom, 0px));
     border-top: 1px solid var(--border-card);
     font-size: 13.5px;
     font-weight: 500;
@@ -1581,7 +1581,7 @@
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.22s ease, visibility 0.22s;
-    padding: 16px;
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px));
   }
   .modal.open, .modal.active, .modal[style*="display: flex"], .modal[style*="display:flex"] {
     display: flex !important;
@@ -1782,7 +1782,7 @@
 
   /* ========== RESPONSIVE STYLES (Extension Popup 350px - Desktop) ========== */
   @media (max-width: 640px) {
-    body { padding: 8px; }
+    body { padding: calc(8px + env(safe-area-inset-top, 0px)) calc(8px + env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) calc(8px + env(safe-area-inset-left, 0px)); }
     .container { border-radius: var(--radius-lg); }
     .app-header { padding: 12px 14px; }
     .shift-info { padding: 7px 12px; }
@@ -1793,14 +1793,14 @@
     .filter-header select, .filter-header input, .filter-toggle { width: 100%; }
     .quick-actions-grid { grid-template-columns: 1fr; }
     #scrollTopBtn {
-      bottom: calc(-2px + env(safe-area-inset-bottom, 0px));
+      bottom: calc(14px + env(safe-area-inset-bottom, 0px));
       left: 21px;
       width: 56px;
       height: 56px;
     }
     #scrollTopBtn .hero-icon { width: 30px; height: 30px; }
     #queueBtn {
-      bottom: calc(-2px + env(safe-area-inset-bottom, 0px));
+      bottom: calc(14px + env(safe-area-inset-bottom, 0px));
       right: 21px;
       left: auto;
       width: 56px;

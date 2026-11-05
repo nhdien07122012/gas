@@ -4,7 +4,7 @@
   "webDir": "www",
   "ios": {
     "backgroundColor": "#005ba6",
-    "contentInset": "automatic"
+    "contentInset": "never"
   },
   "plugins": {
     "SplashScreen": {
@@ -14,8 +14,7 @@
       "launchAutoHide": true
     },
     "StatusBar": {
-      "style": "dark",
-      "backgroundColor": "#005ba6"
+      "style": "dark"
     }
   }
 }
