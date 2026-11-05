@@ -929,6 +929,26 @@
     }
   }
 
+  
+  /* Hiệu ứng xung sáng khi kích hoạt từ 3D Touch / Quick Action */
+  @keyframes quickActionGlow {
+    0% {
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+      transform: scale(1);
+    }
+    40% {
+      box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.35);
+      transform: scale(1.02);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+      transform: scale(1);
+    }
+  }
+  .quick-action-highlight {
+    animation: quickActionGlow 1.2s ease-out !important;
+  }
+
   .filter-toggle {
     display: inline-flex;
     align-items: center;
@@ -4931,6 +4951,76 @@ document.addEventListener('DOMContentLoaded', function() {
 
   setInterval(updateShiftInfo, 60000);
 });
+
+// ==========================================
+// 3D Touch / Quick Action "Thêm điểm gas"
+// ==========================================
+window.quickActionAddPoint = function() {
+  try {
+    // 1. Đóng sidebar nếu đang mở
+    if (typeof closeSidebar === 'function') {
+      closeSidebar();
+    }
+    // 2. Đóng các modal nếu đang mở
+    const openModals = document.querySelectorAll('.modal.active, .modal.show, [id$="-modal"]');
+    openModals.forEach(m => {
+      if (typeof closeModal === 'function' && m.id) {
+        closeModal(m.id);
+      } else {
+        m.classList.remove('active', 'show');
+        m.style.display = 'none';
+      }
+    });
+
+    const chonDiemInput = document.getElementById('chon_diem');
+    if (!chonDiemInput) return;
+
+    // 3. Xoá giá trị cũ để người dùng nhập mới thuận tiện
+    chonDiemInput.value = '';
+    const tenDiemInput = document.getElementById('ten_diem');
+    if (tenDiemInput) tenDiemInput.value = '';
+
+    // 4. Cuộn mượt đến ô chọn điểm gas
+    chonDiemInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // 5. Thêm hiệu ứng phát sáng nhận diện (glow pulse)
+    chonDiemInput.classList.remove('quick-action-highlight');
+    void chonDiemInput.offsetWidth; // reflow
+    chonDiemInput.classList.add('quick-action-highlight');
+    setTimeout(() => {
+      chonDiemInput.classList.remove('quick-action-highlight');
+    }, 1800);
+
+    // 6. Rung nhẹ phản hồi haptic nếu có
+    if (typeof vibrateShort === 'function') {
+      vibrateShort();
+    }
+
+    // 7. Focus vào ô nhập liệu để mở bàn phím ảo ngay lập tức
+    chonDiemInput.focus();
+    setTimeout(() => {
+      chonDiemInput.focus();
+    }, 80);
+    setTimeout(() => {
+      chonDiemInput.focus();
+    }, 250);
+  } catch (err) {
+    console.error('Lỗi khi kích hoạt quickActionAddPoint:', err);
+  }
+};
+
+// Kiểm tra query parameter ?action=add_point khi mở ứng dụng từ trang khác
+(function checkQuickActionParam() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('action') === 'add_point') {
+    setTimeout(() => {
+      if (typeof window.quickActionAddPoint === 'function') {
+        window.quickActionAddPoint();
+      }
+    }, 350);
+  }
+})();
+
 </script>
 </body>
 </html>

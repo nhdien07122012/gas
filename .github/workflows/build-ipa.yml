@@ -41,10 +41,13 @@ jobs:
           npx cap add ios
           npx cap sync ios
 
-      - name: Apply Custom Gas AppIcon (Light, Dark, Tinted for iOS 18+)
+      - name: Apply Custom Native iOS Files (AppIcon, Info.plist, SceneDelegate)
         run: |
           mkdir -p ios/App/App/Assets.xcassets/AppIcon.appiconset
           cp -r resources/ios/AppIcon/* ios/App/App/Assets.xcassets/AppIcon.appiconset/
+          cp resources/ios/Info.plist ios/App/App/Info.plist
+          cp resources/ios/SceneDelegate.swift ios/App/App/SceneDelegate.swift
+          cp resources/ios/AppDelegate.swift ios/App/App/AppDelegate.swift
 
       - name: Build iOS App with Xcode (Unsigned)
         run: |
