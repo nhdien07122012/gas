@@ -17,13 +17,14 @@ jobs:
         run: |
           xcodebuild -version
 
-      - name: Set up Node.js
+      - name: Set up Node.js (Node 22 required for Capacitor 8)
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install dependencies
         run: |
+          node -v
           npm install
 
       - name: Prepare web assets
