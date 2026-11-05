@@ -8,10 +8,14 @@ on:
 jobs:
   build-ios:
     name: Build iOS IPA
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Verify Xcode Version
+        run: |
+          xcodebuild -version
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -31,7 +35,7 @@ jobs:
 
       - name: Sync Capacitor iOS
         run: |
-          npx cap sync ios
+          npx cap sync ios --verbose
 
       - name: Build iOS App with Xcode (Unsigned)
         run: |
