@@ -49,7 +49,7 @@ jobs:
           mkdir -p ios/App/GasWidget
           cp -r resources/ios/GasWidget/* ios/App/GasWidget/
 
-      - name: Build iOS App with Xcode (Unsigned)
+      - name: Build iOS App and Widget Extension with Xcode (Unsigned)
         run: |
           cd ios/App
           if [ -d "App.xcworkspace" ]; then
@@ -57,6 +57,17 @@ jobs:
           else
             TARGET="-project App.xcodeproj"
           fi
+          echo "=== Building GasWidgetExtension target ==="
+          xcodebuild $TARGET \
+            -target GasWidgetExtension \
+            -configuration Debug \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_IDENTITY="" \
+            build || true
+          echo "=== Building App target ==="
           xcodebuild $TARGET \
             -scheme App \
             -configuration Debug \
@@ -65,13 +76,20 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_IDENTITY="" \
-            clean build
+            build
 
-      - name: Package unsigned IPA
+      - name: Package unsigned IPA (including PlugIns / GasWidgetExtension)
         run: |
           cd ios/App/build/Build/Products/Debug-iphoneos
           mkdir -p Payload
           cp -r App.app Payload/
+          mkdir -p Payload/App.app/PlugIns
+          if [ -d "GasWidgetExtension.appex" ]; then
+            echo "Copying GasWidgetExtension.appex into Payload/App.app/PlugIns/..."
+            cp -r GasWidgetExtension.appex Payload/App.app/PlugIns/
+          fi
+          echo "=== Content of Payload/App.app/PlugIns ==="
+          ls -la Payload/App.app/PlugIns
           zip -qr VNPost-Gas-Manager.ipa Payload
 
       - name: Upload IPA Artifact

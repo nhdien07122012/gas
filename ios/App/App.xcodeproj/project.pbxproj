@@ -20,6 +20,30 @@
 		9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9582B6822FE993A50072D4E8 /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B000000E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 504EC2FC1FED79650016851F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B000000A;
+			remoteInfo = GasWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B0000008 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				B0000003 /* GasWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		B0000002 /* GasWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GasWidget.swift; sourceTree = "<group>"; };
 		B0000004 /* GasWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GasWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,10 +131,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 504EC3161FED79650016851F /* Build configuration list for PBXNativeTarget "App" */;
 			buildPhases = (
-				B0000008 /* Embed App Extensions */,
 				504EC3001FED79650016851F /* Sources */,
 				504EC3011FED79650016851F /* Frameworks */,
 				504EC3021FED79650016851F /* Resources */,
+				B0000008 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -174,8 +198,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B000000A /* GasWidgetExtension */,
 				504EC3031FED79650016851F /* App */,
+				B000000A /* GasWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
