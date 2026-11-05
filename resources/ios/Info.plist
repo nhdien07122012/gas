@@ -31,10 +31,16 @@
 			<string>vn.vnpost.gas.add_point</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Thêm điểm gas</string>
-			<key>UIApplicationShortcutItemSubtitle</key>
-			<string>Nhập nhanh điểm gas mới</string>
 			<key>UIApplicationShortcutItemIconType</key>
 			<string>UIApplicationShortcutIconTypeAdd</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>vn.vnpost.gas.clipboard</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Clipboard</string>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeTask</string>
 		</dict>
 	</array>
 	<key>UIApplicationSceneManifest</key>

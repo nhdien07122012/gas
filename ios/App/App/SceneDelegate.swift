@@ -37,37 +37,48 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     @discardableResult
     func handleShortcutItem(_ shortcutItem: UIApplicationShortcutItem) -> Bool {
         if shortcutItem.type == "vn.vnpost.gas.add_point" {
-            triggerQuickActionAddPoint(retries: 10)
+            triggerQuickAction(jsCode: """
+            (function() {
+                if (typeof window.quickActionAddPoint === 'function') {
+                    window.quickActionAddPoint();
+                    return true;
+                }
+                return false;
+            })();
+            """, retries: 10)
+            return true
+        } else if shortcutItem.type == "vn.vnpost.gas.clipboard" {
+            triggerQuickAction(jsCode: """
+            (function() {
+                if (typeof window.quickActionClipboard === 'function') {
+                    window.quickActionClipboard();
+                    return true;
+                } else {
+                    window.location.href = 'clipboard.html';
+                    return true;
+                }
+            })();
+            """, retries: 10)
             return true
         }
         return false
     }
 
-    private func triggerQuickActionAddPoint(retries: Int) {
+    private func triggerQuickAction(jsCode: String, retries: Int) {
         guard let bridgeVC = window?.rootViewController as? CAPBridgeViewController else {
             if retries > 0 {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                    self?.triggerQuickActionAddPoint(retries: retries - 1)
+                    self?.triggerQuickAction(jsCode: jsCode, retries: retries - 1)
                 }
             }
             return
         }
 
-        let js = """
-        (function() {
-            if (typeof window.quickActionAddPoint === 'function') {
-                window.quickActionAddPoint();
-                return true;
-            }
-            return false;
-        })();
-        """
-
-        bridgeVC.webView?.evaluateJavaScript(js) { [weak self] (result, error) in
+        bridgeVC.webView?.evaluateJavaScript(jsCode) { [weak self] (result, error) in
             let success = (result as? Bool) == true
             if !success && retries > 0 {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { [weak self] in
-                    self?.triggerQuickActionAddPoint(retries: retries - 1)
+                    self?.triggerQuickAction(jsCode: jsCode, retries: retries - 1)
                 }
             }
         }

@@ -1826,6 +1826,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Hỗ trợ 3D Touch Quick Action: điều hướng về index.html để thêm điểm gas
+
+// Hỗ trợ 3D Touch Quick Action: điều hướng về clipboard.html
+window.quickActionClipboard = function() {
+  window.location.href = 'clipboard.html';
+};
+
 window.quickActionAddPoint = function() {
   window.location.href = 'index.html?action=add_point';
 };

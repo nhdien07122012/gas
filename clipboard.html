@@ -1138,6 +1138,14 @@
     window.addEventListener('load', loadHistory);
   
 // Hỗ trợ 3D Touch Quick Action: điều hướng về index.html để thêm điểm gas
+
+// Quick Action khi đã ở sẵn trang Clipboard
+window.quickActionClipboard = function() {
+  if (typeof loadHistory === 'function') {
+    loadHistory();
+  }
+};
+
 window.quickActionAddPoint = function() {
   window.location.href = 'index.html?action=add_point';
 };
