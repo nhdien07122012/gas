@@ -3693,9 +3693,9 @@ function formatCurrencyCompact(amount) {
   const millions = Math.floor(absAmount / 1000000);
   const thousands = Math.floor((absAmount % 1000000) / 1000);
   if (absAmount === 0) return '0 đ';
-  if (millions > 0 && thousands > 0) return `${sign}${millions}tr${String(thousands).replace(/^0+/, '')} ngàn`;
+  if (millions > 0 && thousands > 0) return `${sign}${millions}tr${String(thousands).replace(/^0+/, '')}`;
   if (millions > 0) return `${sign}${millions}tr`;
-  return `${sign}${Math.floor(absAmount / 1000)} ngàn`;
+  return `${sign}${Math.floor(absAmount / 1000)}k`;
 }
 
 function calculateStats(data) {

@@ -235,12 +235,22 @@ struct GasWidgetProvider: TimelineProvider {
 
         if absAmount == 0 { return "0 đ" }
         if millions > 0 && thousands > 0 {
-            return "\(sign)\(millions)tr\(thousands) ngàn"
+            return "\(sign)\(millions)tr\(thousands)"
         }
         if millions > 0 {
             return "\(sign)\(millions)tr"
         }
-        return "\(sign)\(thousands) ngàn"
+        return "\(sign)\(thousands)k"
+    }
+}
+
+extension GasShiftEntry {
+    var displayAmount: String {
+        let cleaned = totalFormatted
+            .replacingOccurrences(of: " ngàn", with: "")
+            .replacingOccurrences(of: "ngàn", with: "")
+            .trimmingCharacters(in: .whitespaces)
+        return cleaned.isEmpty ? totalFormatted : cleaned
     }
 }
 
@@ -275,23 +285,24 @@ struct GasProgressRingView: View {
             // Thông số ở giữa vòng tròn
             VStack(spacing: 2) {
                 Text("\(percentage)%")
-                    .font(.system(size: 20, weight: .heavy, design: .rounded))
-                    .foregroundColor(Color(red: 16/255, green: 185/255, blue: 129/255))
+                    .font(.system(size: 21, weight: .heavy, design: .rounded))
+                    .foregroundColor(rate > 0 ? Color(red: 16/255, green: 185/255, blue: 129/255) : .primary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
 
                 Text("ĐÃ THU")
                     .font(.system(size: 9, weight: .heavy))
                     .foregroundColor(.secondary)
+                    .tracking(0.3)
             }
         }
-        .frame(width: 88, height: 88)
+        .frame(width: 86, height: 86)
     }
 }
 
 // MARK: - Widget 1 Views: Tổng quan Ca & Doanh thu
 
-// Kích thước 2x2 (.systemSmall): Chỉ hiện Số tiền và Số giao dịch to rõ
+// Kích thước 2x2 (.systemSmall): Chỉ hiện Số tiền và Số giao dịch to rõ, không tràn chữ
 struct GasWidgetSmallView: View {
     let entry: GasShiftEntry
 
@@ -315,52 +326,50 @@ struct GasWidgetSmallView: View {
                     .frame(width: 7, height: 7)
             }
 
-            Spacer(minLength: 6)
+            Spacer(minLength: 4)
 
-            // Số tiền: To, đậm, cực kỳ trực quan
+            // Số tiền: To, đậm, hiển thị gọn (7tr440), không bao giờ bị cắt thành "ng..."
             VStack(alignment: .leading, spacing: 2) {
                 Text("Doanh thu ca")
-                    .font(.system(size: 11, weight: .semibold))
+                    .font(.system(size: 10, weight: .semibold))
                     .foregroundColor(.secondary)
 
-                Text(entry.totalFormatted)
-                    .font(.system(size: 24, weight: .black, design: .rounded))
+                Text(entry.displayAmount)
+                    .font(.system(size: 25, weight: .black, design: .rounded))
                     .foregroundColor(Color(red: 16/255, green: 185/255, blue: 129/255))
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
             }
 
-            Spacer(minLength: 8)
+            Spacer(minLength: 6)
 
-            // Số giao dịch: Khối pill xanh nổi bật, số to
+            // Số giao dịch: Khối pill xanh nổi bật, chữ gọn "12 điểm" không bị cắt "12 g..."
             HStack(spacing: 6) {
                 Image(systemName: "doc.text.fill")
                     .font(.system(size: 12, weight: .bold))
                     .foregroundColor(Color(red: 0/255, green: 91/255, blue: 166/255))
 
-                HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text("\(entry.count)")
-                        .font(.system(size: 18, weight: .heavy, design: .rounded))
-                        .foregroundColor(Color(red: 0/255, green: 91/255, blue: 166/255))
+                Text("\(entry.count)")
+                    .font(.system(size: 16, weight: .black, design: .rounded))
+                    .foregroundColor(Color(red: 0/255, green: 91/255, blue: 166/255))
 
-                    Text("giao dịch")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(.primary.opacity(0.8))
-                }
+                Text("điểm")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(.primary.opacity(0.75))
 
                 Spacer()
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 7)
+            .padding(.horizontal, 9)
+            .padding(.vertical, 6)
             .background(Color(red: 0/255, green: 91/255, blue: 166/255).opacity(0.12))
-            .cornerRadius(10)
+            .cornerRadius(9)
         }
-        .padding(14)
+        .padding(13)
         .widgetURL(URL(string: "gasmanager://open"))
     }
 }
 
-// Kích thước 4x2 (.systemMedium): Thiết kế dạng Ring vòng tròn tiến độ & thẻ thông tin
+// Kích thước 4x2 (.systemMedium): Thiết kế dạng Ring vòng tròn tiến độ & bảng số liệu không tràn
 struct GasWidgetMediumView: View {
     let entry: GasShiftEntry
 
@@ -373,48 +382,59 @@ struct GasWidgetMediumView: View {
     }
 
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 14) {
             // 1. Ring vòng tròn trực quan
             GasProgressRingView(rate: rate, percentage: percentage)
 
             // 2. Nội dung thông tin chi tiết
-            VStack(alignment: .leading, spacing: 6) {
-                // Tiêu đề & Tên ca
+            VStack(alignment: .leading, spacing: 0) {
+                // Header: Tên ca bên trái & Huy hiệu tổng điểm bên phải
                 HStack(spacing: 5) {
                     Image(systemName: "flame.fill")
-                        .font(.system(size: 13, weight: .bold))
+                        .font(.system(size: 12, weight: .bold))
                         .foregroundColor(Color(red: 239/255, green: 68/255, blue: 68/255))
 
-                    Text("Gas Manager")
+                    Text(entry.shiftName)
                         .font(.system(size: 13, weight: .bold))
                         .foregroundColor(.primary)
-
-                    Text("• \(entry.shiftName)")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(.secondary)
                         .lineLimit(1)
 
                     Spacer()
+
+                    // Huy hiệu tổng số điểm (gọn gàng, không chiếm dòng dưới)
+                    HStack(spacing: 3) {
+                        Image(systemName: "doc.text.fill")
+                            .font(.system(size: 9, weight: .bold))
+                        Text("\(entry.count) điểm")
+                            .font(.system(size: 11, weight: .bold))
+                    }
+                    .foregroundColor(Color(red: 0/255, green: 91/255, blue: 166/255))
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 3)
+                    .background(Color(red: 0/255, green: 91/255, blue: 166/255).opacity(0.12))
+                    .cornerRadius(6)
                 }
 
-                // Doanh thu ca: Chữ to đậm nét
+                Spacer(minLength: 4)
+
+                // Doanh thu ca: Chữ to đậm nét, không tràn chữ
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(entry.totalFormatted)
-                        .font(.system(size: 24, weight: .black, design: .rounded))
+                    Text(entry.displayAmount)
+                        .font(.system(size: 25, weight: .black, design: .rounded))
                         .foregroundColor(Color(red: 16/255, green: 185/255, blue: 129/255))
                         .lineLimit(1)
-                        .minimumScaleFactor(0.8)
+                        .minimumScaleFactor(0.7)
 
                     Text("Tổng doanh thu ca")
-                        .font(.system(size: 11, weight: .semibold))
+                        .font(.system(size: 10, weight: .semibold))
                         .foregroundColor(.secondary)
                 }
 
-                Spacer(minLength: 2)
+                Spacer(minLength: 6)
 
-                // 3 Thẻ thống kê: Đã nộp, Chưa nộp, Tổng điểm
-                HStack(spacing: 6) {
-                    // Đã nộp
+                // 2 Thẻ trạng thái phân bổ đều 50/50 (Đã nộp & Chưa nộp) - Không còn bị chấm chấm (...)
+                HStack(spacing: 8) {
+                    // Thẻ Đã nộp
                     HStack(spacing: 4) {
                         Circle()
                             .fill(Color(red: 16/255, green: 185/255, blue: 129/255))
@@ -426,12 +446,12 @@ struct GasWidgetMediumView: View {
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.primary)
                     }
-                    .padding(.horizontal, 7)
-                    .padding(.vertical, 4)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 5)
                     .background(Color(red: 16/255, green: 185/255, blue: 129/255).opacity(0.12))
                     .cornerRadius(7)
 
-                    // Chưa nộp
+                    // Thẻ Chưa nộp
                     HStack(spacing: 4) {
                         Circle()
                             .fill(Color.orange)
@@ -443,29 +463,15 @@ struct GasWidgetMediumView: View {
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.orange)
                     }
-                    .padding(.horizontal, 7)
-                    .padding(.vertical, 4)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 5)
                     .background(Color.orange.opacity(0.12))
-                    .cornerRadius(7)
-
-                    // Tổng điểm
-                    HStack(spacing: 3) {
-                        Text("\(entry.count)")
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundColor(Color(red: 0/255, green: 91/255, blue: 166/255))
-                        Text("điểm")
-                            .font(.system(size: 10, weight: .medium))
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(.horizontal, 7)
-                    .padding(.vertical, 4)
-                    .background(Color(red: 0/255, green: 91/255, blue: 166/255).opacity(0.1))
                     .cornerRadius(7)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(14)
+        .padding(13)
         .widgetURL(URL(string: "gasmanager://open"))
     }
 }
