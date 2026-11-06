@@ -57,17 +57,7 @@ jobs:
           else
             TARGET="-project App.xcodeproj"
           fi
-          echo "=== Building GasWidgetExtension target ==="
-          xcodebuild $TARGET \
-            -target GasWidgetExtension \
-            -configuration Debug \
-            -destination 'generic/platform=iOS' \
-            -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_IDENTITY="" \
-            build
-          echo "=== Building App target ==="
+          echo "=== Building App and GasWidgetExtension with scheme App ==="
           xcodebuild $TARGET \
             -scheme App \
             -configuration Debug \
