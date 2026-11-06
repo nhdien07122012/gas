@@ -302,13 +302,13 @@ struct GasProgressRingView: View {
 
 // MARK: - Widget 1 Views: Tổng quan Ca & Doanh thu
 
-// Kích thước 2x2 (.systemSmall): Chỉ hiện Số tiền và Số giao dịch to rõ, không tràn chữ
+// Kích thước 2x2 (.systemSmall): Bỏ số điểm và chữ 'doanh thu ca', phóng to số tiền vừa khung
 struct GasWidgetSmallView: View {
     let entry: GasShiftEntry
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Header: Tên ca & Chấm xanh
+            // Header: Tên ca & Chấm xanh Live
             HStack(spacing: 5) {
                 Image(systemName: "flame.fill")
                     .font(.system(size: 13, weight: .bold))
@@ -326,45 +326,19 @@ struct GasWidgetSmallView: View {
                     .frame(width: 7, height: 7)
             }
 
-            Spacer(minLength: 4)
+            Spacer()
 
-            // Số tiền: To, đậm, hiển thị gọn (7tr440), không bao giờ bị cắt thành "ng..."
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Doanh thu ca")
-                    .font(.system(size: 10, weight: .semibold))
-                    .foregroundColor(.secondary)
+            // Doanh thu khổng lồ, phóng to tối đa vừa vặn toàn bộ khung
+            Text(entry.displayAmount)
+                .font(.system(size: 36, weight: .black, design: .rounded))
+                .foregroundColor(Color(red: 16/255, green: 185/255, blue: 129/255))
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-                Text(entry.displayAmount)
-                    .font(.system(size: 25, weight: .black, design: .rounded))
-                    .foregroundColor(Color(red: 16/255, green: 185/255, blue: 129/255))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            }
-
-            Spacer(minLength: 6)
-
-            // Số giao dịch: Khối pill xanh nổi bật, chữ gọn "12 điểm" không bị cắt "12 g..."
-            HStack(spacing: 6) {
-                Image(systemName: "doc.text.fill")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundColor(Color(red: 0/255, green: 91/255, blue: 166/255))
-
-                Text("\(entry.count)")
-                    .font(.system(size: 16, weight: .black, design: .rounded))
-                    .foregroundColor(Color(red: 0/255, green: 91/255, blue: 166/255))
-
-                Text("điểm")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundColor(.primary.opacity(0.75))
-
-                Spacer()
-            }
-            .padding(.horizontal, 9)
-            .padding(.vertical, 6)
-            .background(Color(red: 0/255, green: 91/255, blue: 166/255).opacity(0.12))
-            .cornerRadius(9)
+            Spacer()
         }
-        .padding(13)
+        .padding(14)
         .widgetURL(URL(string: "gasmanager://open"))
     }
 }
