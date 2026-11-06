@@ -587,8 +587,9 @@ struct GasQuickActionsWidget: Widget {
 
 @main
 struct GasWidgetBundle: WidgetBundle {
+    @WidgetBundleBuilder
     var body: some Widget {
-        GasShiftWidget()
         GasQuickActionsWidget()
+        GasShiftWidget()
     }
 }
