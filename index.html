@@ -3599,8 +3599,8 @@ async function generateReport() {
   let reportContent;
   if (currentExpenses.length > 0) {
     const expenseString = currentExpenses.map(expense => `${expense.name} ${formatNumber(expense.amount)}`).join(', ');
-    // Bỏ chữ 'chi tiêu', chỉ để Trừ + các khoản chi
-    reportContent = `Giao ${recipient} ${formatNumber(netDueAmount)} (Tổng ${formatNumber(totalRevenue)} - Trừ ${expenseString})`;
+    // Bỏ tổng doanh thu, chỉ còn: Giao [Người nhận] [Tiền thực nộp] (Trừ [khoản chi])
+    reportContent = `Giao ${recipient} ${formatNumber(netDueAmount)} (Trừ ${expenseString})`;
   } else {
     reportContent = `Giao ${recipient} ${formatNumber(totalRevenue)}`;
   }
@@ -3921,7 +3921,11 @@ async function exportToText() {
     return;
   }
   let content = '';
-  dataToExport.forEach(item => { content += `${item.ten_diem} - ${item.so_tien}\n`; });
+  dataToExport.forEach(item => {
+    const amountNum = parseInt(item.so_tien, 10);
+    const formattedAmount = !isNaN(amountNum) ? formatNumber(amountNum) : (item.so_tien || '0');
+    content += `${item.ten_diem} - ${formattedAmount}\n`;
+  });
   const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
   const link = document.createElement('a');
   const shiftInfo = getCurrentShift();
@@ -4336,7 +4340,7 @@ function renderQuickActions() {
         <button class="btn btn-clipboard" type="button" onclick="window.location.href='clipboard.html';">${svgInline('clipboard')} Clipboard</button>
       </div>
       <div class="action-buttons">
-        <button class="btn btn-chitieu" type="button" onclick="openExpenseModal()">${svgInline('banknotes')} Chi tiêu ca</button>
+        <button class="btn btn-primary" type="button" onclick="exportToText()">${svgInline('arrowUpTray')} Xuất data</button>
         <button class="btn btn-warning" type="button" onclick="openReportModal()">${svgInline('chartBar')} Báo cáo</button>
       </div>
     </div>
