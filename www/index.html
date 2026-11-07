@@ -2986,6 +2986,61 @@ function setupSidebarSwipe() {
 /* ========== QUẢN LÝ CHI TIÊU TRONG CA (LOCALSTORAGE) ========== */
 const EXPENSES_STORAGE_KEY = 'gas_shift_expenses';
 
+function getNormalizedShiftKey(shift) {
+  if (!shift) return '';
+  return getShiftDateKey(shift) || String(shift).trim();
+}
+
+function getAvailableShiftMap() {
+  const shiftMap = new Map();
+
+  // 1. Thu thập từ allData
+  allData.forEach(item => {
+    if (item.ca) {
+      const key = getNormalizedShiftKey(item.ca);
+      if (key && !shiftMap.has(key)) {
+        shiftMap.set(key, formatShiftDayLabel(item.ca));
+      }
+    }
+  });
+
+  // 2. Thu thập từ ca hiện tại
+  const shiftInfo = getCurrentShift();
+  const curKey = shiftInfo.shiftKey || currentShift;
+  if (curKey) {
+    const key = getNormalizedShiftKey(curKey);
+    if (key && !shiftMap.has(key)) {
+      shiftMap.set(key, formatShiftDayLabel(key));
+    }
+  }
+
+  // 3. Thu thập từ chi tiêu đã lưu
+  const allStoredExps = getAllStoredExpenses();
+  allStoredExps.forEach(exp => {
+    if (exp.shift) {
+      const key = getNormalizedShiftKey(exp.shift);
+      if (key && !shiftMap.has(key)) {
+        shiftMap.set(key, formatShiftDayLabel(key));
+      }
+    }
+  });
+
+  // 4. Thu thập từ kết quả đếm tiền đã lưu
+  try {
+    const savedCounts = JSON.parse(localStorage.getItem('money_counts') || '[]');
+    savedCounts.forEach(c => {
+      if (c.shift) {
+        const key = getNormalizedShiftKey(c.shift);
+        if (key && !shiftMap.has(key)) {
+          shiftMap.set(key, formatShiftDayLabel(key));
+        }
+      }
+    });
+  } catch (e) {}
+
+  return shiftMap;
+}
+
 function getAllStoredExpenses() {
   try {
     return JSON.parse(localStorage.getItem(EXPENSES_STORAGE_KEY) || '[]');
@@ -3006,8 +3061,12 @@ function saveAllStoredExpenses(expenses) {
 
 function getShiftExpenses(shift) {
   if (!shift) return [];
+  const targetKey = getNormalizedShiftKey(shift);
   const all = getAllStoredExpenses();
-  return all.filter(item => item.shift === shift);
+  return all.filter(item => {
+    const itemKey = getNormalizedShiftKey(item.shift);
+    return (targetKey && itemKey === targetKey) || item.shift === shift;
+  });
 }
 
 function addShiftExpense(shift, name, amount, note = '') {
@@ -3015,11 +3074,12 @@ function addShiftExpense(shift, name, amount, note = '') {
   const numAmount = parseInt(amount, 10);
   if (isNaN(numAmount) || numAmount <= 0) return null;
 
+  const normalizedShift = getNormalizedShiftKey(shift) || shift;
   const now = new Date();
   const timeStr = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
   const newExp = {
     id: 'exp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-    shift: shift,
+    shift: normalizedShift,
     name: name.trim(),
     amount: numAmount,
     note: (note || '').trim(),
@@ -3044,8 +3104,12 @@ function deleteShiftExpense(id) {
 }
 
 function clearShiftExpenses(shift) {
+  const targetKey = getNormalizedShiftKey(shift);
   let all = getAllStoredExpenses();
-  all = all.filter(item => item.shift !== shift);
+  all = all.filter(item => {
+    const itemKey = getNormalizedShiftKey(item.shift);
+    return !((targetKey && itemKey === targetKey) || item.shift === shift);
+  });
   saveAllStoredExpenses(all);
 }
 
@@ -3085,24 +3149,22 @@ function openExpenseModal() {
   vibrateShort();
   loadExpenseTemplates();
 
-  const shifts = new Set();
-  allData.forEach(item => { if (item.ca) shifts.add(item.ca); });
-  if (currentShift) shifts.add(currentShift);
-
+  const shiftMap = getAvailableShiftMap();
   const select = document.getElementById('expense-shift-select');
   select.innerHTML = '';
 
-  const sortedShifts = Array.from(shifts).sort().reverse();
-  if (sortedShifts.length === 0) {
+  const sortedKeys = Array.from(shiftMap.keys()).sort((a, b) => b.localeCompare(a));
+  if (sortedKeys.length === 0) {
     select.innerHTML = '<option value="">Chưa có ca làm việc</option>';
   } else {
-    sortedShifts.forEach(shift => {
+    sortedKeys.forEach(shiftKey => {
       const opt = document.createElement('option');
-      opt.value = shift;
-      opt.textContent = formatShiftDayLabel(shift);
+      opt.value = shiftKey;
+      opt.textContent = shiftMap.get(shiftKey) || shiftKey;
       select.appendChild(opt);
     });
-    const preferredShift = (currentShift && shifts.has(currentShift)) ? currentShift : sortedShifts[0];
+    const currentKey = getNormalizedShiftKey(currentShift || getCurrentShift().shiftKey);
+    const preferredShift = (currentKey && shiftMap.has(currentKey)) ? currentKey : sortedKeys[0];
     select.value = preferredShift;
   }
 
@@ -3222,11 +3284,11 @@ function submitNewExpense() {
 
 function handleDeleteExpenseItem(id) {
   vibrateShort();
-  if (confirm('Bạn có chắc muốn xóa khoản chi này không?')) {
+  if (confirm('Bạn có chắc muốn xóa khoản chi này?')) {
     deleteShiftExpense(id);
     renderExpenseModalList();
     showToast('Đã xóa khoản chi!', 'info');
-    vibrateSuccess();
+    vibrateShort();
   }
 }
 
@@ -3236,13 +3298,16 @@ function clearAllExpensesForSelectedShift() {
   const shift = select ? select.value : '';
   if (!shift) return;
 
-  const expenses = getShiftExpenses(shift);
-  if (expenses.length === 0) return;
+  const currentList = getShiftExpenses(shift);
+  if (currentList.length === 0) {
+    showToast('Ca này hiện chưa có khoản chi tiêu nào!', 'info');
+    return;
+  }
 
-  if (confirm(`Bạn có chắc muốn xóa TOÀN BỘ ${expenses.length} khoản chi tiêu của ca ${formatShiftDayLabel(shift)} không? Hành động này sẽ loại bỏ chi tiêu khỏi báo cáo ca.`)) {
+  if (confirm(`Bạn có chắc chắn muốn xóa TOÀN BỘ ${currentList.length} khoản chi của ca này không?`)) {
     clearShiftExpenses(shift);
     renderExpenseModalList();
-    showToast('Đã xóa sạch chi tiêu ca!', 'success');
+    showToast('Đã xóa toàn bộ chi tiêu của ca!', 'success');
     vibrateSuccess();
   }
 }
@@ -3258,23 +3323,21 @@ function openReportModal() {
   const recipientInput = document.getElementById('report-recipient');
   recipientInput.value = lastRecipient || '';
 
-  const shifts = new Set();
-  allData.forEach(item => { if (item.ca) shifts.add(item.ca); });
-  if (currentShift) shifts.add(currentShift);
-
+  const shiftMap = getAvailableShiftMap();
   const shiftSelect = document.getElementById('report-shift');
   shiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
 
-  const sortedShifts = Array.from(shifts).sort().reverse();
-  sortedShifts.forEach(shift => {
+  const sortedKeys = Array.from(shiftMap.keys()).sort((a, b) => b.localeCompare(a));
+  sortedKeys.forEach(shiftKey => {
     const option = document.createElement('option');
-    option.value = shift;
-    option.textContent = formatShiftDayLabel(shift);
+    option.value = shiftKey;
+    option.textContent = shiftMap.get(shiftKey) || shiftKey;
     shiftSelect.appendChild(option);
   });
 
   // Mặc định chọn ca hiện tại nếu có trong danh sách
-  const defaultShift = (currentShift && shifts.has(currentShift)) ? currentShift : (sortedShifts[0] || '');
+  const currentKey = getNormalizedShiftKey(currentShift || getCurrentShift().shiftKey);
+  const defaultShift = (currentKey && shiftMap.has(currentKey)) ? currentKey : (sortedKeys[0] || '');
   if (defaultShift) {
     shiftSelect.value = defaultShift;
   }
@@ -3320,29 +3383,20 @@ function loadExpenseTemplates() {
   if (savedExpenses) {
     expenseTemplateList = JSON.parse(savedExpenses);
   } else {
-    expenseTemplateList = [
-      { name: 'Xăng xe', amount: 0 },
-      { name: 'Ăn trưa', amount: 0 },
-      { name: 'Sửa xe / Vá săm', amount: 0 },
-      { name: 'Băng keo / Bút', amount: 0 },
-      { name: 'Chi phí khác', amount: 0 }
-    ];
+    expenseTemplateList = [{ name: 'xăng', amount: 0 }];
     localStorage.setItem('gas_point_expense_templates', JSON.stringify(expenseTemplateList));
   }
   updateExpenseTemplatesDatalist();
 }
 
 function updateExpenseTemplatesDatalist() {
-  const targets = ['expense-templates-list', 'global-expense-templates'];
-  targets.forEach(id => {
-    const datalist = document.getElementById(id);
-    if (!datalist) return;
-    datalist.innerHTML = '';
-    expenseTemplateList.forEach(expense => {
-      const option = document.createElement('option');
-      option.value = expense.name;
-      datalist.appendChild(option);
-    });
+  const expenseDatalist = document.getElementById('expense-templates-list');
+  if (!expenseDatalist) return;
+  expenseDatalist.innerHTML = '';
+  expenseTemplateList.forEach(expense => {
+    const option = document.createElement('option');
+    option.value = expense.name;
+    expenseDatalist.appendChild(option);
   });
 }
 
@@ -3356,7 +3410,11 @@ function getSavedCountForCurrentShift(shiftKey = null) {
     const savedCounts = JSON.parse(localStorage.getItem('money_counts') || '[]');
     const selectedShift = shiftKey || document.getElementById('report-shift')?.value;
     if (!selectedShift) return null;
-    const savedData = savedCounts.find(item => item.shift === selectedShift);
+    const targetKey = getNormalizedShiftKey(selectedShift);
+    const savedData = savedCounts.find(item => {
+      const itemKey = getNormalizedShiftKey(item.shift);
+      return (targetKey && itemKey === targetKey) || item.shift === selectedShift;
+    });
     if (!savedData || typeof savedData.total !== 'number') return null;
     return String(savedData.total);
   } catch (error) {
@@ -3382,7 +3440,6 @@ function saveRecipient() {
     vibrateSuccess();
   } else {
     showToast('Người nhận đã có trong danh sách!', 'info');
-    vibrateShort();
   }
   saveLastReportRecipient(recipient);
   updateReportSummary();
@@ -3420,61 +3477,57 @@ function addExpense() {
   document.getElementById('expense-name').value = '';
   document.getElementById('expense-amount').value = '';
   updateReportSummary();
-  showToast(`Đã lưu chi tiêu vào ca: ${expenseName} (-${formatCurrency(amount)})`, 'success');
+  showToast(`Đã lưu chi tiêu: ${expenseName} (-${formatNumber(amount)})`, 'success');
   vibrateSuccess();
-}
-
-function updateExpensesList() {
-  const expensesList = document.getElementById('expenses-list');
-  if (!expensesList) return;
-  if (currentExpenses.length === 0) {
-    expensesList.innerHTML = '';
-    return;
-  }
-  let html = `<h4 style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">${svgInline('pencilSquare')} Chi tiêu trong ca:</h4>`;
-  currentExpenses.forEach((expense, index) => {
-    html += `
-      <div class="expense-item">
-        <div class="expense-item-info">
-          <div class="expense-item-name">${escapeHTML(expense.name)}</div>
-          ${expense.time ? `<div class="expense-item-meta"><span>${expense.time}</span></div>` : ''}
-        </div>
-        <div class="expense-item-amount">-${formatCurrency(expense.amount)}</div>
-        <button class="expense-item-delete" onclick="removeExpense(${index})" onmousedown="vibrateShort()" aria-label="Xóa" title="Xóa">${svgInline('xMark')}</button>
-      </div>
-    `;
-  });
-  const totalExpense = currentExpenses.reduce((sum, expense) => sum + (expense.amount || 0), 0);
-  html += `<div class="expense-total">Tổng chi tiêu: -${formatCurrency(totalExpense)}</div>`;
-  expensesList.innerHTML = html;
 }
 
 function removeExpense(index) {
   vibrateShort();
-  if (index >= 0 && index < currentExpenses.length) {
-    const item = currentExpenses[index];
-    if (item && item.id) {
-      deleteShiftExpense(item.id);
-    }
-    const shiftSelect = document.getElementById('report-shift');
-    const selectedShift = shiftSelect ? shiftSelect.value : '';
-    currentExpenses = getShiftExpenses(selectedShift);
-    updateExpensesList();
-    updateReportSummary();
-    showToast('Đã xóa khoản chi khỏi ca!', 'info');
+  const shiftSelect = document.getElementById('report-shift');
+  const selectedShift = shiftSelect ? shiftSelect.value : '';
+
+  const itemToRemove = currentExpenses[index];
+  if (itemToRemove && itemToRemove.id) {
+    deleteShiftExpense(itemToRemove.id);
+  } else {
+    currentExpenses.splice(index, 1);
   }
+
+  if (selectedShift) {
+    currentExpenses = getShiftExpenses(selectedShift);
+  }
+  updateExpensesList();
+  updateReportSummary();
+  showToast('Đã xóa khoản chi!', 'info');
+}
+
+function updateExpensesList() {
+  const expensesListDiv = document.getElementById('expenses-list');
+  if (currentExpenses.length === 0) {
+    expensesListDiv.innerHTML = '';
+    return;
+  }
+  let html = '<div style="margin-top: 10px;"><strong>Các khoản chi trong ca:</strong></div>';
+  currentExpenses.forEach((expense, index) => {
+    html += `
+      <div class="expense-item">
+        <span>${expense.name}: ${formatNumber(expense.amount)} đ</span>
+        <button class="btn-danger btn-sm" onclick="removeExpense(${index})">Xóa</button>
+      </div>
+    `;
+  });
+  const totalExpense = currentExpenses.reduce((sum, expense) => sum + (expense.amount || 0), 0);
+  html += `<div class="expense-total">Tổng chi: -${formatNumber(totalExpense)} đ</div>`;
+  expensesListDiv.innerHTML = html;
 }
 
 function updateReportSummary() {
-  const shiftSelect = document.getElementById('report-shift');
-  const selectedShift = shiftSelect ? shiftSelect.value : '';
-  const actualCountInput = document.getElementById('report-actual-count');
-  const recipientInput = document.getElementById('report-recipient');
-
+  const selectedShift = document.getElementById('report-shift').value;
   const summaryDiv = document.getElementById('report-summary');
-  const detailsDiv = document.getElementById('report-details');
+  const detailsP = document.getElementById('report-details');
   const totalP = document.getElementById('report-total');
   const generateBtn = document.getElementById('btn-generate-report');
+  const recipient = document.getElementById('report-recipient').value.trim();
 
   if (!selectedShift) {
     summaryDiv.style.display = 'none';
@@ -3482,11 +3535,15 @@ function updateReportSummary() {
     return;
   }
 
-  const recipient = recipientInput.value.trim();
-  const shiftData = allData.filter(item => item.ca === selectedShift);
+  const targetShiftKey = getNormalizedShiftKey(selectedShift);
+  const shiftData = allData.filter(item => {
+    const itemKey = getNormalizedShiftKey(item.ca);
+    return (targetShiftKey && itemKey === targetShiftKey) || item.ca === selectedShift;
+  });
+
   if (shiftData.length === 0) {
-    detailsDiv.innerHTML = '<p>Không có dữ liệu điểm gas cho ca này</p>';
-    totalP.textContent = '';
+    detailsP.innerHTML = 'Không có dữ liệu cho ca này!';
+    totalP.innerHTML = '';
     summaryDiv.style.display = 'block';
     generateBtn.disabled = true;
     return;
@@ -3494,22 +3551,19 @@ function updateReportSummary() {
 
   const totalRevenue = shiftData.reduce((sum, item) => sum + (parseInt(item.so_tien) || 0), 0);
   const totalExpense = currentExpenses.reduce((sum, expense) => sum + (expense.amount || 0), 0);
-  const netDueAmount = totalRevenue - totalExpense; // Số tiền thực tế phải nộp sau khi trừ chi tiêu
+  const netDueAmount = totalRevenue - totalExpense;
 
-  const actualCountedAmount = actualCountInput.value.trim() !== ''
-    ? (parseInt(actualCountInput.value, 10) || 0)
-    : totalRevenue;
-
-  // Lệch giữa tiền thực tế đếm được và số tiền cần nộp sau khi trừ chi tiêu
+  const actualCountVal = document.getElementById('report-actual-count').value;
+  const actualCountedAmount = actualCountVal ? parseInt(actualCountVal, 10) : 0;
   const diffFromNet = actualCountedAmount - netDueAmount;
   const isMatched = (diffFromNet === 0);
 
-  detailsDiv.innerHTML = `
-    <div class="report-line"><span class="report-label">Tổng doanh thu ca:</span><span class="report-value">${formatCurrencyCompact(totalRevenue)}</span></div>
-    <div class="report-line"><span class="report-label">Đã chi tiêu trong ca:</span><span class="report-value danger">-${formatCurrencyCompact(totalExpense)}</span></div>
-    <div class="report-line" style="background:var(--bg-secondary);padding:5px 8px;border-radius:var(--radius-xs);margin:4px 0;"><span class="report-label" style="font-weight:700;">Thực nộp sau chi tiêu:</span><span class="report-value" style="font-weight:800;color:var(--primary);">${formatCurrencyCompact(netDueAmount)}</span></div>
-    <div class="report-line"><span class="report-label">Thực tế đã đếm:</span><span class="report-value">${formatCurrencyCompact(actualCountedAmount)}</span></div>
-    <div class="report-line"><span class="report-label">Chênh lệch đối soát:</span><span class="report-value ${isMatched ? 'highlight' : 'danger'}" style="font-weight:700;">${isMatched ? '0 đ (Khớp tiền)' : (diffFromNet > 0 ? '+ Thừa ' + formatCurrencyCompact(diffFromNet) : '- Thiếu ' + formatCurrencyCompact(Math.abs(diffFromNet)))}</span></div>
+  detailsP.innerHTML = `
+    <div class="report-row"><span class="report-label">Tổng doanh thu ca:</span><span class="report-value highlight">${formatCurrencyCompact(totalRevenue)}</span></div>
+    <div class="report-row"><span class="report-label">Tổng chi trong ca:</span><span class="report-value danger">-${formatCurrencyCompact(totalExpense)}</span></div>
+    <div class="report-row" style="border-top:1px dashed var(--border-card); padding-top:6px; margin-top:4px;"><span class="report-label" style="font-weight:700;">Tiền thực nộp (cần nộp):</span><span class="report-value highlight" style="font-size:16px;">${formatCurrencyCompact(netDueAmount)}</span></div>
+    <div class="report-row"><span class="report-label">Tiền đếm thực tế:</span><span class="report-value">${formatCurrencyCompact(actualCountedAmount)}</span></div>
+    <div class="report-row"><span class="report-label">Độ lệch đối soát:</span><span class="report-value ${isMatched ? 'highlight' : 'danger'}" style="font-weight:700;">${isMatched ? '0 đ (Khớp tiền)' : (diffFromNet > 0 ? '+ Thừa ' + formatCurrencyCompact(diffFromNet) : '- Thiếu ' + formatCurrencyCompact(Math.abs(diffFromNet)))}</span></div>
   `;
 
   totalP.innerHTML = `Trạng thái: <span style="font-weight:700; color: ${isMatched ? 'var(--color-success, #10b981)' : 'var(--color-danger, #ef4444)'}">${isMatched ? '✓ Khớp hoàn toàn' : '⚠ Chưa khớp (' + (diffFromNet > 0 ? 'Thừa ' + formatCurrencyCompact(diffFromNet) : 'Thiếu ' + formatCurrencyCompact(Math.abs(diffFromNet))) + ')'}</span>`;
@@ -3526,7 +3580,13 @@ async function generateReport() {
     vibrateError();
     return;
   }
-  const shiftData = allData.filter(item => item.ca === selectedShift);
+
+  const targetShiftKey = getNormalizedShiftKey(selectedShift);
+  const shiftData = allData.filter(item => {
+    const itemKey = getNormalizedShiftKey(item.ca);
+    return (targetShiftKey && itemKey === targetShiftKey) || item.ca === selectedShift;
+  });
+
   if (shiftData.length === 0) {
     showToast('Không có dữ liệu cho ca này!', 'error');
     vibrateError();
@@ -3539,7 +3599,8 @@ async function generateReport() {
   let reportContent;
   if (currentExpenses.length > 0) {
     const expenseString = currentExpenses.map(expense => `${expense.name} ${formatNumber(expense.amount)}`).join(', ');
-    reportContent = `Giao ${recipient} ${formatNumber(netDueAmount)} (Tổng ${formatNumber(totalRevenue)} - Trừ chi tiêu: ${expenseString})`;
+    // Bỏ chữ 'chi tiêu', chỉ để Trừ + các khoản chi
+    reportContent = `Giao ${recipient} ${formatNumber(netDueAmount)} (Tổng ${formatNumber(totalRevenue)} - Trừ ${expenseString})`;
   } else {
     reportContent = `Giao ${recipient} ${formatNumber(totalRevenue)}`;
   }
@@ -3886,14 +3947,13 @@ function openOutOfHoursModal() {
   if (shiftInfo.start) {
     showToast('Lưu ý: Bạn đang trong ca làm việc, nhưng vẫn có thể chọn ca khác để thêm bù điểm.', 'info');
   }
-  const shifts = new Set();
-  allData.forEach(item => { if (item.ca) shifts.add(item.ca); });
+  const shiftMap = getAvailableShiftMap();
   const shiftSelect = document.getElementById('out-of-hours-shift');
   shiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
-  Array.from(shifts).sort().reverse().forEach(shift => {
+  Array.from(shiftMap.keys()).sort((a, b) => b.localeCompare(a)).forEach(shiftKey => {
     const option = document.createElement('option');
-    option.value = shift;
-    option.textContent = formatShiftDayLabel(shift);
+    option.value = shiftKey;
+    option.textContent = shiftMap.get(shiftKey) || shiftKey;
     shiftSelect.appendChild(option);
   });
 
@@ -4012,23 +4072,23 @@ function formatShiftName(shiftKey) {
 function openQuickViewModal() {
   closeSidebar();
   vibrateShort();
-  const shifts = new Set();
-  allData.forEach(item => { if (item.ca) shifts.add(item.ca); });
+  const shiftMap = getAvailableShiftMap();
   const shiftSelect = document.getElementById('quick-view-shift');
   shiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
-  Array.from(shifts).sort().reverse().forEach(shift => {
+  const sortedKeys = Array.from(shiftMap.keys()).sort((a, b) => b.localeCompare(a));
+  sortedKeys.forEach(shiftKey => {
     const option = document.createElement('option');
-    option.value = shift;
-    option.textContent = formatShiftDayLabel(shift);
+    option.value = shiftKey;
+    option.textContent = shiftMap.get(shiftKey) || shiftKey;
     shiftSelect.appendChild(option);
   });
-  const currentShiftInfo = getCurrentShift();
-  if (currentShiftInfo.shiftKey) {
-    const currentMatch = Array.from(shifts).find(shift => getShiftDateKey(shift) === currentShiftInfo.shiftKey);
-    if (currentMatch) {
-      shiftSelect.value = currentMatch;
-      updateQuickViewList();
-    }
+  const currentKey = getNormalizedShiftKey(currentShift || getCurrentShift().shiftKey);
+  if (currentKey && shiftMap.has(currentKey)) {
+    shiftSelect.value = currentKey;
+    updateQuickViewList();
+  } else if (sortedKeys.length > 0) {
+    shiftSelect.value = sortedKeys[0];
+    updateQuickViewList();
   }
   openModal('quick-view-modal');
 }
@@ -4050,7 +4110,11 @@ function updateQuickViewList() {
     return;
   }
 
-  const shiftData = allData.filter(item => item.ca === selectedShift);
+  const targetShiftKey = getNormalizedShiftKey(selectedShift);
+  const shiftData = allData.filter(item => {
+    const itemKey = getNormalizedShiftKey(item.ca);
+    return (targetShiftKey && itemKey === targetShiftKey) || item.ca === selectedShift;
+  });
   if (shiftData.length === 0) {
     emptyState.style.display = 'block';
     emptyState.innerHTML = '<p>Không có dữ liệu cho ca này</p>';
