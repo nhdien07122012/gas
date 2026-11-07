@@ -56,8 +56,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
                     case .success(let coord):
                         let js = "if (typeof window.onNativeLocationSuccess === 'function') { window.onNativeLocationSuccess(\(coord.latitude), \(coord.longitude)); }"
                         bridgeVC.webView?.evaluateJavaScript(js, completionHandler: nil)
-                    case .failure(let errorMsg):
-                        let escapedError = errorMsg.replacingOccurrences(of: "'", with: "\\'").replacingOccurrences(of: "\n", with: " ")
+                    case .failure(let error):
+                        let escapedError = error.localizedDescription.replacingOccurrences(of: "'", with: "\\'").replacingOccurrences(of: "\n", with: " ")
                         let js = "if (typeof window.onNativeLocationError === 'function') { window.onNativeLocationError('\(escapedError)'); }"
                         bridgeVC.webView?.evaluateJavaScript(js, completionHandler: nil)
                     }
@@ -181,10 +181,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
 }
 
 // MARK: - Native Location Manager for iOS App GPS
+
+struct NativeLocationError: LocalizedError {
+    let message: String
+    var errorDescription: String? { message }
+}
+
 class NativeLocationManager: NSObject, CLLocationManagerDelegate {
     static let shared = NativeLocationManager()
     private let manager = CLLocationManager()
-    private var completion: ((Result<CLLocationCoordinate2D, String>) -> Void)?
+    private var completion: ((Result<CLLocationCoordinate2D, Error>) -> Void)?
     private var timeoutWorkItem: DispatchWorkItem?
 
     override init() {
@@ -193,11 +199,11 @@ class NativeLocationManager: NSObject, CLLocationManagerDelegate {
         manager.desiredAccuracy = kCLLocationAccuracyBest
     }
 
-    func getCurrentLocation(completion: @escaping (Result<CLLocationCoordinate2D, String>) -> Void) {
+    func getCurrentLocation(completion: @escaping (Result<CLLocationCoordinate2D, Error>) -> Void) {
         self.completion = completion
 
         guard CLLocationManager.locationServicesEnabled() else {
-            finish(with: .failure("Dịch vụ định vị GPS trên iPhone đang tắt. Vui lòng bật trong Cài đặt > Quyền riêng tư."))
+            finish(with: .failure(NativeLocationError(message: "Dịch vụ định vị GPS trên iPhone đang tắt. Vui lòng bật trong Cài đặt > Quyền riêng tư.")))
             return
         }
 
@@ -213,11 +219,11 @@ class NativeLocationManager: NSObject, CLLocationManagerDelegate {
             startTimeoutTimer()
             manager.requestWhenInUseAuthorization()
         case .restricted, .denied:
-            finish(with: .failure("Ứng dụng chưa được cấp quyền vị trí. Vui lòng vào Cài đặt iPhone > Gas Manager > Vị trí để cho phép."))
+            finish(with: .failure(NativeLocationError(message: "Ứng dụng chưa được cấp quyền vị trí. Vui lòng vào Cài đặt iPhone > Gas Manager > Vị trí để cho phép.")))
         case .authorizedWhenInUse, .authorizedAlways:
             startUpdating()
         @unknown default:
-            finish(with: .failure("Trạng thái vị trí không xác định."))
+            finish(with: .failure(NativeLocationError(message: "Trạng thái vị trí không xác định.")))
         }
     }
 
@@ -230,13 +236,13 @@ class NativeLocationManager: NSObject, CLLocationManagerDelegate {
         timeoutWorkItem?.cancel()
         let item = DispatchWorkItem { [weak self] in
             self?.manager.stopUpdatingLocation()
-            self?.finish(with: .failure("Hết thời gian chờ nhận tín hiệu GPS. Vui lòng thử lại."))
+            self?.finish(with: .failure(NativeLocationError(message: "Hết thời gian chờ nhận tín hiệu GPS. Vui lòng thử lại.")))
         }
         timeoutWorkItem = item
         DispatchQueue.main.asyncAfter(deadline: .now() + 15.0, execute: item)
     }
 
-    private func finish(with result: Result<CLLocationCoordinate2D, String>) {
+    private func finish(with result: Result<CLLocationCoordinate2D, Error>) {
         timeoutWorkItem?.cancel()
         timeoutWorkItem = nil
         let callback = completion
@@ -261,7 +267,7 @@ class NativeLocationManager: NSObject, CLLocationManagerDelegate {
             startUpdating()
         case .denied, .restricted:
             manager.stopUpdatingLocation()
-            finish(with: .failure("Quyền truy cập vị trí bị từ chối. Vui lòng bật trong Cài đặt iPhone."))
+            finish(with: .failure(NativeLocationError(message: "Quyền truy cập vị trí bị từ chối. Vui lòng bật trong Cài đặt iPhone.")))
         default:
             break
         }
@@ -281,6 +287,6 @@ class NativeLocationManager: NSObject, CLLocationManagerDelegate {
             return
         }
         manager.stopUpdatingLocation()
-        finish(with: .failure(error.localizedDescription))
+        finish(with: .failure(error))
     }
 }
