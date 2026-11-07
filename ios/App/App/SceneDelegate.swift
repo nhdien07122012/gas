@@ -254,10 +254,6 @@ class NativeLocationManager: NSObject, CLLocationManagerDelegate {
         handleAuthStatus(status)
     }
 
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        handleAuthStatus(status)
-    }
-
     private func handleAuthStatus(_ status: CLAuthorizationStatus) {
         guard completion != nil else { return }
         switch status {

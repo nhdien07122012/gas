@@ -58,6 +58,7 @@ jobs:
             TARGET="-project App.xcodeproj"
           fi
           echo "=== Building App and GasWidgetExtension with scheme App ==="
+          set -o pipefail
           xcodebuild $TARGET \
             -scheme App \
             -configuration Debug \
@@ -66,7 +67,11 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_IDENTITY="" \
-            build
+            build 2>&1 | tee xcodebuild.log || {
+              echo "=== XCODEBUILD FAILED: Showing error summary ==="
+              grep -E "error:|FAILED" xcodebuild.log | head -n 40
+              exit 1
+            }
 
       - name: Package unsigned IPA (including PlugIns / GasWidgetExtension)
         run: |

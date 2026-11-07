@@ -604,74 +604,7 @@ struct GasQuickActionsWidget: Widget {
     }
 }
 
-// MARK: - Widget 3: Phím tắt Thêm điểm Gas trên Màn hình khóa (Lock Screen Accessory)
-
-@available(iOS 16.0, *)
-struct GasAccessoryAddPointView: View {
-    let family: WidgetFamily
-
-    var body: some View {
-        switch family {
-        case .accessoryInline:
-            HStack(spacing: 3) {
-                Image(systemName: "plus.circle.fill")
-                Text("Thêm điểm Gas")
-            }
-            .widgetURL(URL(string: "gasmanager://add_point"))
-        default: // .accessoryCircular
-            ZStack {
-                AccessoryWidgetBackground()
-                VStack(spacing: 1) {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.system(size: 21, weight: .bold))
-                    Text("Thêm gas")
-                        .font(.system(size: 8, weight: .bold))
-                        .minimumScaleFactor(0.7)
-                }
-            }
-            .widgetURL(URL(string: "gasmanager://add_point"))
-        }
-    }
-}
-
-struct GasLockScreenAddPointEntryView: View {
-    @Environment(\.widgetFamily) var family
-
-    var body: some View {
-        if #available(iOS 16.0, *) {
-            GasAccessoryAddPointView(family: family)
-        } else {
-            VStack {
-                Image(systemName: "plus.circle.fill")
-                Text("Thêm điểm")
-            }
-            .widgetURL(URL(string: "gasmanager://add_point"))
-        }
-    }
-}
-
-struct GasLockScreenAddPointWidget: Widget {
-    let kind: String = "GasLockScreenAddPointWidget"
-
-    private var supportedFamiliesList: [WidgetFamily] {
-        if #available(iOS 16.0, *) {
-            return [.accessoryCircular, .accessoryInline]
-        } else {
-            return [.systemSmall]
-        }
-    }
-
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: GasWidgetProvider()) { _ in
-            GasLockScreenAddPointEntryView()
-        }
-        .configurationDisplayName("Thêm điểm Gas (Màn hình khóa)")
-        .description("Phím tắt 1 chạm trên Màn hình khóa để mở nhanh màn hình thêm điểm gas.")
-        .supportedFamilies(supportedFamiliesList)
-    }
-}
-
-// MARK: - Widget Bundle (Xuất tất cả widget ra Widget Gallery của iOS)
+// MARK: - Widget Bundle (Xuất cả 2 widget ra Widget Gallery của iOS)
 
 @main
 struct GasWidgetBundle: WidgetBundle {
@@ -679,6 +612,5 @@ struct GasWidgetBundle: WidgetBundle {
     var body: some Widget {
         GasQuickActionsWidget()
         GasShiftWidget()
-        GasLockScreenAddPointWidget()
     }
 }
