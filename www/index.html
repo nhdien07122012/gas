@@ -1784,20 +1784,128 @@
     display: flex;
     gap: 8px;
   }
+  .btn-chitieu {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.28) !important;
+    border: none !important;
+  }
+  .btn-chitieu:hover:not(:disabled) {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.38) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+  }
+  .expense-summary-card {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(217, 119, 6, 0.06) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    margin-top: 10px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .expense-summary-main {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .expense-summary-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .expense-summary-amount {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--color-danger, #ef4444);
+    letter-spacing: -0.3px;
+  }
+  .expense-summary-count {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-card);
+  }
   .expense-input-group {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
   }
-  .expense-input-group input:first-child { flex: 2; }
-  .expense-input-group input:nth-child(2) { flex: 1; }
+  .expense-input-group input:first-child { flex: 2; min-width: 130px; }
+  .expense-input-group input:nth-child(2) { flex: 1; min-width: 90px; }
   .expense-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 10px;
-    border-bottom: 1px solid var(--border-light);
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
+    margin-bottom: 7px;
+    border: 1px solid var(--border-card);
     font-size: 14px;
+    transition: var(--transition);
+  }
+  .expense-item:hover {
+    background: var(--bg-hover);
+  }
+  .expense-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+  .expense-item-name {
+    font-weight: 600;
+    color: var(--text-main);
+    word-break: break-word;
+  }
+  .expense-item-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .expense-item-amount {
+    font-weight: 700;
+    color: var(--color-danger, #ef4444);
+    font-size: 14.5px;
+    margin: 0 8px;
+    white-space: nowrap;
+  }
+  .expense-item-delete {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+  .expense-item-delete:hover {
+    color: var(--color-danger, #ef4444);
+    background: var(--color-danger-light, rgba(239, 68, 68, 0.12));
+  }
+  .expense-total {
+    font-weight: 700;
+    font-size: 14.5px;
+    color: var(--color-danger, #ef4444);
+    text-align: right;
+    padding: 9px 12px;
+    background: rgba(239, 68, 68, 0.08);
+    border-radius: var(--radius-sm);
+    margin-top: 8px;
+    border: 1px dashed rgba(239, 68, 68, 0.25);
   }
 
   /* ========== RESPONSIVE STYLES (Extension Popup 350px - Desktop) ========== */
@@ -1881,6 +1989,13 @@
         </svg>
         Đếm tiền
       </button>
+      <button class="sidebar-item" onclick="closeSidebar(); openExpenseModal()">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M2.5 4A1.5 1.5 0 001 5.5V6h18v-.5A1.5 1.5 0 0017.5 4h-15zM19 8.5H1v6A1.5 1.5 0 002.5 16h15a1.5 1.5 0 001.5-1.5v-6zM3 13.25a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zm4.75-.75a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z" clip-rule="evenodd" />
+        </svg>
+        <span>Quản lý chi tiêu ca</span>
+        <span id="sidebar-expense-badge" class="badge" style="display:none;margin-left:auto;background:var(--color-warning,#f59e0b);color:#ffffff;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:700;">0đ</span>
+      </button>
       <button class="sidebar-item" onclick="openOutOfHoursModal()">
         <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
@@ -1937,6 +2052,12 @@
           <path fill-rule="evenodd" d="M2 9.25A2.25 2.25 0 014.25 7h7.5A2.25 2.25 0 0114 9.25v7.5A2.25 2.25 0 0111.75 19h-7.5A2.25 2.25 0 012 16.75v-7.5zm2.25-.75a.75.75 0 00-.75.75v7.5c0 .414.336.75.75.75h7.5a.75.75 0 00.75-.75v-7.5a.75.75 0 00-.75-.75h-7.5z" clip-rule="evenodd" />
         </svg>
         Lưu Clipboard
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar(); exportToText()">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v7.5a.75.75 0 01-1.5 0v-7.5A.75.75 0 0110 3z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M6.22 6.22a.75.75 0 011.06 0L10 8.94l2.72-2.72a.75.75 0 111.06 1.06l-3.25 3.25a.75.75 0 01-1.06 0L6.22 7.28a.75.75 0 010-1.06z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M2.5 12.25a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H3.25a.75.75 0 01-.75-.75zM3.25 15.25a.75.75 0 000 1.5h13.5a.75.75 0 000-1.5H3.25z" clip-rule="evenodd" />
+        </svg>
+        Xuất data của ca
       </button>
       <button class="sidebar-item" id="theme-toggle" type="button" onclick="toggleTheme()">
         <span id="theme-icon" style="display:inline-flex;align-items:center;justify-content:center;"></span>
@@ -2354,6 +2475,69 @@
       <div class="modal-footer">
         <button class="btn-secondary" onclick="closeModal('batch-status-modal')">Hủy</button>
         <button class="btn-primary" id="batch-status-confirm" onclick="confirmBatchStatusUpdate()" disabled>Xác nhận</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal quản lý chi tiêu trong ca -->
+  <div class="modal" id="expense-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M2.5 4A1.5 1.5 0 001 5.5V6h18v-.5A1.5 1.5 0 0017.5 4h-15zM19 8.5H1v6A1.5 1.5 0 002.5 16h15a1.5 1.5 0 001.5-1.5v-6zM3 13.25a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zm4.75-.75a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z" clip-rule="evenodd" />
+          </svg>
+          Quản lý chi tiêu trong ca
+        </h2>
+        <button class="close-modal" onclick="closeModal('expense-modal')" aria-label="Đóng">
+          <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="expense-shift-select">Ca làm việc:</label>
+          <select id="expense-shift-select" onchange="onExpenseShiftChange()">
+            <option value="">-- Chọn ca --</option>
+          </select>
+        </div>
+
+        <div class="expense-summary-card">
+          <div class="expense-summary-main">
+            <span class="expense-summary-label">Tổng chi tiêu ca:</span>
+            <span class="expense-summary-amount" id="modal-expense-total">0 đ</span>
+          </div>
+          <div class="expense-summary-count" id="modal-expense-count">0 khoản chi</div>
+        </div>
+
+        <div class="form-group" style="margin-top: 14px;">
+          <label for="new-expense-name">Thêm khoản chi mới:</label>
+          <div class="expense-input-group">
+            <input id="new-expense-name" list="global-expense-templates" placeholder="Tên khoản chi (VD: Xăng, Ăn trưa...)" autocomplete="off">
+            <input id="new-expense-amount" type="number" placeholder="Số tiền" min="0">
+            <button class="btn btn-warning btn-sm" type="button" onclick="submitNewExpense()">Thêm</button>
+          </div>
+          <datalist id="global-expense-templates"></datalist>
+        </div>
+
+        <div class="form-group">
+          <label for="new-expense-note">Ghi chú (tùy chọn):</label>
+          <input id="new-expense-note" class="form-input" placeholder="Ghi chú thêm về khoản chi (VD: Xăng đi giao xa)">
+        </div>
+
+        <div id="expense-items-container" style="margin-top: 14px;"></div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <button class="btn btn-secondary btn-sm" type="button" onclick="clearAllExpensesForSelectedShift()" id="btn-clear-shift-expenses">
+          Xóa hết chi tiêu ca này
+        </button>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" type="button" onclick="closeModal('expense-modal')">Đóng</button>
+          <button class="btn btn-warning" type="button" onclick="closeModal('expense-modal'); openReportModal();">
+            Đi tới Báo cáo
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -2799,40 +2983,323 @@ function setupSidebarSwipe() {
   window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 }
 
+/* ========== QUẢN LÝ CHI TIÊU TRONG CA (LOCALSTORAGE) ========== */
+const EXPENSES_STORAGE_KEY = 'gas_shift_expenses';
+
+function getAllStoredExpenses() {
+  try {
+    return JSON.parse(localStorage.getItem(EXPENSES_STORAGE_KEY) || '[]');
+  } catch (e) {
+    console.error('Lỗi khi đọc gas_shift_expenses:', e);
+    return [];
+  }
+}
+
+function saveAllStoredExpenses(expenses) {
+  try {
+    localStorage.setItem(EXPENSES_STORAGE_KEY, JSON.stringify(expenses));
+  } catch (e) {
+    console.error('Lỗi khi lưu gas_shift_expenses:', e);
+  }
+  updateSidebarExpenseBadge();
+}
+
+function getShiftExpenses(shift) {
+  if (!shift) return [];
+  const all = getAllStoredExpenses();
+  return all.filter(item => item.shift === shift);
+}
+
+function addShiftExpense(shift, name, amount, note = '') {
+  if (!shift || !name || !amount) return null;
+  const numAmount = parseInt(amount, 10);
+  if (isNaN(numAmount) || numAmount <= 0) return null;
+
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+  const newExp = {
+    id: 'exp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+    shift: shift,
+    name: name.trim(),
+    amount: numAmount,
+    note: (note || '').trim(),
+    time: timeStr,
+    timestamp: Date.now()
+  };
+
+  const all = getAllStoredExpenses();
+  all.unshift(newExp);
+  saveAllStoredExpenses(all);
+
+  // Tự động lưu vào mẫu gợi ý chi tiêu nếu là mẫu mới
+  saveExpenseTemplateIfNew(newExp.name, newExp.amount);
+
+  return newExp;
+}
+
+function deleteShiftExpense(id) {
+  let all = getAllStoredExpenses();
+  all = all.filter(item => item.id !== id);
+  saveAllStoredExpenses(all);
+}
+
+function clearShiftExpenses(shift) {
+  let all = getAllStoredExpenses();
+  all = all.filter(item => item.shift !== shift);
+  saveAllStoredExpenses(all);
+}
+
+function saveExpenseTemplateIfNew(name, amount) {
+  if (!name) return;
+  const existing = expenseTemplateList.find(t => t.name.toLowerCase() === name.toLowerCase());
+  if (!existing) {
+    expenseTemplateList.push({ name: name, amount: amount || 0 });
+    try {
+      localStorage.setItem('gas_point_expense_templates', JSON.stringify(expenseTemplateList));
+      updateExpenseTemplatesDatalist();
+    } catch (e) {}
+  }
+}
+
+function updateSidebarExpenseBadge() {
+  const badge = document.getElementById('sidebar-expense-badge');
+  if (!badge) return;
+  const targetShift = currentShift || (allData.length > 0 ? allData[0]?.ca : '');
+  if (!targetShift) {
+    badge.style.display = 'none';
+    return;
+  }
+  const shiftExps = getShiftExpenses(targetShift);
+  const total = shiftExps.reduce((sum, item) => sum + (item.amount || 0), 0);
+  if (total > 0) {
+    badge.textContent = '-' + formatCurrencyCompact(total);
+    badge.style.display = 'inline-block';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+/* Modal Quản lý chi tiêu trong ca */
+function openExpenseModal() {
+  closeSidebar();
+  vibrateShort();
+  loadExpenseTemplates();
+
+  const shifts = new Set();
+  allData.forEach(item => { if (item.ca) shifts.add(item.ca); });
+  if (currentShift) shifts.add(currentShift);
+
+  const select = document.getElementById('expense-shift-select');
+  select.innerHTML = '';
+
+  const sortedShifts = Array.from(shifts).sort().reverse();
+  if (sortedShifts.length === 0) {
+    select.innerHTML = '<option value="">Chưa có ca làm việc</option>';
+  } else {
+    sortedShifts.forEach(shift => {
+      const opt = document.createElement('option');
+      opt.value = shift;
+      opt.textContent = formatShiftDayLabel(shift);
+      select.appendChild(opt);
+    });
+    const preferredShift = (currentShift && shifts.has(currentShift)) ? currentShift : sortedShifts[0];
+    select.value = preferredShift;
+  }
+
+  renderExpenseModalList();
+  openModal('expense-modal');
+}
+
+function onExpenseShiftChange() {
+  vibrateShort();
+  renderExpenseModalList();
+}
+
+function renderExpenseModalList() {
+  const select = document.getElementById('expense-shift-select');
+  const shift = select ? select.value : '';
+  const container = document.getElementById('expense-items-container');
+  const totalElem = document.getElementById('modal-expense-total');
+  const countElem = document.getElementById('modal-expense-count');
+  const clearBtn = document.getElementById('btn-clear-shift-expenses');
+
+  if (!shift) {
+    if (container) container.innerHTML = '<p class="empty-state" style="padding:15px;text-align:center;color:var(--text-muted);">Vui lòng chọn ca làm việc.</p>';
+    if (totalElem) totalElem.textContent = '0 đ';
+    if (countElem) countElem.textContent = '0 khoản chi';
+    if (clearBtn) clearBtn.disabled = true;
+    return;
+  }
+
+  const expenses = getShiftExpenses(shift);
+  const total = expenses.reduce((sum, it) => sum + (it.amount || 0), 0);
+
+  if (totalElem) totalElem.textContent = '-' + formatCurrency(total);
+  if (countElem) countElem.textContent = expenses.length + ' khoản chi';
+  if (clearBtn) clearBtn.disabled = expenses.length === 0;
+
+  if (expenses.length === 0) {
+    container.innerHTML = `
+      <div style="padding: 24px 12px; text-align: center; color: var(--text-muted);">
+        <p style="font-size: 14px; font-weight: 500; margin-bottom: 4px;">Chưa có khoản chi tiêu nào trong ca này.</p>
+        <span style="font-size: 12px; color: var(--text-tertiary);">Nhập thông tin bên trên và bấm "Thêm" để lưu chi tiêu tạm thời.</span>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+  expenses.forEach(exp => {
+    html += `
+      <div class="expense-item">
+        <div class="expense-item-info">
+          <div class="expense-item-name">${escapeHTML(exp.name)}</div>
+          <div class="expense-item-meta">
+            <span>${exp.time || ''}</span>
+            ${exp.note ? `<span>• ${escapeHTML(exp.note)}</span>` : ''}
+          </div>
+        </div>
+        <div class="expense-item-amount">-${formatCurrency(exp.amount)}</div>
+        <button class="expense-item-delete" onclick="handleDeleteExpenseItem('${exp.id}')" title="Xóa khoản chi" aria-label="Xóa">
+          ${svgInline('trash')}
+        </button>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function submitNewExpense() {
+  vibrateShort();
+  const select = document.getElementById('expense-shift-select');
+  const shift = select ? select.value : '';
+  if (!shift) {
+    showToast('Vui lòng chọn ca làm việc!', 'error');
+    vibrateError();
+    return;
+  }
+
+  const nameInput = document.getElementById('new-expense-name');
+  const amountInput = document.getElementById('new-expense-amount');
+  const noteInput = document.getElementById('new-expense-note');
+
+  let name = nameInput.value.trim();
+  let amountVal = amountInput.value.trim();
+  let note = noteInput ? noteInput.value.trim() : '';
+
+  if (!name) {
+    showToast('Vui lòng nhập tên khoản chi tiêu!', 'error');
+    vibrateError();
+    nameInput.focus();
+    return;
+  }
+
+  if (!amountVal) {
+    showToast('Vui lòng nhập số tiền chi tiêu!', 'error');
+    vibrateError();
+    amountInput.focus();
+    return;
+  }
+
+  let amount = parseInt(amountVal, 10);
+  if (isNaN(amount) || amount <= 0) {
+    showToast('Số tiền chi tiêu không hợp lệ!', 'error');
+    vibrateError();
+    amountInput.focus();
+    return;
+  }
+
+  addShiftExpense(shift, name, amount, note);
+  showToast(`Đã lưu chi tiêu: ${name} (-${formatCurrency(amount)})`, 'success');
+  vibrateSuccess();
+
+  nameInput.value = '';
+  amountInput.value = '';
+  if (noteInput) noteInput.value = '';
+
+  renderExpenseModalList();
+}
+
+function handleDeleteExpenseItem(id) {
+  vibrateShort();
+  if (confirm('Bạn có chắc muốn xóa khoản chi này không?')) {
+    deleteShiftExpense(id);
+    renderExpenseModalList();
+    showToast('Đã xóa khoản chi!', 'info');
+    vibrateSuccess();
+  }
+}
+
+function clearAllExpensesForSelectedShift() {
+  vibrateShort();
+  const select = document.getElementById('expense-shift-select');
+  const shift = select ? select.value : '';
+  if (!shift) return;
+
+  const expenses = getShiftExpenses(shift);
+  if (expenses.length === 0) return;
+
+  if (confirm(`Bạn có chắc muốn xóa TOÀN BỘ ${expenses.length} khoản chi tiêu của ca ${formatShiftDayLabel(shift)} không? Hành động này sẽ loại bỏ chi tiêu khỏi báo cáo ca.`)) {
+    clearShiftExpenses(shift);
+    renderExpenseModalList();
+    showToast('Đã xóa sạch chi tiêu ca!', 'success');
+    vibrateSuccess();
+  }
+}
+
 /* ========== BÁO CÁO CUỐI CA ========== */
 function openReportModal() {
   closeSidebar();
   vibrateShort();
   loadRecipients();
   loadExpenseTemplates();
-  currentExpenses = [];
-  updateExpensesList();
 
   const lastRecipient = localStorage.getItem('gas_point_last_report_recipient') || '';
   const recipientInput = document.getElementById('report-recipient');
   recipientInput.value = lastRecipient || '';
 
-  const actualCountInput = document.getElementById('report-actual-count');
-  actualCountInput.value = '';
-  const savedCountValue = getSavedCountForCurrentShift();
-  if (savedCountValue !== null) actualCountInput.value = savedCountValue;
-
   const shifts = new Set();
   allData.forEach(item => { if (item.ca) shifts.add(item.ca); });
+  if (currentShift) shifts.add(currentShift);
 
   const shiftSelect = document.getElementById('report-shift');
   shiftSelect.innerHTML = '<option value="">-- Chọn ca --</option>';
 
-  Array.from(shifts).sort().reverse().forEach(shift => {
+  const sortedShifts = Array.from(shifts).sort().reverse();
+  sortedShifts.forEach(shift => {
     const option = document.createElement('option');
     option.value = shift;
     option.textContent = formatShiftDayLabel(shift);
     shiftSelect.appendChild(option);
   });
 
-  document.getElementById('report-summary').style.display = 'none';
-  document.getElementById('btn-generate-report').disabled = true;
+  // Mặc định chọn ca hiện tại nếu có trong danh sách
+  const defaultShift = (currentShift && shifts.has(currentShift)) ? currentShift : (sortedShifts[0] || '');
+  if (defaultShift) {
+    shiftSelect.value = defaultShift;
+  }
+
+  // Tự động nạp chi tiêu đã lưu trong localStorage cho ca được chọn
+  syncReportExpensesWithShift();
+
+  const actualCountInput = document.getElementById('report-actual-count');
+  actualCountInput.value = '';
+  const savedCountValue = getSavedCountForCurrentShift(shiftSelect.value);
+  if (savedCountValue !== null) actualCountInput.value = savedCountValue;
+
+  updateReportSummary();
   openModal('report-modal');
+}
+
+function syncReportExpensesWithShift() {
+  const shiftSelect = document.getElementById('report-shift');
+  const selectedShift = shiftSelect ? shiftSelect.value : '';
+  if (selectedShift) {
+    currentExpenses = getShiftExpenses(selectedShift);
+  } else {
+    currentExpenses = [];
+  }
+  updateExpensesList();
 }
 
 function loadRecipients() {
@@ -2853,19 +3320,29 @@ function loadExpenseTemplates() {
   if (savedExpenses) {
     expenseTemplateList = JSON.parse(savedExpenses);
   } else {
-    expenseTemplateList = [{ name: 'xăng', amount: 0 }];
+    expenseTemplateList = [
+      { name: 'Xăng xe', amount: 0 },
+      { name: 'Ăn trưa', amount: 0 },
+      { name: 'Sửa xe / Vá săm', amount: 0 },
+      { name: 'Băng keo / Bút', amount: 0 },
+      { name: 'Chi phí khác', amount: 0 }
+    ];
     localStorage.setItem('gas_point_expense_templates', JSON.stringify(expenseTemplateList));
   }
   updateExpenseTemplatesDatalist();
 }
 
 function updateExpenseTemplatesDatalist() {
-  const expenseDatalist = document.getElementById('expense-templates-list');
-  expenseDatalist.innerHTML = '';
-  expenseTemplateList.forEach(expense => {
-    const option = document.createElement('option');
-    option.value = expense.name;
-    expenseDatalist.appendChild(option);
+  const targets = ['expense-templates-list', 'global-expense-templates'];
+  targets.forEach(id => {
+    const datalist = document.getElementById(id);
+    if (!datalist) return;
+    datalist.innerHTML = '';
+    expenseTemplateList.forEach(expense => {
+      const option = document.createElement('option');
+      option.value = expense.name;
+      datalist.appendChild(option);
+    });
   });
 }
 
@@ -2913,6 +3390,14 @@ function saveRecipient() {
 
 function addExpense() {
   vibrateShort();
+  const shiftSelect = document.getElementById('report-shift');
+  const selectedShift = shiftSelect ? shiftSelect.value : '';
+  if (!selectedShift) {
+    showToast('Vui lòng chọn ca cần báo cáo trước khi thêm chi tiêu!', 'error');
+    vibrateError();
+    return;
+  }
+
   const expenseName = document.getElementById('expense-name').value.trim();
   const expenseAmount = document.getElementById('expense-amount').value.trim();
   if (!expenseName || !expenseAmount) {
@@ -2920,31 +3405,28 @@ function addExpense() {
     vibrateError();
     return;
   }
-  const amount = parseInt(expenseAmount);
+  const amount = parseInt(expenseAmount, 10);
   if (isNaN(amount) || amount <= 0) {
     showToast('Số tiền chi tiêu không hợp lệ!', 'error');
     vibrateError();
     return;
   }
-  currentExpenses.push({ name: expenseName, amount: amount });
-  const existingTemplate = expenseTemplateList.find(template => template.name.toLowerCase() === expenseName.toLowerCase());
-  if (!existingTemplate) {
-    if (confirm(`Bạn có muốn lưu "${expenseName}" vào danh sách chi tiêu mẫu không?`)) {
-      expenseTemplateList.push({ name: expenseName, amount: amount });
-      localStorage.setItem('gas_point_expense_templates', JSON.stringify(expenseTemplateList));
-      updateExpenseTemplatesDatalist();
-      showToast('Đã lưu vào danh sách chi tiêu mẫu!', 'success');
-      vibrateSuccess();
-    }
-  }
+
+  // Lưu bền vững vào localStorage của ca đang chọn
+  addShiftExpense(selectedShift, expenseName, amount);
+  currentExpenses = getShiftExpenses(selectedShift);
   updateExpensesList();
+
   document.getElementById('expense-name').value = '';
   document.getElementById('expense-amount').value = '';
   updateReportSummary();
+  showToast(`Đã lưu chi tiêu vào ca: ${expenseName} (-${formatCurrency(amount)})`, 'success');
+  vibrateSuccess();
 }
 
 function updateExpensesList() {
   const expensesList = document.getElementById('expenses-list');
+  if (!expensesList) return;
   if (currentExpenses.length === 0) {
     expensesList.innerHTML = '';
     return;
@@ -2955,49 +3437,55 @@ function updateExpensesList() {
       <div class="expense-item">
         <div class="expense-item-info">
           <div class="expense-item-name">${escapeHTML(expense.name)}</div>
+          ${expense.time ? `<div class="expense-item-meta"><span>${expense.time}</span></div>` : ''}
         </div>
         <div class="expense-item-amount">-${formatCurrency(expense.amount)}</div>
-        <button class="expense-item-delete" onclick="removeExpense(${index})" onmousedown="vibrateShort()" aria-label="Xóa">${svgInline('xMark')}</button>
+        <button class="expense-item-delete" onclick="removeExpense(${index})" onmousedown="vibrateShort()" aria-label="Xóa" title="Xóa">${svgInline('xMark')}</button>
       </div>
     `;
   });
-  const totalExpense = currentExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+  const totalExpense = currentExpenses.reduce((sum, expense) => sum + (expense.amount || 0), 0);
   html += `<div class="expense-total">Tổng chi tiêu: -${formatCurrency(totalExpense)}</div>`;
   expensesList.innerHTML = html;
 }
 
 function removeExpense(index) {
   vibrateShort();
-  currentExpenses.splice(index, 1);
-  updateExpensesList();
-  updateReportSummary();
+  if (index >= 0 && index < currentExpenses.length) {
+    const item = currentExpenses[index];
+    if (item && item.id) {
+      deleteShiftExpense(item.id);
+    }
+    const shiftSelect = document.getElementById('report-shift');
+    const selectedShift = shiftSelect ? shiftSelect.value : '';
+    currentExpenses = getShiftExpenses(selectedShift);
+    updateExpensesList();
+    updateReportSummary();
+    showToast('Đã xóa khoản chi khỏi ca!', 'info');
+  }
 }
 
 function updateReportSummary() {
-  const selectedShift = document.getElementById('report-shift').value;
+  const shiftSelect = document.getElementById('report-shift');
+  const selectedShift = shiftSelect ? shiftSelect.value : '';
   const actualCountInput = document.getElementById('report-actual-count');
   const recipientInput = document.getElementById('report-recipient');
-  
-  if (selectedShift && actualCountInput.value === '') {
-    const savedCountValue = getSavedCountForCurrentShift(selectedShift);
-    if (savedCountValue !== null) actualCountInput.value = savedCountValue;
-  }
-  
-  const recipient = recipientInput.value.trim();
+
   const summaryDiv = document.getElementById('report-summary');
   const detailsDiv = document.getElementById('report-details');
   const totalP = document.getElementById('report-total');
   const generateBtn = document.getElementById('btn-generate-report');
 
-  if (!selectedShift || !recipient) {
+  if (!selectedShift) {
     summaryDiv.style.display = 'none';
     generateBtn.disabled = true;
     return;
   }
 
+  const recipient = recipientInput.value.trim();
   const shiftData = allData.filter(item => item.ca === selectedShift);
   if (shiftData.length === 0) {
-    detailsDiv.innerHTML = '<p>Không có dữ liệu cho ca này</p>';
+    detailsDiv.innerHTML = '<p>Không có dữ liệu điểm gas cho ca này</p>';
     totalP.textContent = '';
     summaryDiv.style.display = 'block';
     generateBtn.disabled = true;
@@ -3005,34 +3493,34 @@ function updateReportSummary() {
   }
 
   const totalRevenue = shiftData.reduce((sum, item) => sum + (parseInt(item.so_tien) || 0), 0);
+  const totalExpense = currentExpenses.reduce((sum, expense) => sum + (expense.amount || 0), 0);
+  const netDueAmount = totalRevenue - totalExpense; // Số tiền thực tế phải nộp sau khi trừ chi tiêu
+
   const actualCountedAmount = actualCountInput.value.trim() !== ''
     ? (parseInt(actualCountInput.value, 10) || 0)
     : totalRevenue;
-  
-  const difference = totalRevenue - actualCountedAmount; // Thiếu tiền là số dương
-  const totalExpense = currentExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-  
-  const remainingForExpenses = Math.max(0, difference - totalExpense);
+
+  // Lệch giữa tiền thực tế đếm được và số tiền cần nộp sau khi trừ chi tiêu
+  const diffFromNet = actualCountedAmount - netDueAmount;
+  const isMatched = (diffFromNet === 0);
 
   detailsDiv.innerHTML = `
-    <div class="report-line"><span class="report-label">Tổng doanh thu:</span><span class="report-value">${formatCurrencyCompact(totalRevenue)}</span></div>
-    <div class="report-line"><span class="report-label">Thực tế đếm:</span><span class="report-value">${formatCurrencyCompact(actualCountedAmount)}</span></div>
-    <div class="report-line"><span class="report-label">Tổng thiếu:</span><span class="report-value ${difference > 0 ? 'danger' : 'highlight'}">${difference >= 0 ? '+' : ''}${formatCurrencyCompact(difference)}</span></div>
-    <div class="report-line"><span class="report-label">Đã chi tiêu:</span><span class="report-value danger">-${formatCurrencyCompact(totalExpense)}</span></div>
-    <div class="report-line"><span class="report-label">Còn lại dự kiến:</span><span class="report-value ${remainingForExpenses > 0 ? 'highlight' : ''}">${formatCurrencyCompact(remainingForExpenses)}</span></div>
+    <div class="report-line"><span class="report-label">Tổng doanh thu ca:</span><span class="report-value">${formatCurrencyCompact(totalRevenue)}</span></div>
+    <div class="report-line"><span class="report-label">Đã chi tiêu trong ca:</span><span class="report-value danger">-${formatCurrencyCompact(totalExpense)}</span></div>
+    <div class="report-line" style="background:var(--bg-secondary);padding:5px 8px;border-radius:var(--radius-xs);margin:4px 0;"><span class="report-label" style="font-weight:700;">Thực nộp sau chi tiêu:</span><span class="report-value" style="font-weight:800;color:var(--primary);">${formatCurrencyCompact(netDueAmount)}</span></div>
+    <div class="report-line"><span class="report-label">Thực tế đã đếm:</span><span class="report-value">${formatCurrencyCompact(actualCountedAmount)}</span></div>
+    <div class="report-line"><span class="report-label">Chênh lệch đối soát:</span><span class="report-value ${isMatched ? 'highlight' : 'danger'}" style="font-weight:700;">${isMatched ? '0 đ (Khớp tiền)' : (diffFromNet > 0 ? '+ Thừa ' + formatCurrencyCompact(diffFromNet) : '- Thiếu ' + formatCurrencyCompact(Math.abs(diffFromNet)))}</span></div>
   `;
 
-  // Trạng thái khớp: Tổng thiếu tiền phải bằng tổng chi tiêu (hoặc chênh lệch 0)
-  const isMatched = (difference === totalExpense);
-  totalP.innerHTML = `Trạng thái: <span style="color: ${isMatched ? 'var(--primary)' : 'var(--danger)'}">${isMatched ? 'Khớp' : 'Chưa khớp'}</span>`;
+  totalP.innerHTML = `Trạng thái: <span style="font-weight:700; color: ${isMatched ? 'var(--color-success, #10b981)' : 'var(--color-danger, #ef4444)'}">${isMatched ? '✓ Khớp hoàn toàn' : '⚠ Chưa khớp (' + (diffFromNet > 0 ? 'Thừa ' + formatCurrencyCompact(diffFromNet) : 'Thiếu ' + formatCurrencyCompact(Math.abs(diffFromNet))) + ')'}</span>`;
   summaryDiv.style.display = 'block';
-  generateBtn.disabled = false;
+  generateBtn.disabled = !recipient;
 }
 
 async function generateReport() {
   vibrateLong();
   const selectedShift = document.getElementById('report-shift').value;
-  const recipient = document.getElementById('report-recipient').value;
+  const recipient = document.getElementById('report-recipient').value.trim();
   if (!selectedShift || !recipient) {
     showToast('Vui lòng chọn ca và người nhận!', 'error');
     vibrateError();
@@ -3045,10 +3533,13 @@ async function generateReport() {
     return;
   }
   const totalRevenue = shiftData.reduce((sum, item) => sum + (parseInt(item.so_tien) || 0), 0);
+  const totalExpense = currentExpenses.reduce((sum, expense) => sum + (expense.amount || 0), 0);
+  const netDueAmount = totalRevenue - totalExpense;
+
   let reportContent;
   if (currentExpenses.length > 0) {
     const expenseString = currentExpenses.map(expense => `${expense.name} ${formatNumber(expense.amount)}`).join(', ');
-    reportContent = `Giao ${recipient} ${formatNumber(totalRevenue)} (Trừ ${expenseString})`;
+    reportContent = `Giao ${recipient} ${formatNumber(netDueAmount)} (Tổng ${formatNumber(totalRevenue)} - Trừ chi tiêu: ${expenseString})`;
   } else {
     reportContent = `Giao ${recipient} ${formatNumber(totalRevenue)}`;
   }
@@ -3277,6 +3768,7 @@ function applyDataToView(data) {
 
   const shiftInfo = getCurrentShift();
   currentShift = shiftInfo.shiftKey;
+  updateSidebarExpenseBadge();
 
   const preferredShift = getPreferredShiftKey(allData);
   const shiftFilter = document.getElementById('filter-shift');
@@ -3780,7 +4272,7 @@ function renderQuickActions() {
         <button class="btn btn-clipboard" type="button" onclick="window.location.href='clipboard.html';">${svgInline('clipboard')} Clipboard</button>
       </div>
       <div class="action-buttons">
-        <button class="btn btn-primary" type="button" onclick="exportToText()">${svgInline('arrowUpTray')} Xuất data</button>
+        <button class="btn btn-chitieu" type="button" onclick="openExpenseModal()">${svgInline('banknotes')} Chi tiêu ca</button>
         <button class="btn btn-warning" type="button" onclick="openReportModal()">${svgInline('chartBar')} Báo cáo</button>
       </div>
     </div>
@@ -4952,7 +5444,39 @@ document.addEventListener('DOMContentLoaded', function() {
   setupPullToRefresh();
   setupModalCloseOnOutsideClick();
 
-  document.getElementById('report-shift').addEventListener('change', updateReportSummary);
+  document.getElementById('report-shift').addEventListener('change', function() {
+    syncReportExpensesWithShift();
+    const actualCountInput = document.getElementById('report-actual-count');
+    const savedCount = getSavedCountForCurrentShift(this.value);
+    actualCountInput.value = savedCount !== null ? savedCount : '';
+    updateReportSummary();
+  });
+
+  // Sự kiện cho modal Quản lý chi tiêu
+  const newExpName = document.getElementById('new-expense-name');
+  if (newExpName) {
+    newExpName.addEventListener('change', function() {
+      vibrateShort();
+      const val = this.value.trim();
+      if (!val) return;
+      const t = expenseTemplateList.find(item => item.name.toLowerCase() === val.toLowerCase());
+      if (t && t.amount > 0) {
+        document.getElementById('new-expense-amount').value = t.amount;
+      }
+    });
+  }
+  const newExpAmount = document.getElementById('new-expense-amount');
+  if (newExpAmount) {
+    newExpAmount.addEventListener('blur', function() {
+      let value = this.value.trim();
+      if (/^\d+$/.test(value) && value.length > 0 && value.length <= 3) {
+        this.value = value + '000';
+        vibrateShort();
+      }
+    });
+  }
+
+  updateSidebarExpenseBadge();
   document.getElementById('report-recipient').addEventListener('input', function() {
     saveLastReportRecipient(this.value.trim());
     updateReportSummary();
