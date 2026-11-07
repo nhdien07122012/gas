@@ -4066,33 +4066,65 @@ function saveLocation() {
     vibrateError();
     return;
   }
-  if (!navigator.geolocation) {
-    showToast('Thiết bị không hỗ trợ GPS!', 'error');
-    vibrateError();
-    return;
-  }
+
   const btn = document.getElementById('btn-save-location');
   btn.disabled = true;
   btn.innerHTML = `<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" /></svg> Đang lấy vị trí...`;
 
+  function applyCoordinates(latitude, longitude) {
+    const lat = Number(latitude).toFixed(6);
+    const lng = Number(longitude).toFixed(6);
+    let ghiChuInput = document.getElementById('ghi_chu');
+    let ghiChu = ghiChuInput.value.replace(/\s*\[GPS: [\d.-]+, [\d.-]+\]/, '');
+    ghiChuInput.value = ghiChu + ` [GPS: ${lat}, ${lng}]`;
+    showToast('Đã lưu vị trí GPS thực tế!', 'success');
+    vibrateSuccess();
+    btn.innerHTML = `<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" /></svg> Đã lưu vị trí`;
+    btn.disabled = false;
+    btn.className = 'btn-success btn-sm';
+    btn.style.backgroundColor = '#34c759';
+  }
+
+  function handleLocationError(errMsg) {
+    showToast('Không thể lấy vị trí: ' + errMsg, 'error');
+    vibrateError();
+    resetSaveLocationButton();
+  }
+
+  // 1. Kiểm tra Native CoreLocation Bridge (cho iPhone App iOS)
+  if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.gasLocationBridge) {
+    window.onNativeLocationSuccess = function(lat, lng) {
+      applyCoordinates(lat, lng);
+    };
+    window.onNativeLocationError = function(err) {
+      handleLocationError(err);
+    };
+    try {
+      window.webkit.messageHandlers.gasLocationBridge.postMessage({ action: 'getLocation' });
+      return;
+    } catch (e) {
+      console.warn('Lỗi gọi native location bridge, fallback sang web geolocation:', e);
+    }
+  }
+
+  // 2. Fallback cho trình duyệt Web thông thường
+  if (!navigator.geolocation) {
+    showToast('Thiết bị không hỗ trợ GPS!', 'error');
+    vibrateError();
+    resetSaveLocationButton();
+    return;
+  }
+
   navigator.geolocation.getCurrentPosition(
     function(pos) {
-      const lat = pos.coords.latitude.toFixed(6);
-      const lng = pos.coords.longitude.toFixed(6);
-      let ghiChuInput = document.getElementById('ghi_chu');
-      let ghiChu = ghiChuInput.value.replace(/\s*\[GPS: [\d.-]+, [\d.-]+\]/, '');
-      ghiChuInput.value = ghiChu + ` [GPS: ${lat}, ${lng}]`;
-      showToast('Đã lưu vị trí GPS thực tế!', 'success');
-      vibrateSuccess();
-      btn.innerHTML = `<svg class="hero-icon hero-icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" /></svg> Đã lưu vị trí`;
-      btn.disabled = false;
-      btn.className = 'btn-success btn-sm';
-      btn.style.backgroundColor = '#34c759';
+      applyCoordinates(pos.coords.latitude, pos.coords.longitude);
     },
     function(err) {
-      showToast('Không thể lấy vị trí: ' + err.message, 'error');
-      vibrateError();
-      resetSaveLocationButton();
+      let msg = err.message || 'Không xác định';
+      if (err.code === 1) msg = 'Quyền vị trí bị từ chối';
+      else if (err.code === 2) msg = 'Không có tín hiệu vị trí';
+      else if (err.code === 3) msg = 'Hết thời gian chờ GPS';
+      handleLocationError(msg);
     },
     { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
   );

@@ -24,6 +24,12 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Ứng dụng cần truy cập vị trí của bạn để tự động lấy tọa độ GPS khi lưu vị trí điểm giao gas.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Ứng dụng cần truy cập vị trí của bạn để tự động lấy tọa độ GPS khi lưu vị trí điểm giao gas.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Ứng dụng cần truy cập vị trí của bạn để tự động lấy tọa độ GPS khi lưu vị trí điểm giao gas.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

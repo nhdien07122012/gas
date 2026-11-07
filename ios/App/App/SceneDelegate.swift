@@ -2,6 +2,7 @@ import UIKit
 import WebKit
 import WidgetKit
 import Capacitor
+import CoreLocation
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler {
     var window: UIWindow?
@@ -18,6 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
 
         // Đăng ký message handler để nhận dữ liệu thống kê từ Web và đồng bộ sang Widget
         bridgeVC.webView?.configuration.userContentController.add(self, name: "gasWidgetBridge")
+        // Đăng ký message handler lấy tọa độ GPS thực tế từ CoreLocation
+        bridgeVC.webView?.configuration.userContentController.add(self, name: "gasLocationBridge")
 
         // Xử lý 3D Touch Quick Action khi khởi động ứng dụng (Cold Start)
         if let shortcutItem = connectionOptions.shortcutItem {
@@ -44,6 +47,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
 
             if #available(iOS 14.0, *) {
                 WidgetCenter.shared.reloadAllTimelines()
+            }
+        } else if message.name == "gasLocationBridge" {
+            NativeLocationManager.shared.getCurrentLocation { [weak self] result in
+                DispatchQueue.main.async {
+                    guard let bridgeVC = self?.window?.rootViewController as? CAPBridgeViewController else { return }
+                    switch result {
+                    case .success(let coord):
+                        let js = "if (typeof window.onNativeLocationSuccess === 'function') { window.onNativeLocationSuccess(\(coord.latitude), \(coord.longitude)); }"
+                        bridgeVC.webView?.evaluateJavaScript(js, completionHandler: nil)
+                    case .failure(let errorMsg):
+                        let escapedError = errorMsg.replacingOccurrences(of: "'", with: "\\'").replacingOccurrences(of: "\n", with: " ")
+                        let js = "if (typeof window.onNativeLocationError === 'function') { window.onNativeLocationError('\(escapedError)'); }"
+                        bridgeVC.webView?.evaluateJavaScript(js, completionHandler: nil)
+                    }
+                }
             }
         }
     }
@@ -159,5 +177,114 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
                 }
             }
         }
+    }
+}
+
+// MARK: - Native Location Manager for iOS App GPS
+class NativeLocationManager: NSObject, CLLocationManagerDelegate {
+    static let shared = NativeLocationManager()
+    private let manager = CLLocationManager()
+    private var completion: ((Result<CLLocationCoordinate2D, String>) -> Void)?
+    private var timeoutWorkItem: DispatchWorkItem?
+
+    override init() {
+        super.init()
+        manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+    }
+
+    func getCurrentLocation(completion: @escaping (Result<CLLocationCoordinate2D, String>) -> Void) {
+        self.completion = completion
+
+        guard CLLocationManager.locationServicesEnabled() else {
+            finish(with: .failure("Dịch vụ định vị GPS trên iPhone đang tắt. Vui lòng bật trong Cài đặt > Quyền riêng tư."))
+            return
+        }
+
+        let status: CLAuthorizationStatus
+        if #available(iOS 14.0, *) {
+            status = manager.authorizationStatus
+        } else {
+            status = CLLocationManager.authorizationStatus()
+        }
+
+        switch status {
+        case .notDetermined:
+            startTimeoutTimer()
+            manager.requestWhenInUseAuthorization()
+        case .restricted, .denied:
+            finish(with: .failure("Ứng dụng chưa được cấp quyền vị trí. Vui lòng vào Cài đặt iPhone > Gas Manager > Vị trí để cho phép."))
+        case .authorizedWhenInUse, .authorizedAlways:
+            startUpdating()
+        @unknown default:
+            finish(with: .failure("Trạng thái vị trí không xác định."))
+        }
+    }
+
+    private func startUpdating() {
+        startTimeoutTimer()
+        manager.startUpdatingLocation()
+    }
+
+    private func startTimeoutTimer() {
+        timeoutWorkItem?.cancel()
+        let item = DispatchWorkItem { [weak self] in
+            self?.manager.stopUpdatingLocation()
+            self?.finish(with: .failure("Hết thời gian chờ nhận tín hiệu GPS. Vui lòng thử lại."))
+        }
+        timeoutWorkItem = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + 15.0, execute: item)
+    }
+
+    private func finish(with result: Result<CLLocationCoordinate2D, String>) {
+        timeoutWorkItem?.cancel()
+        timeoutWorkItem = nil
+        let callback = completion
+        completion = nil
+        callback?(result)
+    }
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status: CLAuthorizationStatus
+        if #available(iOS 14.0, *) {
+            status = manager.authorizationStatus
+        } else {
+            status = CLLocationManager.authorizationStatus()
+        }
+        handleAuthStatus(status)
+    }
+
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        handleAuthStatus(status)
+    }
+
+    private func handleAuthStatus(_ status: CLAuthorizationStatus) {
+        guard completion != nil else { return }
+        switch status {
+        case .authorizedWhenInUse, .authorizedAlways:
+            startUpdating()
+        case .denied, .restricted:
+            manager.stopUpdatingLocation()
+            finish(with: .failure("Quyền truy cập vị trí bị từ chối. Vui lòng bật trong Cài đặt iPhone."))
+        default:
+            break
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        // Nhận tọa độ có độ chính xác hợp lý
+        if location.horizontalAccuracy >= 0 {
+            manager.stopUpdatingLocation()
+            finish(with: .success(location.coordinate))
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        if let clErr = error as? CLError, clErr.code == .locationUnknown {
+            return
+        }
+        manager.stopUpdatingLocation()
+        finish(with: .failure(error.localizedDescription))
     }
 }
