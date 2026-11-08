@@ -3599,8 +3599,8 @@ async function generateReport() {
   let reportContent;
   if (currentExpenses.length > 0) {
     const expenseString = currentExpenses.map(expense => `${expense.name} ${formatNumber(expense.amount)}`).join(', ');
-    // Bỏ tổng doanh thu, chỉ còn: Giao [Người nhận] [Tiền thực nộp] (Trừ [khoản chi])
-    reportContent = `Giao ${recipient} ${formatNumber(netDueAmount)} (Trừ ${expenseString})`;
+    // Cú pháp: Giao [Người nhận] [Tổng doanh thu ca] (Trừ [khoản chi tiêu])
+    reportContent = `Giao ${recipient} ${formatNumber(totalRevenue)} (Trừ ${expenseString})`;
   } else {
     reportContent = `Giao ${recipient} ${formatNumber(totalRevenue)}`;
   }
