@@ -14,6 +14,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 14 (v1.5 / UI v5.2) - Chọn nhanh & Quản lý khoản chi đã lưu trong LocalStorage](#build-14-v15--ui-v52---2026-11-09)
 - [Build 13 (v1.5 / UI v5.1) - Thêm quy tắc Version Tag & Nâng phiên bản giao diện v5.1](#build-13-v15--ui-v51---2026-11-09)
 - [Build 12 (v1.5) - Sửa lỗi giao diện iPhone: Status bar header & Tràn tọa độ GPS](#build-12-v15---2026-11-09)
 - [Build 11 (v1.5) - Đồng bộ & tăng kích thước font chữ toàn ứng dụng](#build-11-v15---2026-11-09)
@@ -25,6 +26,36 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 - [Build 5 (v1.4) - Phóng to Doanh thu Widget 2x2 & Ẩn số giao dịch](#build-5-v14---2026-11-06)
 - [Build 4 (v1.3) - Tối ưu bố cục chống tràn chữ Widget 2x2 & 4x2](#build-4-v13---2026-11-06)
 - [Build 3 (v1.2) - Thiết kế lại Widget doanh thu vòng tròn tiến độ](#build-3-v12---2026-11-06)
+
+---
+
+## [Build 14 (v1.5 / UI v5.2)] - 2026-11-09
+- **Commit SHA**: `cb7db31`
+- **Mục tiêu**: Bổ sung cơ chế chọn nhanh và quản lý các khoản chi đã lưu trong LocalStorage cho modal "Quản lý chi tiêu trong ca" và "Báo cáo cuối ca", nâng phiên bản giao diện lên `v5.2`.
+
+### 🔄 Chi tiết thay đổi
+- **Giao diện Quick Chips & Quản lý mẫu khoản chi đã lưu (`gas_point_expense_templates`)**:
+  - Bổ sung thanh gợi ý khoản chi mẫu dạng thẻ (Quick Chips) một chạm ngay dưới tiêu đề: `[ ⛽ Xăng ]`, `[ 🍚 Ăn uống ]`, `[ 🅿️ Gửi xe ]`... Bấm vào chip sẽ tự động điền tên vào ô nhập và focus ngay sang ô số tiền.
+  - Hỗ trợ nút `[+ Thêm mẫu]` để lưu nhanh khoản chi mẫu mới vào `localStorage`.
+  - Hỗ trợ nút `[×]` trên từng thẻ để người dùng có thể xóa bỏ các mẫu chi tiêu không còn dùng khỏi `localStorage`.
+  - Highlight trực quan thẻ chip đang được chọn khi người dùng gõ tên khớp trong ô nhập liệu.
+- **Sửa lỗi Datalist không đồng bộ trong modal Chi tiêu**:
+  - Hàm `updateExpenseTemplatesDatalist()` cập nhật đồng thời cả `#global-expense-templates` (Chi tiêu ca) và `#expense-templates-list` (Báo cáo).
+  - Tự động lưu tên khoản chi mới vào `localStorage` khi bấm nút "Thêm", giúp các lần sau luôn có sẵn trong danh sách chọn nhanh.
+- **Nâng phiên bản hiển thị UI theo quy tắc**:
+  - `index.html` & `www/index.html`: `<span class="version-tag">v5.1</span>` ➔ `<span class="version-tag">v5.2</span>`.
+- **Files tác động**:
+  - `index.html` & `www/index.html`
+  - `CHANGELOG.md`
+  - `resources/ios/project.pbxproj` (Build 14)
+  - `ios/App/App.xcodeproj/project.pbxproj` (Build 14)
+  - `ios/App/App/public/*` (`npx cap sync ios`)
+
+### ⏪ Hướng dẫn Revert nếu cần
+```bash
+git revert HEAD --no-edit
+git push origin main
+```
 
 ---
 
