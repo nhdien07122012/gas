@@ -187,7 +187,7 @@
     }
 
     .sidebar-header {
-      padding: 1.25rem 1.25rem 1rem;
+      padding: calc(1.25rem + env(safe-area-inset-top, 0px)) 1.25rem 1rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -313,6 +313,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      padding-top: env(safe-area-inset-top, 0px);
       transition: var(--transition);
     }
 
@@ -431,7 +432,7 @@
     .container {
       max-width: 680px;
       margin: 0 auto;
-      padding: 1.25rem 1rem 3rem;
+      padding: 1.25rem 1rem calc(2.5rem + env(safe-area-inset-bottom, 0px));
     }
 
     /* Header hero banner */

@@ -13,6 +13,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 12 (v1.5) - Sửa lỗi giao diện iPhone: Status bar header & Tràn tọa độ GPS](#build-12-v15---2026-11-09)
 - [Build 11 (v1.5) - Đồng bộ & tăng kích thước font chữ toàn ứng dụng](#build-11-v15---2026-11-09)
 - [Build 10 (v1.5) - Cập nhật số tiền giao trong Báo cáo là Tổng doanh thu ca](#build-10-v15---2026-11-08)
 - [Build 9 (v1.5) - Hoàn trả nút Xuất data & Định dạng dấu chấm phần ngàn](#build-9-v15---2026-11-08)
@@ -22,6 +23,35 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 - [Build 5 (v1.4) - Phóng to Doanh thu Widget 2x2 & Ẩn số giao dịch](#build-5-v14---2026-11-06)
 - [Build 4 (v1.3) - Tối ưu bố cục chống tràn chữ Widget 2x2 & 4x2](#build-4-v13---2026-11-06)
 - [Build 3 (v1.2) - Thiết kế lại Widget doanh thu vòng tròn tiến độ](#build-3-v12---2026-11-06)
+
+---
+
+## [Build 12 (v1.5)] - 2026-11-09
+- **Commit SHA**: `06cbb10`
+- **Mục tiêu**: Sửa lỗi hiển thị giao diện trên iPhone cho trang `tinhgascon.html` (header đè status bar/Dynamic Island) và `vitri.html` (tràn tọa độ GPS ra ngoài thẻ & placeholder bị cắt), đồng thời tối ưu safe area cho `dudoandiemgas.html`.
+
+### 🔄 Chi tiết thay đổi
+- **`tinhgascon.html` & `dudoandiemgas.html`**:
+  - Thêm `padding-top: env(safe-area-inset-top, 0px);` vào `.app-header` (sticky top: 0). Nền kính mờ (glassmorphism) phủ kín khu vực status bar, đẩy thanh điều hướng, nút menu `[=]`, tiêu đề trang và nút công cụ xuống dưới Dynamic Island / tai thỏ, không còn bị giờ hệ thống và icon pin/wifi đè lên.
+  - Thêm safe-area-inset-top vào `.sidebar-header` (`padding: calc(1.25rem + env(safe-area-inset-top, 0px)) 1.25rem 1rem;`) giúp menu trượt không bị che khuất nút đóng và tiêu đề trên iPhone.
+  - Thêm safe-area-inset-bottom vào `.container` (`padding-bottom: calc(2.5rem + env(safe-area-inset-bottom, 0px));`) tránh che lấp nút bấm bởi thanh gạt Home Indicator của iOS.
+- **`vitri.html`**:
+  - Bổ sung `flex-wrap: wrap; gap: 6px;` vào `.card-details` để badge tọa độ GPS tự động xuống dòng gọn gàng khi màn hình hẹp thay vì tràn viền.
+  - Thêm `max-width: 100%; box-sizing: border-box; overflow: hidden; text-overflow: ellipsis;` và `font-size: 11.5px;` vào `.badge-gps` cùng `overflow: hidden;` cho `.location-card`, đảm bảo tọa độ GPS hiển thị đầy đủ, không bao giờ bị cắt số hay tràn ra ngoài thẻ.
+  - Rút gọn placeholder ô tìm kiếm thành `Tìm tên điểm, địa chỉ, ghi chú...` hiển thị trọn vẹn, không bị cụt trên màn hình điện thoại.
+- **Files tác động**:
+  - `tinhgascon.html` & `www/tinhgascon.html`
+  - `dudoandiemgas.html` & `www/dudoandiemgas.html`
+  - `vitri.html` & `www/vitri.html`
+  - `resources/ios/project.pbxproj` (Build 12)
+  - `ios/App/App.xcodeproj/project.pbxproj` (Build 12)
+  - `ios/App/App/public/*` (`npx cap sync ios`)
+
+### ⏪ Hướng dẫn Revert nếu cần
+```bash
+git revert HEAD --no-edit
+git push origin main
+```
 
 ---
 
