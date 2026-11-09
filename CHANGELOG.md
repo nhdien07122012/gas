@@ -8,11 +8,13 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 > 2. Luôn đồng bộ đồng thời giữa file gốc `index.html` và `www/index.html`, sau đó chạy `npx cap sync ios`.
 > 3. Tăng build version (`CURRENT_PROJECT_VERSION`) tại cả hai file `resources/ios/project.pbxproj` và `ios/App/App.xcodeproj/project.pbxproj`.
 > 4. Ghi rõ commit hash và lệnh `git revert` để người dùng hoặc agent khác có thể hoàn tác ngay lập tức khi phát sinh sự cố.
+> 5. **Quy tắc Version Tag giao diện Web (`index.html`)**: Khi có cập nhật/thay đổi đủ lớn (tính năng mới quan trọng, thay đổi lớn về logic hoặc giao diện), **PHẢI** cập nhật thẻ `<span class="version-tag">` ở tiêu đề `index.html` và `www/index.html` tăng thêm 1 chấm nhỏ (ví dụ: `v5.0` ➔ `v5.1` ➔ `v5.2`...).
 
 ---
 
 ## 📑 Danh mục phiên bản
 
+- [Build 13 (v1.5 / UI v5.1) - Thêm quy tắc Version Tag & Nâng phiên bản giao diện v5.1](#build-13-v15--ui-v51---2026-11-09)
 - [Build 12 (v1.5) - Sửa lỗi giao diện iPhone: Status bar header & Tràn tọa độ GPS](#build-12-v15---2026-11-09)
 - [Build 11 (v1.5) - Đồng bộ & tăng kích thước font chữ toàn ứng dụng](#build-11-v15---2026-11-09)
 - [Build 10 (v1.5) - Cập nhật số tiền giao trong Báo cáo là Tổng doanh thu ca](#build-10-v15---2026-11-08)
@@ -23,6 +25,33 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 - [Build 5 (v1.4) - Phóng to Doanh thu Widget 2x2 & Ẩn số giao dịch](#build-5-v14---2026-11-06)
 - [Build 4 (v1.3) - Tối ưu bố cục chống tràn chữ Widget 2x2 & 4x2](#build-4-v13---2026-11-06)
 - [Build 3 (v1.2) - Thiết kế lại Widget doanh thu vòng tròn tiến độ](#build-3-v12---2026-11-06)
+
+---
+
+## [Build 13 (v1.5 / UI v5.1)] - 2026-11-09
+- **Commit SHA**: `537dbbf`
+- **Mục tiêu**: Bổ sung quy tắc quản lý phiên bản hiển thị (`version-tag`) vào tài liệu hướng dẫn Agent và nâng phiên bản giao diện chính `index.html` từ `v5.0` lên `v5.1` đánh dấu chuỗi cải tiến lớn (Quản lý chi tiêu ca, Chuẩn hóa báo cáo doanh thu, Đồng bộ font size toàn ứng dụng và Tối ưu Safe Area iPhone).
+
+### 🔄 Chi tiết thay đổi
+- **Bổ sung Quy Tắc Version Tag vào `AGENT_INSTRUCTIONS.md` & `CHANGELOG.md`**:
+  - Quy định bắt buộc: Mỗi khi dự án có cập nhật/thay đổi đủ lớn, Agent phải nâng số phiên bản tại thẻ `<span class="version-tag">` trên trang chính `index.html` (và `www/index.html`) tăng thêm 1 chấm nhỏ (`v5.0` ➔ `v5.1` ➔ `v5.2`...).
+  - Bổ sung bước kiểm tra vào Checklist hoàn tất task của Agent.
+- **Nâng phiên bản giao diện chính**:
+  - `index.html`: `<span class="version-tag">v5.0</span>` ➔ `<span class="version-tag">v5.1</span>`.
+  - `www/index.html`: `<span class="version-tag">v5.0</span>` ➔ `<span class="version-tag">v5.1</span>`.
+- **Files tác động**:
+  - `AGENT_INSTRUCTIONS.md`
+  - `CHANGELOG.md`
+  - `index.html` & `www/index.html`
+  - `resources/ios/project.pbxproj` (Build 13)
+  - `ios/App/App.xcodeproj/project.pbxproj` (Build 13)
+  - `ios/App/App/public/*` (`npx cap sync ios`)
+
+### ⏪ Hướng dẫn Revert nếu cần
+```bash
+git revert HEAD --no-edit
+git push origin main
+```
 
 ---
 

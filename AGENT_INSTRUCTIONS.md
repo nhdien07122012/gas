@@ -18,7 +18,19 @@ Chào bạn Agent tiếp theo! Đây là dự án **Gas Manager** (Ứng dụng 
 
 ---
 
-## 🏗️ 2. Kiến Trúc Dự Án & Luồng Dữ Liệu
+## 🏷️ 2. Quy Tắc Cập Nhật Phiên Bản Hiển Thị (UI Versioning Rule)
+
+* **Vị trí hiển thị**: Thẻ `<span class="version-tag">v5.0</span>` nằm cạnh tiêu đề *"Quản lý điểm gas"* trong header của `index.html` (và bản copy `www/index.html`).
+* **Quy tắc nâng phiên bản**:
+  - **Thay đổi nhỏ / Hotfix CSS / Sửa lỗi hiển thị**: Giữ nguyên version tag (hoặc tăng patch `v5.0.1` nếu cần), chỉ tăng `CURRENT_PROJECT_VERSION` (Build number iOS) và ghi `CHANGELOG.md`.
+  - **Thay đổi ĐỦ LỚN** (Thêm tính năng mới, tái cấu trúc logic báo cáo/chi tiêu, đồng bộ typography toàn ứng dụng, thay đổi luồng làm việc quan trọng): **BẮT BUỘC** tăng phiên bản UI lên 1 chấm nhỏ (minor version), ví dụ: `v5.0` ➔ `v5.1` ➔ `v5.2`...
+  - Khi tăng số phiên bản trên UI, phải:
+    1. Cập nhật đồng thời ở `index.html` và `www/index.html`.
+    2. Ghi rõ số phiên bản này vào tiêu đề mục cập nhật trong `CHANGELOG.md`.
+
+---
+
+## 🏗️ 3. Kiến Trúc Dự Án & Luồng Dữ Liệu
 
 1. **Web App**:
    - `index.html`: File ứng dụng chính của toàn bộ giao diện Web.
@@ -56,9 +68,10 @@ Chào bạn Agent tiếp theo! Đây là dự án **Gas Manager** (Ứng dụng 
 
 ---
 
-## 🚀 3. Checklist Trước Khi Hoàn Tất Một Task
+## 🚀 4. Checklist Trước Khi Hoàn Tất Một Task
 
 - [ ] Đã sửa và kiểm tra cú pháp JS trong `index.html`.
+- [ ] Nếu là thay đổi đủ lớn: Đã cập nhật thẻ version tag trên header (`<span class="version-tag">vX.X</span>`) trong cả `index.html` và `www/index.html`.
 - [ ] Đã copy/đồng bộ chính xác sang `www/index.html`.
 - [ ] Đã chạy `npx cap sync ios`.
 - [ ] Đã tăng `CURRENT_PROJECT_VERSION` trong cả 2 file `project.pbxproj`.
