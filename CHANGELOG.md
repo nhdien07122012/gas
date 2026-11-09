@@ -13,6 +13,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 11 (v1.5) - Đồng bộ & tăng kích thước font chữ toàn ứng dụng](#build-11-v15---2026-11-09)
 - [Build 10 (v1.5) - Cập nhật số tiền giao trong Báo cáo là Tổng doanh thu ca](#build-10-v15---2026-11-08)
 - [Build 9 (v1.5) - Hoàn trả nút Xuất data & Định dạng dấu chấm phần ngàn](#build-9-v15---2026-11-08)
 - [Build 8 (v1.5) - Chuẩn hóa mã ca, giải quyết triệt để lỗi trùng ca & Báo cáo](#build-8-v15---2026-11-07)
@@ -21,6 +22,44 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 - [Build 5 (v1.4) - Phóng to Doanh thu Widget 2x2 & Ẩn số giao dịch](#build-5-v14---2026-11-06)
 - [Build 4 (v1.3) - Tối ưu bố cục chống tràn chữ Widget 2x2 & 4x2](#build-4-v13---2026-11-06)
 - [Build 3 (v1.2) - Thiết kế lại Widget doanh thu vòng tròn tiến độ](#build-3-v12---2026-11-06)
+
+---
+
+## [Build 11 (v1.5)] - 2026-11-09
+- **Commit SHA**: `54834c2`
+- **Mục tiêu**: Đồng bộ và tăng kích thước font chữ cho 9 màn hình chức năng (4 modal trong index.html và 5 trang độc lập) theo chuẩn trực quan của trang chính.
+
+### 🔄 Chi tiết thay đổi
+- **Hệ thống Typography chuẩn hóa**:
+  - Ô nhập liệu (Input/Select): Đồng bộ `font-size: 16px !important;` với chiều cao 44px - 46px chống tự động phóng to trên iOS Safari.
+  - Tên điểm gas / Tiêu đề thẻ: Nâng lên `15.5px - 16px` (Font-weight: 700).
+  - Số tiền / Doanh thu / Lương: Nâng lên `16px` (Font-weight: 700).
+  - Nhãn trường (Label) & Nút bấm (Button): Nâng lên `14.5px - 15px`, chiều cao nút tối thiểu 44px.
+  - Địa chỉ / Ghi chú / Thời gian: Nâng từ mức quá nhỏ (`10.5px - 12px`) lên `13.5px`.
+- **4 Modal trong `index.html`**:
+  - `#out-of-hours-modal`: Tăng font mô tả (15px), nhãn và nút bấm footer (15px, cao 44px).
+  - `#queue-modal`: Tên điểm (15.5px), tiền (16px), địa chỉ (13.5px), status bar (14.5px).
+  - `#batch-status-modal`: Tóm tắt (15.5px), mô tả (14.5px), nút bấm (15px).
+  - `#quick-view-modal`: Tên điểm (15.5px), địa chỉ (13.5px), tiền (16px), tổng kết (16.5px).
+- **5 Trang chức năng riêng biệt**:
+  - `vitri.html`: Nâng card-title lên 16px, địa chỉ lên 13.5px, subtitle 13.5px.
+  - `tinhluong.html`: Nâng label lên 14.5px, input 16px (cao 44px), nút bấm 15px (cao 44px), bảng ca 14px (th/td).
+  - `tinhgascon.html`: Nâng label lên 14.5px, input 16px, kết quả lên 1.25rem (20px).
+  - `dudoandiemgas.html`: Nâng bảng lên 14px - 14.5px, ô tìm kiếm 16px (cao 44px), nút tạo báo cáo 14.5px.
+  - `clipboard.html`: Nâng text nội dung lên 15px, badge & time lên 13.5px, ô tìm kiếm & lọc 16px.
+- **Files tác động**:
+  - `index.html`, `vitri.html`, `tinhluong.html`, `tinhgascon.html`, `dudoandiemgas.html`, `clipboard.html`.
+  - Toàn bộ thư mục `www/` và tài nguyên iOS Native (`project.pbxproj` Build 11).
+
+### ⚠️ Lưu ý kỹ thuật cho Agent sau
+- Toàn bộ ô nhập liệu `input, select` trên web di động nên duy trì tối thiểu `16px` để tránh tính năng tự động phóng to (auto-zoom) khó chịu của trình duyệt Safari trên iPhone.
+- Các nút bấm thao tác trên di động nên duy trì `min-height: 44px` để đạt chuẩn ngón tay người dùng (Apple Human Interface Guidelines).
+
+### ⏪ Hướng dẫn Revert (Nếu có lỗi)
+```bash
+git revert HEAD --no-edit
+git push origin main
+```
 
 ---
 
