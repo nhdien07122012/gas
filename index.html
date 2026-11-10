@@ -2150,6 +2150,12 @@
       </button>
     </div>
     <div class="sidebar-content">
+      <button class="sidebar-item active" onclick="closeSidebar(); window.scrollTo({top:0, behavior:'smooth'})">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd" />
+        </svg>
+        Quản lý điểm gas
+      </button>
       <button class="sidebar-item" onclick="closeSidebar(); window.location.href='diemtien.html'">
         <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
@@ -2261,7 +2267,7 @@
         <div class="brand-info">
           <div class="brand-title-row">
             <h1 class="brand-title">Quản lý điểm gas</h1>
-            <span class="version-tag">v5.4</span>
+            <span class="version-tag">v5.5</span>
           </div>
           <span class="brand-subtitle">Theo dõi &amp; quản lý gas theo ca</span>
         </div>
@@ -6104,6 +6110,8 @@ window.quickActionAddPoint = function() {
 (function checkQuickActionParam() {
   const urlParams = new URLSearchParams(window.location.search);
   const action = urlParams.get('action');
+  if (!action) return;
+
   if (action === 'add_point') {
     setTimeout(() => {
       if (typeof window.quickActionAddPoint === 'function') {
@@ -6122,6 +6130,42 @@ window.quickActionAddPoint = function() {
         window.quickActionExpense();
       } else if (typeof window.openExpenseModal === 'function') {
         window.openExpenseModal();
+      }
+    }, 450);
+  } else if (action === 'outofhours') {
+    setTimeout(() => {
+      if (typeof window.openOutOfHoursModal === 'function') {
+        window.openOutOfHoursModal();
+      }
+    }, 450);
+  } else if (action === 'queue') {
+    setTimeout(() => {
+      if (typeof window.openModal === 'function') {
+        window.openModal('queue-modal');
+      }
+    }, 450);
+  } else if (action === 'batchstatus') {
+    setTimeout(() => {
+      if (typeof window.openBatchStatusModal === 'function') {
+        window.openBatchStatusModal();
+      }
+    }, 450);
+  } else if (action === 'quickview') {
+    setTimeout(() => {
+      if (typeof window.openQuickViewModal === 'function') {
+        window.openQuickViewModal();
+      }
+    }, 450);
+  } else if (action === 'export') {
+    setTimeout(() => {
+      if (typeof window.exportToText === 'function') {
+        window.exportToText();
+      }
+    }, 450);
+  } else if (action === 'help') {
+    setTimeout(() => {
+      if (typeof window.openModal === 'function') {
+        window.openModal('help-modal');
       }
     }, 450);
   }

@@ -32,6 +32,49 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ---
 
+## [Build 18 (v1.5 / UI v5.5)] - 2026-11-10
+- **Commit SHA**: (Pending commit)
+- **Mục tiêu**: Đồng bộ toàn bộ thanh Menubar (Header) và Sidebar Drawer trên tất cả 7 trang chức năng của ứng dụng theo thiết kế chuẩn nhận diện thương hiệu VNPost của trang `index.html`, loại bỏ hoàn toàn sự rời rạc và lỗi notch iPhone.
+
+### 🔄 Chi tiết thay đổi
+1. **Thanh Menubar (Header trên cùng) đồng bộ 100% trên cả 7 trang (`index.html`, `diemtien.html`, `vitri.html`, `tinhluong.html`, `tinhgascon.html`, `dudoandiemgas.html`, `clipboard.html`)**:
+   - Chuyển toàn bộ header các trang con sang `.app-header` phong cách VNPost: nền thẻ đồng nhất `var(--bg-card)`, viền dưới `var(--border-card)`, căn giữa hoàn hảo.
+   - Bên trái: Nút Hamburger card `menu-toggle` (40x40px, bo góc 10px) kích hoạt Sidebar Drawer và hỗ trợ chạm rung phản hồi (`vibrateShort`).
+   - Ở giữa: Khối thương hiệu `.brand` với tiêu đề chính `.brand-title` màu xanh VNPost (`#005ba6`), font Be Vietnam Pro đậm nét, kèm phụ đề mô tả rõ ràng.
+   - Bên phải: Nút quay về trang chủ `header-home-btn` (icon Home 40x40px) tiện lợi, giúp người dùng chuyển về `index.html` trong 1 chạm.
+   - Đưa Header trong `tinhgascon.html` và `dudoandiemgas.html` vào trong container card có safe-area padding, chấm dứt triệt để lỗi notch tai thỏ iPhone 13 Pro đè cắt vào tiêu đề và các nút bấm.
+
+2. **Thanh Sidebar Drawer dùng chung thống nhất với 16 danh mục chức năng**:
+   - Tất cả các trang đều sở hữu cùng một Sidebar Drawer với đúng 16 mục chức năng, cùng icon Heroicons, cùng thứ tự:
+     1. 🏠 **Quản lý điểm gas** (Trang chủ)
+     2. 💵 **Đếm tiền** (`diemtien.html`)
+     3. 💳 **Quản lý chi tiêu ca** (`index.html?action=expense`)
+     4. ➕ **Thêm điểm ngoài ca** (`index.html?action=outofhours`)
+     5. 🔄 **Hàng đợi đồng bộ** (`index.html?action=queue`)
+     6. 📋 **Chuyển tất cả chưa nộp** (`index.html?action=batchstatus`)
+     7. 📍 **Quản lý vị trí** (`vitri.html`)
+     8. 💼 **Tính công & lương** (`tinhluong.html`)
+     9. 👁️ **Xem nhanh điểm (ca)** (`index.html?action=quickview`)
+     10. 🧪 **Tính tiền gas còn lại** (`tinhgascon.html`)
+     11. 📈 **Dự đoán điểm gas** (`dudoandiemgas.html`)
+     12. 📋 **Lưu Clipboard** (`clipboard.html`)
+     13. 📤 **Xuất data của ca** (`index.html?action=export`)
+     14. 🌙/☀️ **Chế độ sáng / tối** (Đồng bộ `gas_theme` giữa tất cả các trang)
+     15. ❓ **Trợ giúp**
+     16. ✕ **Đóng**
+   - Đánh dấu `class="sidebar-item active"` tại đúng trang hiện tại của người dùng.
+   - Thêm cơ chế điều hướng thông minh qua query parameters `?action=...` trên `index.html` cho các tính năng modal (chi tiêu, ngoài ca, hàng đợi, chuyển trạng thái hàng loạt, xem nhanh, xuất data, trợ giúp).
+
+3. **Cử chỉ vuốt mép trái (Edge Swipe) & Dark Mode đồng bộ**:
+   - Tích hợp cử chỉ vuốt mép màn hình (Edge Swipe Gestures) mở / đóng menu mượt mà 60fps trên toàn bộ 7 trang.
+   - Đồng bộ toàn diện Dark Mode/Light Mode/Tự động theo hệ thống qua khóa `gas_theme`.
+
+4. **Nâng cấp phiên bản**:
+   - Cập nhật UI tag từ `v5.4` lên `v5.5` trên `index.html`.
+   - Nâng `CURRENT_PROJECT_VERSION` từ 17 lên 18 trong Xcode project (`project.pbxproj`).
+   - Đồng bộ toàn bộ mã nguồn sang thư mục `www/` và chạy `npx cap sync ios`.
+
+
 ## [Build 17 (v1.5 / UI v5.4)] - 2026-11-10
 - **Commit SHA**: `6b95c24`
 - **Mục tiêu**: Điều chỉnh vị trí thông báo Toast nằm hoàn toàn dưới tai thỏ (Notch) iPhone 13 Pro (chống che khuất status bar / giờ / pin), thiết kế lại hiệu ứng Pull-to-Refresh dạng khoang Notch Expansion (Dynamic Island pill) kéo mượt mà từ tai thỏ ra, nâng UI lên `v5.4`.

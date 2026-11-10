@@ -862,139 +862,425 @@
       width: 1.15rem;
       height: 1.15rem;
     }
-  </style>
+  
+
+  /* ========== UNIFIED APP HEADER (VNPost Brand Style) ========== */
+  .app-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-card);
+    position: relative;
+    text-align: center;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+
+  .menu-toggle {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-subtle, var(--bg-tertiary, #f1f5f9));
+    border: 1px solid var(--border-card, #e2e8f0);
+    border-radius: 10px;
+    color: var(--text-main, var(--text-primary, #0f172a));
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 2;
+  }
+  .menu-toggle:hover {
+    background: var(--bg-hover, #f1f5f9);
+    color: var(--vnpost-blue, #005ba6);
+    border-color: var(--vnpost-blue-border, #bfdbfe);
+  }
+  .menu-toggle:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  .header-home-btn {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-subtle, var(--bg-tertiary, #f1f5f9));
+    border: 1px solid var(--border-card, #e2e8f0);
+    border-radius: 10px;
+    color: var(--text-main, var(--text-primary, #0f172a));
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 2;
+  }
+  .header-home-btn:hover {
+    background: var(--bg-hover, #f1f5f9);
+    color: var(--vnpost-blue, #005ba6);
+    border-color: var(--vnpost-blue-border, #bfdbfe);
+  }
+  .header-home-btn:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    padding: 0 52px;
+    min-width: 0;
+  }
+  .brand-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .brand-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+  .brand-title {
+    margin: 0;
+    font-size: 20.5px;
+    font-weight: 700;
+    color: var(--vnpost-blue, #005ba6);
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+  .brand-subtitle {
+    font-size: 14.5px;
+    color: var(--text-secondary, #334155);
+    font-weight: 500;
+    line-height: 1.35;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  /* ========== UNIFIED SIDEBAR DRAWER ========== */
+  .overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.22s ease, visibility 0.22s;
+    will-change: opacity;
+  }
+  .overlay.open, .overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0; left: -330px;
+    width: 310px;
+    max-width: 85vw;
+    height: 100%;
+    background: var(--bg-sidebar, var(--bg-card, #ffffff));
+    box-shadow: 0 10px 20px -3px rgb(0 0 0 / 0.14), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+    z-index: 1001;
+    transition: left 0.22s cubic-bezier(0.25, 1, 0.5, 1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-card, #e2e8f0);
+    touch-action: pan-y;
+    will-change: left;
+  }
+  .sidebar.open { left: 0; }
+  .sidebar.swiping { transition: none !important; will-change: left; }
+
+  .sidebar-header {
+    padding: calc(18px + env(safe-area-inset-top, 0px)) 20px 18px;
+    background: linear-gradient(135deg, var(--vnpost-blue, #005ba6), var(--vnpost-blue-hover, #004680));
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sidebar-header h2 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.2px;
+    margin: 0;
+  }
+  .close-sidebar {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.15s ease;
+  }
+  .close-sidebar:hover { opacity: 0.8; }
+
+  .sidebar-content {
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary, #334155);
+    font-family: inherit;
+    font-size: 16.5px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.12s ease;
+  }
+  .sidebar-item:hover {
+    background: var(--bg-hover, #f1f5f9);
+    color: var(--vnpost-blue, #005ba6);
+  }
+  .sidebar-item:active { transform: scale(0.98); }
+  .sidebar-item.active {
+    background: var(--vnpost-blue-light, rgba(0, 91, 166, 0.1));
+    color: var(--vnpost-blue, #005ba6);
+    border-color: var(--vnpost-blue-border, #bfdbfe);
+  }
+
+  .sidebar-item .hero-icon,
+  .sidebar-item #theme-icon svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    color: var(--text-muted, #94a3b8);
+  }
+  .sidebar-item:hover .hero-icon,
+  .sidebar-item:hover #theme-icon svg,
+  .sidebar-item.active .hero-icon {
+    color: var(--vnpost-blue, #005ba6);
+  }
+
+  .sidebar-footer {
+    padding: 16px 20px calc(16px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--border-card, #e2e8f0);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-muted, #94a3b8);
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .app-header { padding: 12px 14px; }
+  }
+
+
+  /* Unified Container Card & Body */
+  body {
+    padding: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px)) !important;
+  }
+  @media (max-width: 640px) {
+    body {
+      padding: calc(8px + env(safe-area-inset-top, 0px)) calc(8px + env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) calc(8px + env(safe-area-inset-left, 0px)) !important;
+    }
+  }
+  .container {
+    max-width: 680px !important;
+    margin: 0 auto !important;
+    background: var(--bg-card) !important;
+    border-radius: var(--radius-xl) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: var(--shadow-md) !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+  }
+  .container-content {
+    padding: 1.25rem 1rem calc(2.5rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+</style>
 </head>
 <body>
   <!-- Overlay cho sidebar -->
+    <!-- Sidebar Overlay -->
   <div class="overlay" id="sidebar-overlay"></div>
 
-  <!-- Toast notification -->
-  <div class="toast" id="toast">
-    <span class="toast-icon" id="toast-icon"></span>
-    <span id="toast-message">Thông báo</span>
-  </div>
-
-  <!-- Sidebar Drawer -->
+  <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <div class="sidebar-brand">
-        <img src="icon.png" alt="Gas Manager" class="sidebar-logo" onerror="this.style.display='none'">
-        <div class="sidebar-title-group">
-          <h2>Gas Manager</h2>
-          <p>Hệ thống hỗ trợ ca trực</p>
-        </div>
-      </div>
+      <h2>Danh mục quản lý</h2>
       <button class="close-sidebar" id="close-sidebar" aria-label="Đóng menu">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+        <svg class="hero-icon hero-icon-md" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
         </svg>
       </button>
     </div>
-
     <div class="sidebar-content">
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M11.47 3.84a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.06l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 0 0 1.061 1.06l8.69-8.69Z" />
-          <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
+      <button class="sidebar-item " onclick="closeSidebar(); window.location.href='index.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd" />
         </svg>
-        Bảng điều khiển
+        Quản lý điểm gas
       </button>
-
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='diemtien.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+      <button class="sidebar-item " onclick="closeSidebar(); window.location.href='diemtien.html'">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
           <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
         </svg>
         Đếm tiền
       </button>
-
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='vitri.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html?action=expense'">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M2.5 4A1.5 1.5 0 001 5.5V6h18v-.5A1.5 1.5 0 0017.5 4h-15zM19 8.5H1v6A1.5 1.5 0 002.5 16h15a1.5 1.5 0 001.5-1.5v-6zM3 13.25a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zm4.75-.75a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z" clip-rule="evenodd" />
+        </svg>
+        <span>Quản lý chi tiêu ca</span>
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html?action=outofhours'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
+        </svg>
+        Thêm điểm ngoài ca
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html?action=queue'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
+        </svg>
+        <span>Hàng đợi đồng bộ</span>
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html?action=batchstatus'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.451a.75.75 0 000-1.5H4.5a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-2.138l.385.385a7 7 0 0011.758-3.15.75.75 0 00-2.08-.892ZM4.688 8.576a5.5 5.5 0 019.201-2.466l.312.311h-2.451a.75.75 0 000 1.5H15.5a.75.75 0 00.75-.75V3.421a.75.75 0 00-1.5 0v2.138l-.385-.385A7 7 0 002.607 8.324a.75.75 0 002.081.252Z" clip-rule="evenodd" />
+        </svg>
+        Chuyển tất cả chưa nộp
+      </button>
+      <button class="sidebar-item " onclick="closeSidebar(); window.location.href='vitri.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19.02 10.11 18.934l.004-.002.01-.005a20.086 20.086 0 001.838-1.295A21.36 21.36 0 0015.5 12.87c1.336-1.614 2-3.435 2-5.37a7.5 7.5 0 10-15 0c0 1.935.664 3.756 2 5.37a21.36 21.36 0 003.548 4.762 20.086 20.086 0 001.838 1.295l.01.005.004.002.001.001ZM10 10.5a3 3 0 100-6 3 3 0 000 6Z" clip-rule="evenodd" />
         </svg>
         Quản lý vị trí
       </button>
-
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='tinhluong.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 0 1-.921.42Z" />
-          <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a3.836 3.836 0 0 0-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 0 1-.921-.421l-.879-.66a.75.75 0 0 0-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 0 0 1.5 0v-.81a4.124 4.124 0 0 0 1.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 0 0-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 0 0 .933-1.175l-.415-.33a3.836 3.836 0 0 0-1.719-.755V6Z" clip-rule="evenodd" />
+      <button class="sidebar-item " onclick="closeSidebar(); window.location.href='tinhluong.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-3-1a1 1 0 011 1v2a1 1 0 11-2 0v-2a1 1 0 011-1z" clip-rule="evenodd" />
         </svg>
-        Tính công & lương
+        Tính công &amp; lương
       </button>
-
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='dudoandiemgas.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5Z" clip-rule="evenodd" />
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html?action=quickview'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+          <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
         </svg>
-        Dự đoán điểm gas
+        Xem nhanh điểm (ca)
       </button>
-
-      <button class="sidebar-item active" type="button">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path fill-rule="evenodd" d="M10.5 3.798v5.02a3 3 0 0 1-.879 2.121l-2.377 2.377a9.845 9.845 0 0 1 5.091 1.013 8.315 8.315 0 0 0 5.713.636l.285-.071-3.954-3.955a3 3 0 0 1-.879-2.121v-5.02a23.614 23.614 0 0 0-3 0Zm4.5.138a.75.75 0 0 0 .093-1.495A24.837 24.837 0 0 0 12 2.25a25.048 25.048 0 0 0-3.093.191A.75.75 0 0 0 9 3.936v4.882a1.5 1.5 0 0 1-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.471-4.881L15.44 9.879A1.5 1.5 0 0 1 15 8.818V3.936Z" clip-rule="evenodd" />
+      <button class="sidebar-item active" onclick="closeSidebar(); window.location.href='tinhgascon.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 2a.75.75 0 01.75.75v.258a33.12 33.12 0 013.722.505.75.75 0 11-.244 1.48 31.623 31.623 0 00-3.478-.48v3.424l3.18 3.18a3.25 3.25 0 01.952 2.298V14a3 3 0 01-3 3H8.118a3 3 0 01-3-3v-.585a3.25 3.25 0 01.952-2.298l3.18-3.18V4.513c-1.168.1-2.33.262-3.478.48a.75.75 0 11-.244-1.48 33.124 33.124 0 013.722-.505V2.75A.75.75 0 0110 2z" clip-rule="evenodd" />
         </svg>
         Tính tiền gas còn lại
       </button>
-
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='clipboard.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path fill-rule="evenodd" d="M10.5 3A1.501 1.501 0 0 0 9 4.5h6A1.5 1.5 0 0 0 13.5 3h-3Zm-2.693.178A3 3 0 0 1 10.5 1.5h3a3 3 0 0 1 2.694 1.678c.497.042.992.092 1.486.15 1.497.173 2.57 1.46 2.57 2.929V19.5a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V6.257c0-1.47 1.073-2.756 2.57-2.93.493-.057.989-.107 1.487-.15Z" clip-rule="evenodd" />
+      <button class="sidebar-item " onclick="closeSidebar(); window.location.href='dudoandiemgas.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+        </svg>
+        Dự đoán điểm gas
+      </button>
+      <button class="sidebar-item " onclick="closeSidebar(); window.location.href='clipboard.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M15.988 3.012A2.25 2.25 0 0118 5.25v6.5A2.25 2.25 0 0115.75 14H13.5v-1.5h2.25a.75.75 0 00.75-.75v-6.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 00-.75.75V7H6v-.75A2.25 2.25 0 018.25 3h7.738z" clip-rule="evenodd" />
+          <path fill-rule="evenodd" d="M2 9.25A2.25 2.25 0 014.25 7h7.5A2.25 2.25 0 0114 9.25v7.5A2.25 2.25 0 0111.75 19h-7.5A2.25 2.25 0 012 16.75v-7.5zm2.25-.75a.75.75 0 00-.75.75v7.5c0 .414.336.75.75.75h7.5a.75.75 0 00.75-.75v-7.5a.75.75 0 00-.75-.75h-7.5z" clip-rule="evenodd" />
         </svg>
         Lưu Clipboard
       </button>
-
-      <button class="sidebar-item" onclick="openModal('help-modal')">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 0 1-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 0 1-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 0 1-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.83-.727.83-1.857 0-2.584ZM12 18a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html?action=export'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v7.5a.75.75 0 01-1.5 0v-7.5A.75.75 0 0110 3z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M6.22 6.22a.75.75 0 011.06 0L10 8.94l2.72-2.72a.75.75 0 111.06 1.06l-3.25 3.25a.75.75 0 01-1.06 0L6.22 7.28a.75.75 0 010-1.06z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M2.5 12.25a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H3.25a.75.75 0 01-.75-.75zM3.25 15.25a.75.75 0 000 1.5h13.5a.75.75 0 000-1.5H3.25z" clip-rule="evenodd" />
         </svg>
-        Hướng dẫn & Công thức
+        Xuất data của ca
+      </button>
+      <button class="sidebar-item" id="theme-toggle" type="button" onclick="toggleTheme()">
+        <span id="theme-icon" style="display:inline-flex;align-items:center;justify-content:center;"></span>
+        <span id="theme-text">Chế độ tối</span>
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar(); openModal(&quot;help-modal&quot;);">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.94 6.94a.75.75 0 11-1.061-1.061 3 3 0 112.871 5.026v.345a.75.75 0 01-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 108.94 6.94zM10 15a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+        </svg>
+        Trợ giúp
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar()">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+        </svg>
+        Đóng
       </button>
     </div>
-
     <div class="sidebar-footer">
-      <span>Gas System</span>
-      <span>v3.0</span>
+      <p>Gas Manager &copy; 2026</p>
     </div>
   </div>
 
-  <!-- Header -->
-  <header class="app-header">
-    <div class="header-inner">
-      <div class="header-left">
-        <button class="menu-toggle" id="menu-toggle" aria-label="Mở menu">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path fill-rule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
-          </svg>
-        </button>
-        <a href="index.html" class="brand-link">
-          <div class="header-title-wrap">
-            <h1>Tính gas còn lại</h1>
-            <p>Trừ tiền bình 45kg</p>
+  <div class="container">
+    <header class="app-header">
+      <button class="menu-toggle" id="menu-toggle" aria-label="Mở menu">
+        <svg class="hero-icon hero-icon-md" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <div class="brand">
+        <div class="brand-info">
+          <div class="brand-title-row">
+            <h1 class="brand-title">Tính gas còn lại</h1>
           </div>
-        </a>
+          <span class="brand-subtitle">Trừ tiền bình 45kg</span>
+        </div>
       </div>
+      <button class="header-home-btn" onclick="window.location.href='index.html'" aria-label="Về trang chủ">
+        <svg class="hero-icon hero-icon-md" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </header>
+    <div class="container-content">
 
-      <div class="header-actions">
-        <button class="icon-btn" onclick="toggleTheme()" aria-label="Đổi giao diện Sáng/Tối">
-          <svg id="theme-icon-sun" class="hero-icon" style="display:none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z" />
-          </svg>
-          <svg id="theme-icon-moon" class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.7-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" />
-          </svg>
-        </button>
-        <button class="icon-btn" onclick="openModal('help-modal')" aria-label="Xem hướng dẫn">
-          <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 0 1-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 0 1-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 0 1-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.83-.727.83-1.857 0-2.584ZM12 18a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Container -->
-  <main class="container">
     <div class="hero-banner">
       <div class="hero-banner-icon">
         <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -1223,7 +1509,8 @@
         </div>
       </div>
     </div>
-  </main>
+      </div>
+  </div>
 
   <script>
     // ========== HEROICONS LIBRARY ==========
@@ -1257,142 +1544,344 @@
       showToast(isDark ? 'Đã bật chế độ tối' : 'Đã bật chế độ sáng', 'info');
     }
 
-    // ========== HÀM TOGGLE SIDEBAR ==========
-    function openSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebar-overlay');
-      if (!sidebar || !overlay) return;
-      if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
-      sidebar.style.left = '';
-      sidebar.style.transition = '';
-      overlay.style.opacity = '';
-      overlay.style.transition = '';
-      overlay.style.display = '';
-      if (!sidebar.classList.contains('open')) {
-        if (navigator.vibrate) navigator.vibrate(10);
-        sidebar.classList.add('open');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
-    }
+    
+/* ========== UNIFIED NAVIGATION & SIDEBAR JS ========== */
+const NAV_ICONS = {
+  sun: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zm-8-5a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5A.75.75 0 012 10zm13 0a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5A.75.75 0 0115 10zM4.343 4.343a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061L4.343 5.404a.75.75 0 010-1.06zm9.193 9.192a.75.75 0 011.06 0l1.061 1.061a.75.75 0 11-1.06 1.06l-1.061-1.06a.75.75 0 010-1.061zm0-9.192a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.062-1.06l1.061-1.061a.75.75 0 011.061 0zm-9.193 9.192a.75.75 0 010 1.061l-1.06 1.06a.75.75 0 11-1.062-1.06l1.061-1.061a.75.75 0 011.061 0zM10 6.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" /></svg>',
+  moon: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>',
+  cog: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" /></svg>'
+};
 
-    function closeSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebar-overlay');
-      if (!sidebar || !overlay) return;
-      if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
-      sidebar.style.left = '';
-      sidebar.style.transition = '';
-      overlay.style.opacity = '';
-      overlay.style.transition = '';
-      overlay.style.display = '';
-      sidebar.classList.remove('open');
-      overlay.classList.remove('active');
-      document.body.style.overflow = '';
-    }
+function vibrateShort() {
+  if (navigator.vibrate) {
+    try { navigator.vibrate(10); } catch(e) {}
+  }
+}
 
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      if (!sidebar) return;
-      if (sidebar.classList.contains('open')) {
-        closeSidebar();
+function openSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!sidebar || !overlay) return;
+  if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
+  sidebar.style.left = '';
+  sidebar.style.transition = '';
+  overlay.style.opacity = '';
+  overlay.style.transition = '';
+  overlay.style.display = '';
+  if (!sidebar.classList.contains('open')) {
+    vibrateShort();
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+    document.body.classList.add('no-scroll');
+  }
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!sidebar || !overlay) return;
+  if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
+  sidebar.style.left = '';
+  sidebar.style.transition = '';
+  overlay.style.opacity = '';
+  overlay.style.transition = '';
+  overlay.style.display = '';
+  sidebar.classList.remove('open');
+  overlay.classList.remove('active');
+  if (!document.querySelector('.modal[style*="display: flex"]')) {
+    document.body.classList.remove('no-scroll');
+  }
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar && sidebar.classList.contains('open')) {
+    vibrateShort();
+    closeSidebar();
+  } else {
+    openSidebar();
+  }
+}
+
+function updateThemeToggle() {
+  const themeIcon = document.getElementById('theme-icon');
+  const themeText = document.getElementById('theme-text');
+  if (!themeIcon || !themeText) return;
+
+  const savedTheme = localStorage.getItem('gas_theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = savedTheme === 'dark' || (savedTheme !== 'light' && systemPrefersDark);
+
+  const btn = document.getElementById('theme-toggle');
+
+  if (!savedTheme) {
+    themeIcon.innerHTML = NAV_ICONS.cog;
+    themeText.textContent = 'Tự động (' + (isDark ? 'tối' : 'sáng') + ')';
+    if (btn) btn.setAttribute('aria-label', 'Đang dùng chế độ theo thiết bị');
+  } else if (isDark) {
+    themeIcon.innerHTML = NAV_ICONS.sun;
+    themeText.textContent = 'Chế độ sáng';
+    if (btn) btn.setAttribute('aria-label', 'Chuyển sang chế độ sáng');
+  } else {
+    themeIcon.innerHTML = NAV_ICONS.moon;
+    themeText.textContent = 'Chế độ tối';
+    if (btn) btn.setAttribute('aria-label', 'Chuyển sang chế độ tối');
+  }
+}
+
+function applySavedTheme() {
+  const savedTheme = localStorage.getItem('gas_theme');
+  if (savedTheme === 'light' || savedTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  updateThemeToggle();
+}
+
+function toggleTheme() {
+  vibrateShort();
+  const savedTheme = localStorage.getItem('gas_theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  let nextTheme;
+  if (!savedTheme) nextTheme = 'light';
+  else if (savedTheme === 'light') nextTheme = 'dark';
+  else nextTheme = null;
+
+  if (nextTheme) {
+    localStorage.setItem('gas_theme', nextTheme);
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    if (typeof showToast === 'function') {
+      showToast(nextTheme === 'dark' ? 'Đã chuyển sang chế độ tối' : 'Đã chuyển sang chế độ sáng', 'success');
+    }
+  } else {
+    localStorage.removeItem('gas_theme');
+    document.documentElement.removeAttribute('data-theme');
+    if (typeof showToast === 'function') {
+      showToast('Đã bật chế độ tự động theo thiết bị (' + (systemPrefersDark ? 'tối' : 'sáng') + ')', 'info');
+    }
+  }
+  updateThemeToggle();
+}
+
+function setupSidebarSwipe() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!sidebar || !overlay) return;
+
+  const EDGE_THRESHOLD = 35;
+  let startX = 0;
+  let startY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let startTime = 0;
+  let isSwiping = false;
+  let isClosing = false;
+  let isDetermined = false;
+  let animTimeout = null;
+
+  window.sidebarSwipeCancelAnim = function() {
+    if (animTimeout) {
+      clearTimeout(animTimeout);
+      animTimeout = null;
+    }
+  };
+
+  function getSidebarWidth() {
+    return sidebar.offsetWidth || 310;
+  }
+
+  function handleTouchStart(e) {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    const target = touch.target;
+    if (target && target.closest && target.closest('input, textarea, select')) return;
+
+    startX = touch.clientX;
+    startY = touch.clientY;
+    currentX = startX;
+    currentY = startY;
+    startTime = Date.now();
+    isDetermined = false;
+    isSwiping = false;
+
+    const isOpen = sidebar.classList.contains('open');
+    if (isOpen) {
+      isClosing = true;
+    } else {
+      if (startX <= EDGE_THRESHOLD) {
+        isClosing = false;
       } else {
-        openSidebar();
-      }
-    }
-
-    // ========== TOUCH SWIPE CHO SIDEBAR ==========
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchCurrentX = 0;
-    let isSwiping = false;
-
-    function getSidebarWidth() {
-      const sidebar = document.getElementById('sidebar');
-      return sidebar ? sidebar.offsetWidth : 290;
-    }
-
-    function handleTouchStart(e) {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-      touchCurrentX = touchStartX;
-      isSwiping = false;
-      const sidebar = document.getElementById('sidebar');
-      if (sidebar && sidebar.classList.contains('open')) {
-        isSwiping = true;
-      } else if (touchStartX < 30) {
-        isSwiping = true;
-      }
-    }
-
-    function handleTouchMove(e) {
-      if (!isSwiping) return;
-      touchCurrentX = e.touches[0].clientX;
-      const diffX = touchCurrentX - touchStartX;
-      const diffY = Math.abs(e.touches[0].clientY - touchStartY);
-      if (diffY > Math.abs(diffX) * 1.5) {
-        isSwiping = false;
         return;
       }
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebar-overlay');
-      const width = getSidebarWidth();
-      if (!sidebar || !overlay) return;
+    }
 
-      if (!sidebar.classList.contains('open')) {
-        if (diffX > 0) {
-          const moveX = Math.min(diffX - width, 0);
-          sidebar.style.transition = 'none';
-          sidebar.style.left = moveX + 'px';
-          overlay.style.display = 'block';
-          overlay.style.opacity = (diffX / width) * 0.6;
+    if (animTimeout) {
+      clearTimeout(animTimeout);
+      animTimeout = null;
+    }
+  }
+
+  function handleTouchMove(e) {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    currentX = touch.clientX;
+    currentY = touch.clientY;
+    const deltaX = currentX - startX;
+    const deltaY = currentY - startY;
+
+    if (!isDetermined) {
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
+      if (absX < 8 && absY < 8) return;
+      isDetermined = true;
+
+      if (!isClosing) {
+        if (deltaX > 0 && absX > absY * 1.2) {
+          isSwiping = true;
+        } else {
+          isSwiping = false;
+          return;
         }
       } else {
-        if (diffX < 0) {
-          const moveX = Math.max(diffX, -width);
-          sidebar.style.transition = 'none';
-          sidebar.style.left = moveX + 'px';
-          overlay.style.opacity = ((width + diffX) / width) * 0.6;
+        if (deltaX < 0 && absX > absY * 1.2) {
+          isSwiping = true;
+        } else {
+          isSwiping = false;
+          return;
         }
       }
     }
 
-    function handleTouchEnd(e) {
-      if (!isSwiping) return;
-      isSwiping = false;
-      const diffX = touchCurrentX - touchStartX;
-      const sidebar = document.getElementById('sidebar');
-      const width = getSidebarWidth();
-      if (!sidebar) return;
+    if (!isSwiping) return;
+    if (e.cancelable) e.preventDefault();
 
-      sidebar.style.transition = '';
-      sidebar.style.left = '';
+    const sidebarW = getSidebarWidth();
+    sidebar.classList.add('swiping');
 
-      if (!sidebar.classList.contains('open')) {
-        if (diffX > width * 0.3) {
-          openSidebar();
-        } else {
-          closeSidebar();
-        }
+    let currentPos;
+    if (!isClosing) {
+      currentPos = Math.min(0, -sidebarW + deltaX);
+      const ratio = Math.max(0, Math.min(1, (sidebarW + currentPos) / sidebarW));
+      overlay.style.display = 'block';
+      overlay.style.opacity = (ratio * 1).toFixed(3);
+    } else {
+      currentPos = Math.min(0, deltaX);
+      const ratio = Math.max(0, Math.min(1, (sidebarW + currentPos) / sidebarW));
+      overlay.style.opacity = (ratio * 1).toFixed(3);
+    }
+    sidebar.style.left = currentPos + 'px';
+  }
+
+  function handleTouchEnd() {
+    if (!isSwiping) return;
+    isSwiping = false;
+
+    const sidebarW = getSidebarWidth();
+    const deltaX = currentX - startX;
+    const duration = Date.now() - startTime;
+    const velocity = deltaX / duration;
+
+    sidebar.classList.remove('swiping');
+
+    if (!isClosing) {
+      if (deltaX > sidebarW * 0.35 || velocity > 0.4) {
+        sidebar.style.transition = 'left 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
+        overlay.style.transition = 'opacity 0.2s ease';
+        sidebar.style.left = '0px';
+        overlay.style.opacity = '1';
+        animTimeout = setTimeout(() => {
+          sidebar.classList.add('open');
+          overlay.classList.add('active');
+          sidebar.style.left = '';
+          sidebar.style.transition = '';
+          overlay.style.opacity = '';
+          overlay.style.transition = '';
+          document.body.classList.add('no-scroll');
+        }, 200);
       } else {
-        if (diffX < -width * 0.3) {
-          closeSidebar();
-        } else {
-          openSidebar();
-        }
+        sidebar.style.transition = 'left 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
+        overlay.style.transition = 'opacity 0.2s ease';
+        sidebar.style.left = (-sidebarW) + 'px';
+        overlay.style.opacity = '0';
+        animTimeout = setTimeout(() => {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('active');
+          sidebar.style.left = '';
+          sidebar.style.transition = '';
+          overlay.style.opacity = '';
+          overlay.style.transition = '';
+          overlay.style.display = '';
+        }, 200);
+      }
+    } else {
+      if (deltaX < -sidebarW * 0.3 || velocity < -0.4) {
+        sidebar.style.transition = 'left 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
+        overlay.style.transition = 'opacity 0.2s ease';
+        sidebar.style.left = (-sidebarW) + 'px';
+        overlay.style.opacity = '0';
+        animTimeout = setTimeout(() => {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('active');
+          sidebar.style.left = '';
+          sidebar.style.transition = '';
+          overlay.style.opacity = '';
+          overlay.style.transition = '';
+          overlay.style.display = '';
+          document.body.classList.remove('no-scroll');
+        }, 200);
+      } else {
+        sidebar.style.transition = 'left 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
+        overlay.style.transition = 'opacity 0.2s ease';
+        sidebar.style.left = '0px';
+        overlay.style.opacity = '1';
+        animTimeout = setTimeout(() => {
+          sidebar.classList.add('open');
+          overlay.classList.add('active');
+          sidebar.style.left = '';
+          sidebar.style.transition = '';
+          overlay.style.opacity = '';
+          overlay.style.transition = '';
+        }, 200);
       }
     }
+  }
 
-    function setupSidebarSwipe() {
-      document.addEventListener('touchstart', handleTouchStart, { passive: true });
-      document.addEventListener('touchmove', handleTouchMove, { passive: true });
-      document.addEventListener('touchend', handleTouchEnd, { passive: true });
-    }
+  document.addEventListener('touchstart', handleTouchStart, { passive: true });
+  document.addEventListener('touchmove', handleTouchMove, { passive: false });
+  document.addEventListener('touchend', handleTouchEnd, { passive: true });
+  document.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+}
 
-    function goTo(page) {
+document.addEventListener('DOMContentLoaded', () => {
+  const menuBtn = document.getElementById('menu-toggle');
+  if (menuBtn) {
+    menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleSidebar();
+    });
+  }
+
+  const closeBtn = document.getElementById('close-sidebar');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       closeSidebar();
-      window.location.href = page;
-    }
+    });
+  }
+
+  const overlay = document.getElementById('sidebar-overlay');
+  if (overlay) {
+    overlay.addEventListener('click', () => {
+      closeSidebar();
+    });
+  }
+
+  applySavedTheme();
+  setupSidebarSwipe();
+});
+
 
     // ========== HÀM MỞ/ĐÓNG MODAL ==========
     function openModal(modalId) {

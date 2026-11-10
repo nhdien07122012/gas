@@ -921,6 +921,257 @@
       font-size: 13.5px;
     }
   }
+
+
+  /* ========== UNIFIED APP HEADER (VNPost Brand Style) ========== */
+  .app-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-card);
+    position: relative;
+    text-align: center;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+
+  .menu-toggle {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-subtle, var(--bg-tertiary, #f1f5f9));
+    border: 1px solid var(--border-card, #e2e8f0);
+    border-radius: 10px;
+    color: var(--text-main, var(--text-primary, #0f172a));
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 2;
+  }
+  .menu-toggle:hover {
+    background: var(--bg-hover, #f1f5f9);
+    color: var(--vnpost-blue, #005ba6);
+    border-color: var(--vnpost-blue-border, #bfdbfe);
+  }
+  .menu-toggle:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  .header-home-btn {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-subtle, var(--bg-tertiary, #f1f5f9));
+    border: 1px solid var(--border-card, #e2e8f0);
+    border-radius: 10px;
+    color: var(--text-main, var(--text-primary, #0f172a));
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 2;
+  }
+  .header-home-btn:hover {
+    background: var(--bg-hover, #f1f5f9);
+    color: var(--vnpost-blue, #005ba6);
+    border-color: var(--vnpost-blue-border, #bfdbfe);
+  }
+  .header-home-btn:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    padding: 0 52px;
+    min-width: 0;
+  }
+  .brand-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .brand-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+  .brand-title {
+    margin: 0;
+    font-size: 20.5px;
+    font-weight: 700;
+    color: var(--vnpost-blue, #005ba6);
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+  .brand-subtitle {
+    font-size: 14.5px;
+    color: var(--text-secondary, #334155);
+    font-weight: 500;
+    line-height: 1.35;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  /* ========== UNIFIED SIDEBAR DRAWER ========== */
+  .overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.22s ease, visibility 0.22s;
+    will-change: opacity;
+  }
+  .overlay.open, .overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0; left: -330px;
+    width: 310px;
+    max-width: 85vw;
+    height: 100%;
+    background: var(--bg-sidebar, var(--bg-card, #ffffff));
+    box-shadow: 0 10px 20px -3px rgb(0 0 0 / 0.14), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+    z-index: 1001;
+    transition: left 0.22s cubic-bezier(0.25, 1, 0.5, 1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-card, #e2e8f0);
+    touch-action: pan-y;
+    will-change: left;
+  }
+  .sidebar.open { left: 0; }
+  .sidebar.swiping { transition: none !important; will-change: left; }
+
+  .sidebar-header {
+    padding: calc(18px + env(safe-area-inset-top, 0px)) 20px 18px;
+    background: linear-gradient(135deg, var(--vnpost-blue, #005ba6), var(--vnpost-blue-hover, #004680));
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sidebar-header h2 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.2px;
+    margin: 0;
+  }
+  .close-sidebar {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.15s ease;
+  }
+  .close-sidebar:hover { opacity: 0.8; }
+
+  .sidebar-content {
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary, #334155);
+    font-family: inherit;
+    font-size: 16.5px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.12s ease;
+  }
+  .sidebar-item:hover {
+    background: var(--bg-hover, #f1f5f9);
+    color: var(--vnpost-blue, #005ba6);
+  }
+  .sidebar-item:active { transform: scale(0.98); }
+  .sidebar-item.active {
+    background: var(--vnpost-blue-light, rgba(0, 91, 166, 0.1));
+    color: var(--vnpost-blue, #005ba6);
+    border-color: var(--vnpost-blue-border, #bfdbfe);
+  }
+
+  .sidebar-item .hero-icon,
+  .sidebar-item #theme-icon svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    color: var(--text-muted, #94a3b8);
+  }
+  .sidebar-item:hover .hero-icon,
+  .sidebar-item:hover #theme-icon svg,
+  .sidebar-item.active .hero-icon {
+    color: var(--vnpost-blue, #005ba6);
+  }
+
+  .sidebar-footer {
+    padding: 16px 20px calc(16px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--border-card, #e2e8f0);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-muted, #94a3b8);
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .app-header { padding: 12px 14px; }
+  }
+
 </style>
 <script>
   (function() {
@@ -951,61 +1202,127 @@
   </div>
 
   <!-- Sidebar Overlay -->
+    <!-- Sidebar Overlay -->
   <div class="overlay" id="sidebar-overlay"></div>
 
-  <!-- Sidebar Drawer đồng bộ với toàn hệ thống -->
+  <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <h2>Danh mục quản lý</h2>
-      <button class="close-sidebar" id="close-sidebar" aria-label="Đóng menu">&times;</button>
+      <button class="close-sidebar" id="close-sidebar" aria-label="Đóng menu">
+        <svg class="hero-icon hero-icon-md" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+        </svg>
+      </button>
     </div>
     <div class="sidebar-content">
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html'">
-        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd" /></svg>
-        <span>Quản lý điểm gas</span>
+      <button class="sidebar-item " onclick="closeSidebar(); window.location.href='index.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd" />
+        </svg>
+        Quản lý điểm gas
       </button>
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='diemtien.html'">
-        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+      <button class="sidebar-item " onclick="closeSidebar(); window.location.href='diemtien.html'">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
           <path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.839 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z" clip-rule="evenodd" />
         </svg>
-        <span>Đếm tiền</span>
+        Đếm tiền
       </button>
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='vitri.html'">
-        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19.02 10.11 18.934l.004-.002.01-.005a20.086 20.086 0 001.838-1.295A21.36 21.36 0 0015.5 12.87c1.336-1.614 2-3.435 2-5.37a7.5 7.5 0 10-15 0c0 1.935.664 3.756 2 5.37a21.36 21.36 0 003.548 4.762 20.086 20.086 0 001.838 1.295l.01.005.004.002.001.001ZM10 10.5a3 3 0 100-6 3 3 0 000 6Z" clip-rule="evenodd" /></svg>
-        <span>Quản lý vị trí</span>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html?action=expense'">
+        <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M2.5 4A1.5 1.5 0 001 5.5V6h18v-.5A1.5 1.5 0 0017.5 4h-15zM19 8.5H1v6A1.5 1.5 0 002.5 16h15a1.5 1.5 0 001.5-1.5v-6zM3 13.25a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zm4.75-.75a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z" clip-rule="evenodd" />
+        </svg>
+        <span>Quản lý chi tiêu ca</span>
       </button>
-      <button class="sidebar-item active" type="button">
-        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h.01a1 1 0 100-2H10zm3 0a1 1 0 100 2h.01a1 1 0 100-2H13z" clip-rule="evenodd" /></svg>
-        <span>Tính công &amp; lương</span>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html?action=outofhours'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
+        </svg>
+        Thêm điểm ngoài ca
       </button>
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='tinhgascon.html'">
-        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-2 4a2 2 0 100 4 2 2 0 000-4z" clip-rule="evenodd" /></svg>
-        <span>Tính tiền gas còn lại</span>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html?action=queue'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
+        </svg>
+        <span>Hàng đợi đồng bộ</span>
       </button>
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='dudoandiemgas.html'">
-        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.577 4.878a.75.75 0 01.919-.53l4.5 1.5a.75.75 0 01.504.707v4.5a.75.75 0 01-1.5 0V7.81l-4.22 4.22a.75.75 0 01-1.06 0L8.5 8.81l-5.72 5.72a.75.75 0 01-1.06-1.06l6.25-6.25a.75.75 0 011.06 0l3.22 3.22 3.44-3.44h-3.253a.75.75 0 01-.75-.75v-.382z" clip-rule="evenodd" /></svg>
-        <span>Dự đoán điểm gas</span>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html?action=batchstatus'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.451a.75.75 0 000-1.5H4.5a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-2.138l.385.385a7 7 0 0011.758-3.15.75.75 0 00-2.08-.892ZM4.688 8.576a5.5 5.5 0 019.201-2.466l.312.311h-2.451a.75.75 0 000 1.5H15.5a.75.75 0 00.75-.75V3.421a.75.75 0 00-1.5 0v2.138l-.385-.385A7 7 0 002.607 8.324a.75.75 0 002.081.252Z" clip-rule="evenodd" />
+        </svg>
+        Chuyển tất cả chưa nộp
       </button>
-      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='clipboard.html'">
-        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M15.988 3.012A2.25 2.25 0 0118 5.25v6.5A2.25 2.25 0 0115.75 14H13.5v-1.5h2.25a.75.75 0 00.75-.75v-6.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 00-.75.75V7H6v-.75A2.25 2.25 0 018.25 3h7.738z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M2 9.25A2.25 2.25 0 014.25 7h7.5A2.25 2.25 0 0114 9.25v7.5A2.25 2.25 0 0111.75 19h-7.5A2.25 2.25 0 012 16.75v-7.5zm2.25-.75a.75.75 0 00-.75.75v7.5c0 .414.336.75.75.75h7.5a.75.75 0 00.75-.75v-7.5a.75.75 0 00-.75-.75h-7.5z" clip-rule="evenodd" /></svg>
-        <span>Lưu Clipboard</span>
+      <button class="sidebar-item " onclick="closeSidebar(); window.location.href='vitri.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19.02 10.11 18.934l.004-.002.01-.005a20.086 20.086 0 001.838-1.295A21.36 21.36 0 0015.5 12.87c1.336-1.614 2-3.435 2-5.37a7.5 7.5 0 10-15 0c0 1.935.664 3.756 2 5.37a21.36 21.36 0 003.548 4.762 20.086 20.086 0 001.838 1.295l.01.005.004.002.001.001ZM10 10.5a3 3 0 100-6 3 3 0 000 6Z" clip-rule="evenodd" />
+        </svg>
+        Quản lý vị trí
       </button>
-      <button class="sidebar-item" id="theme-toggle-sidebar" type="button" onclick="toggleTheme()">
-        <span id="theme-icon-sidebar" style="display:inline-flex;align-items:center;justify-content:center;"></span>
-        <span id="theme-text-sidebar">Chế độ tối</span>
+      <button class="sidebar-item active" onclick="closeSidebar(); window.location.href='tinhluong.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-3-1a1 1 0 011 1v2a1 1 0 11-2 0v-2a1 1 0 011-1z" clip-rule="evenodd" />
+        </svg>
+        Tính công &amp; lương
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html?action=quickview'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+          <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+        </svg>
+        Xem nhanh điểm (ca)
+      </button>
+      <button class="sidebar-item " onclick="closeSidebar(); window.location.href='tinhgascon.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 2a.75.75 0 01.75.75v.258a33.12 33.12 0 013.722.505.75.75 0 11-.244 1.48 31.623 31.623 0 00-3.478-.48v3.424l3.18 3.18a3.25 3.25 0 01.952 2.298V14a3 3 0 01-3 3H8.118a3 3 0 01-3-3v-.585a3.25 3.25 0 01.952-2.298l3.18-3.18V4.513c-1.168.1-2.33.262-3.478.48a.75.75 0 11-.244-1.48 33.124 33.124 0 013.722-.505V2.75A.75.75 0 0110 2z" clip-rule="evenodd" />
+        </svg>
+        Tính tiền gas còn lại
+      </button>
+      <button class="sidebar-item " onclick="closeSidebar(); window.location.href='dudoandiemgas.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+        </svg>
+        Dự đoán điểm gas
+      </button>
+      <button class="sidebar-item " onclick="closeSidebar(); window.location.href='clipboard.html'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M15.988 3.012A2.25 2.25 0 0118 5.25v6.5A2.25 2.25 0 0115.75 14H13.5v-1.5h2.25a.75.75 0 00.75-.75v-6.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 00-.75.75V7H6v-.75A2.25 2.25 0 018.25 3h7.738z" clip-rule="evenodd" />
+          <path fill-rule="evenodd" d="M2 9.25A2.25 2.25 0 014.25 7h7.5A2.25 2.25 0 0114 9.25v7.5A2.25 2.25 0 0111.75 19h-7.5A2.25 2.25 0 012 16.75v-7.5zm2.25-.75a.75.75 0 00-.75.75v7.5c0 .414.336.75.75.75h7.5a.75.75 0 00.75-.75v-7.5a.75.75 0 00-.75-.75h-7.5z" clip-rule="evenodd" />
+        </svg>
+        Lưu Clipboard
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html?action=export'">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v7.5a.75.75 0 01-1.5 0v-7.5A.75.75 0 0110 3z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M6.22 6.22a.75.75 0 011.06 0L10 8.94l2.72-2.72a.75.75 0 111.06 1.06l-3.25 3.25a.75.75 0 01-1.06 0L6.22 7.28a.75.75 0 010-1.06z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M2.5 12.25a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H3.25a.75.75 0 01-.75-.75zM3.25 15.25a.75.75 0 000 1.5h13.5a.75.75 0 000-1.5H3.25z" clip-rule="evenodd" />
+        </svg>
+        Xuất data của ca
+      </button>
+      <button class="sidebar-item" id="theme-toggle" type="button" onclick="toggleTheme()">
+        <span id="theme-icon" style="display:inline-flex;align-items:center;justify-content:center;"></span>
+        <span id="theme-text">Chế độ tối</span>
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar(); window.location.href='index.html?action=help';">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.94 6.94a.75.75 0 11-1.061-1.061 3 3 0 112.871 5.026v.345a.75.75 0 01-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 108.94 6.94zM10 15a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+        </svg>
+        Trợ giúp
+      </button>
+      <button class="sidebar-item" onclick="closeSidebar()">
+        <svg class="hero-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+        </svg>
+        Đóng
       </button>
     </div>
     <div class="sidebar-footer">
-      <p>Quản lý điểm gas &copy; 2026</p>
+      <p>Gas Manager &copy; 2026</p>
     </div>
   </div>
 
-  <!-- Container chính (Chuẩn đồng bộ với index.html) -->
   <div class="container">
     <!-- Header (VNPost Brand Identity - Đồng bộ 100% với index.html) -->
-    <header class="app-header">
-      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Mở menu">
+        <header class="app-header">
+      <button class="menu-toggle" id="menu-toggle" aria-label="Mở menu">
         <svg class="hero-icon hero-icon-md" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
         </svg>
@@ -1018,6 +1335,11 @@
           <span class="brand-subtitle">Tính lương dựa trên số ca làm việc thực tế</span>
         </div>
       </div>
+      <button class="header-home-btn" onclick="window.location.href='index.html'" aria-label="Về trang chủ">
+        <svg class="hero-icon hero-icon-md" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd" />
+        </svg>
+      </button>
     </header>
 
     <div class="container-body">
@@ -1835,6 +2157,345 @@ window.quickActionClipboard = function() {
 window.quickActionAddPoint = function() {
   window.location.href = 'index.html?action=add_point';
 };
+
+
+
+/* ========== UNIFIED NAVIGATION & SIDEBAR JS ========== */
+const NAV_ICONS = {
+  sun: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zm-8-5a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5A.75.75 0 012 10zm13 0a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5A.75.75 0 0115 10zM4.343 4.343a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061L4.343 5.404a.75.75 0 010-1.06zm9.193 9.192a.75.75 0 011.06 0l1.061 1.061a.75.75 0 11-1.06 1.06l-1.061-1.06a.75.75 0 010-1.061zm0-9.192a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.062-1.06l1.061-1.061a.75.75 0 011.061 0zm-9.193 9.192a.75.75 0 010 1.061l-1.06 1.06a.75.75 0 11-1.062-1.06l1.061-1.061a.75.75 0 011.061 0zM10 6.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" /></svg>',
+  moon: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>',
+  cog: '<svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" /></svg>'
+};
+
+function vibrateShort() {
+  if (navigator.vibrate) {
+    try { navigator.vibrate(10); } catch(e) {}
+  }
+}
+
+function openSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!sidebar || !overlay) return;
+  if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
+  sidebar.style.left = '';
+  sidebar.style.transition = '';
+  overlay.style.opacity = '';
+  overlay.style.transition = '';
+  overlay.style.display = '';
+  if (!sidebar.classList.contains('open')) {
+    vibrateShort();
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+    document.body.classList.add('no-scroll');
+  }
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!sidebar || !overlay) return;
+  if (window.sidebarSwipeCancelAnim) window.sidebarSwipeCancelAnim();
+  sidebar.style.left = '';
+  sidebar.style.transition = '';
+  overlay.style.opacity = '';
+  overlay.style.transition = '';
+  overlay.style.display = '';
+  sidebar.classList.remove('open');
+  overlay.classList.remove('active');
+  if (!document.querySelector('.modal[style*="display: flex"]')) {
+    document.body.classList.remove('no-scroll');
+  }
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar && sidebar.classList.contains('open')) {
+    vibrateShort();
+    closeSidebar();
+  } else {
+    openSidebar();
+  }
+}
+
+function updateThemeToggle() {
+  const themeIcon = document.getElementById('theme-icon');
+  const themeText = document.getElementById('theme-text');
+  if (!themeIcon || !themeText) return;
+
+  const savedTheme = localStorage.getItem('gas_theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = savedTheme === 'dark' || (savedTheme !== 'light' && systemPrefersDark);
+
+  const btn = document.getElementById('theme-toggle');
+
+  if (!savedTheme) {
+    themeIcon.innerHTML = NAV_ICONS.cog;
+    themeText.textContent = 'Tự động (' + (isDark ? 'tối' : 'sáng') + ')';
+    if (btn) btn.setAttribute('aria-label', 'Đang dùng chế độ theo thiết bị');
+  } else if (isDark) {
+    themeIcon.innerHTML = NAV_ICONS.sun;
+    themeText.textContent = 'Chế độ sáng';
+    if (btn) btn.setAttribute('aria-label', 'Chuyển sang chế độ sáng');
+  } else {
+    themeIcon.innerHTML = NAV_ICONS.moon;
+    themeText.textContent = 'Chế độ tối';
+    if (btn) btn.setAttribute('aria-label', 'Chuyển sang chế độ tối');
+  }
+}
+
+function applySavedTheme() {
+  const savedTheme = localStorage.getItem('gas_theme');
+  if (savedTheme === 'light' || savedTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  updateThemeToggle();
+}
+
+function toggleTheme() {
+  vibrateShort();
+  const savedTheme = localStorage.getItem('gas_theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  let nextTheme;
+  if (!savedTheme) nextTheme = 'light';
+  else if (savedTheme === 'light') nextTheme = 'dark';
+  else nextTheme = null;
+
+  if (nextTheme) {
+    localStorage.setItem('gas_theme', nextTheme);
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    if (typeof showToast === 'function') {
+      showToast(nextTheme === 'dark' ? 'Đã chuyển sang chế độ tối' : 'Đã chuyển sang chế độ sáng', 'success');
+    }
+  } else {
+    localStorage.removeItem('gas_theme');
+    document.documentElement.removeAttribute('data-theme');
+    if (typeof showToast === 'function') {
+      showToast('Đã bật chế độ tự động theo thiết bị (' + (systemPrefersDark ? 'tối' : 'sáng') + ')', 'info');
+    }
+  }
+  updateThemeToggle();
+}
+
+function setupSidebarSwipe() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!sidebar || !overlay) return;
+
+  const EDGE_THRESHOLD = 35;
+  let startX = 0;
+  let startY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let startTime = 0;
+  let isSwiping = false;
+  let isClosing = false;
+  let isDetermined = false;
+  let animTimeout = null;
+
+  window.sidebarSwipeCancelAnim = function() {
+    if (animTimeout) {
+      clearTimeout(animTimeout);
+      animTimeout = null;
+    }
+  };
+
+  function getSidebarWidth() {
+    return sidebar.offsetWidth || 310;
+  }
+
+  function handleTouchStart(e) {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    const target = touch.target;
+    if (target && target.closest && target.closest('input, textarea, select')) return;
+
+    startX = touch.clientX;
+    startY = touch.clientY;
+    currentX = startX;
+    currentY = startY;
+    startTime = Date.now();
+    isDetermined = false;
+    isSwiping = false;
+
+    const isOpen = sidebar.classList.contains('open');
+    if (isOpen) {
+      isClosing = true;
+    } else {
+      if (startX <= EDGE_THRESHOLD) {
+        isClosing = false;
+      } else {
+        return;
+      }
+    }
+
+    if (animTimeout) {
+      clearTimeout(animTimeout);
+      animTimeout = null;
+    }
+  }
+
+  function handleTouchMove(e) {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    currentX = touch.clientX;
+    currentY = touch.clientY;
+    const deltaX = currentX - startX;
+    const deltaY = currentY - startY;
+
+    if (!isDetermined) {
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
+      if (absX < 8 && absY < 8) return;
+      isDetermined = true;
+
+      if (!isClosing) {
+        if (deltaX > 0 && absX > absY * 1.2) {
+          isSwiping = true;
+        } else {
+          isSwiping = false;
+          return;
+        }
+      } else {
+        if (deltaX < 0 && absX > absY * 1.2) {
+          isSwiping = true;
+        } else {
+          isSwiping = false;
+          return;
+        }
+      }
+    }
+
+    if (!isSwiping) return;
+    if (e.cancelable) e.preventDefault();
+
+    const sidebarW = getSidebarWidth();
+    sidebar.classList.add('swiping');
+
+    let currentPos;
+    if (!isClosing) {
+      currentPos = Math.min(0, -sidebarW + deltaX);
+      const ratio = Math.max(0, Math.min(1, (sidebarW + currentPos) / sidebarW));
+      overlay.style.display = 'block';
+      overlay.style.opacity = (ratio * 1).toFixed(3);
+    } else {
+      currentPos = Math.min(0, deltaX);
+      const ratio = Math.max(0, Math.min(1, (sidebarW + currentPos) / sidebarW));
+      overlay.style.opacity = (ratio * 1).toFixed(3);
+    }
+    sidebar.style.left = currentPos + 'px';
+  }
+
+  function handleTouchEnd() {
+    if (!isSwiping) return;
+    isSwiping = false;
+
+    const sidebarW = getSidebarWidth();
+    const deltaX = currentX - startX;
+    const duration = Date.now() - startTime;
+    const velocity = deltaX / duration;
+
+    sidebar.classList.remove('swiping');
+
+    if (!isClosing) {
+      if (deltaX > sidebarW * 0.35 || velocity > 0.4) {
+        sidebar.style.transition = 'left 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
+        overlay.style.transition = 'opacity 0.2s ease';
+        sidebar.style.left = '0px';
+        overlay.style.opacity = '1';
+        animTimeout = setTimeout(() => {
+          sidebar.classList.add('open');
+          overlay.classList.add('active');
+          sidebar.style.left = '';
+          sidebar.style.transition = '';
+          overlay.style.opacity = '';
+          overlay.style.transition = '';
+          document.body.classList.add('no-scroll');
+        }, 200);
+      } else {
+        sidebar.style.transition = 'left 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
+        overlay.style.transition = 'opacity 0.2s ease';
+        sidebar.style.left = (-sidebarW) + 'px';
+        overlay.style.opacity = '0';
+        animTimeout = setTimeout(() => {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('active');
+          sidebar.style.left = '';
+          sidebar.style.transition = '';
+          overlay.style.opacity = '';
+          overlay.style.transition = '';
+          overlay.style.display = '';
+        }, 200);
+      }
+    } else {
+      if (deltaX < -sidebarW * 0.3 || velocity < -0.4) {
+        sidebar.style.transition = 'left 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
+        overlay.style.transition = 'opacity 0.2s ease';
+        sidebar.style.left = (-sidebarW) + 'px';
+        overlay.style.opacity = '0';
+        animTimeout = setTimeout(() => {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('active');
+          sidebar.style.left = '';
+          sidebar.style.transition = '';
+          overlay.style.opacity = '';
+          overlay.style.transition = '';
+          overlay.style.display = '';
+          document.body.classList.remove('no-scroll');
+        }, 200);
+      } else {
+        sidebar.style.transition = 'left 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
+        overlay.style.transition = 'opacity 0.2s ease';
+        sidebar.style.left = '0px';
+        overlay.style.opacity = '1';
+        animTimeout = setTimeout(() => {
+          sidebar.classList.add('open');
+          overlay.classList.add('active');
+          sidebar.style.left = '';
+          sidebar.style.transition = '';
+          overlay.style.opacity = '';
+          overlay.style.transition = '';
+        }, 200);
+      }
+    }
+  }
+
+  document.addEventListener('touchstart', handleTouchStart, { passive: true });
+  document.addEventListener('touchmove', handleTouchMove, { passive: false });
+  document.addEventListener('touchend', handleTouchEnd, { passive: true });
+  document.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const menuBtn = document.getElementById('menu-toggle');
+  if (menuBtn) {
+    menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleSidebar();
+    });
+  }
+
+  const closeBtn = document.getElementById('close-sidebar');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeSidebar();
+    });
+  }
+
+  const overlay = document.getElementById('sidebar-overlay');
+  if (overlay) {
+    overlay.addEventListener('click', () => {
+      closeSidebar();
+    });
+  }
+
+  applySavedTheme();
+  setupSidebarSwipe();
+});
 
 </script>
 </body>
