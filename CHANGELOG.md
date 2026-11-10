@@ -36,7 +36,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 ---
 
 ## [Build 20 (v1.5 / UI v5.5)] - 2026-11-10
-- **Commit SHA**: `4b96a71`
+- **Commit SHA**: `1b9b621`
 - **Mục tiêu**: Khắc phục triệt để lỗi Header chèn lên statusbar trên iPhone 13 Pro và sửa lỗi JavaScript crash (`ReferenceError: updateThemeUI is not defined`) khiến dữ liệu dự đoán không tải được trên trang `dudoandiemgas.html` (đồng thời bảo vệ trang `tinhgascon.html`).
 
 ### 🔄 Chi tiết thay đổi
