@@ -35,7 +35,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 ---
 
 ## [Build 19 (v1.5 / UI v5.5)] - 2026-11-10
-- **Commit SHA**: `aeb6779`
+- **Commit SHA**: `ef5ccc1`
 - **Mục tiêu**: Khắc phục triệt để các lỗi hiển thị giao diện trên trang Dự đoán điểm gas (`dudoandiemgas.html`) và Tính tiền gas còn lại (`tinhgascon.html`) khi chạy trên iPhone (đặc biệt trong Chế độ tối / Dark Mode).
 
 ### 🔄 Chi tiết thay đổi
