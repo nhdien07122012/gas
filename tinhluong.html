@@ -759,7 +759,7 @@
   /* Toast Notification */
   .toast {
     position: fixed;
-    top: 20px;
+    top: max(16px, calc(env(safe-area-inset-top, 0px) + 12px));
     left: 50%;
     transform: translateX(-50%) translateY(-50px);
     background: rgba(15, 23, 42, 0.95);

@@ -390,48 +390,97 @@
     to { transform: rotate(360deg); }
   }
 
-  /* Pull-to-refresh Indicator */
+  /* ========== NOTCH PULL-TO-REFRESH (Dynamic Island / Notch Expansion) ========== */
   .pull-refresh-indicator {
     position: fixed;
-    top: 0; left: 50%;
-    transform: translate(-50%, -100%);
-    z-index: 1100;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-width: 190px;
-    padding: 9px 16px;
-    border-radius: 0 0 16px 16px;
-    background: linear-gradient(135deg, var(--vnpost-blue), var(--vnpost-blue-hover));
-    color: #ffffff;
-    box-shadow: var(--shadow-float);
-    font-weight: 600;
-    font-size: 0.9rem;
-    opacity: 0;
-    transition: transform 0.25s ease, opacity 0.25s ease;
-    pointer-events: none;
-  }
-  .pull-refresh-indicator.show {
+    top: env(safe-area-inset-top, 0px);
+    left: 50%;
+    transform: translate(-50%, -100%) scale(0.75);
+    z-index: 10000;
     display: flex;
-    opacity: 1;
-    transform: translate(-50%, 0);
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, opacity;
+    transition: transform 0.28s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.22s ease;
   }
-  .pull-refresh-indicator.loading {
-    background: linear-gradient(135deg, var(--color-success), var(--color-success-hover));
+  .pull-refresh-indicator.dragging {
+    transition: none !important;
   }
-  .pull-refresh-indicator .pull-refresh-icon {
-    font-size: 1.05rem;
+  .pull-refresh-pill {
     display: inline-flex;
     align-items: center;
+    gap: 9px;
+    padding: 7px 16px 7px 12px;
+    border-radius: 9999px;
+    background: rgba(15, 23, 42, 0.92);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.1px;
+    white-space: nowrap;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  }
+  .pull-refresh-indicator.ready .pull-refresh-pill {
+    border-color: rgba(16, 185, 129, 0.65);
+    box-shadow: 0 12px 32px rgba(16, 185, 129, 0.28), 0 0 0 1px rgba(16, 185, 129, 0.3) inset;
+  }
+  .pull-refresh-indicator.loading .pull-refresh-pill {
+    border-color: rgba(56, 189, 248, 0.65);
+    box-shadow: 0 12px 32px rgba(56, 189, 248, 0.28), 0 0 0 1px rgba(56, 189, 248, 0.3) inset;
+  }
+  .pull-refresh-indicator.success .pull-refresh-pill {
+    border-color: rgba(16, 185, 129, 0.85);
+    background: rgba(6, 78, 59, 0.95);
+  }
+  .pull-refresh-icon-wrap {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    transition: transform 0.2s ease;
   }
-  .pull-refresh-indicator.loading .pull-refresh-icon {
-    animation: pullRefreshSpin 0.8s linear infinite;
+  .pull-refresh-svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 20px; height: 20px;
+    transform: rotate(-90deg);
   }
-  @keyframes pullRefreshSpin {
-    from { transform: rotate(0deg); }
+  .pull-refresh-progress {
+    transition: stroke-dashoffset 0.06s ease;
+  }
+  .pull-refresh-arrow {
+    position: relative;
+    z-index: 2;
+    transition: transform 0.2s ease, color 0.2s ease;
+    color: #38bdf8;
+  }
+  .pull-refresh-indicator.ready .pull-refresh-arrow {
+    color: #34d399;
+  }
+  .pull-refresh-spinner {
+    display: none;
+    width: 15px;
+    height: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-top-color: #38bdf8;
+    border-radius: 50%;
+    animation: pullSpin 0.7s linear infinite;
+  }
+  .pull-refresh-indicator.loading .pull-refresh-spinner {
+    display: block;
+  }
+  .pull-refresh-indicator.loading .pull-refresh-svg,
+  .pull-refresh-indicator.loading .pull-refresh-arrow {
+    display: none;
+  }
+  @keyframes pullSpin {
     to { transform: rotate(360deg); }
   }
 
@@ -1261,57 +1310,70 @@
     font-size: 14px;
   }
 
-  /* ========== FLOATING TOAST (Pill Style 2.4s) ========== */
+  /* ========== FLOATING TOAST (Dynamic Island / Notch-aware Floating Pill) ========== */
   .toast {
     position: fixed;
-    top: 20px;
+    top: max(16px, calc(env(safe-area-inset-top, 0px) + 12px));
     left: 50%;
-    transform: translateX(-50%) translateY(-40px);
+    transform: translateX(-50%) translateY(-24px) scale(0.92);
     padding: 10px 18px;
     border-radius: 9999px;
     font-size: 13.5px;
     font-weight: 600;
-    display: flex;
+    line-height: 1.4;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    box-shadow: var(--shadow-float);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
     opacity: 0;
     pointer-events: none;
-    transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 9999;
-    max-width: 90%;
+    transition: transform 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.24s ease;
+    z-index: 99999;
+    max-width: min(92vw, 420px);
+    width: auto;
     text-align: center;
-    white-space: nowrap;
-    background: #0f172a;
+    white-space: normal;
+    word-break: break-word;
+    background: rgba(15, 23, 42, 0.94);
     color: #f8fafc;
-    border: 1px solid #334155;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
   }
 
   .toast.show {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-50%) translateY(0) scale(1);
     pointer-events: auto;
   }
 
   .toast.success, .toast.toast-success {
-    background: #064e3b;
+    background: rgba(6, 78, 59, 0.95);
     color: #ecfdf5;
-    border: 1px solid #059669;
+    border: 1px solid rgba(16, 185, 129, 0.6);
+    box-shadow: 0 12px 32px rgba(5, 150, 105, 0.35), 0 2px 8px rgba(0, 0, 0, 0.25);
   }
+
   .toast.warning, .toast.toast-warning {
-    background: #78350f;
+    background: rgba(120, 53, 15, 0.95);
     color: #fffbeb;
-    border: 1px solid #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.6);
+    box-shadow: 0 12px 32px rgba(217, 119, 6, 0.35), 0 2px 8px rgba(0, 0, 0, 0.25);
   }
+
   .toast.error, .toast.danger, .toast.toast-error {
-    background: #7f1d1d;
+    background: rgba(127, 29, 29, 0.95);
     color: #fef2f2;
-    border: 1px solid #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.6);
+    box-shadow: 0 12px 32px rgba(220, 38, 38, 0.38), 0 2px 8px rgba(0, 0, 0, 0.25);
   }
+
   .toast.info, .toast.toast-info {
-    background: #0f172a;
+    background: rgba(15, 23, 42, 0.95);
     color: #f8fafc;
-    border: 1px solid #334155;
+    border: 1px solid rgba(59, 130, 246, 0.6);
+    box-shadow: 0 12px 32px rgba(37, 99, 235, 0.32), 0 2px 8px rgba(0, 0, 0, 0.25);
   }
 
   /* ========================================================================
@@ -2060,13 +2122,21 @@
     <span id="toast-message">Đã sao chép vào clipboard!</span>
   </div>
 
+  <!-- Pull to Refresh Notch Capsule -->
   <div class="pull-refresh-indicator" id="pull-refresh-indicator" aria-hidden="true">
-    <span class="pull-refresh-icon" id="pull-refresh-icon">
-      <svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v7.59l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" clip-rule="evenodd" />
-      </svg>
-    </span>
-    <span id="pull-refresh-text">Kéo xuống để tải lại</span>
+    <div class="pull-refresh-pill">
+      <div class="pull-refresh-icon-wrap">
+        <svg class="pull-refresh-svg" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2.5" />
+          <circle id="pull-refresh-progress" class="pull-refresh-progress" cx="12" cy="12" r="9" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="56.5" stroke-dashoffset="56.5" stroke-linecap="round" />
+        </svg>
+        <svg class="pull-refresh-arrow" id="pull-refresh-icon" viewBox="0 0 20 20" fill="currentColor" width="12" height="12">
+          <path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v7.59l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" clip-rule="evenodd" />
+        </svg>
+        <div class="pull-refresh-spinner" id="pull-refresh-spinner"></div>
+      </div>
+      <span class="pull-refresh-text" id="pull-refresh-text">Kéo xuống để làm mới</span>
+    </div>
   </div>
 
   <!-- Sidebar -->
@@ -2191,7 +2261,7 @@
         <div class="brand-info">
           <div class="brand-title-row">
             <h1 class="brand-title">Quản lý điểm gas</h1>
-            <span class="version-tag">v5.3</span>
+            <span class="version-tag">v5.4</span>
           </div>
           <span class="brand-subtitle">Theo dõi &amp; quản lý gas theo ca</span>
         </div>
@@ -5288,26 +5358,51 @@ function setupPullToRefresh() {
   const indicator = document.getElementById('pull-refresh-indicator');
   const icon = document.getElementById('pull-refresh-icon');
   const text = document.getElementById('pull-refresh-text');
+  const progressCircle = document.getElementById('pull-refresh-progress');
   if (!indicator || !icon || !text) return;
 
-  let startY = 0, currentY = 0, isDragging = false, hasTriggered = false;
+  const circumference = 56.5;
+  let startY = 0, currentY = 0, isDragging = false, hasTriggered = false, isReady = false;
 
   function resetIndicator() {
-    indicator.classList.remove('show', 'loading');
+    indicator.classList.remove('dragging', 'ready', 'loading', 'success');
     indicator.style.opacity = '0';
-    indicator.style.transform = 'translate(-50%, -100%)';
+    indicator.style.transform = 'translate(-50%, -100%) scale(0.75)';
+    if (progressCircle) progressCircle.style.strokeDashoffset = String(circumference);
     icon.style.transform = 'rotate(0deg)';
-    text.textContent = 'Kéo xuống để tải lại';
+    text.textContent = 'Kéo xuống để làm mới';
+    isReady = false;
   }
 
   function updateIndicator(progress) {
     if (progress <= 0) { resetIndicator(); return; }
     const safeProgress = Math.min(progress, 1);
-    indicator.classList.add('show');
-    indicator.style.opacity = '1';
-    indicator.style.transform = `translate(-50%, ${Math.min(safeProgress * 40, 40)}px)`;
-    icon.style.transform = `rotate(${safeProgress * 180}deg)`;
-    text.textContent = safeProgress >= 1 ? 'Thả để tải lại' : 'Kéo xuống để tải lại';
+    indicator.classList.add('dragging');
+    indicator.style.opacity = String(Math.min(safeProgress * 1.5, 1));
+    const yOffset = 8 + safeProgress * 24;
+    const scale = 0.82 + safeProgress * 0.18;
+    indicator.style.transform = `translate(-50%, ${yOffset}px) scale(${scale})`;
+    
+    if (progressCircle) {
+      progressCircle.style.strokeDashoffset = String(circumference * (1 - safeProgress));
+    }
+
+    if (safeProgress >= 1) {
+      if (!isReady) {
+        isReady = true;
+        indicator.classList.add('ready');
+        vibrateShort();
+      }
+      icon.style.transform = 'rotate(180deg)';
+      text.textContent = 'Thả để làm mới';
+    } else {
+      if (isReady) {
+        isReady = false;
+        indicator.classList.remove('ready');
+      }
+      icon.style.transform = `rotate(${safeProgress * 180}deg)`;
+      text.textContent = 'Kéo xuống để làm mới';
+    }
   }
 
   function handleTouchStart(event) {
@@ -5320,6 +5415,7 @@ function setupPullToRefresh() {
     currentY = startY;
     isDragging = false;
     hasTriggered = false;
+    isReady = false;
     resetIndicator();
   }
 
@@ -5333,24 +5429,40 @@ function setupPullToRefresh() {
     currentY = event.touches[0].clientY;
     isDragging = true;
     event.preventDefault();
-    const progress = Math.min(deltaY / 95, 1);
+    const progress = Math.min(deltaY / 85, 1);
     updateIndicator(progress);
   }
 
-  function handleTouchEnd() {
+  async function handleTouchEnd() {
     if (window.innerWidth > 768 || startY === 0) return;
+    indicator.classList.remove('dragging');
     const deltaY = currentY - startY;
-    if (isDragging && deltaY >= 95 && !hasTriggered) {
+    if (isDragging && deltaY >= 85 && !hasTriggered) {
       hasTriggered = true;
+      indicator.classList.remove('ready');
       indicator.classList.add('loading');
-      indicator.classList.add('show');
       indicator.style.opacity = '1';
-      indicator.style.transform = 'translate(-50%, 0)';
-      icon.style.transform = 'rotate(0deg)';
-      text.textContent = 'Đang tải lại...';
+      indicator.style.transform = 'translate(-50%, 26px) scale(1)';
+      text.textContent = 'Đang làm mới...';
       vibrateShort();
-      setTimeout(() => { window.location.reload(); }, 350);
-    } else { resetIndicator(); }
+
+      try {
+        if (typeof taiDuLieu === 'function') {
+          await taiDuLieu();
+          indicator.classList.remove('loading');
+          indicator.classList.add('success');
+          text.textContent = 'Đã cập nhật!';
+          vibrateSuccess();
+          setTimeout(() => { resetIndicator(); }, 650);
+        } else {
+          setTimeout(() => { window.location.reload(); }, 350);
+        }
+      } catch (err) {
+        setTimeout(() => { window.location.reload(); }, 350);
+      }
+    } else {
+      resetIndicator();
+    }
     startY = 0; currentY = 0; isDragging = false;
   }
 

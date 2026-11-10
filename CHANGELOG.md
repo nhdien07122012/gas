@@ -14,6 +14,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 17 (v1.5 / UI v5.4) - Vị trí thông báo dưới Notch iPhone & Hiệu ứng Pull-to-Refresh từ tai thỏ](#build-17-v15--ui-v54---2026-11-10)
 - [Build 16 (v1.5 / UI v5.3) - Sửa lỗi chuỗi ngày ca & Khắc phục hiển thị số tiền chi tiêu Widget](#build-16-v15--ui-v53---2026-11-10)
 - [Build 15 (v1.5 / UI v5.3) - Nút tròn Chi tiêu ca trên Widget & Sửa lỗi lệch ngày ca](#build-15-v15--ui-v53---2026-11-10)
 - [Build 14 (v1.5 / UI v5.2) - Chọn nhanh & Quản lý khoản chi đã lưu trong LocalStorage](#build-14-v15--ui-v52---2026-11-09)
@@ -28,6 +29,42 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 - [Build 5 (v1.4) - Phóng to Doanh thu Widget 2x2 & Ẩn số giao dịch](#build-5-v14---2026-11-06)
 - [Build 4 (v1.3) - Tối ưu bố cục chống tràn chữ Widget 2x2 & 4x2](#build-4-v13---2026-11-06)
 - [Build 3 (v1.2) - Thiết kế lại Widget doanh thu vòng tròn tiến độ](#build-3-v12---2026-11-06)
+
+---
+
+## [Build 17 (v1.5 / UI v5.4)] - 2026-11-10
+- **Commit SHA**: `6b95c24`
+- **Mục tiêu**: Điều chỉnh vị trí thông báo Toast nằm hoàn toàn dưới tai thỏ (Notch) iPhone 13 Pro (chống che khuất status bar / giờ / pin), thiết kế lại hiệu ứng Pull-to-Refresh dạng khoang Notch Expansion (Dynamic Island pill) kéo mượt mà từ tai thỏ ra, nâng UI lên `v5.4`.
+
+### 🔄 Chi tiết thay đổi
+- **Điều chỉnh vị trí thông báo Toast dưới Notch iPhone (`env(safe-area-inset-top)`)**:
+  - Khắc phục triệt để lỗi thông báo bị tai thỏ che mất và đè lên thanh đồng hồ (`15:24`) / biểu tượng pin.
+  - Chuyển `top: 20px` cố định thành `top: max(16px, calc(env(safe-area-inset-top, 0px) + 12px))`. Trên iPhone 13 Pro (tai thỏ 47px), thông báo sẽ nổi tại tọa độ 59px, nằm hoàn toàn bên dưới tai thỏ.
+  - Nâng cấp giao diện Toast dạng Frosted Glassmorphism (viền mờ, bo góc pill, đổ bóng sâu 3D, hiệu ứng rơi đàn hồi Spring nhẹ từ dưới tai thỏ).
+  - Tự động ngắt dòng thông minh (`white-space: normal`) cho các thông báo dài như cảnh báo "Ngoài ca làm việc", không còn bị cắt đuôi chữ.
+  - Đồng bộ vị trí hiển thị chuẩn trên toàn bộ các trang: `index.html`, `clipboard.html`, `tinhluong.html`, `vitri.html`.
+- **Thiết kế hiệu ứng Pull-to-Refresh dạng Notch Expansion (kéo từ tai thỏ ra)**:
+  - Tái thiết kế toàn diện trải nghiệm kéo làm mới thành một viên nang đen nhung (Obsidian Capsule) kéo giãn tự nhiên từ tai thỏ xuống.
+  - Vòng tiến trình tròn SVG dạng Apple Watch Activity Ring (`stroke-dashoffset`) tự động lấp đầy từ 0% đến 100% theo khoảng cách tay kéo.
+  - Mũi tên đảo chiều linh hoạt, kèm rung phản hồi xúc giác nhẹ (Haptic feedback `vibrateShort()`) và viền xanh ngọc bích khi đạt ngưỡng kích hoạt ("Thả để làm mới").
+  - Khi thả tay: Icon chuyển thành vòng xoay Spinner mượt mà, gọi trực tiếp hàm nạp dữ liệu không chớp trắng màn hình (`taiDuLieu()`), hiển thị trạng thái "Đã cập nhật!" trước khi thụt êm ái trở lại tai thỏ.
+- **Nâng phiên bản hiển thị**:
+  - `index.html` & `www/index.html`: `<span class="version-tag">v5.3</span>` ➔ `<span class="version-tag">v5.4</span>`.
+  - `project.pbxproj`: Nâng `CURRENT_PROJECT_VERSION` lên `17`.
+- **Files tác động**:
+  - `index.html` & `www/index.html`
+  - `clipboard.html`
+  - `tinhluong.html`
+  - `vitri.html`
+  - `resources/ios/project.pbxproj` & `ios/App/App.xcodeproj/project.pbxproj` (Build 17)
+  - `CHANGELOG.md`
+  - `ios/App/App/public/*` (`npx cap sync ios`)
+
+### ⏪ Hướng dẫn Revert nếu cần
+```bash
+git revert HEAD --no-edit
+git push origin main
+```
 
 ---
 

@@ -485,7 +485,7 @@
   /* ========== FLOATING TOAST (Pill Style 2.4s) ========== */
   .toast {
     position: fixed;
-    top: 20px;
+    top: max(16px, calc(env(safe-area-inset-top, 0px) + 12px));
     left: 50%;
     transform: translateX(-50%) translateY(-40px);
     padding: 10px 18px;
