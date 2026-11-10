@@ -33,7 +33,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 ---
 
 ## [Build 18 (v1.5 / UI v5.5)] - 2026-11-10
-- **Commit SHA**: (Pending commit)
+- **Commit SHA**: `b540497`
 - **Mục tiêu**: Đồng bộ toàn bộ thanh Menubar (Header) và Sidebar Drawer trên tất cả 7 trang chức năng của ứng dụng theo thiết kế chuẩn nhận diện thương hiệu VNPost của trang `index.html`, loại bỏ hoàn toàn sự rời rạc và lỗi notch iPhone.
 
 ### 🔄 Chi tiết thay đổi
