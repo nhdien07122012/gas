@@ -1653,6 +1653,10 @@ function updateThemeToggle() {
   }
 }
 
+function updateThemeUI() {
+  applySavedTheme();
+}
+
 function applySavedTheme() {
   const savedTheme = localStorage.getItem('gas_theme');
   const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -2089,7 +2093,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ========== SỰ KIỆN ==========
     document.addEventListener('DOMContentLoaded', function() {
-      updateThemeUI();
+      applySavedTheme();
 
       const menuToggle = document.getElementById('menu-toggle');
       if (menuToggle) menuToggle.addEventListener('click', toggleSidebar);

@@ -14,6 +14,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 20 (v1.5 / UI v5.5) - Sửa lỗi chèn Statusbar iPhone & Khắc phục tải dữ liệu dự đoán](#build-20-v15--ui-v55---2026-11-10)
 - [Build 19 (v1.5 / UI v5.5) - Sửa lỗi giao diện trang Dự đoán điểm gas trên Dark Mode & Tràn nút Sao chép](#build-19-v15--ui-v55---2026-11-10)
 - [Build 18 (v1.5 / UI v5.5) - Đồng bộ thanh Menubar & Sidebar Drawer trên 7 trang](#build-18-v15--ui-v55---2026-11-10)
 - [Build 17 (v1.5 / UI v5.4) - Vị trí thông báo dưới Notch iPhone & Hiệu ứng Pull-to-Refresh từ tai thỏ](#build-17-v15--ui-v54---2026-11-10)
@@ -31,6 +32,25 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 - [Build 5 (v1.4) - Phóng to Doanh thu Widget 2x2 & Ẩn số giao dịch](#build-5-v14---2026-11-06)
 - [Build 4 (v1.3) - Tối ưu bố cục chống tràn chữ Widget 2x2 & 4x2](#build-4-v13---2026-11-06)
 - [Build 3 (v1.2) - Thiết kế lại Widget doanh thu vòng tròn tiến độ](#build-3-v12---2026-11-06)
+
+---
+
+## [Build 20 (v1.5 / UI v5.5)] - 2026-11-10
+- **Commit SHA**: `4b96a71`
+- **Mục tiêu**: Khắc phục triệt để lỗi Header chèn lên statusbar trên iPhone 13 Pro và sửa lỗi JavaScript crash (`ReferenceError: updateThemeUI is not defined`) khiến dữ liệu dự đoán không tải được trên trang `dudoandiemgas.html` (đồng thời bảo vệ trang `tinhgascon.html`).
+
+### 🔄 Chi tiết thay đổi
+1. **Khắc phục lỗi dữ liệu dự đoán không load được (`ReferenceError: updateThemeUI is not defined`)**:
+   - Khi dọn dẹp các hàm cũ ở Build 19, hàm `updateThemeUI()` bị xóa nhưng vẫn còn lời gọi ở sự kiện `DOMContentLoaded`. Lỗi uncaught exception này làm ngừng toàn bộ tiến trình JavaScript, khiến hàm `loadData()` không bao giờ được gọi và các event listener cho nút "Tải lại", nút lọc, tìm kiếm không được gắn.
+   - Đã khai báo hàm alias an toàn `function updateThemeUI() { applySavedTheme(); }` và chuẩn hóa sự kiện `DOMContentLoaded` gọi trực tiếp `applySavedTheme()`. Kết quả: dữ liệu 895 bản ghi điểm gas từ Google Apps Script tải về và phân tích chu kỳ mượt mà 100%.
+
+2. **Khắc phục lỗi Header chèn đè lên Status Bar (đồng hồ, tai thỏ, cột sóng, pin) trên iPhone**:
+   - Khôi phục cấu trúc Container Card chuẩn của hệ thống: bọc Header và nội dung bên trong `<div class="container">`.
+   - Khôi phục `body { padding: calc(8px + env(safe-area-inset-top, 0px)) ... !important; }` trên mobile.
+   - Nhờ đó trên iPhone 13 Pro (tai thỏ 47px), khối giao diện bắt đầu tại Y = 55px (cách mép dưới status bar một khoảng đệm an toàn 8px). Không còn bất kỳ sự chồng lấn nào giữa nút Menu / Home / Tiêu đề với đồng hồ hay biểu tượng pin/sóng.
+
+3. **Tối ưu hiển thị nút "Sao chép đang lọc" không tràn viền thẻ**:
+   - Cân chỉnh kích thước font chữ nút 13px và padding gọn gàng `0 0.45rem`, bọc nhãn chữ `<span>` với cơ chế ellipsis, đảm bảo chữ hiển thị trọn vẹn, sắc nét trong thẻ card.
 
 ---
 

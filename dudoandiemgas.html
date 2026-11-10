@@ -974,7 +974,7 @@
       .report-actions button {
         height: 42px;
         padding: 0 0.5rem;
-        font-size: 13.5px;
+        font-size: 13px;
         font-weight: 600;
         gap: 0.35rem;
         min-width: 0;
@@ -1166,16 +1166,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px;
-    background: var(--bg-card-glass, var(--bg-card));
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    padding: 14px 16px;
+    background: var(--bg-card);
     border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    position: relative;
     text-align: center;
     width: 100%;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+  @media (max-width: 640px) {
+    .app-header {
+      padding: 12px 14px;
+    }
   }
 
   .menu-toggle {
@@ -1435,29 +1438,40 @@
   }
 
 
-  /* Dashboard Layout: Full-bleed Header & Clean Transparent Container */
+  /* Unified Container Card & Body (Safe-area margin on iOS) */
   body {
-    padding: 0 !important;
+    padding: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px)) !important;
     background-color: var(--bg-primary);
   }
   @media (max-width: 640px) {
     body {
-      padding: 0 !important;
+      padding: calc(8px + env(safe-area-inset-top, 0px)) calc(8px + env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) calc(8px + env(safe-area-inset-left, 0px)) !important;
     }
   }
   .container {
-    max-width: 720px !important;
+    max-width: 680px !important;
     margin: 0 auto !important;
-    background: transparent !important;
-    border-radius: 0 !important;
-    border: none !important;
-    box-shadow: none !important;
-    overflow: visible !important;
-    padding: 1rem 0.85rem calc(2.5rem + env(safe-area-inset-bottom, 0px)) !important;
+    background: var(--bg-card) !important;
+    border-radius: var(--radius-xl) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: var(--shadow-md) !important;
+    overflow: hidden !important;
+    padding: 0 !important;
   }
   @media (max-width: 640px) {
     .container {
-      padding: 0.75rem 0.65rem calc(2rem + env(safe-area-inset-bottom, 0px)) !important;
+      border-radius: var(--radius-lg) !important;
+    }
+  }
+  .container-content {
+    padding: 12px 12px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  @media (max-width: 640px) {
+    .container-content {
+      padding: 10px 10px calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    .card {
+      padding: 12px 10px !important;
     }
   }
 
@@ -1587,28 +1601,29 @@
     </div>
   </div>
 
-  <header class="app-header">
-    <button class="menu-toggle" id="menu-toggle" aria-label="Mở menu">
-      <svg class="hero-icon hero-icon-md" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-        <path fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
-      </svg>
-    </button>
-    <div class="brand">
-      <div class="brand-info">
-        <div class="brand-title-row">
-          <h1 class="brand-title">Dự đoán điểm gas</h1>
+  <div class="container">
+    <header class="app-header">
+      <button class="menu-toggle" id="menu-toggle" aria-label="Mở menu">
+        <svg class="hero-icon hero-icon-md" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <div class="brand">
+        <div class="brand-info">
+          <div class="brand-title-row">
+            <h1 class="brand-title">Dự đoán điểm gas</h1>
+          </div>
+          <span class="brand-subtitle">Phân tích chu kỳ lấy hàng</span>
         </div>
-        <span class="brand-subtitle">Phân tích chu kỳ lấy hàng</span>
       </div>
-    </div>
-    <button class="header-home-btn" onclick="window.location.href='index.html'" aria-label="Về trang chủ">
-      <svg class="hero-icon hero-icon-md" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-        <path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd" />
-      </svg>
-    </button>
-  </header>
+      <button class="header-home-btn" onclick="window.location.href='index.html'" aria-label="Về trang chủ">
+        <svg class="hero-icon hero-icon-md" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </header>
 
-  <main class="container">
+    <div class="container-content">
 
     <div class="summary-strip">
       <div id="today-label">Hôm nay</div>
@@ -1696,7 +1711,8 @@
         </div>
       </div>
     </div>
-  </main>
+    </div>
+  </div>
 
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyRnnoEd2BnD7u1pXHER17Cv95BN9Z77yUeO6oR7CFRtbUqd-SiVJqBv5ENYyARwX77fw/exec';
@@ -1790,6 +1806,10 @@ function updateThemeToggle() {
     themeText.textContent = 'Chế độ tối';
     if (btn) btn.setAttribute('aria-label', 'Chuyển sang chế độ tối');
   }
+}
+
+function updateThemeUI() {
+  applySavedTheme();
 }
 
 function applySavedTheme() {
@@ -2366,7 +2386,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      updateThemeUI();
+      applySavedTheme();
       document.getElementById('today-label').textContent = 'Hôm nay: ' + formatDate(new Date());
       document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
       document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
