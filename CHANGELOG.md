@@ -14,6 +14,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 16 (v1.5 / UI v5.3) - Sửa lỗi chuỗi ngày ca & Khắc phục hiển thị số tiền chi tiêu Widget](#build-16-v15--ui-v53---2026-11-10)
 - [Build 15 (v1.5 / UI v5.3) - Nút tròn Chi tiêu ca trên Widget & Sửa lỗi lệch ngày ca](#build-15-v15--ui-v53---2026-11-10)
 - [Build 14 (v1.5 / UI v5.2) - Chọn nhanh & Quản lý khoản chi đã lưu trong LocalStorage](#build-14-v15--ui-v52---2026-11-09)
 - [Build 13 (v1.5 / UI v5.1) - Thêm quy tắc Version Tag & Nâng phiên bản giao diện v5.1](#build-13-v15--ui-v51---2026-11-09)
@@ -27,6 +28,38 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 - [Build 5 (v1.4) - Phóng to Doanh thu Widget 2x2 & Ẩn số giao dịch](#build-5-v14---2026-11-06)
 - [Build 4 (v1.3) - Tối ưu bố cục chống tràn chữ Widget 2x2 & 4x2](#build-4-v13---2026-11-06)
 - [Build 3 (v1.2) - Thiết kế lại Widget doanh thu vòng tròn tiến độ](#build-3-v12---2026-11-06)
+
+---
+
+## [Build 16 (v1.5 / UI v5.3)] - 2026-11-10
+- **Commit SHA**: `ef2d099`
+- **Mục tiêu**: Sửa triệt để lỗi hiển thị ngày ca (`Ca (df.str...`) trên 2 widget, khắc phục lỗi vòng tròn chi tiêu hiển thị 0 đ bằng cấu hình App Group Entitlements & bộ đệm đồng bộ file JSON hai chiều.
+
+### 🔄 Chi tiết thay đổi
+- **Khắc phục lỗi cú pháp nội suy chuỗi Swift hiển thị ngày ca trên Widget**:
+  - Sửa lỗi thiếu ký tự gạch chéo `\` trong hàm `formatShiftDisplayFromDate` khiến tên ca bị in nguyên bản chuỗi mã nguồn `Ca (df.string(from: date))` thay vì ngày ca thực tế `Ca 09-11`.
+  - Cả 2 Widget (Widget Tổng quan 4x2 và Widget Thao tác nhanh 4x2) giờ đây hiển thị ngày ca chuẩn xác 100% dạng `Ca dd-MM` theo giờ Việt Nam.
+- **Khắc phục lỗi vòng tròn chi tiêu hiển thị 0 đ (Thiếu số tiền đã chi)**:
+  - **Bổ sung App Group Entitlements (`com.apple.security.application-groups`)**: Tạo file `App.entitlements` và `GasWidget.entitlements` với App Group `group.com.vnpost.gasmanager`, liên kết vào `CODE_SIGN_ENTITLEMENTS` trong `project.pbxproj` cho cả target App và GasWidgetExtension.
+  - **Tích hợp Ad-hoc Codesign trong GitHub Actions**: Workflow đóng gói tự động ký ad-hoc với entitlements để các công cụ cài đặt (TrollStore, AltStore, Esign) tự động cấp quyền Shared Container giữa App và Widget.
+  - **Bộ đệm đồng bộ đa tầng qua File JSON dùng chung (`widget_data.json`)**: Bên cạnh `UserDefaults`, `SceneDelegate.swift` lưu trực tiếp bản sao dữ liệu sang `widget_data.json` trong thư mục Shared App Group; `GasWidget.swift` đọc ưu tiên từ file này, đảm bảo Widget luôn lấy được số tiền chi tiêu thực tế ngay cả khi UserDefaults bị phân mảnh sandbox.
+  - **Sửa hàm `syncWidgetData()` và tự động đồng bộ khi thao tác chi tiêu**: Bổ sung xử lý khi `stats` chưa được truyền (tự động tính từ dữ liệu hiện có), gọi `syncWidgetData()` ngay khi thêm, xóa hoặc xóa hết chi tiêu trong `saveAllStoredExpenses()`.
+- **Files tác động**:
+  - `index.html` & `www/index.html`
+  - `ios/App/App/SceneDelegate.swift` & `resources/ios/SceneDelegate.swift`
+  - `ios/App/GasWidget/GasWidget.swift` & `resources/ios/GasWidget/GasWidget.swift`
+  - `resources/ios/App.entitlements` & `ios/App/App/App.entitlements`
+  - `resources/ios/GasWidget/GasWidget.entitlements` & `ios/App/GasWidget/GasWidget.entitlements`
+  - `resources/ios/project.pbxproj` & `ios/App/App.xcodeproj/project.pbxproj` (Build 16)
+  - `.github/workflows/build-ipa.yml`
+  - `CHANGELOG.md`
+  - `ios/App/App/public/*` (`npx cap sync ios`)
+
+### ⏪ Hướng dẫn Revert nếu cần
+```bash
+git revert HEAD --no-edit
+git push origin main
+```
 
 ---
 

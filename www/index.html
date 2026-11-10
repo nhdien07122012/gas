@@ -3165,6 +3165,7 @@ function saveAllStoredExpenses(expenses) {
     console.error('Lỗi khi lưu gas_shift_expenses:', e);
   }
   updateSidebarExpenseBadge();
+  syncWidgetData();
 }
 
 function getShiftExpenses(shift) {
@@ -4520,11 +4521,31 @@ function calculateStats(data) {
 
 function syncWidgetData(stats) {
   try {
-    const activeShift = (typeof getPreferredShiftKey === 'function' && typeof allData !== 'undefined' && allData.length > 0)
-      ? getPreferredShiftKey(allData)
-      : (currentShift || 'Ca hiện tại');
+    // 1. Tự động tính stats từ data khả dụng nếu stats chưa được truyền hoặc rỗng
+    if (!stats || typeof stats !== 'object' || typeof stats.count === 'undefined') {
+      const dataToCalc = (typeof currentFilteredData !== 'undefined' && currentFilteredData.length > 0)
+        ? currentFilteredData
+        : (typeof allData !== 'undefined' ? allData : []);
+      stats = (typeof calculateStats === 'function') ? calculateStats(dataToCalc) : { count: 0, total: 0, daNop: 0, chuaNop: 0 };
+    }
 
-    // Format tên ca hiển thị chuẩn dạng 'Ca DD-MM' khớp với Widget
+    // 2. Xác định ca active: ưu tiên filter-shift đang chọn (nếu khác 'all'), hoặc getPreferredShiftKey(allData)
+    let activeShift = '';
+    const shiftFilter = document.getElementById('filter-shift');
+    if (shiftFilter && shiftFilter.value && shiftFilter.value !== 'all') {
+      activeShift = shiftFilter.value;
+    } else if (typeof getPreferredShiftKey === 'function' && typeof allData !== 'undefined' && allData.length > 0) {
+      activeShift = getPreferredShiftKey(allData);
+    } else {
+      activeShift = currentShift || '';
+    }
+
+    // Fallback: nếu vẫn chưa có ca, lấy ca mới nhất từ allData
+    if ((!activeShift || activeShift === 'all') && typeof getLatestShiftKey === 'function' && typeof allData !== 'undefined' && allData.length > 0) {
+      activeShift = getLatestShiftKey(allData);
+    }
+
+    // 3. Format tên ca hiển thị chuẩn dạng 'Ca dd-MM' (khớp 100% với Widget)
     let displayShiftName = 'Ca hôm nay';
     if (typeof formatShiftDayLabel === 'function' && activeShift) {
       const fullLabel = formatShiftDayLabel(activeShift); // e.g. 'Ca 09-11-2026'
@@ -4538,7 +4559,7 @@ function syncWidgetData(stats) {
       displayShiftName = activeShift.startsWith('Ca ') ? activeShift : `Ca ${activeShift}`;
     }
 
-    // Tính tổng chi tiêu thực tế của ca hiện tại
+    // 4. Tính tổng chi tiêu thực tế của ca hiện tại
     const shiftExpenses = (typeof getShiftExpenses === 'function') ? getShiftExpenses(activeShift) : [];
     const expenseTotal = shiftExpenses.reduce((sum, item) => sum + (item.amount || 0), 0);
     const expenseFormatted = expenseTotal > 0 ? `-${formatCurrencyCompact(expenseTotal)}` : '0 đ';
@@ -4546,12 +4567,12 @@ function syncWidgetData(stats) {
     const widgetData = {
       shift: displayShiftName,
       shiftKey: activeShift,
-      count: stats.count || 0,
-      total: stats.total || 0,
-      totalFormatted: formatCurrencyCompact(stats.total || 0),
-      daNop: stats.daNop || 0,
-      chuaNop: stats.chuaNop || 0,
-      expenseTotal: expenseTotal,
+      count: Number(stats.count) || 0,
+      total: Number(stats.total) || 0,
+      totalFormatted: formatCurrencyCompact(Number(stats.total) || 0),
+      daNop: Number(stats.daNop) || 0,
+      chuaNop: Number(stats.chuaNop) || 0,
+      expenseTotal: Number(expenseTotal) || 0,
       expenseFormatted: expenseFormatted,
       updatedAt: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
     };

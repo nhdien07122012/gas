@@ -46,6 +46,7 @@ jobs:
           cp resources/ios/Info.plist ios/App/App/Info.plist
           cp resources/ios/SceneDelegate.swift ios/App/App/SceneDelegate.swift
           cp resources/ios/project.pbxproj ios/App/App.xcodeproj/project.pbxproj
+          cp resources/ios/App.entitlements ios/App/App/App.entitlements
           mkdir -p ios/App/GasWidget
           cp -r resources/ios/GasWidget/* ios/App/GasWidget/
 
@@ -89,6 +90,12 @@ jobs:
           if [ -d "GasWidgetExtension.appex" ]; then
             echo "Copying GasWidgetExtension.appex into Payload/App.app/PlugIns/..."
             cp -r GasWidgetExtension.appex Payload/App.app/PlugIns/
+            if [ -f "$GITHUB_WORKSPACE/ios/App/GasWidget/GasWidget.entitlements" ]; then
+              codesign -f -s - --entitlements "$GITHUB_WORKSPACE/ios/App/GasWidget/GasWidget.entitlements" Payload/App.app/PlugIns/GasWidgetExtension.appex || true
+            fi
+          fi
+          if [ -f "$GITHUB_WORKSPACE/ios/App/App/App.entitlements" ]; then
+            codesign -f -s - --entitlements "$GITHUB_WORKSPACE/ios/App/App/App.entitlements" Payload/App.app || true
           fi
           echo "=== Content of Payload/App.app/PlugIns ==="
           ls -la Payload/App.app/PlugIns

@@ -36,16 +36,50 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "gasWidgetBridge", let dict = message.body as? [String: Any] {
             let defaults = UserDefaults(suiteName: "group.com.vnpost.gasmanager") ?? UserDefaults.standard
-            if let shift = dict["shift"] as? String { defaults.set(shift, forKey: "widget_shift") }
-            if let count = dict["count"] as? Int { defaults.set(count, forKey: "widget_count") }
-            if let total = dict["total"] as? Int { defaults.set(total, forKey: "widget_total") }
-            if let totalFormatted = dict["totalFormatted"] as? String { defaults.set(totalFormatted, forKey: "widget_totalFormatted") }
-            if let daNop = dict["daNop"] as? Int { defaults.set(daNop, forKey: "widget_daNop") }
-            if let chuaNop = dict["chuaNop"] as? Int { defaults.set(chuaNop, forKey: "widget_chuaNop") }
-            if let updatedAt = dict["updatedAt"] as? String { defaults.set(updatedAt, forKey: "widget_updatedAt") }
-            if let expenseTotal = dict["expenseTotal"] as? Int { defaults.set(expenseTotal, forKey: "widget_expenseTotal") }
-            if let expenseFormatted = dict["expenseFormatted"] as? String { defaults.set(expenseFormatted, forKey: "widget_expenseFormatted") }
-            defaults.set(Date().timeIntervalSince1970, forKey: "widget_timestamp")
+            let std = UserDefaults.standard
+
+            let shift = dict["shift"] as? String ?? "Ca hôm nay"
+            let count = (dict["count"] as? NSNumber)?.intValue ?? (dict["count"] as? Int) ?? 0
+            let total = (dict["total"] as? NSNumber)?.intValue ?? (dict["total"] as? Int) ?? 0
+            let totalFormatted = dict["totalFormatted"] as? String ?? "0 đ"
+            let daNop = (dict["daNop"] as? NSNumber)?.intValue ?? (dict["daNop"] as? Int) ?? 0
+            let chuaNop = (dict["chuaNop"] as? NSNumber)?.intValue ?? (dict["chuaNop"] as? Int) ?? 0
+            let updatedAt = dict["updatedAt"] as? String ?? ""
+            let expenseTotal = (dict["expenseTotal"] as? NSNumber)?.intValue ?? (dict["expenseTotal"] as? Int) ?? 0
+            let expenseFormatted = dict["expenseFormatted"] as? String ?? (expenseTotal > 0 ? "-\(expenseTotal)" : "0 đ")
+            let nowTime = Date().timeIntervalSince1970
+
+            // 1. Lưu vào Shared UserDefaults (App Group)
+            defaults.set(shift, forKey: "widget_shift")
+            defaults.set(count, forKey: "widget_count")
+            defaults.set(total, forKey: "widget_total")
+            defaults.set(totalFormatted, forKey: "widget_totalFormatted")
+            defaults.set(daNop, forKey: "widget_daNop")
+            defaults.set(chuaNop, forKey: "widget_chuaNop")
+            defaults.set(updatedAt, forKey: "widget_updatedAt")
+            defaults.set(expenseTotal, forKey: "widget_expenseTotal")
+            defaults.set(expenseFormatted, forKey: "widget_expenseFormatted")
+            defaults.set(nowTime, forKey: "widget_timestamp")
+
+            // 2. Lưu vào standard defaults làm dự phòng
+            std.set(shift, forKey: "widget_shift")
+            std.set(count, forKey: "widget_count")
+            std.set(total, forKey: "widget_total")
+            std.set(totalFormatted, forKey: "widget_totalFormatted")
+            std.set(daNop, forKey: "widget_daNop")
+            std.set(chuaNop, forKey: "widget_chuaNop")
+            std.set(updatedAt, forKey: "widget_updatedAt")
+            std.set(expenseTotal, forKey: "widget_expenseTotal")
+            std.set(expenseFormatted, forKey: "widget_expenseFormatted")
+            std.set(nowTime, forKey: "widget_timestamp")
+
+            // 3. Lưu vào file JSON trong Shared Container để Widget đọc dự phòng trực tiếp
+            if let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.vnpost.gasmanager") {
+                let fileURL = containerURL.appendingPathComponent("widget_data.json")
+                if let jsonData = try? JSONSerialization.data(withJSONObject: dict, options: [.prettyPrinted]) {
+                    try? jsonData.write(to: fileURL, options: .atomic)
+                }
+            }
 
             if #available(iOS 14.0, *) {
                 WidgetCenter.shared.reloadAllTimelines()
