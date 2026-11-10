@@ -2191,7 +2191,7 @@
         <div class="brand-info">
           <div class="brand-title-row">
             <h1 class="brand-title">Quản lý điểm gas</h1>
-            <span class="version-tag">v5.2</span>
+            <span class="version-tag">v5.3</span>
           </div>
           <span class="brand-subtitle">Theo dõi &amp; quản lý gas theo ca</span>
         </div>
@@ -3285,6 +3285,7 @@ function onExpenseShiftChange() {
   vibrateShort();
   renderExpenseModalList();
   renderExpenseQuickChips();
+  syncWidgetData(calculateStats(currentFilteredData.length > 0 ? currentFilteredData : allData));
 }
 
 function renderExpenseModalList() {
@@ -4519,15 +4520,39 @@ function calculateStats(data) {
 
 function syncWidgetData(stats) {
   try {
-    const shiftInfo = (typeof getCurrentShift === 'function') ? getCurrentShift() : null;
-    const shiftName = (shiftInfo && shiftInfo.shift) ? shiftInfo.shift : (currentShift || 'Ca hiện tại');
+    const activeShift = (typeof getPreferredShiftKey === 'function' && typeof allData !== 'undefined' && allData.length > 0)
+      ? getPreferredShiftKey(allData)
+      : (currentShift || 'Ca hiện tại');
+
+    // Format tên ca hiển thị chuẩn dạng 'Ca DD-MM' khớp với Widget
+    let displayShiftName = 'Ca hôm nay';
+    if (typeof formatShiftDayLabel === 'function' && activeShift) {
+      const fullLabel = formatShiftDayLabel(activeShift); // e.g. 'Ca 09-11-2026'
+      const parts = fullLabel.replace(/^Ca\s*/i, '').split('-');
+      if (parts.length >= 2) {
+        displayShiftName = `Ca ${parts[0]}-${parts[1]}`;
+      } else {
+        displayShiftName = fullLabel;
+      }
+    } else if (activeShift) {
+      displayShiftName = activeShift.startsWith('Ca ') ? activeShift : `Ca ${activeShift}`;
+    }
+
+    // Tính tổng chi tiêu thực tế của ca hiện tại
+    const shiftExpenses = (typeof getShiftExpenses === 'function') ? getShiftExpenses(activeShift) : [];
+    const expenseTotal = shiftExpenses.reduce((sum, item) => sum + (item.amount || 0), 0);
+    const expenseFormatted = expenseTotal > 0 ? `-${formatCurrencyCompact(expenseTotal)}` : '0 đ';
+
     const widgetData = {
-      shift: shiftName,
+      shift: displayShiftName,
+      shiftKey: activeShift,
       count: stats.count || 0,
       total: stats.total || 0,
       totalFormatted: formatCurrencyCompact(stats.total || 0),
       daNop: stats.daNop || 0,
       chuaNop: stats.chuaNop || 0,
+      expenseTotal: expenseTotal,
+      expenseFormatted: expenseFormatted,
       updatedAt: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
     };
 
@@ -5864,6 +5889,25 @@ document.addEventListener('DOMContentLoaded', function() {
 // 3D Touch / Quick Action "Thêm điểm gas"
 // ==========================================
 
+// Quick Action mở nhanh Modal Quản lý chi tiêu trong ca từ Widget
+window.quickActionExpense = function() {
+  try {
+    if (typeof closeSidebar === 'function') closeSidebar();
+    const openModals = document.querySelectorAll('.modal.active, .modal.show, [id$="-modal"]');
+    openModals.forEach(m => {
+      if (typeof closeModal === 'function' && m.id) closeModal(m.id);
+      else { m.classList.remove('active', 'show'); m.style.display = 'none'; }
+    });
+    setTimeout(() => {
+      if (typeof openExpenseModal === 'function') {
+        openExpenseModal();
+      }
+    }, 150);
+  } catch (err) {
+    console.error('Lỗi khi kích hoạt quickActionExpense:', err);
+  }
+};
+
 // Quick Action mở nhanh trang Clipboard
 window.quickActionClipboard = function() {
   window.location.href = 'clipboard.html';
@@ -5937,6 +5981,14 @@ window.quickActionAddPoint = function() {
     setTimeout(() => {
       if (typeof window.openReportModal === 'function') {
         window.openReportModal();
+      }
+    }, 450);
+  } else if (action === 'expense') {
+    setTimeout(() => {
+      if (typeof window.quickActionExpense === 'function') {
+        window.quickActionExpense();
+      } else if (typeof window.openExpenseModal === 'function') {
+        window.openExpenseModal();
       }
     }, 450);
   }

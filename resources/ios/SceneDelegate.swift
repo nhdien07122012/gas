@@ -43,6 +43,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
             if let daNop = dict["daNop"] as? Int { defaults.set(daNop, forKey: "widget_daNop") }
             if let chuaNop = dict["chuaNop"] as? Int { defaults.set(chuaNop, forKey: "widget_chuaNop") }
             if let updatedAt = dict["updatedAt"] as? String { defaults.set(updatedAt, forKey: "widget_updatedAt") }
+            if let expenseTotal = dict["expenseTotal"] as? Int { defaults.set(expenseTotal, forKey: "widget_expenseTotal") }
+            if let expenseFormatted = dict["expenseFormatted"] as? String { defaults.set(expenseFormatted, forKey: "widget_expenseFormatted") }
             defaults.set(Date().timeIntervalSince1970, forKey: "widget_timestamp")
 
             if #available(iOS 14.0, *) {
@@ -117,6 +119,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
                     return true;
                 } else {
                     window.location.href = 'index.html?action=report';
+                    return true;
+                }
+            })();
+            """, retries: 10)
+        } else if url.host == "expense" || urlStr.contains("expense") {
+            triggerQuickAction(jsCode: """
+            (function() {
+                if (typeof window.quickActionExpense === 'function') {
+                    window.quickActionExpense();
+                    return true;
+                } else if (typeof openExpenseModal === 'function') {
+                    openExpenseModal();
+                    return true;
+                } else {
+                    window.location.href = 'index.html?action=expense';
                     return true;
                 }
             })();

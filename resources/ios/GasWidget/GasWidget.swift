@@ -11,6 +11,8 @@ struct GasShiftEntry: TimelineEntry {
     let totalFormatted: String
     let daNop: Int
     let chuaNop: Int
+    let expenseTotal: Int
+    let expenseFormatted: String
     let updatedAt: String
     let isLive: Bool
 
@@ -20,9 +22,11 @@ struct GasShiftEntry: TimelineEntry {
             shiftName: "Ca hôm nay",
             count: 12,
             total: 7440000,
-            totalFormatted: "7tr440 ngàn",
+            totalFormatted: "7tr440",
             daNop: 10,
             chuaNop: 2,
+            expenseTotal: 62000,
+            expenseFormatted: "-62k",
             updatedAt: "Vừa xong",
             isLive: true
         )
@@ -111,6 +115,8 @@ struct GasWidgetProvider: TimelineProvider {
         let total = defaults.integer(forKey: "widget_total")
         let daNop = defaults.integer(forKey: "widget_daNop")
         let chuaNop = defaults.integer(forKey: "widget_chuaNop")
+        let expenseTotal = defaults.integer(forKey: "widget_expenseTotal")
+        let expenseFormatted = defaults.string(forKey: "widget_expenseFormatted") ?? (expenseTotal > 0 ? "-(expenseTotal)" : "0 đ")
         let updatedAt = defaults.string(forKey: "widget_updatedAt") ?? ""
         let savedTime = defaults.double(forKey: "widget_timestamp")
         let date = savedTime > 0 ? Date(timeIntervalSince1970: savedTime) : Date()
@@ -123,6 +129,8 @@ struct GasWidgetProvider: TimelineProvider {
             totalFormatted: totalFormatted,
             daNop: daNop,
             chuaNop: chuaNop,
+            expenseTotal: expenseTotal,
+            expenseFormatted: expenseFormatted,
             updatedAt: updatedAt.isEmpty ? "Vừa xong" : updatedAt,
             isLive: true
         )
@@ -151,17 +159,22 @@ struct GasWidgetProvider: TimelineProvider {
                     return
                 }
 
-                // Tìm ca mới nhất
-                var latestCa = ""
-                for item in items.reversed() {
-                    if let ca = item.ca, !ca.isEmpty {
-                        latestCa = ca
-                        break
+                // 1. Phân tích ngày ca chuẩn theo múi giờ Việt Nam (UTC+7)
+                var latestKey = ""
+                var latestDate: Date? = nil
+
+                for item in items {
+                    if let raw = item.ca, let d = self.parseShiftDate(raw) {
+                        let key = self.getShiftKey(raw)
+                        if key > latestKey {
+                            latestKey = key
+                            latestDate = d
+                        }
                     }
                 }
 
-                // Lọc các bản ghi thuộc ca mới nhất
-                let shiftItems = items.filter { $0.ca == latestCa }
+                // 2. Lọc các bản ghi thuộc ca mới nhất (theo khóa chuẩn yyyy-MM-dd)
+                let shiftItems = items.filter { self.getShiftKey($0.ca) == latestKey }
                 let targetItems = shiftItems.isEmpty ? Array(items.suffix(20)) : shiftItems
 
                 var total = 0
@@ -180,13 +193,24 @@ struct GasWidgetProvider: TimelineProvider {
 
                 let count = targetItems.count
 
-                // Format tên ca hiển thị
-                let shiftDisplay = formatShiftDisplay(latestCa)
+                // 3. Format tên ca hiển thị theo giờ Việt Nam
+                let shiftDisplay: String
+                if let d = latestDate {
+                    shiftDisplay = self.formatShiftDisplayFromDate(d)
+                } else {
+                    shiftDisplay = "Ca gần nhất"
+                }
+
                 let formattedTotal = formatCompactCurrency(total)
 
                 let timeFormatter = DateFormatter()
                 timeFormatter.dateFormat = "HH:mm"
                 let updatedTime = timeFormatter.string(from: Date())
+
+                // 4. Giữ lại số tiền chi tiêu từ cache Shared UserDefaults
+                let defaults = UserDefaults(suiteName: groupID) ?? UserDefaults.standard
+                let expenseTotal = defaults.integer(forKey: "widget_expenseTotal")
+                let expenseFormatted = defaults.string(forKey: "widget_expenseFormatted") ?? (expenseTotal > 0 ? "-(formatCompactCurrency(expenseTotal))" : "0 đ")
 
                 let entry = GasShiftEntry(
                     date: Date(),
@@ -196,12 +220,13 @@ struct GasWidgetProvider: TimelineProvider {
                     totalFormatted: formattedTotal,
                     daNop: daNop,
                     chuaNop: chuaNop,
+                    expenseTotal: expenseTotal,
+                    expenseFormatted: expenseFormatted,
                     updatedAt: updatedTime,
                     isLive: true
                 )
 
                 // Lưu vào cache
-                let defaults = UserDefaults(suiteName: groupID) ?? UserDefaults.standard
                 defaults.set(shiftDisplay, forKey: "widget_shift")
                 defaults.set(count, forKey: "widget_count")
                 defaults.set(total, forKey: "widget_total")
@@ -218,13 +243,51 @@ struct GasWidgetProvider: TimelineProvider {
         }.resume()
     }
 
-    private func formatShiftDisplay(_ rawCa: String) -> String {
-        if rawCa.isEmpty { return "Ca hôm nay" }
-        let parts = rawCa.prefix(10).split(separator: "-")
-        if parts.count == 3 {
-            return "Ca \(parts[2])-\(parts[1])"
-        }
-        return "Ca gần nhất"
+    // Parse ngày ca chính xác theo giờ Việt Nam (UTC+7)
+    private func parseShiftDate(_ rawCa: String) -> Date? {
+        let trimmed = rawCa.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty { return nil }
+
+        // Dạng ISO 8601 (ví dụ 2026-11-08T17:00:00.000Z từ Google Apps Script)
+        let isoFormatter = ISO8601DateFormatter()
+        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let d = isoFormatter.date(from: trimmed) { return d }
+        isoFormatter.formatOptions = [.withInternetDateTime]
+        if let d = isoFormatter.date(from: trimmed) { return d }
+
+        let vnTimeZone = TimeZone(identifier: "Asia/Ho_Chi_Minh") ?? TimeZone(secondsFromGMT: 7 * 3600)!
+
+        // Dạng yyyy-MM-dd
+        let dfYMD = DateFormatter()
+        dfYMD.dateFormat = "yyyy-MM-dd"
+        dfYMD.timeZone = vnTimeZone
+        if let d = dfYMD.date(from: trimmed) { return d }
+
+        // Dạng Ca dd-MM-yyyy hoặc dd-MM-yyyy
+        let cleaned = trimmed.replacingOccurrences(of: "Ca ", with: "", options: .caseInsensitive)
+        let dfDMY = DateFormatter()
+        dfDMY.dateFormat = "dd-MM-yyyy"
+        dfDMY.timeZone = vnTimeZone
+        if let d = dfDMY.date(from: cleaned) { return d }
+
+        return nil
+    }
+
+    // Chuyển chuỗi ca bất kỳ thành khóa chuẩn yyyy-MM-dd theo giờ Việt Nam
+    private func getShiftKey(_ rawCa: String?) -> String {
+        guard let raw = rawCa, let date = parseShiftDate(raw) else { return "" }
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd"
+        df.timeZone = TimeZone(identifier: "Asia/Ho_Chi_Minh") ?? TimeZone(secondsFromGMT: 7 * 3600)!
+        return df.string(from: date)
+    }
+
+    // Hiển thị tên ca dạng Ca dd-MM theo giờ Việt Nam
+    private func formatShiftDisplayFromDate(_ date: Date) -> String {
+        let df = DateFormatter()
+        df.dateFormat = "dd-MM"
+        df.timeZone = TimeZone(identifier: "Asia/Ho_Chi_Minh") ?? TimeZone(secondsFromGMT: 7 * 3600)!
+        return "Ca (df.string(from: date))"
     }
 
     private func formatCompactCurrency(_ amount: Int) -> String {
@@ -254,49 +317,63 @@ extension GasShiftEntry {
     }
 }
 
-// MARK: - Component: Vòng tròn tiến độ (Circular Progress Ring)
+// MARK: - Component: Nút tròn Chi tiêu ca (Interactive Deep Link)
 
-struct GasProgressRingView: View {
-    let rate: Double
-    let percentage: Int
+struct GasExpenseCircleButton: View {
+    let expenseFormatted: String
+    let expenseTotal: Int
 
     var body: some View {
-        ZStack {
-            // Vòng nền mờ
-            Circle()
-                .stroke(Color.primary.opacity(0.08), lineWidth: 10)
+        Link(destination: URL(string: "gasmanager://expense")!) {
+            ZStack {
+                // Vòng nền mờ hiệu ứng Amber / Orange đồng bộ với nút Chi tiêu ca trong app
+                Circle()
+                    .stroke(
+                        LinearGradient(
+                            colors: [
+                                Color(red: 245/255, green: 158/255, blue: 11/255), // Amber
+                                Color(red: 217/255, green: 119/255, blue: 6/255)   // Deep Amber
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 3.5
+                    )
+                    .background(
+                        Circle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        Color(red: 245/255, green: 158/255, blue: 11/255).opacity(0.12),
+                                        Color(red: 217/255, green: 119/255, blue: 6/255).opacity(0.06)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                    )
 
-            // Vòng tiến độ Gradient màu Emerald
-            Circle()
-                .trim(from: 0.0, to: CGFloat(min(max(rate, 0.0), 1.0)))
-                .stroke(
-                    LinearGradient(
-                        colors: [
-                            Color(red: 16/255, green: 185/255, blue: 129/255), // Emerald
-                            Color(red: 52/255, green: 211/255, blue: 153/255)  // Bright mint
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    style: StrokeStyle(lineWidth: 10, lineCap: .round)
-                )
-                .rotationEffect(.degrees(-90))
+                // Thông số ở giữa: Icon thẻ + Số tiền chi tiêu + Chữ CHI TIÊU
+                VStack(spacing: 2) {
+                    Image(systemName: "creditcard.fill")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundColor(Color(red: 245/255, green: 158/255, blue: 11/255))
 
-            // Thông số ở giữa vòng tròn
-            VStack(spacing: 2) {
-                Text("\(percentage)%")
-                    .font(.system(size: 21, weight: .heavy, design: .rounded))
-                    .foregroundColor(rate > 0 ? Color(red: 16/255, green: 185/255, blue: 129/255) : .primary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+                    Text(expenseFormatted)
+                        .font(.system(size: 15, weight: .heavy, design: .rounded))
+                        .foregroundColor(expenseTotal > 0 ? Color(red: 239/255, green: 68/255, blue: 68/255) : Color(red: 245/255, green: 158/255, blue: 11/255))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.65)
 
-                Text("ĐÃ THU")
-                    .font(.system(size: 9, weight: .heavy))
-                    .foregroundColor(.secondary)
-                    .tracking(0.3)
+                    Text("CHI TIÊU")
+                        .font(.system(size: 8.5, weight: .heavy))
+                        .foregroundColor(.secondary)
+                        .tracking(0.3)
+                }
+                .padding(4)
             }
+            .frame(width: 86, height: 86)
         }
-        .frame(width: 86, height: 86)
     }
 }
 
@@ -343,22 +420,14 @@ struct GasWidgetSmallView: View {
     }
 }
 
-// Kích thước 4x2 (.systemMedium): Thiết kế dạng Ring vòng tròn tiến độ & bảng số liệu không tràn
+// Kích thước 4x2 (.systemMedium): Thiết kế dạng Nút tròn Chi tiêu ca & bảng số liệu không tràn
 struct GasWidgetMediumView: View {
     let entry: GasShiftEntry
 
-    var rate: Double {
-        entry.count > 0 ? (Double(entry.daNop) / Double(entry.count)) : 0.0
-    }
-
-    var percentage: Int {
-        Int((rate * 100).rounded())
-    }
-
     var body: some View {
         HStack(spacing: 14) {
-            // 1. Ring vòng tròn trực quan
-            GasProgressRingView(rate: rate, percentage: percentage)
+            // 1. Nút tròn chi tiêu ca (Bấm vào mở modal Chi tiêu, bình thường hiện số tiền đã chi)
+            GasExpenseCircleButton(expenseFormatted: entry.expenseFormatted, expenseTotal: entry.expenseTotal)
 
             // 2. Nội dung thông tin chi tiết
             VStack(alignment: .leading, spacing: 0) {

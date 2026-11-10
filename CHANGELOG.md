@@ -14,6 +14,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 15 (v1.5 / UI v5.3) - Nút tròn Chi tiêu ca trên Widget & Sửa lỗi lệch ngày ca](#build-15-v15--ui-v53---2026-11-10)
 - [Build 14 (v1.5 / UI v5.2) - Chọn nhanh & Quản lý khoản chi đã lưu trong LocalStorage](#build-14-v15--ui-v52---2026-11-09)
 - [Build 13 (v1.5 / UI v5.1) - Thêm quy tắc Version Tag & Nâng phiên bản giao diện v5.1](#build-13-v15--ui-v51---2026-11-09)
 - [Build 12 (v1.5) - Sửa lỗi giao diện iPhone: Status bar header & Tràn tọa độ GPS](#build-12-v15---2026-11-09)
@@ -26,6 +27,41 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 - [Build 5 (v1.4) - Phóng to Doanh thu Widget 2x2 & Ẩn số giao dịch](#build-5-v14---2026-11-06)
 - [Build 4 (v1.3) - Tối ưu bố cục chống tràn chữ Widget 2x2 & 4x2](#build-4-v13---2026-11-06)
 - [Build 3 (v1.2) - Thiết kế lại Widget doanh thu vòng tròn tiến độ](#build-3-v12---2026-11-06)
+
+---
+
+## [Build 15 (v1.5 / UI v5.3)] - 2026-11-10
+- **Commit SHA**: `f5667b6`
+- **Mục tiêu**: Chuyển đổi vòng tròn % trên iOS Widget thành Nút tròn Chi tiêu ca (hiện số tiền đã chi & bấm vào mở ngay modal Chi tiêu), sửa triệt để lỗi lệch ngày ca trên Widget theo múi giờ Việt Nam, nâng UI lên `v5.3`.
+
+### 🔄 Chi tiết thay đổi
+- **Nút tròn Chi tiêu ca (`GasExpenseCircleButton`) trên Widget 4x2**:
+  - Thay thế phần vòng tròn `% ĐÃ THU` bằng nút tròn viền Cam Hổ phách (Amber `#f59e0b`) đồng bộ nhận diện nút Chi tiêu ca trong app.
+  - Hiển thị số tiền chi tiêu thực tế của ca (ví dụ `-62.000` hoặc `-62k`, nếu chưa chi hiện `0 đ`) kèm nhãn `CHI TIÊU`.
+  - Tích hợp Deep Link `gasmanager://expense`: Chạm vào nút tròn trên màn hình chính sẽ tự động mở ứng dụng và bật ngay modal "Quản lý chi tiêu trong ca".
+- **Khắc phục triệt để lỗi lệch ngày ca trên Widget (`Ca 08-11` ➔ `Ca 09-11`)**:
+  - Dữ liệu Google Sheets xuất chuỗi UTC (`2026-11-08T17:00:00.000Z`). Widget trước đây chỉ cắt 10 ký tự đầu nên hiển thị `Ca 08-11`.
+  - Đã tích hợp bộ phân tích `ISO8601DateFormatter` và quy chuẩn múi giờ Việt Nam (`Asia/Ho_Chi_Minh` - GMT+7) vào `GasWidget.swift`.
+  - Chuẩn hóa nhóm bản ghi theo khóa ca `yyyy-MM-dd` theo giờ Việt Nam, đảm bảo ngày ca trên Widget luôn khớp 100% với Web App.
+- **Đồng bộ hai chiều dữ liệu chi tiêu qua Shared App Group (`group.com.vnpost.gasmanager`)**:
+  - `index.html`: Cập nhật `syncWidgetData()` tính tổng chi tiêu thực tế của ca hiện tại và đồng bộ sang native bridge `gasWidgetBridge`.
+  - `SceneDelegate.swift`: Lưu `widget_expenseTotal` và `widget_expenseFormatted`, đồng thời bắt URL Scheme `gasmanager://expense` gọi `window.quickActionExpense()`.
+- **Nâng phiên bản hiển thị**:
+  - `index.html` & `www/index.html`: `<span class="version-tag">v5.2</span>` ➔ `<span class="version-tag">v5.3</span>`.
+- **Files tác động**:
+  - `index.html` & `www/index.html`
+  - `ios/App/App/SceneDelegate.swift` & `resources/ios/SceneDelegate.swift`
+  - `ios/App/GasWidget/GasWidget.swift` & `resources/ios/GasWidget/GasWidget.swift`
+  - `resources/ios/project.pbxproj` (Build 15)
+  - `ios/App/App.xcodeproj/project.pbxproj` (Build 15)
+  - `CHANGELOG.md`
+  - `ios/App/App/public/*` (`npx cap sync ios`)
+
+### ⏪ Hướng dẫn Revert nếu cần
+```bash
+git revert HEAD --no-edit
+git push origin main
+```
 
 ---
 
