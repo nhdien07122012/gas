@@ -57,6 +57,10 @@
 
       /* Neutrals - Slate Scale */
       --bg-primary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --bg-subtle: #f8fafc;
+      --border-card: #e2e8f0;
+      --text-main: #0f172a;
       --bg-secondary: #f1f5f9;
       --bg-card: #ffffff;
       --bg-card-glass: rgba(255, 255, 255, 0.85);
@@ -89,9 +93,11 @@
       --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    html.dark {
+    html.dark, html[data-theme="dark"], [data-theme="dark"] {
       --bg-primary: #0f172a;
       --bg-secondary: #1e293b;
+      --bg-tertiary: #1e293b;
+      --bg-subtle: #1e293b;
       --bg-card: #1e293b;
       --bg-card-glass: rgba(30, 41, 59, 0.88);
       --bg-sidebar: #1e293b;
@@ -100,12 +106,14 @@
       --bg-hover: #334155;
       --bg-active: #334155;
 
+      --text-main: #f8fafc;
       --text-primary: #f8fafc;
       --text-secondary: #cbd5e1;
       --text-muted: #94a3b8;
       --text-inverse: #0f172a;
 
       --border-color: #334155;
+      --border-card: #334155;
       --border-focus: #38bdf8;
 
       --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
@@ -808,28 +816,29 @@
       color: var(--text-primary);
     }
 
-    /* Toast Notification */
+    /* Toast Notification (Floating Pill below Notch) */
     .toast {
       position: fixed;
-      bottom: 24px;
+      top: max(16px, calc(env(safe-area-inset-top, 0px) + 12px));
       left: 50%;
-      transform: translateX(-50%) translateY(100px);
+      transform: translateX(-50%) translateY(-40px);
       background: #0f172a;
-      color: #ffffff;
-      padding: 0.75rem 1.25rem;
-      border-radius: var(--radius-full);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      color: #f8fafc;
+      padding: 10px 18px;
+      border-radius: 9999px;
+      box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      font-size: 0.875rem;
+      gap: 8px;
+      font-size: 13.5px;
       font-weight: 600;
-      z-index: 3000;
+      z-index: 9999;
       opacity: 0;
       pointer-events: none;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
       max-width: 90vw;
       white-space: nowrap;
+      border: 1px solid #334155;
     }
 
     .toast.show {
@@ -838,23 +847,27 @@
       pointer-events: auto;
     }
 
-    .toast.success {
-      background: #065f46;
-      border: 1px solid #10b981;
+    .toast.success, .toast.toast-success {
+      background: #064e3b;
+      color: #ecfdf5;
+      border: 1px solid #059669;
     }
 
-    .toast.warning {
+    .toast.warning, .toast.toast-warning {
       background: #78350f;
-      border: 1px solid #f59e0b;
+      color: #fffbeb;
+      border: 1px solid #d97706;
     }
 
-    .toast.error {
+    .toast.error, .toast.toast-error {
       background: #7f1d1d;
-      border: 1px solid #ef4444;
+      color: #fef2f2;
+      border: 1px solid #dc2626;
     }
 
-    .toast.info {
+    .toast.info, .toast.toast-info {
       background: #0c4a6e;
+      color: #f0f9ff;
       border: 1px solid #0284c7;
     }
 
@@ -934,6 +947,27 @@
   }
   .header-home-btn:active {
     transform: translateY(-50%) scale(0.95);
+  }
+
+  /* Dark mode explicit button colors to avoid white-on-white glitch */
+  html.dark .menu-toggle,
+  html.dark .header-home-btn,
+  html[data-theme="dark"] .menu-toggle,
+  html[data-theme="dark"] .header-home-btn,
+  [data-theme="dark"] .menu-toggle,
+  [data-theme="dark"] .header-home-btn {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+  }
+  html.dark .menu-toggle:hover,
+  html.dark .header-home-btn:hover,
+  html[data-theme="dark"] .menu-toggle:hover,
+  html[data-theme="dark"] .header-home-btn:hover,
+  [data-theme="dark"] .menu-toggle:hover,
+  [data-theme="dark"] .header-home-btn:hover {
+    background: #334155 !important;
+    color: #38bdf8 !important;
   }
 
   .brand {
@@ -1143,6 +1177,12 @@
   <!-- Overlay cho sidebar -->
     <!-- Sidebar Overlay -->
   <div class="overlay" id="sidebar-overlay"></div>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toast-icon"></span>
+    <span id="toast-message">Thông báo</span>
+  </div>
 
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
@@ -1526,23 +1566,7 @@
       return str.replace(/^[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{2B00}-\u{2BFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE0F}\u{200D}\s]+/u, '').trim() || str.trim();
     }
 
-    // ========== THEME TOGGLE ==========
-    function updateThemeUI() {
-      const isDark = document.documentElement.classList.contains('dark');
-      const sun = document.getElementById('theme-icon-sun');
-      const moon = document.getElementById('theme-icon-moon');
-      if (sun && moon) {
-        sun.style.display = isDark ? 'inline-block' : 'none';
-        moon.style.display = isDark ? 'none' : 'inline-block';
-      }
-    }
-
-    function toggleTheme() {
-      const isDark = document.documentElement.classList.toggle('dark');
-      localStorage.setItem('gas_theme', isDark ? 'dark' : 'light');
-      updateThemeUI();
-      showToast(isDark ? 'Đã bật chế độ tối' : 'Đã bật chế độ sáng', 'info');
-    }
+    // (Theme management unified with applySavedTheme/toggleTheme)
 
     
 /* ========== UNIFIED NAVIGATION & SIDEBAR JS ========== */
@@ -1631,11 +1655,14 @@ function updateThemeToggle() {
 
 function applySavedTheme() {
   const savedTheme = localStorage.getItem('gas_theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = savedTheme === 'dark' || (!savedTheme && systemPrefersDark);
   if (savedTheme === 'light' || savedTheme === 'dark') {
     document.documentElement.setAttribute('data-theme', savedTheme);
   } else {
     document.documentElement.removeAttribute('data-theme');
   }
+  document.documentElement.classList.toggle('dark', isDark);
   updateThemeToggle();
 }
 
@@ -1648,6 +1675,8 @@ function toggleTheme() {
   if (!savedTheme) nextTheme = 'light';
   else if (savedTheme === 'light') nextTheme = 'dark';
   else nextTheme = null;
+
+  const isDark = nextTheme === 'dark' || (!nextTheme && systemPrefersDark);
 
   if (nextTheme) {
     localStorage.setItem('gas_theme', nextTheme);
@@ -1662,6 +1691,7 @@ function toggleTheme() {
       showToast('Đã bật chế độ tự động theo thiết bị (' + (systemPrefersDark ? 'tối' : 'sáng') + ')', 'info');
     }
   }
+  document.documentElement.classList.toggle('dark', isDark);
   updateThemeToggle();
 }
 

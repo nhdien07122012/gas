@@ -14,6 +14,8 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 19 (v1.5 / UI v5.5) - Sửa lỗi giao diện trang Dự đoán điểm gas trên Dark Mode & Tràn nút Sao chép](#build-19-v15--ui-v55---2026-11-10)
+- [Build 18 (v1.5 / UI v5.5) - Đồng bộ thanh Menubar & Sidebar Drawer trên 7 trang](#build-18-v15--ui-v55---2026-11-10)
 - [Build 17 (v1.5 / UI v5.4) - Vị trí thông báo dưới Notch iPhone & Hiệu ứng Pull-to-Refresh từ tai thỏ](#build-17-v15--ui-v54---2026-11-10)
 - [Build 16 (v1.5 / UI v5.3) - Sửa lỗi chuỗi ngày ca & Khắc phục hiển thị số tiền chi tiêu Widget](#build-16-v15--ui-v53---2026-11-10)
 - [Build 15 (v1.5 / UI v5.3) - Nút tròn Chi tiêu ca trên Widget & Sửa lỗi lệch ngày ca](#build-15-v15--ui-v53---2026-11-10)
@@ -29,6 +31,30 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 - [Build 5 (v1.4) - Phóng to Doanh thu Widget 2x2 & Ẩn số giao dịch](#build-5-v14---2026-11-06)
 - [Build 4 (v1.3) - Tối ưu bố cục chống tràn chữ Widget 2x2 & 4x2](#build-4-v13---2026-11-06)
 - [Build 3 (v1.2) - Thiết kế lại Widget doanh thu vòng tròn tiến độ](#build-3-v12---2026-11-06)
+
+---
+
+## [Build 19 (v1.5 / UI v5.5)] - 2026-11-10
+- **Commit SHA**: `aeb6779`
+- **Mục tiêu**: Khắc phục triệt để các lỗi hiển thị giao diện trên trang Dự đoán điểm gas (`dudoandiemgas.html`) và Tính tiền gas còn lại (`tinhgascon.html`) khi chạy trên iPhone (đặc biệt trong Chế độ tối / Dark Mode).
+
+### 🔄 Chi tiết thay đổi
+1. **Sửa lỗi nút Menu & nút Home bị trắng tinh trong Chế độ tối (Dark Mode)**:
+   - Bổ sung biến CSS `--bg-tertiary: #1e293b`, `--bg-subtle: #1e293b`, `--border-card: #334155`, `--text-main: #f8fafc` cho cả `html.dark` lẫn `[data-theme="dark"]` trong `dudoandiemgas.html` và `tinhgascon.html`.
+   - Thiết lập CSS trực tiếp cho `.menu-toggle` và `.header-home-btn` trong Dark Mode (`background: #1e293b !important; border-color: #334155 !important; color: #f8fafc !important`), đảm bảo không còn tình trạng nút trắng icon trắng.
+
+2. **Khôi phục bố cục Dashboard chuẩn tràn mép (Full-bleed Header) & bỏ khung lồng kép**:
+   - Tách `<header class="app-header">` ra ngoài `<main class="container">`, đưa Header lên sát mép trên với `padding-top: calc(12px + env(safe-area-inset-top, 0px))`, nền mờ glass blur và cố định (`sticky`).
+   - Xóa bỏ lớp bọc `.container-content` và đưa `.container` về dạng khung Dashboard trong suốt (`background: transparent; border: none; box-shadow: none`), giải phóng 32px bề ngang màn hình iPhone 13 Pro bị bóp nghẹt trước đó.
+
+3. **Sửa lỗi tràn viền thẻ và cụt chữ nút "Sao chép đang lọc" (`#copy-all-btn`)**:
+   - Điều chỉnh CSS grid 2 cột của `.report-actions`: thêm `min-width: 0`, `font-size: 13.5px`, `padding: 0 0.5rem`.
+   - Bọc nội dung nút trong thẻ `<span>` với `overflow: hidden; text-overflow: ellipsis; white-space: nowrap`.
+   - Nhờ bề ngang được mở rộng kết hợp kích thước nút tối ưu, chữ "Sao chép đang lọc" hiển thị đầy đủ, đẹp mắt và không còn tràn mép thẻ.
+
+4. **Đồng bộ cơ chế đổi giao diện Sáng / Tối (Theme Toggle) & Khôi phục Toast Notification**:
+   - Loại bỏ các hàm toggle theme cũ trùng lặp, chuẩn hóa `applySavedTheme()` và `toggleTheme()` đồng bộ cả class `.dark` và thuộc tính `data-theme`.
+   - Khôi phục container `#toast` và chuyển sang dạng Floating Pill bo tròn nổi dưới notch tai thỏ iPhone 13 Pro (`top: max(16px, calc(env(safe-area-inset-top, 0px) + 12px))`).
 
 ---
 
