@@ -9,6 +9,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 > 3. Tăng build version (`CURRENT_PROJECT_VERSION`) tại cả hai file `resources/ios/project.pbxproj` và `ios/App/App.xcodeproj/project.pbxproj`.
 > 4. Ghi rõ commit hash và lệnh `git revert` để người dùng hoặc agent khác có thể hoàn tác ngay lập tức khi phát sinh sự cố.
 > 5. **Quy tắc Version Tag giao diện Web (`index.html`)**: Khi có cập nhật/thay đổi đủ lớn (tính năng mới quan trọng, thay đổi lớn về logic hoặc giao diện), **PHẢI** cập nhật thẻ `<span class="version-tag">` ở tiêu đề `index.html` và `www/index.html` tăng thêm 1 chấm nhỏ (ví dụ: `v5.0` ➔ `v5.1` ➔ `v5.2`...).
+> 6. **Quy tắc Giữ nguyên Phạm vi Chức năng & Xác nhận khi có ảnh hưởng liên đới (Scope Preservation & Impact Confirmation Rule)**: Mỗi khi người dùng yêu cầu thay đổi hoặc sửa lỗi một tính năng/giao diện cụ thể, TẤT CẢ các chức năng khác không được đề cập trong yêu cầu **BẮT BUỘC PHẢI GIỮ NGUYÊN 100%**, tuyệt đối không tự ý thay đổi, tái cấu trúc (refactor) hay xóa bỏ. Nếu việc sửa chữa bắt buộc phải can thiệp hoặc có nguy cơ ảnh hưởng tới bất kỳ chức năng liên quan nào khác, **BẮT BUỘC PHẢI DỪNG LẠI, HỎI Ý KIẾN VÀ ĐƯỢC NGƯỜI DÙNG XÁC NHẬN (CONFIRM)** trước khi tiến hành viết code hay chỉnh sửa.
 
 ---
 

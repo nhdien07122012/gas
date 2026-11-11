@@ -30,7 +30,22 @@ Chào bạn Agent tiếp theo! Đây là dự án **Gas Manager** (Ứng dụng 
 
 ---
 
-## 🏗️ 3. Kiến Trúc Dự Án & Luồng Dữ Liệu
+---
+
+## 🛡️ 3. Quy Tắc Giữ Nguyên Phạm Vi Chức Năng & Xác Nhận Khi Có Ảnh Hưởng Liên Đới (Scope Preservation & Impact Confirmation Rule)
+
+> [!CAUTION]
+> **ĐÂY LÀ QUY TẮC CỐT LÕI BẮT BUỘC TUÂN THỦ TRONG MỌI PHIÊN LÀM VIỆC:**
+> 1. **Bảo toàn phạm vi tuyệt đối (Strict Scope Isolation)**:
+>    - Mỗi khi người dùng yêu cầu thay đổi, sửa lỗi, chỉnh giao diện hoặc bổ sung tính năng cụ thể, Agent **CHỈ ĐƯỢC PHÉP** can thiệp đúng vào đối tượng, file và chức năng được yêu cầu.
+>    - **Mọi chức năng, giao diện, cấu trúc dữ liệu, luồng tính toán khác KHÔNG được người dùng đề cập trong yêu cầu BẮT BUỘC PHẢI GIỮ NGUYÊN 100%**, tuyệt đối không tự ý thay đổi, tái cấu trúc (refactor), dọn dẹp hàm, hay thay đổi hành vi vốn có của chúng.
+> 2. **Hỏi ý kiến người dùng trước khi can thiệp liên đới (Impact Assessment & Prior Confirmation)**:
+>    - Nếu việc sửa đổi theo yêu cầu bắt buộc phải tác động, can thiệp hoặc có nguy cơ làm ảnh hưởng/thay đổi bất kỳ chức năng liên quan nào khác: **AGENT BẮT BUỘC PHẢI DỪNG LẠI, GIẢI THÍCH RÕ RÀNG VÀ HỎI Ý KIẾN NGƯỜI DÙNG** trước khi chỉnh sửa.
+>    - Chỉ được phép triển khai phần ảnh hưởng liên đới sau khi người dùng đã xem xét và đồng ý (confirm).
+> 3. **Kiểm tra hồi quy trước khi hoàn tất (Zero Regression Check)**:
+>    - Luôn kiểm tra lại các chức năng xung quanh để đảm bảo không có bất kỳ tác dụng phụ (side-effect) ngoài ý muốn nào được đưa vào codebase.
+
+## 🏗️ 4. Kiến Trúc Dự Án & Luồng Dữ Liệu
 
 1. **Web App**:
    - `index.html`: File ứng dụng chính của toàn bộ giao diện Web.
@@ -68,9 +83,10 @@ Chào bạn Agent tiếp theo! Đây là dự án **Gas Manager** (Ứng dụng 
 
 ---
 
-## 🚀 4. Checklist Trước Khi Hoàn Tất Một Task
+## 🚀 5. Checklist Trước Khi Hoàn Tất Một Task
 
-- [ ] Đã sửa và kiểm tra cú pháp JS trong `index.html`.
+- [ ] Đã sửa và kiểm tra cú pháp JS trong `index.html` (và các file liên quan).
+- [ ] **Bảo toàn phạm vi**: Đảm bảo tất cả các chức năng khác không được đề cập đều được giữ nguyên 100%, không bị ảnh hưởng ngoài ý muốn.
 - [ ] Nếu là thay đổi đủ lớn: Đã cập nhật thẻ version tag trên header (`<span class="version-tag">vX.X</span>`) trong cả `index.html` và `www/index.html`.
 - [ ] Đã copy/đồng bộ chính xác sang `www/index.html`.
 - [ ] Đã chạy `npx cap sync ios`.
