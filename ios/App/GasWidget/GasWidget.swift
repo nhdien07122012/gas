@@ -109,58 +109,109 @@ struct GasWidgetProvider: TimelineProvider {
         let defaults = UserDefaults(suiteName: groupID) ?? UserDefaults.standard
         let fallback = UserDefaults.standard
 
+        var shiftName: String?
+        var shiftKey: String = ""
+        var totalFormatted: String?
+        var count = 0
+        var total = 0
+        var daNop = 0
+        var chuaNop = 0
+        var expenseTotal = 0
+        var expenseFormatted = "0 đ"
+        var updatedAt = "Vừa xong"
+        var savedDate: Date = Date()
+        var expensesByShift: [String: Int] = [:]
+
         // 1. Đọc từ file JSON trong App Group container (nếu có)
         if let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupID) {
             let fileURL = containerURL.appendingPathComponent("widget_data.json")
             if let data = try? Data(contentsOf: fileURL),
-               let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let shiftName = dict["shift"] as? String,
-               let totalFormatted = dict["totalFormatted"] as? String {
-                let count = (dict["count"] as? NSNumber)?.intValue ?? (dict["count"] as? Int) ?? 0
-                let total = (dict["total"] as? NSNumber)?.intValue ?? (dict["total"] as? Int) ?? 0
-                let daNop = (dict["daNop"] as? NSNumber)?.intValue ?? (dict["daNop"] as? Int) ?? 0
-                let chuaNop = (dict["chuaNop"] as? NSNumber)?.intValue ?? (dict["chuaNop"] as? Int) ?? 0
-                let expenseTotal = (dict["expenseTotal"] as? NSNumber)?.intValue ?? (dict["expenseTotal"] as? Int) ?? 0
-                let expenseFormatted = dict["expenseFormatted"] as? String ?? (expenseTotal > 0 ? "-\(formatCompactCurrency(expenseTotal))" : "0 đ")
-                let updatedAt = dict["updatedAt"] as? String ?? "Vừa xong"
-
-                return GasShiftEntry(
-                    date: Date(),
-                    shiftName: shiftName,
-                    count: count,
-                    total: total,
-                    totalFormatted: totalFormatted,
-                    daNop: daNop,
-                    chuaNop: chuaNop,
-                    expenseTotal: expenseTotal,
-                    expenseFormatted: expenseFormatted,
-                    updatedAt: updatedAt,
-                    isLive: true
-                )
+               let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                shiftName = dict["shift"] as? String
+                shiftKey = dict["shiftKey"] as? String ?? ""
+                totalFormatted = dict["totalFormatted"] as? String
+                count = (dict["count"] as? NSNumber)?.intValue ?? (dict["count"] as? Int) ?? 0
+                total = (dict["total"] as? NSNumber)?.intValue ?? (dict["total"] as? Int) ?? 0
+                daNop = (dict["daNop"] as? NSNumber)?.intValue ?? (dict["daNop"] as? Int) ?? 0
+                chuaNop = (dict["chuaNop"] as? NSNumber)?.intValue ?? (dict["chuaNop"] as? Int) ?? 0
+                expenseTotal = (dict["expenseTotal"] as? NSNumber)?.intValue ?? (dict["expenseTotal"] as? Int) ?? 0
+                if let ef = dict["expenseFormatted"] as? String, !ef.isEmpty && ef != "0 đ" {
+                    expenseFormatted = ef
+                } else if expenseTotal > 0 {
+                    expenseFormatted = "-\(formatCompactCurrency(expenseTotal))"
+                }
+                updatedAt = dict["updatedAt"] as? String ?? "Vừa xong"
+                if let map = dict["expensesByShift"] as? [String: Int] {
+                    expensesByShift = map
+                }
             }
         }
 
-        // 2. Đọc từ Shared UserDefaults hoặc Standard
-        guard let shiftName = defaults.string(forKey: "widget_shift") ?? fallback.string(forKey: "widget_shift"),
-              let totalFormatted = defaults.string(forKey: "widget_totalFormatted") ?? fallback.string(forKey: "widget_totalFormatted") else {
+        // 2. Bổ sung từ Shared UserDefaults / Fallback
+        if shiftName == nil {
+            shiftName = defaults.string(forKey: "widget_shift") ?? fallback.string(forKey: "widget_shift")
+        }
+        if totalFormatted == nil {
+            totalFormatted = defaults.string(forKey: "widget_totalFormatted") ?? fallback.string(forKey: "widget_totalFormatted")
+        }
+        if shiftKey.isEmpty {
+            shiftKey = defaults.string(forKey: "widget_shiftKey") ?? fallback.string(forKey: "widget_shiftKey") ?? ""
+        }
+        if count == 0 {
+            count = defaults.object(forKey: "widget_count") != nil ? defaults.integer(forKey: "widget_count") : fallback.integer(forKey: "widget_count")
+        }
+        if total == 0 {
+            total = defaults.object(forKey: "widget_total") != nil ? defaults.integer(forKey: "widget_total") : fallback.integer(forKey: "widget_total")
+        }
+        if daNop == 0 {
+            daNop = defaults.object(forKey: "widget_daNop") != nil ? defaults.integer(forKey: "widget_daNop") : fallback.integer(forKey: "widget_daNop")
+        }
+        if chuaNop == 0 {
+            chuaNop = defaults.object(forKey: "widget_chuaNop") != nil ? defaults.integer(forKey: "widget_chuaNop") : fallback.integer(forKey: "widget_chuaNop")
+        }
+        let savedTime = defaults.double(forKey: "widget_timestamp") > 0 ? defaults.double(forKey: "widget_timestamp") : fallback.double(forKey: "widget_timestamp")
+        if savedTime > 0 {
+            savedDate = Date(timeIntervalSince1970: savedTime)
+        }
+
+        // 3. Nếu expenseTotal vẫn = 0, tìm từ expensesByShift hoặc key theo ca
+        if expenseTotal == 0 {
+            if !shiftKey.isEmpty, let val = expensesByShift[shiftKey], val > 0 {
+                expenseTotal = val
+                expenseFormatted = "-\(formatCompactCurrency(val))"
+            } else if !shiftKey.isEmpty {
+                let keyExp = defaults.integer(forKey: "widget_expenseTotal_\(shiftKey)") != 0 ? defaults.integer(forKey: "widget_expenseTotal_\(shiftKey)") : fallback.integer(forKey: "widget_expenseTotal_\(shiftKey)")
+                if keyExp > 0 {
+                    expenseTotal = keyExp
+                    expenseFormatted = defaults.string(forKey: "widget_expenseFormatted_\(shiftKey)") ?? fallback.string(forKey: "widget_expenseFormatted_\(shiftKey)") ?? "-\(formatCompactCurrency(keyExp))"
+                }
+            }
+        }
+        if expenseTotal == 0 {
+            let defExp = defaults.object(forKey: "widget_expenseTotal") != nil ? defaults.integer(forKey: "widget_expenseTotal") : fallback.integer(forKey: "widget_expenseTotal")
+            if defExp > 0 {
+                expenseTotal = defExp
+                expenseFormatted = defaults.string(forKey: "widget_expenseFormatted") ?? fallback.string(forKey: "widget_expenseFormatted") ?? "-\(formatCompactCurrency(defExp))"
+            }
+        }
+        if expenseTotal == 0 && !expensesByShift.isEmpty {
+            let sortedKeys = expensesByShift.keys.sorted(by: >)
+            if let firstKey = sortedKeys.first, let val = expensesByShift[firstKey], val > 0 {
+                expenseTotal = val
+                expenseFormatted = "-\(formatCompactCurrency(val))"
+            }
+        }
+
+        guard let finalShiftName = shiftName, let finalTotalFormatted = totalFormatted else {
             return nil
         }
-        let count = defaults.object(forKey: "widget_count") != nil ? defaults.integer(forKey: "widget_count") : fallback.integer(forKey: "widget_count")
-        let total = defaults.object(forKey: "widget_total") != nil ? defaults.integer(forKey: "widget_total") : fallback.integer(forKey: "widget_total")
-        let daNop = defaults.object(forKey: "widget_daNop") != nil ? defaults.integer(forKey: "widget_daNop") : fallback.integer(forKey: "widget_daNop")
-        let chuaNop = defaults.object(forKey: "widget_chuaNop") != nil ? defaults.integer(forKey: "widget_chuaNop") : fallback.integer(forKey: "widget_chuaNop")
-        let expenseTotal = defaults.object(forKey: "widget_expenseTotal") != nil ? defaults.integer(forKey: "widget_expenseTotal") : fallback.integer(forKey: "widget_expenseTotal")
-        let expenseFormatted = defaults.string(forKey: "widget_expenseFormatted") ?? fallback.string(forKey: "widget_expenseFormatted") ?? (expenseTotal > 0 ? "-\(formatCompactCurrency(expenseTotal))" : "0 đ")
-        let updatedAt = defaults.string(forKey: "widget_updatedAt") ?? fallback.string(forKey: "widget_updatedAt") ?? ""
-        let savedTime = defaults.double(forKey: "widget_timestamp") > 0 ? defaults.double(forKey: "widget_timestamp") : fallback.double(forKey: "widget_timestamp")
-        let date = savedTime > 0 ? Date(timeIntervalSince1970: savedTime) : Date()
 
         return GasShiftEntry(
-            date: date,
-            shiftName: shiftName,
+            date: savedDate,
+            shiftName: finalShiftName,
             count: count,
             total: total,
-            totalFormatted: totalFormatted,
+            totalFormatted: finalTotalFormatted,
             daNop: daNop,
             chuaNop: chuaNop,
             expenseTotal: expenseTotal,
@@ -241,28 +292,67 @@ struct GasWidgetProvider: TimelineProvider {
                 timeFormatter.dateFormat = "HH:mm"
                 let updatedTime = timeFormatter.string(from: Date())
 
-                // 4. Giữ lại số tiền chi tiêu từ file JSON hoặc cache Shared UserDefaults
+                // 4. Tìm số tiền chi tiêu thực tế khớp với ca mới nhất (latestKey)
                 var expenseTotal = 0
                 var expenseFormatted = "0 đ"
+                var expensesByShift: [String: Int] = [:]
 
+                // A. Thử đọc từ widget_data.json trong App Group container
                 if let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupID) {
                     let fileURL = containerURL.appendingPathComponent("widget_data.json")
                     if let d = try? Data(contentsOf: fileURL),
                        let dict = try? JSONSerialization.jsonObject(with: d) as? [String: Any] {
-                        expenseTotal = (dict["expenseTotal"] as? NSNumber)?.intValue ?? (dict["expenseTotal"] as? Int) ?? 0
-                        if let ef = dict["expenseFormatted"] as? String {
-                            expenseFormatted = ef
-                        } else if expenseTotal > 0 {
-                            expenseFormatted = "-\(formatCompactCurrency(expenseTotal))"
+                        if let map = dict["expensesByShift"] as? [String: Int] {
+                            expensesByShift = map
+                        }
+                        if let mapVal = expensesByShift[latestKey], mapVal > 0 {
+                            expenseTotal = mapVal
+                        } else {
+                            let fileShiftKey = dict["shiftKey"] as? String ?? ""
+                            let exp = (dict["expenseTotal"] as? NSNumber)?.intValue ?? (dict["expenseTotal"] as? Int) ?? 0
+                            if exp > 0 && (fileShiftKey.isEmpty || fileShiftKey == latestKey) {
+                                expenseTotal = exp
+                            }
+                        }
+                        if expenseTotal > 0 {
+                            if let ef = dict["expenseFormatted"] as? String, !ef.isEmpty && ef != "0 đ" && (dict["shiftKey"] as? String ?? "") == latestKey {
+                                expenseFormatted = ef
+                            } else {
+                                expenseFormatted = "-\(formatCompactCurrency(expenseTotal))"
+                            }
                         }
                     }
                 }
 
+                // B. Nếu chưa có hoặc = 0, đọc từ Shared UserDefaults
                 let defaults = UserDefaults(suiteName: groupID) ?? UserDefaults.standard
                 let fallback = UserDefaults.standard
                 if expenseTotal == 0 {
-                    expenseTotal = defaults.object(forKey: "widget_expenseTotal") != nil ? defaults.integer(forKey: "widget_expenseTotal") : fallback.integer(forKey: "widget_expenseTotal")
-                    expenseFormatted = defaults.string(forKey: "widget_expenseFormatted") ?? fallback.string(forKey: "widget_expenseFormatted") ?? (expenseTotal > 0 ? "-\(formatCompactCurrency(expenseTotal))" : "0 đ")
+                    let keySpecific = defaults.integer(forKey: "widget_expenseTotal_\(latestKey)") != 0 ? defaults.integer(forKey: "widget_expenseTotal_\(latestKey)") : fallback.integer(forKey: "widget_expenseTotal_\(latestKey)")
+                    if keySpecific > 0 {
+                        expenseTotal = keySpecific
+                        expenseFormatted = defaults.string(forKey: "widget_expenseFormatted_\(latestKey)") ?? fallback.string(forKey: "widget_expenseFormatted_\(latestKey)") ?? "-\(formatCompactCurrency(keySpecific))"
+                    } else if let data = defaults.data(forKey: "widget_expensesByShift") ?? fallback.data(forKey: "widget_expensesByShift"),
+                              let map = try? JSONSerialization.jsonObject(with: data) as? [String: Int],
+                              let val = map[latestKey], val > 0 {
+                        expenseTotal = val
+                        expenseFormatted = "-\(formatCompactCurrency(val))"
+                    } else {
+                        let savedExp = defaults.object(forKey: "widget_expenseTotal") != nil ? defaults.integer(forKey: "widget_expenseTotal") : fallback.integer(forKey: "widget_expenseTotal")
+                        if savedExp > 0 {
+                            expenseTotal = savedExp
+                            expenseFormatted = defaults.string(forKey: "widget_expenseFormatted") ?? fallback.string(forKey: "widget_expenseFormatted") ?? "-\(formatCompactCurrency(savedExp))"
+                        }
+                    }
+                }
+
+                // C. Nếu vẫn = 0 nhưng có ca gần nhất có chi tiêu trong expensesByShift
+                if expenseTotal == 0 && !expensesByShift.isEmpty {
+                    let sortedKeys = expensesByShift.keys.sorted(by: >)
+                    if let firstKey = sortedKeys.first, let val = expensesByShift[firstKey], val > 0 {
+                        expenseTotal = val
+                        expenseFormatted = "-\(formatCompactCurrency(val))"
+                    }
                 }
 
                 let entry = GasShiftEntry(
@@ -281,14 +371,19 @@ struct GasWidgetProvider: TimelineProvider {
 
                 // Lưu vào cache
                 defaults.set(shiftDisplay, forKey: "widget_shift")
+                defaults.set(latestKey, forKey: "widget_shiftKey")
                 defaults.set(count, forKey: "widget_count")
                 defaults.set(total, forKey: "widget_total")
                 defaults.set(formattedTotal, forKey: "widget_totalFormatted")
                 defaults.set(daNop, forKey: "widget_daNop")
                 defaults.set(chuaNop, forKey: "widget_chuaNop")
                 defaults.set(updatedTime, forKey: "widget_updatedAt")
-                defaults.set(expenseTotal, forKey: "widget_expenseTotal")
-                defaults.set(expenseFormatted, forKey: "widget_expenseFormatted")
+                if expenseTotal > 0 {
+                    defaults.set(expenseTotal, forKey: "widget_expenseTotal")
+                    defaults.set(expenseFormatted, forKey: "widget_expenseFormatted")
+                    defaults.set(expenseTotal, forKey: "widget_expenseTotal_\(latestKey)")
+                    defaults.set(expenseFormatted, forKey: "widget_expenseFormatted_\(latestKey)")
+                }
                 defaults.set(Date().timeIntervalSince1970, forKey: "widget_timestamp")
 
                 completion(entry)
@@ -353,6 +448,7 @@ struct GasWidgetProvider: TimelineProvider {
         let sign = amount < 0 ? "-" : ""
 
         if absAmount == 0 { return "0 đ" }
+        if absAmount < 1_000 { return "\(sign)\(absAmount) đ" }
         if millions > 0 && thousands > 0 {
             return "\(sign)\(millions)tr\(thousands)"
         }

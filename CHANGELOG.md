@@ -15,6 +15,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 21 (v1.5 / UI v5.5) - Khắc phục hiển thị tổng chi tiêu ca trên Widget iOS](#build-21-v15--ui-v55---2026-11-12)
 - [Build 20 (v1.5 / UI v5.5) - Sửa lỗi chèn Statusbar iPhone & Khắc phục tải dữ liệu dự đoán](#build-20-v15--ui-v55---2026-11-10)
 - [Build 19 (v1.5 / UI v5.5) - Sửa lỗi giao diện trang Dự đoán điểm gas trên Dark Mode & Tràn nút Sao chép](#build-19-v15--ui-v55---2026-11-10)
 - [Build 18 (v1.5 / UI v5.5) - Đồng bộ thanh Menubar & Sidebar Drawer trên 7 trang](#build-18-v15--ui-v55---2026-11-10)
@@ -33,6 +34,43 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 - [Build 5 (v1.4) - Phóng to Doanh thu Widget 2x2 & Ẩn số giao dịch](#build-5-v14---2026-11-06)
 - [Build 4 (v1.3) - Tối ưu bố cục chống tràn chữ Widget 2x2 & 4x2](#build-4-v13---2026-11-06)
 - [Build 3 (v1.2) - Thiết kế lại Widget doanh thu vòng tròn tiến độ](#build-3-v12---2026-11-06)
+
+---
+
+## [Build 21 (v1.5 / UI v5.5)] - 2026-11-12
+- **Commit SHA**: `e0af36c`
+- **Mục tiêu**: Khắc phục triệt để lỗi vòng tròn chi tiêu trên Widget iOS (4x2) vẫn hiển thị `0 đ CHI TIÊU` mặc dù trong ca đã phát sinh các khoản chi tiêu; bảo toàn 100% tất cả các tính năng khác theo Quy tắc 1.
+
+### 🔄 Chi tiết thay đổi
+1. **Khắc phục lỗi đăng ký Native Bridge (`gasWidgetBridge`) trong `SceneDelegate.swift`**:
+   - Trước đây `bridgeVC.webView?.configuration.userContentController.add(self, name: "gasWidgetBridge")` được gọi ngay sau khi khởi tạo `CAPBridgeViewController()` khi `webView` chưa được nạp (là `nil`), khiến WebKit không thể đăng ký handler và bridge bị bỏ qua trong im lặng.
+   - Bổ sung `bridgeVC.loadViewIfNeeded()` và `_ = bridgeVC.view` để đảm bảo `webView` đã được khởi tạo trước khi thêm handler.
+   - Tách hàm chuẩn hóa `setupBridgeHandlers(for:)` gỡ bỏ handler cũ nếu có và tái đăng ký trong cả `scene(_:willConnectTo:options:)` và `sceneDidBecomeActive(_:)`.
+   - Bổ sung lưu trữ chi tiết: `widget_shiftKey`, `widget_expenseTotal_\(shiftKey)`, `widget_expenseFormatted_\(shiftKey)`, và dictionary `widget_expensesByShift` vào cả Shared App Group `group.com.vnpost.gasmanager` và Standard UserDefaults.
+
+2. **Cải tiến `syncWidgetData()` trong `index.html`**:
+   - Thu thập toàn bộ bản đồ chi tiêu `expensesByShift` theo từng mã ngày ca chuẩn hóa (`yyyy-MM-dd`).
+   - Cung cấp cơ chế tự động fallback thông minh: nếu `activeShift` đang là `all` hoặc chưa chọn trên màn hình chính, hệ thống tự động đối chiếu ca hiện tại từ `getCurrentShift()` hoặc ca gần nhất có chi tiêu để lấy đúng tổng số tiền đã chi.
+   - Đóng gói gửi cả `expensesByShift` sang native bridge.
+   - Thêm cơ chế tự động gửi lại (retry 300ms và 1000ms) phòng trường hợp webview tải xong trước khi native bridge hoàn tất khởi tạo.
+   - Kích hoạt đồng bộ `syncWidgetData()` ngay khi mở ứng dụng trong sự kiện `DOMContentLoaded`.
+
+3. **Nâng cấp khớp dữ liệu chi tiêu trong `GasWidget.swift`**:
+   - Khi chạy ở chế độ cache nhanh (`loadLocalCache()`): đọc và đối chiếu chính xác số tiền chi tiêu từ `widget_data.json`, `widget_expenseTotal_\(shiftKey)`, `widget_expensesByShift`, hoặc fallback ca mới nhất.
+   - Khi chạy Live Timeline qua Google Apps Script (`fetchRemoteData()`): sau khi phân tích được ngày ca mới nhất (`latestKey`), đối chiếu trực tiếp khoản chi tương ứng của ca đó trong `expensesByShift` hoặc cache theo ca, bảo đảm không bao giờ bị ghi đè thành 0 khi lấy doanh thu live.
+   - Tinh chỉnh `formatCompactCurrency`: hiển thị rõ ràng số tiền nhỏ dưới 1.000 đ dạng `xx đ` thay vì bị làm tròn về `0k`.
+
+4. **Đồng bộ nền tảng**:
+   - Đồng bộ `index.html` sang `www/index.html`.
+   - Đồng bộ `SceneDelegate.swift` và `GasWidget.swift` sang `resources/ios/`.
+   - Tăng `CURRENT_PROJECT_VERSION` lên **21** tại cả `resources/ios/project.pbxproj` và `ios/App/App.xcodeproj/project.pbxproj`.
+   - Chạy `npx cap sync ios`.
+
+### ⏪ Lệnh hoàn tác nhanh (Revert command)
+```bash
+git revert e0af36c --no-edit
+npm run sync
+```
 
 ---
 

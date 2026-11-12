@@ -17,10 +17,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
 
         SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connectionOptions)
 
-        // Đăng ký message handler để nhận dữ liệu thống kê từ Web và đồng bộ sang Widget
-        bridgeVC.webView?.configuration.userContentController.add(self, name: "gasWidgetBridge")
-        // Đăng ký message handler lấy tọa độ GPS thực tế từ CoreLocation
-        bridgeVC.webView?.configuration.userContentController.add(self, name: "gasLocationBridge")
+        // Đảm bảo bridgeVC đã load view và webView đã được khởi tạo
+        bridgeVC.loadViewIfNeeded()
+        _ = bridgeVC.view
+        setupBridgeHandlers(for: bridgeVC)
 
         // Xử lý 3D Touch Quick Action khi khởi động ứng dụng (Cold Start)
         if let shortcutItem = connectionOptions.shortcutItem {
@@ -33,12 +33,30 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
         }
     }
 
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        if let bridgeVC = window?.rootViewController as? CAPBridgeViewController {
+            setupBridgeHandlers(for: bridgeVC)
+        }
+    }
+
+    private func setupBridgeHandlers(for bridgeVC: CAPBridgeViewController) {
+        bridgeVC.loadViewIfNeeded()
+        _ = bridgeVC.view
+        guard let webView = bridgeVC.webView else { return }
+        let controller = webView.configuration.userContentController
+        controller.removeScriptMessageHandler(forName: "gasWidgetBridge")
+        controller.removeScriptMessageHandler(forName: "gasLocationBridge")
+        controller.add(self, name: "gasWidgetBridge")
+        controller.add(self, name: "gasLocationBridge")
+    }
+
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "gasWidgetBridge", let dict = message.body as? [String: Any] {
             let defaults = UserDefaults(suiteName: "group.com.vnpost.gasmanager") ?? UserDefaults.standard
             let std = UserDefaults.standard
 
             let shift = dict["shift"] as? String ?? "Ca hôm nay"
+            let shiftKey = dict["shiftKey"] as? String ?? ""
             let count = (dict["count"] as? NSNumber)?.intValue ?? (dict["count"] as? Int) ?? 0
             let total = (dict["total"] as? NSNumber)?.intValue ?? (dict["total"] as? Int) ?? 0
             let totalFormatted = dict["totalFormatted"] as? String ?? "0 đ"
@@ -51,6 +69,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
 
             // 1. Lưu vào Shared UserDefaults (App Group)
             defaults.set(shift, forKey: "widget_shift")
+            defaults.set(shiftKey, forKey: "widget_shiftKey")
             defaults.set(count, forKey: "widget_count")
             defaults.set(total, forKey: "widget_total")
             defaults.set(totalFormatted, forKey: "widget_totalFormatted")
@@ -61,8 +80,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
             defaults.set(expenseFormatted, forKey: "widget_expenseFormatted")
             defaults.set(nowTime, forKey: "widget_timestamp")
 
+            if !shiftKey.isEmpty {
+                defaults.set(expenseTotal, forKey: "widget_expenseTotal_\(shiftKey)")
+                defaults.set(expenseFormatted, forKey: "widget_expenseFormatted_\(shiftKey)")
+            }
+
+            if let expensesByShift = dict["expensesByShift"] as? [String: Any],
+               let data = try? JSONSerialization.data(withJSONObject: expensesByShift) {
+                defaults.set(data, forKey: "widget_expensesByShift")
+                std.set(data, forKey: "widget_expensesByShift")
+            }
+
             // 2. Lưu vào standard defaults làm dự phòng
             std.set(shift, forKey: "widget_shift")
+            std.set(shiftKey, forKey: "widget_shiftKey")
             std.set(count, forKey: "widget_count")
             std.set(total, forKey: "widget_total")
             std.set(totalFormatted, forKey: "widget_totalFormatted")
@@ -72,6 +103,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
             std.set(expenseTotal, forKey: "widget_expenseTotal")
             std.set(expenseFormatted, forKey: "widget_expenseFormatted")
             std.set(nowTime, forKey: "widget_timestamp")
+            if !shiftKey.isEmpty {
+                std.set(expenseTotal, forKey: "widget_expenseTotal_\(shiftKey)")
+                std.set(expenseFormatted, forKey: "widget_expenseFormatted_\(shiftKey)")
+            }
 
             // 3. Lưu vào file JSON trong Shared Container để Widget đọc dự phòng trực tiếp
             if let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.vnpost.gasmanager") {
@@ -84,6 +119,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WKScriptMessageHandler 
             if #available(iOS 14.0, *) {
                 WidgetCenter.shared.reloadAllTimelines()
             }
+
         } else if message.name == "gasLocationBridge" {
             NativeLocationManager.shared.getCurrentLocation { [weak self] result in
                 DispatchQueue.main.async {
