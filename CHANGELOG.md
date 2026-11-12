@@ -38,7 +38,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 ---
 
 ## [Build 21 (v1.5 / UI v5.5)] - 2026-11-12
-- **Commit SHA**: `e0af36c`
+- **Commit SHA**: `8e2e9d1`
 - **Mục tiêu**: Khắc phục triệt để lỗi vòng tròn chi tiêu trên Widget iOS (4x2) vẫn hiển thị `0 đ CHI TIÊU` mặc dù trong ca đã phát sinh các khoản chi tiêu; bảo toàn 100% tất cả các tính năng khác theo Quy tắc 1.
 
 ### 🔄 Chi tiết thay đổi
@@ -68,7 +68,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ### ⏪ Lệnh hoàn tác nhanh (Revert command)
 ```bash
-git revert e0af36c --no-edit
+git revert 8e2e9d1 --no-edit
 npm run sync
 ```
 
