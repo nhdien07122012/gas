@@ -83,7 +83,16 @@ Chào bạn Agent tiếp theo! Đây là dự án **Gas Manager** (Ứng dụng 
 
 ---
 
-## 🚀 5. Checklist Trước Khi Hoàn Tất Một Task
+## 🔗 5. Quy Tắc Cung Cấp Link Tải Bản Dựng IPA (IPA Download Link Delivery Rule)
+
+* Sau khi commit và push lên nhánh `main`, hệ thống GitHub Actions CI/CD sẽ tự động kích hoạt workflow `build-ipa.yml` để tạo file cài đặt IPA (`Gas-Manager.ipa`).
+* **BẮT BUỘC**: Trong phản hồi cuối cùng tới người dùng sau khi push, Agent phải luôn gửi kèm các đường link dẫn trực tiếp đến trang Actions để người dùng có thể bấm vào tải nhanh bản IPA:
+  - Link danh sách bản chạy CI/CD: [GitHub Actions Builds](https://github.com/nhdien07122012/gas/actions)
+  - Link trực tiếp Workflow Build IPA: [GitHub Actions Build IPA](https://github.com/nhdien07122012/gas/actions/workflows/build-ipa.yml)
+
+---
+
+## 🚀 6. Checklist Trước Khi Hoàn Tất Một Task
 
 - [ ] Đã sửa và kiểm tra cú pháp JS trong `index.html` (và các file liên quan).
 - [ ] **Bảo toàn phạm vi**: Đảm bảo tất cả các chức năng khác không được đề cập đều được giữ nguyên 100%, không bị ảnh hưởng ngoài ý muốn.
@@ -93,3 +102,4 @@ Chào bạn Agent tiếp theo! Đây là dự án **Gas Manager** (Ứng dụng 
 - [ ] Đã tăng `CURRENT_PROJECT_VERSION` trong cả 2 file `project.pbxproj`.
 - [ ] Đã ghi lại nhật ký phiên bản mới vào đầu file `CHANGELOG.md`.
 - [ ] Đã commit với commit message rõ ràng và push lên `origin main`.
+- [ ] **Đã gửi kèm link tải bản dựng IPA từ GitHub Actions** trong câu trả lời cho người dùng.

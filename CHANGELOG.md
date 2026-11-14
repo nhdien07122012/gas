@@ -15,6 +15,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 22 (v1.5 / UI v5.6) - Tối ưu hiệu năng khởi động, chống đơ bàn phím & Quy tắc gửi link tải IPA](#build-22-v15--ui-v56---2026-11-14)
 - [Build 21 (v1.5 / UI v5.5) - Khắc phục hiển thị tổng chi tiêu ca trên Widget iOS](#build-21-v15--ui-v55---2026-11-12)
 - [Build 20 (v1.5 / UI v5.5) - Sửa lỗi chèn Statusbar iPhone & Khắc phục tải dữ liệu dự đoán](#build-20-v15--ui-v55---2026-11-10)
 - [Build 19 (v1.5 / UI v5.5) - Sửa lỗi giao diện trang Dự đoán điểm gas trên Dark Mode & Tràn nút Sao chép](#build-19-v15--ui-v55---2026-11-10)
@@ -37,7 +38,40 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ---
 
-## [Build 21 (v1.5 / UI v5.5)] - 2026-11-12
+## [Build 22 (v1.5 / UI v5.6)] - 2026-11-14
+- **Commit SHA**: `edfda4a`
+- **Mục tiêu**: Khắc phục triệt để hiện tượng ứng dụng bị đơ/lag và bàn phím ảo bị khựng khi mới mở app (đặc biệt khi lâu mới mở lại); bổ sung Quy tắc 5 (Bắt buộc gửi kèm link tải bản dựng IPA từ GitHub Actions sau mỗi task); nâng cấp UI Version Tag lên `v5.6` và iOS Build version lên `22`; bảo toàn 100% mọi tính năng khác theo Quy tắc 1.
+
+### 🔄 Chi tiết thay đổi
+1. **Ngăn chặn Double-Render Blitz trong `taiDuLieu()`**:
+   - Thêm hàm so sánh siêu nhẹ `isDataDifferent(cachedData, networkData)`.
+   - Nếu dữ liệu mạng trả về trùng khớp với cache cục bộ (928 bản ghi), hệ thống không gọi lại `applyDataToView()` lần 2. Loại bỏ hoàn toàn hiện tượng render kép đúng lúc người dùng đang gõ hoặc mở bàn phím.
+
+2. **Khắc phục WebKit `<datalist>` Overload cho ô chọn điểm gas**:
+   - Thay thế cơ chế chèn 572 thẻ `<option>` vào `<datalist id="diem-list">` bằng cơ chế tìm kiếm thông minh `updateDiemListSuggestions(query)`.
+   - Mặc định chỉ nạp 20 điểm mới nhất; khi người dùng gõ vào ô tìm kiếm thì tìm nhanh trong mảng JS (có hỗ trợ gõ không dấu qua `removeVietnameseTones`) và chỉ render tối đa 25 kết quả khớp nhất bằng `DocumentFragment`.
+   - Bàn phím ảo trên iOS được giải phóng 100% gánh nặng CPU từ WebKit autocomplete tree, bật lên ngay lập tức mà không bị đơ.
+
+3. **Chuyển bộ lọc điểm gas (`filter-diem`) sang chế độ Tải lười (Lazy-loading)**:
+   - Thay vì nạp 572 options cho `filter-diem` ngay khi mở app trong khi bộ lọc nâng cao đang bị ẩn, hệ thống lưu danh sách điểm trong biến nhớ `allFilterDiems` và chỉ render DOM khi người dùng bấm nút "Lọc thêm" (`toggleAdvancedFilters`).
+
+4. **Memoization Cache cho hàm xử lý ngày ca (`getShiftDateKey`, `formatShiftDayLabel`)**:
+   - Sử dụng hai Map cache (`_shiftDateKeyCache` và `_shiftDayLabelCache`) để lưu kết quả chuẩn hóa chuỗi ngày ca.
+   - Triệt tiêu hàng ngàn lần chạy RegEx phức tạp khi lặp qua 928 bản ghi của Google Sheets.
+
+5. **Tối ưu tìm kiếm điểm mới nhất và kiểm tra GPS**:
+   - Cải tiến `findLatestEntryForDiem` và `hasExistingGPSLocation` duyệt ngược từ cuối mảng `allData`, đạt độ phức tạp O(N) tối ưu, không tạo mảng rác và không sort lại mảng.
+
+6. **Trì hoãn đồng bộ Widget iOS (`syncWidgetData`)**:
+   - Bọc lệnh gọi `syncWidgetData()` trong `setTimeout(..., 1500)` tại sự kiện `DOMContentLoaded`, nhường toàn bộ tài nguyên CPU trong 1.5 giây đầu cho việc khởi tạo giao diện và mở bàn phím.
+
+7. **Bổ sung Quy tắc cung cấp link tải IPA trực tiếp từ GitHub Actions**:
+   - Cập nhật quy tắc bắt buộc vào `AGENTS.md`, `GEMINI.md` và `AGENT_INSTRUCTIONS.md`.
+   - Sau mỗi task, Agent phải luôn gửi kèm đường link trực tiếp đến trang Artifacts / Actions của GitHub để người dùng bấm vào tải nhanh file `Gas-Manager.ipa`.
+
+---
+
+[Build 21 (v1.5 / UI v5.5)] - 2026-11-12
 - **Commit SHA**: `8e2e9d1`
 - **Mục tiêu**: Khắc phục triệt để lỗi vòng tròn chi tiêu trên Widget iOS (4x2) vẫn hiển thị `0 đ CHI TIÊU` mặc dù trong ca đã phát sinh các khoản chi tiêu; bảo toàn 100% tất cả các tính năng khác theo Quy tắc 1.
 
