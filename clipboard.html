@@ -1731,6 +1731,294 @@
     document.getElementById('search-input').addEventListener('input', renderHistory);
     document.getElementById('filter-type').addEventListener('change', renderHistory);
 
+    // Sự kiện nút Nối Clipboard
+    const btnMerge = document.getElementById('btn-merge-shift');
+    if (btnMerge) {
+      btnMerge.addEventListener('click', () => {
+        if (typeof window.openMergeModal === 'function') {
+          window.openMergeModal();
+        }
+      });
+    }
+
+    /* ========== LOGIC NỐI CLIPBOARD BÁO CÁO & XUẤT DATA THEO CA ========== */
+
+    // Kiểm tra có phải là mục Báo cáo cuối ca không (hỗ trợ cả metadata type và phân tích nội dung)
+    function isReportItem(item) {
+      if (!item || !item.content) return false;
+      if (item.type === 'Báo cáo cuối ca') return true;
+      return item.content.trim().startsWith('Giao ');
+    }
+
+    // Kiểm tra có phải là mục Xuất data của ca không
+    function isExportItem(item) {
+      if (!item || !item.content) return false;
+      if (item.type === 'Xuất data của ca') return true;
+      const c = item.content.trim();
+      return !c.startsWith('Giao ') && c.includes(' - ') && (c.includes('\n') || c.length > 10);
+    }
+
+    // Trích xuất mã ca (DD-MM-YYYY) từ một mục clipboard
+    function getItemShiftKey(item) {
+      if (!item) return '';
+      if (item.shift) return item.shift;
+
+      // Tìm chuỗi ca trong nội dung (ví dụ: Ca 23-11-2026, Ca 23/11/2026...)
+      const text = item.content || '';
+      const caMatch = text.match(/Ca\s*(\d{2})[-/](\d{2})[-/](\d{4})/i);
+      if (caMatch) {
+        return `${caMatch[1]}-${caMatch[2]}-${caMatch[3]}`;
+      }
+
+      // Trích xuất từ timestamp
+      if (item.timestamp) {
+        const date = new Date(item.timestamp);
+        if (!isNaN(date.getTime())) {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          return `${day}-${month}-${year}`;
+        }
+      }
+      return '';
+    }
+
+    // Lấy danh sách các ca có dữ liệu Báo cáo hoặc Xuất data trong lịch sử
+    function getAvailableShiftKeys() {
+      const shiftMap = new Map();
+      clipboardHistory.forEach(item => {
+        if (isReportItem(item) || isExportItem(item)) {
+          const shiftKey = getItemShiftKey(item);
+          if (shiftKey) {
+            const time = new Date(item.timestamp).getTime() || 0;
+            const currentLatest = shiftMap.get(shiftKey) || 0;
+            if (time >= currentLatest) {
+              shiftMap.set(shiftKey, time);
+            }
+          }
+        }
+      });
+      // Sắp xếp ca có mục clipboard mới nhất lên đầu tiên
+      return Array.from(shiftMap.entries())
+        .sort((a, b) => b[1] - a[1])
+        .map(entry => entry[0]);
+    }
+
+    // Mở modal Nối Clipboard
+    window.openMergeModal = function() {
+      vibrateShort();
+      const shifts = getAvailableShiftKeys();
+      if (shifts.length === 0) {
+        showToast('Không tìm thấy dữ liệu Báo cáo hoặc Xuất data trong lịch sử để nối', 'error');
+        return;
+      }
+
+      const select = document.getElementById('modal-merge-shift-select');
+      if (!select) return;
+      select.innerHTML = '';
+      shifts.forEach((s, idx) => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = `Ca ${s}${idx === 0 ? ' (Mới nhất)' : ''}`;
+        select.appendChild(opt);
+      });
+
+      // Mặc định chọn ca mới nhất
+      select.value = shifts[0];
+      updateMergeModalView(shifts[0]);
+
+      const modal = document.getElementById('merge-modal');
+      if (modal) {
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+      document.body.classList.add('no-scroll');
+    };
+
+    // Đóng modal Nối Clipboard
+    window.closeMergeModal = function() {
+      vibrateShort();
+      const modal = document.getElementById('merge-modal');
+      if (modal) {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+      document.body.classList.remove('no-scroll');
+    };
+
+    window.onMergeModalOverlayClick = function(e) {
+      if (e.target && e.target.id === 'merge-modal') {
+        closeMergeModal();
+      }
+    };
+
+    // Khi người dùng đổi ca trong modal
+    window.onMergeShiftChange = function() {
+      vibrateShort();
+      const select = document.getElementById('modal-merge-shift-select');
+      if (select) updateMergeModalView(select.value);
+    };
+
+    // Cập nhật thông tin giao diện và bản xem trước
+    function updateMergeModalView(shiftKey) {
+      const cardsContainer = document.getElementById('merge-status-cards');
+      const cleanupNotice = document.getElementById('merge-cleanup-info');
+      const previewBox = document.getElementById('merge-preview-content');
+      const submitBtn = document.getElementById('btn-execute-merge');
+      if (!cardsContainer || !previewBox || !submitBtn) return;
+
+      const shiftItems = clipboardHistory.filter(i => getItemShiftKey(i) === shiftKey);
+      const reports = shiftItems.filter(i => isReportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const exports = shiftItems.filter(i => isExportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const existingMerged = shiftItems.filter(i => i.type === 'Báo cáo & Data ca');
+
+      const latestReport = reports[0] || null;
+      const latestExport = exports[0] || null;
+
+      // 1. Thẻ trạng thái Báo cáo
+      let reportCardHtml = '';
+      if (latestReport) {
+        const d = new Date(latestReport.timestamp);
+        const tStr = !isNaN(d.getTime()) ? d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : 'Vừa xong';
+        reportCardHtml = `
+          <div class="status-card found">
+            <div class="status-card-title">✓ Báo cáo cuối ca</div>
+            <div class="status-card-desc">Bản lúc ${tStr} (${reports.length} bản trong ca)</div>
+          </div>
+        `;
+      } else {
+        reportCardHtml = `
+          <div class="status-card missing">
+            <div class="status-card-title">⚠ Chưa có Báo cáo</div>
+            <div class="status-card-desc">Chưa tìm thấy báo cáo của ca này</div>
+          </div>
+        `;
+      }
+
+      // 2. Thẻ trạng thái Xuất data
+      let exportCardHtml = '';
+      if (latestExport) {
+        const d = new Date(latestExport.timestamp);
+        const tStr = !isNaN(d.getTime()) ? d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : 'Vừa xong';
+        const lineCount = (latestExport.content.match(/\n/g) || []).length + 1;
+        exportCardHtml = `
+          <div class="status-card found">
+            <div class="status-card-title">✓ Xuất data của ca</div>
+            <div class="status-card-desc">${lineCount} điểm gas • ${tStr} (${exports.length} bản)</div>
+          </div>
+        `;
+      } else {
+        exportCardHtml = `
+          <div class="status-card missing">
+            <div class="status-card-title">⚠ Chưa có Xuất data</div>
+            <div class="status-card-desc">Chưa tìm thấy data của ca này</div>
+          </div>
+        `;
+      }
+      cardsContainer.innerHTML = reportCardHtml + exportCardHtml;
+
+      // 3. Thông báo dọn dẹp bản sao trùng
+      const duplicateCount = (reports.length > 1 ? reports.length - 1 : 0) + 
+                             (exports.length > 1 ? exports.length - 1 : 0) + 
+                             existingMerged.length;
+      if (cleanupNotice) {
+        if (duplicateCount > 0) {
+          cleanupNotice.style.display = 'flex';
+          cleanupNotice.innerHTML = `
+            <svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+            </svg>
+            <span>Sẽ tự động dọn dẹp <strong>${duplicateCount}</strong> bản sao cũ/trùng trong ca để làm sạch lịch sử.</span>
+          `;
+        } else {
+          cleanupNotice.style.display = 'none';
+        }
+      }
+
+      // 4. Bản xem trước nội dung nối
+      if (latestReport && latestExport) {
+        const reportLine = latestReport.content.trim();
+        // Căn chỉnh dải gạch ngang khớp với chiều dài dòng báo cáo, chặn cận [30, 36]
+        const dividerLength = Math.max(30, Math.min(reportLine.length, 36));
+        const divider = '-'.repeat(dividerLength);
+        const mergedPreview = `${reportLine}\n${divider}\n${latestExport.content.trim()}`;
+        previewBox.textContent = mergedPreview;
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+          <svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+          </svg>
+          Nối &amp; Sao chép ngay
+        `;
+      } else if (latestReport) {
+        previewBox.textContent = `${latestReport.content.trim()}\n\n[⚠ Chưa có dữ liệu Xuất data của ca để nối]`;
+        submitBtn.disabled = true;
+      } else if (latestExport) {
+        previewBox.textContent = `[⚠ Chưa có dữ liệu Báo cáo cuối ca để nối]\n\n${latestExport.content.trim()}`;
+        submitBtn.disabled = true;
+      } else {
+        previewBox.textContent = 'Không có dữ liệu trong ca được chọn.';
+        submitBtn.disabled = true;
+      }
+    }
+
+    // Thực thi ghép nối, xóa trùng lặp và sao chép vào Clipboard
+    window.executeMergeShift = async function() {
+      const select = document.getElementById('modal-merge-shift-select');
+      if (!select) return;
+      const shiftKey = select.value;
+      if (!shiftKey) return;
+
+      const shiftItems = clipboardHistory.filter(i => getItemShiftKey(i) === shiftKey);
+      const reports = shiftItems.filter(i => isReportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const exports = shiftItems.filter(i => isExportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+      if (reports.length === 0 || exports.length === 0) {
+        showToast('Ca này thiếu Báo cáo hoặc Xuất data, không thể nối!', 'error');
+        return;
+      }
+
+      const latestReport = reports[0];
+      const latestExport = exports[0];
+
+      const reportLine = latestReport.content.trim();
+      const dividerLength = Math.max(30, Math.min(reportLine.length, 36));
+      const divider = '-'.repeat(dividerLength);
+      const mergedContent = `${reportLine}\n${divider}\n${latestExport.content.trim()}`;
+
+      // 1. Thu thập tất cả timestamp của ca này để dọn dẹp các bản cũ/trùng
+      const shiftTimestamps = new Set(shiftItems.map(i => i.timestamp));
+
+      // 2. Loại bỏ các bản ghi cũ của ca này khỏi clipboardHistory
+      clipboardHistory = clipboardHistory.filter(i => !shiftTimestamps.has(i.timestamp));
+
+      // 3. Thêm bản ghép mới lên đầu danh sách lịch sử
+      const newMergedItem = {
+        content: mergedContent,
+        type: 'Báo cáo & Data ca',
+        timestamp: new Date().toISOString(),
+        shift: shiftKey
+      };
+      clipboardHistory.unshift(newMergedItem);
+
+      // 4. Lưu vào LocalStorage
+      localStorage.setItem('clipboard_history', JSON.stringify(clipboardHistory));
+
+      // 5. Sao chép ngay vào bộ nhớ tạm hệ thống (Clipboard)
+      const copySuccess = await copyToClipboard(mergedContent);
+
+      // 6. Đóng modal và cập nhật giao diện
+      closeMergeModal();
+      renderHistory();
+
+      if (copySuccess) {
+        showToast(`Đã nối & sao chép thành công Ca ${shiftKey}!`);
+      } else {
+        showToast(`Đã nối xong Ca ${shiftKey}, nhưng lỗi sao chép clipboard`, 'error');
+      }
+    };
+
+
     // Khởi tạo ban đầu
     window.addEventListener('load', loadHistory);
   

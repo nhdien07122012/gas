@@ -15,6 +15,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 24 (v1.5 / UI v5.6) - Hotfix kích hoạt nút Nối Clipboard & hoàn thiện bộ xử lý JS](#build-24-v15--ui-v56---2026-11-23)
 - [Build 23 (v1.5 / UI v5.6) - Nối Clipboard Báo cáo & Xuất Data theo ca kèm dọn dẹp bản trùng](#build-23-v15--ui-v56---2026-11-23)
 - [Build 22 (v1.5 / UI v5.6) - Tối ưu hiệu năng khởi động, chống đơ bàn phím & Quy tắc gửi link tải IPA](#build-22-v15--ui-v56---2026-11-14)
 - [Build 21 (v1.5 / UI v5.5) - Khắc phục hiển thị tổng chi tiêu ca trên Widget iOS](#build-21-v15--ui-v55---2026-11-12)
@@ -39,7 +40,22 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ---
 
-## [Build 23 (v1.5 / UI v5.6)] - 2026-11-23
+## [Build 24 (v1.5 / UI v5.6)] - 2026-11-23
+- **Commit SHA**: `b6da443`
+- **Mục tiêu**: Khắc phục triệt để lỗi bấm nút "Nối Báo cáo & Data ca" không phản hồi; nạp đầy đủ toàn bộ logic xử lý JavaScript (`openMergeModal`, `executeMergeShift`, `updateMergeModalView`); tăng cường nhận diện dữ liệu ca đa lớp; nâng iOS Build version lên `24`; bảo toàn 100% mọi tính năng khác theo Quy tắc 1.
+
+### 🔄 Chi tiết thay đổi
+1. **Khắc phục lỗi nạp JavaScript của Modal Nối Clipboard**:
+   - Bổ sung đầy đủ khối hàm xử lý: `isReportItem()`, `isExportItem()`, `getItemShiftKey()`, `getAvailableShiftKeys()`, `openMergeModal()`, `closeMergeModal()`, `updateMergeModalView()`, `executeMergeShift()`.
+   - Gắn sự kiện 2 lớp (vừa inline `onclick="openMergeModal()"`, vừa `addEventListener('click')`) bảo đảm 100% luôn phản hồi ngay lập tức khi bấm nút.
+
+2. **Nâng cấp nhận diện dữ liệu ca thông minh**:
+   - Hàm `isReportItem()` và `isExportItem()` nhận diện linh hoạt cả qua trường `type` lẫn phân tích cú pháp nội dung (`Giao ...` cho Báo cáo, `... - ...` cho Xuất data), bảo đảm tìm thấy chính xác dữ liệu của ca ngay cả khi người dùng sao chép từ các phiên bản cũ hoặc từ nguồn khác.
+   - Hàm `getItemShiftKey()` trích xuất ngày ca từ cả chuỗi nội dung (`Ca DD-MM-YYYY`) lẫn `timestamp`.
+
+---
+
+[Build 23 (v1.5 / UI v5.6)] - 2026-11-23
 - **Commit SHA**: `512a6a9`
 - **Mục tiêu**: Bổ sung tính năng Nối 2 clipboard Báo cáo cuối ca và Xuất data của ca thành 1 clipboard mới trên trang `clipboard.html`; dải gạch ngang phân cách vừa vặn với dòng text báo cáo; tự động dọn dẹp các bản sao trùng trong ca; mặc định ca mới nhất và cho phép chọn ca khác tùy ý; nâng iOS Build version lên `23`; bảo toàn 100% mọi tính năng khác theo Quy tắc 1.
 
