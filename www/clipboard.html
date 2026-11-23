@@ -1271,6 +1271,7 @@
         <div class="brand-info">
           <div class="brand-title-row">
             <h1 class="brand-title">Lịch sử Clipboard</h1>
+            <span class="version-tag">Build 27</span>
           </div>
           <span class="brand-subtitle">Lưu trữ data</span>
         </div>
@@ -1798,7 +1799,6 @@
           }
         }
       });
-      // Sắp xếp ca có mục clipboard mới nhất lên đầu tiên
       return Array.from(shiftMap.entries())
         .sort((a, b) => b[1] - a[1])
         .map(entry => entry[0]);
@@ -1808,7 +1808,10 @@
     window.openMergeModal = function() {
       vibrateShort();
       const shifts = getAvailableShiftKeys();
-      if (shifts.length === 0) {
+      const allReports = clipboardHistory.filter(i => isReportItem(i));
+      const allExports = clipboardHistory.filter(i => isExportItem(i));
+
+      if (allReports.length === 0 && allExports.length === 0) {
         showToast('Không tìm thấy dữ liệu Báo cáo hoặc Xuất data trong lịch sử để nối', 'error');
         return;
       }
@@ -1816,16 +1819,26 @@
       const select = document.getElementById('modal-merge-shift-select');
       if (!select) return;
       select.innerHTML = '';
-      shifts.forEach((s, idx) => {
+
+      // Tùy chọn thông minh: Ghép Báo cáo & Xuất data mới nhất bất kể ngày ca (rất hữu ích cho ca đêm)
+      if (allReports.length > 0 && allExports.length > 0) {
+        const optLatest = document.createElement('option');
+        optLatest.value = '__latest_pair__';
+        optLatest.textContent = '🌟 Ghép Báo cáo & Data mới nhất (Bất kể ca)';
+        select.appendChild(optLatest);
+      }
+
+      shifts.forEach((s) => {
         const opt = document.createElement('option');
         opt.value = s;
-        opt.textContent = `Ca ${s}${idx === 0 ? ' (Mới nhất)' : ''}`;
+        opt.textContent = `Ca ${s}`;
         select.appendChild(opt);
       });
 
-      // Mặc định chọn ca mới nhất
-      select.value = shifts[0];
-      updateMergeModalView(shifts[0]);
+      // Mặc định chọn tùy chọn đầu tiên
+      const firstVal = select.options[0]?.value || '';
+      select.value = firstVal;
+      updateMergeModalView(firstVal);
 
       const modal = document.getElementById('merge-modal');
       if (modal) {
@@ -1867,10 +1880,17 @@
       const submitBtn = document.getElementById('btn-execute-merge');
       if (!cardsContainer || !previewBox || !submitBtn) return;
 
-      const shiftItems = clipboardHistory.filter(i => getItemShiftKey(i) === shiftKey);
-      const reports = shiftItems.filter(i => isReportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      const exports = shiftItems.filter(i => isExportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      const existingMerged = shiftItems.filter(i => i.type === 'Báo cáo & Data ca');
+      let reports = [];
+      let exports = [];
+
+      if (shiftKey === '__latest_pair__') {
+        reports = clipboardHistory.filter(i => isReportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        exports = clipboardHistory.filter(i => isExportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      } else {
+        const shiftItems = clipboardHistory.filter(i => getItemShiftKey(i) === shiftKey);
+        reports = shiftItems.filter(i => isReportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        exports = shiftItems.filter(i => isExportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      }
 
       const latestReport = reports[0] || null;
       const latestExport = exports[0] || null;
@@ -1962,12 +1982,20 @@
       const shiftKey = select.value;
       if (!shiftKey) return;
 
-      const shiftItems = clipboardHistory.filter(i => getItemShiftKey(i) === shiftKey);
-      const reports = shiftItems.filter(i => isReportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      const exports = shiftItems.filter(i => isExportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      let reports = [];
+      let exports = [];
+
+      if (shiftKey === '__latest_pair__') {
+        reports = clipboardHistory.filter(i => isReportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        exports = clipboardHistory.filter(i => isExportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      } else {
+        const shiftItems = clipboardHistory.filter(i => getItemShiftKey(i) === shiftKey);
+        reports = shiftItems.filter(i => isReportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        exports = shiftItems.filter(i => isExportItem(i)).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      }
 
       if (reports.length === 0 || exports.length === 0) {
-        showToast('Ca này thiếu Báo cáo hoặc Xuất data, không thể nối!', 'error');
+        showToast('Thiếu Báo cáo hoặc Xuất data, không thể nối!', 'error');
         return;
       }
 
@@ -1979,15 +2007,17 @@
       const divider = '-'.repeat(dividerLength);
       const mergedContent = `${reportLine}\n${divider}\n${latestExport.content.trim()}`;
 
+      const resolvedShift = (shiftKey === '__latest_pair__') ? (getItemShiftKey(latestReport) || getItemShiftKey(latestExport) || 'Mới nhất') : shiftKey;
+
       // 1. Nếu ca này đã có bản ghép "Báo cáo & Data ca" trước đó, chỉ cập nhật/thay thế bản ghép cũ đó để tránh lặp bản ghép
-      clipboardHistory = clipboardHistory.filter(i => !(i.type === 'Báo cáo & Data ca' && (getItemShiftKey(i) === shiftKey || i.content.trim() === mergedContent.trim())));
+      clipboardHistory = clipboardHistory.filter(i => !(i.type === 'Báo cáo & Data ca' && (getItemShiftKey(i) === resolvedShift || i.content.trim() === mergedContent.trim())));
 
       // 2. Thêm bản ghép mới lên đầu danh sách lịch sử (GIỮ NGUYÊN 100% tất cả các clipboard Báo cáo và Xuất data riêng lẻ)
       const newMergedItem = {
         content: mergedContent,
         type: 'Báo cáo & Data ca',
         timestamp: new Date().toISOString(),
-        shift: shiftKey
+        shift: resolvedShift
       };
       clipboardHistory.unshift(newMergedItem);
 

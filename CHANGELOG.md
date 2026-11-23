@@ -15,6 +15,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 27 (v1.5 / UI v5.6) - Tự động kích hoạt Liquid Glass & Ghép thông minh Clipboard Build 27](#build-27-v15--ui-v56---2026-11-23)
 - [Build 26 (v1.5 / UI v5.6) - Bảo toàn lịch sử từng báo cáo khi nối Clipboard](#build-26-v15--ui-v56---2026-11-23)
 - [Build 25 (v1.5 / UI v5.6) - Tích hợp GitHub Release & Cung cấp Direct Download Link cho file IPA](#build-25-v15--ui-v56---2026-11-23)
 - [Build 24 (v1.5 / UI v5.6) - Hotfix kích hoạt nút Nối Clipboard & hoàn thiện bộ xử lý JS](#build-24-v15--ui-v56---2026-11-23)
@@ -39,6 +40,34 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 - [Build 5 (v1.4) - Phóng to Doanh thu Widget 2x2 & Ẩn số giao dịch](#build-5-v14---2026-11-06)
 - [Build 4 (v1.3) - Tối ưu bố cục chống tràn chữ Widget 2x2 & 4x2](#build-4-v13---2026-11-06)
 - [Build 3 (v1.2) - Thiết kế lại Widget doanh thu vòng tròn tiến độ](#build-3-v12---2026-11-06)
+
+---
+
+## [Build 27 (v1.5 / UI v5.6)] - 2026-11-23
+- **Commit SHA**: `6332566`
+- **Mục tiêu**: 
+  1. Tự động kích hoạt giao diện Liquid Glass khi sideload cài đặt ứng dụng trên iOS 26+ mà không cần tick chọn thủ công trong ESign/Feather.
+  2. Bổ sung nhãn nhận diện Build 27 trên header trang Clipboard và cơ chế ghép thông minh `🌟 Ghép Báo cáo & Data mới nhất (Bất kể ca)` đảm bảo hoạt động hoàn hảo trên App iOS native.
+  3. Nâng iOS Build version lên `27` và đồng bộ toàn diện nền tảng.
+
+### 🔄 Chi tiết thay đổi
+1. **Tự động kích hoạt Liquid Glass cho IPA**:
+   - Khai báo `<key>UIDesignRequiresCompatibility</key><false/>` trong `resources/ios/Info.plist` và `ios/App/App/Info.plist` để opt-in vào thiết kế Liquid Glass.
+   - Thêm bước patch SDK tự động trong GitHub Actions workflow (`.github/workflows/build-ipa.yml`): sử dụng `plutil` và `xcrun vtool -set-build-version ios 15.0 26.0 -replace` cho Mach-O binary của ứng dụng chính (`Payload/App.app/App`) và Widget (`GasWidgetExtension`) trước khi đóng gói IPA và ký ad-hoc. Nhờ đó, file IPA phát hành tự động kích hoạt Liquid Glass mà người dùng không cần bật tùy chọn này khi sideload.
+2. **Nâng cấp trang Lịch sử Clipboard (`clipboard.html` & `www/clipboard.html`)**:
+   - Thêm huy hiệu `Build 27` trên header trang Clipboard để nhận biết phiên bản app đã nạp thành công trên iOS.
+   - Thêm tùy chọn ghép thông minh `🌟 Ghép Báo cáo & Data mới nhất (Bất kể ca)` vào dropdown để ghép ngay cặp Báo cáo cuối ca và Xuất data gần nhất, khắc phục trường hợp ca đêm lệch ngày giữa 2 bản ghi.
+   - Bảo toàn 100% dữ liệu lịch sử các mục clipboard riêng lẻ theo Quy tắc 1.
+3. **Đồng bộ nền tảng & Build Version Native**:
+   - Nâng `CURRENT_PROJECT_VERSION` từ 26 lên 27 trong cả hai file `resources/ios/project.pbxproj` và `ios/App/App.xcodeproj/project.pbxproj`.
+   - Đồng bộ sang thư mục `www/clipboard.html` và chạy `npx cap sync ios`.
+
+### 🔙 Lệnh hoàn tác khôi phục khẩn cấp (Emergency Revert)
+```bash
+git revert --no-edit HEAD
+npx cap sync ios
+git push origin main
+```
 
 ---
 
