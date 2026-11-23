@@ -15,6 +15,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 23 (v1.5 / UI v5.6) - Nối Clipboard Báo cáo & Xuất Data theo ca kèm dọn dẹp bản trùng](#build-23-v15--ui-v56---2026-11-23)
 - [Build 22 (v1.5 / UI v5.6) - Tối ưu hiệu năng khởi động, chống đơ bàn phím & Quy tắc gửi link tải IPA](#build-22-v15--ui-v56---2026-11-14)
 - [Build 21 (v1.5 / UI v5.5) - Khắc phục hiển thị tổng chi tiêu ca trên Widget iOS](#build-21-v15--ui-v55---2026-11-12)
 - [Build 20 (v1.5 / UI v5.5) - Sửa lỗi chèn Statusbar iPhone & Khắc phục tải dữ liệu dự đoán](#build-20-v15--ui-v55---2026-11-10)
@@ -38,7 +39,34 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ---
 
-## [Build 22 (v1.5 / UI v5.6)] - 2026-11-14
+## [Build 23 (v1.5 / UI v5.6)] - 2026-11-23
+- **Commit SHA**: `512a6a9`
+- **Mục tiêu**: Bổ sung tính năng Nối 2 clipboard Báo cáo cuối ca và Xuất data của ca thành 1 clipboard mới trên trang `clipboard.html`; dải gạch ngang phân cách vừa vặn với dòng text báo cáo; tự động dọn dẹp các bản sao trùng trong ca; mặc định ca mới nhất và cho phép chọn ca khác tùy ý; nâng iOS Build version lên `23`; bảo toàn 100% mọi tính năng khác theo Quy tắc 1.
+
+### 🔄 Chi tiết thay đổi
+1. **Bổ sung nút bấm & Nhóm hành động (`.control-actions`)**:
+   - Thêm nút *"Nối Báo cáo & Data ca"* (`.btn-merge-shift`) nằm cạnh nút *"Xóa toàn bộ lịch sử"*.
+   - Thiết kế giao diện chuẩn VNPost Design System, tương thích hoàn hảo Light Mode và Dark Mode trên iOS.
+
+2. **Modal Nối Clipboard Theo Ca (`#merge-modal`)**:
+   - Popup hiển thị danh sách các ca có dữ liệu clipboard, mặc định chọn sẵn ca mới nhất.
+   - Thẻ hiển thị trực quan trạng thái của 2 thành phần (Báo cáo cuối ca & Xuất data của ca).
+   - Khung xem trước (Preview) nội dung sau khi ghép trước khi sao chép.
+
+3. **Căn chỉnh Dải gạch ngang phân cách hài hòa**:
+   - Tự động tính toán độ dài dải gạch ngang `-` vừa vặn với chiều dài của dòng Báo cáo cuối ca (`Math.max(30, Math.min(reportLine.length, 36))`), bảo đảm thẩm mỹ và không bao giờ bị rớt xuống dòng thứ 2 khi gửi qua Zalo / Tin nhắn SMS trên iPhone.
+
+4. **Xử lý ngoại lệ bản sao trùng lặp (Duplicate Cleanup)**:
+   - Trong một ca có nhiều bản Báo cáo hoặc nhiều bản Xuất data, hệ thống luôn chọn bản mới nhất để ghép.
+   - Tự động xóa sạch các bản sao cũ bị trùng trong ca khỏi `clipboard_history` để làm sạch bộ nhớ và giao diện.
+   - Bản ghép mới được gắn nhãn badge riêng (`badge-merged`: *"Báo cáo & Data ca"*) và đẩy lên đầu lịch sử.
+
+5. **Bộ lọc loại dữ liệu**:
+   - Bổ sung tùy chọn lọc *"Báo cáo & Data ca"* (`value="merged"`) vào dropdown bộ lọc `#filter-type`.
+
+---
+
+[Build 22 (v1.5 / UI v5.6)] - 2026-11-14
 - **Commit SHA**: `edfda4a`
 - **Mục tiêu**: Khắc phục triệt để hiện tượng ứng dụng bị đơ/lag và bàn phím ảo bị khựng khi mới mở app (đặc biệt khi lâu mới mở lại); bổ sung Quy tắc 5 (Bắt buộc gửi kèm link tải bản dựng IPA từ GitHub Actions sau mỗi task); nâng cấp UI Version Tag lên `v5.6` và iOS Build version lên `22`; bảo toàn 100% mọi tính năng khác theo Quy tắc 1.
 
