@@ -1917,22 +1917,15 @@
       }
       cardsContainer.innerHTML = reportCardHtml + exportCardHtml;
 
-      // 3. Thông báo dọn dẹp bản sao trùng
-      const duplicateCount = (reports.length > 1 ? reports.length - 1 : 0) + 
-                             (exports.length > 1 ? exports.length - 1 : 0) + 
-                             existingMerged.length;
+      // 3. Thông báo bảo toàn lịch sử
       if (cleanupNotice) {
-        if (duplicateCount > 0) {
-          cleanupNotice.style.display = 'flex';
-          cleanupNotice.innerHTML = `
-            <svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
-            </svg>
-            <span>Sẽ tự động dọn dẹp <strong>${duplicateCount}</strong> bản sao cũ/trùng trong ca để làm sạch lịch sử.</span>
-          `;
-        } else {
-          cleanupNotice.style.display = 'none';
-        }
+        cleanupNotice.style.display = 'flex';
+        cleanupNotice.innerHTML = `
+          <svg class="hero-icon hero-icon-sm" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd" />
+          </svg>
+          <span>Tạo bản sao chép mới và giữ nguyên 100% lịch sử từng báo cáo của ca.</span>
+        `;
       }
 
       // 4. Bản xem trước nội dung nối
@@ -1986,13 +1979,10 @@
       const divider = '-'.repeat(dividerLength);
       const mergedContent = `${reportLine}\n${divider}\n${latestExport.content.trim()}`;
 
-      // 1. Thu thập tất cả timestamp của ca này để dọn dẹp các bản cũ/trùng
-      const shiftTimestamps = new Set(shiftItems.map(i => i.timestamp));
+      // 1. Nếu ca này đã có bản ghép "Báo cáo & Data ca" trước đó, chỉ cập nhật/thay thế bản ghép cũ đó để tránh lặp bản ghép
+      clipboardHistory = clipboardHistory.filter(i => !(i.type === 'Báo cáo & Data ca' && (getItemShiftKey(i) === shiftKey || i.content.trim() === mergedContent.trim())));
 
-      // 2. Loại bỏ các bản ghi cũ của ca này khỏi clipboardHistory
-      clipboardHistory = clipboardHistory.filter(i => !shiftTimestamps.has(i.timestamp));
-
-      // 3. Thêm bản ghép mới lên đầu danh sách lịch sử
+      // 2. Thêm bản ghép mới lên đầu danh sách lịch sử (GIỮ NGUYÊN 100% tất cả các clipboard Báo cáo và Xuất data riêng lẻ)
       const newMergedItem = {
         content: mergedContent,
         type: 'Báo cáo & Data ca',

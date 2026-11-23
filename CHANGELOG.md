@@ -15,6 +15,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 26 (v1.5 / UI v5.6) - Bảo toàn lịch sử từng báo cáo khi nối Clipboard](#build-26-v15--ui-v56---2026-11-23)
 - [Build 25 (v1.5 / UI v5.6) - Tích hợp GitHub Release & Cung cấp Direct Download Link cho file IPA](#build-25-v15--ui-v56---2026-11-23)
 - [Build 24 (v1.5 / UI v5.6) - Hotfix kích hoạt nút Nối Clipboard & hoàn thiện bộ xử lý JS](#build-24-v15--ui-v56---2026-11-23)
 - [Build 23 (v1.5 / UI v5.6) - Nối Clipboard Báo cáo & Xuất Data theo ca kèm dọn dẹp bản trùng](#build-23-v15--ui-v56---2026-11-23)
@@ -41,7 +42,22 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ---
 
-## [Build 25 (v1.5 / UI v5.6)] - 2026-11-23
+## [Build 26 (v1.5 / UI v5.6)] - 2026-11-23
+- **Commit SHA**: `b96a8da`
+- **Mục tiêu**: Điều chỉnh logic nối Clipboard theo yêu cầu người dùng: chỉ tạo thêm 1 clipboard mới chứa nội dung ghép và sao chép vào bộ nhớ tạm; bảo toàn 100% tất cả các mục Báo cáo cuối ca và Xuất data riêng lẻ trong lịch sử (không xóa đi); nâng iOS Build version lên `26`; bảo toàn 100% mọi tính năng khác theo Quy tắc 1.
+
+### 🔄 Chi tiết thay đổi
+1. **Bảo toàn lịch sử các mục clipboard riêng lẻ**:
+   - Loại bỏ cơ chế xóa các bản Báo cáo cuối ca và Xuất data trong hàm `executeMergeShift()`.
+   - Giữ nguyên toàn bộ lịch sử các mục gốc để người dùng có thể tra cứu và sao chép lại từng phần bất kỳ lúc nào.
+   - Chỉ tạo 1 bản ghi mới dạng *"Báo cáo & Data ca"* (`type: 'Báo cáo & Data ca'`) và đưa lên đầu danh sách `clipboardHistory`. Nếu trước đó đã có bản ghép cũ cùng ca, hệ thống chỉ thay thế bản ghép cũ đó.
+
+2. **Cập nhật giao diện Modal**:
+   - Cập nhật thông báo hướng dẫn trực quan: *"Tạo bản sao chép mới và giữ nguyên 100% lịch sử từng báo cáo của ca"*.
+
+---
+
+[Build 25 (v1.5 / UI v5.6)] - 2026-11-23
 - **Commit SHA**: `0aa1467`
 - **Mục tiêu**: Bổ sung bước tự động xuất bản (Publish) bản cài đặt `Gas-Manager.ipa` lên GitHub Releases (`tag: latest`) trong workflow GitHub Actions `build-ipa.yml`, cung cấp đường link tải trực tiếp (Direct Download Link) cho người dùng tải nhanh không cần đăng nhập hay giải nén zip; nâng iOS Build version lên `25`; bảo toàn 100% mọi tính năng khác theo Quy tắc 1.
 
