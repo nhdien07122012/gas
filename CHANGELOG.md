@@ -15,6 +15,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 25 (v1.5 / UI v5.6) - Tích hợp GitHub Release & Cung cấp Direct Download Link cho file IPA](#build-25-v15--ui-v56---2026-11-23)
 - [Build 24 (v1.5 / UI v5.6) - Hotfix kích hoạt nút Nối Clipboard & hoàn thiện bộ xử lý JS](#build-24-v15--ui-v56---2026-11-23)
 - [Build 23 (v1.5 / UI v5.6) - Nối Clipboard Báo cáo & Xuất Data theo ca kèm dọn dẹp bản trùng](#build-23-v15--ui-v56---2026-11-23)
 - [Build 22 (v1.5 / UI v5.6) - Tối ưu hiệu năng khởi động, chống đơ bàn phím & Quy tắc gửi link tải IPA](#build-22-v15--ui-v56---2026-11-14)
@@ -40,7 +41,24 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ---
 
-## [Build 24 (v1.5 / UI v5.6)] - 2026-11-23
+## [Build 25 (v1.5 / UI v5.6)] - 2026-11-23
+- **Commit SHA**: `0aa1467`
+- **Mục tiêu**: Bổ sung bước tự động xuất bản (Publish) bản cài đặt `Gas-Manager.ipa` lên GitHub Releases (`tag: latest`) trong workflow GitHub Actions `build-ipa.yml`, cung cấp đường link tải trực tiếp (Direct Download Link) cho người dùng tải nhanh không cần đăng nhập hay giải nén zip; nâng iOS Build version lên `25`; bảo toàn 100% mọi tính năng khác theo Quy tắc 1.
+
+### 🔄 Chi tiết thay đổi
+1. **Cập nhật CI/CD Workflow (`.github/workflows/build-ipa.yml`)**:
+   - Bổ sung quyền `permissions: contents: write` cho job build.
+   - Thêm bước `Publish Latest IPA Release for Direct Download` sử dụng action `softprops/action-gh-release@v2`.
+   - Tự động đính kèm file `Gas-Manager.ipa` vào GitHub Releases với tag `latest` mỗi khi push lên nhánh `main`/`master`.
+
+2. **Cập nhật Quy tắc dự án (Rule 5)**:
+   - Cập nhật `AGENTS.md`, `GEMINI.md` và `AGENT_INSTRUCTIONS.md`.
+   - Bắt buộc sau mỗi task, Agent phải luôn gửi kèm đường link tải trực tiếp (Direct Link):  
+     `https://github.com/nhdien07122012/gas/releases/download/latest/Gas-Manager.ipa`.
+
+---
+
+[Build 24 (v1.5 / UI v5.6)] - 2026-11-23
 - **Commit SHA**: `b6da443`
 - **Mục tiêu**: Khắc phục triệt để lỗi bấm nút "Nối Báo cáo & Data ca" không phản hồi; nạp đầy đủ toàn bộ logic xử lý JavaScript (`openMergeModal`, `executeMergeShift`, `updateMergeModalView`); tăng cường nhận diện dữ liệu ca đa lớp; nâng iOS Build version lên `24`; bảo toàn 100% mọi tính năng khác theo Quy tắc 1.
 

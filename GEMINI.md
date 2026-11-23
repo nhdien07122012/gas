@@ -45,8 +45,9 @@ Tài liệu này là quy chuẩn bắt buộc dành cho mọi AI Agent và Devel
 ---
 
 ## 🔗 5. QUY TẮC CUNG CẤP LINK TẢI BẢN DỰNG IPA (IPA Download Link Delivery Rule)
-- Sau khi commit và push lên nhánh `main`, hệ thống GitHub Actions CI/CD sẽ tự động kích hoạt workflow `build-ipa.yml` để tạo file cài đặt IPA (`Gas-Manager.ipa`).
-- **BẮT BUỘC**: Trong phản hồi cuối cùng tới người dùng sau khi push, Agent phải luôn gửi kèm các đường link dẫn trực tiếp đến trang Actions để người dùng có thể bấm vào tải nhanh bản IPA:
+- Sau khi commit và push lên nhánh `main`, hệ thống GitHub Actions CI/CD sẽ tự động kích hoạt workflow `build-ipa.yml` để đóng gói file cài đặt IPA (`Gas-Manager.ipa`) và tự động xuất bản (Publish) lên GitHub Releases (`tag: latest`).
+- **BẮT BUỘC**: Trong phản hồi cuối cùng tới người dùng sau khi push, Agent phải luôn cung cấp ĐƯỜNG DẪN TẢI TRỰC TIẾP (Direct Download Link) để người dùng có thể bấm vào tải ngay lập tức:
+  - 👉 🔗 **[Tải trực tiếp Gas-Manager.ipa (Build XX)](https://github.com/nhdien07122012/gas/releases/download/latest/Gas-Manager.ipa)**
   - Link danh sách bản chạy CI/CD: [GitHub Actions Builds](https://github.com/nhdien07122012/gas/actions)
   - Link trực tiếp Workflow Build IPA: [GitHub Actions Build IPA](https://github.com/nhdien07122012/gas/actions/workflows/build-ipa.yml)
 

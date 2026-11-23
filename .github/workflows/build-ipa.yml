@@ -9,6 +9,8 @@ jobs:
   build-ios:
     name: Build iOS IPA
     runs-on: macos-15
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -107,3 +109,16 @@ jobs:
           name: Gas-Manager-iOS-IPA
           path: ios/App/build/Build/Products/Debug-iphoneos/Gas-Manager.ipa
           retention-days: 14
+
+      - name: Publish Latest IPA Release for Direct Download
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/master')
+        with:
+          tag_name: latest
+          name: "Gas Manager Latest Build"
+          body: |
+            🚀 **Bản dựng Gas Manager IPA mới nhất tự động từ CI/CD**
+            - Tải trực tiếp file `.ipa` bên dưới để cài đặt qua TrollStore / Sideloadly / AltStore / Scarlet.
+          files: ios/App/build/Build/Products/Debug-iphoneos/Gas-Manager.ipa
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
