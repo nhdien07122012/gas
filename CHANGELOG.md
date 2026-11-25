@@ -61,7 +61,7 @@ URL scheme daemon của iOS không thể đọc đúng metadata từ binary đã
 - **`resources/ios/project.pbxproj`** & **`ios/App/App.xcodeproj/project.pbxproj`**: Bump `CURRENT_PROJECT_VERSION` từ 28 → 29.
 
 ### 📋 Commit SHA
-`(pending — sẽ cập nhật sau push)`
+`749b71f`
 
 ### ↩️ Lệnh revert mẫu
 ```
