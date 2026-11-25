@@ -45,7 +45,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 ---
 
 ## [Build 28 (v1.5 / UI v5.7)] - 2026-11-25
-- **Commit SHA**: `[sẽ cập nhật sau khi commit]`
+- **Commit SHA**: `d24e048`
 - **Mục tiêu**:
   1. Thiết kế lại logic nút **Báo cáo** / **Tạo báo cáo** trên trang `index.html`: khi tạo báo cáo thành công sẽ tự động thực hiện đồng thời Xuất data của đúng ca đang báo cáo, nối Báo cáo với Xuất data bằng dải phân cách chuẩn, lưu đầy đủ lịch sử và sao chép ngay bản đã nối vào clipboard hệ thống (không tạo file `.txt`).
   2. Giữ nguyên nút **Xuất data** ở tất cả các vị trí và nút **"Tạo báo cáo"** theo đúng xác nhận của người dùng & Quy tắc 1.
