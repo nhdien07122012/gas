@@ -83,7 +83,7 @@ jobs:
           name: xcodebuild-failure-log
           path: ios/App/xcodebuild.log
 
-      - name: Package unsigned IPA (including PlugIns / GasWidgetExtension & Liquid Glass patch)
+      - name: Package unsigned IPA (including PlugIns / GasWidgetExtension)
         run: |
           cd ios/App/build/Build/Products/Debug-iphoneos
           mkdir -p Payload
@@ -94,22 +94,8 @@ jobs:
             cp -r GasWidgetExtension.appex Payload/App.app/PlugIns/
           fi
 
-          echo "=== Patching Liquid Glass (iOS 26+ SDK & UIDesignRequiresCompatibility) ==="
+          echo "=== Ensuring UIDesignRequiresCompatibility=false in Info.plist (Liquid Glass via plist) ==="
           plutil -replace UIDesignRequiresCompatibility -bool false Payload/App.app/Info.plist || plutil -insert UIDesignRequiresCompatibility -bool false Payload/App.app/Info.plist || true
-
-          if [ -f "Payload/App.app/App" ]; then
-            echo "Updating SDK version in Payload/App.app/App to 26.0..."
-            xcrun vtool -show-build Payload/App.app/App || true
-            xcrun vtool -set-build-version ios 15.0 26.0 -replace -output Payload/App.app/App.tmp Payload/App.app/App && mv Payload/App.app/App.tmp Payload/App.app/App
-            chmod +x Payload/App.app/App
-            xcrun vtool -show-build Payload/App.app/App || true
-          fi
-
-          if [ -f "Payload/App.app/PlugIns/GasWidgetExtension.appex/GasWidgetExtension" ]; then
-            echo "Updating SDK version in GasWidgetExtension to 26.0..."
-            xcrun vtool -set-build-version ios 15.0 26.0 -replace -output Payload/App.app/PlugIns/GasWidgetExtension.appex/GasWidgetExtension.tmp Payload/App.app/PlugIns/GasWidgetExtension.appex/GasWidgetExtension && mv Payload/App.app/PlugIns/GasWidgetExtension.appex/GasWidgetExtension.tmp Payload/App.app/PlugIns/GasWidgetExtension.appex/GasWidgetExtension
-            chmod +x Payload/App.app/PlugIns/GasWidgetExtension.appex/GasWidgetExtension
-          fi
 
           echo "=== Ad-hoc code signing ==="
           if [ -d "Payload/App.app/PlugIns/GasWidgetExtension.appex" ]; then

@@ -15,6 +15,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 29 (v1.5 / UI v5.7) - Fix URL Scheme gasmanager:// bằng cách bỏ vtool patch khỏi CI/CD](#build-29-v15--ui-v57---2026-11-25)
 - [Build 28 (v1.5 / UI v5.7) - Hợp nhất Tạo Báo Cáo + Xuất Data + Tự Động Nối & Sao Chép Clipboard](#build-28-v15--ui-v57---2026-11-25)
 - [Build 27 (v1.5 / UI v5.6) - Tự động kích hoạt Liquid Glass & Ghép thông minh Clipboard Build 27](#build-27-v15--ui-v56---2026-11-23)
 - [Build 26 (v1.5 / UI v5.6) - Bảo toàn lịch sử từng báo cáo khi nối Clipboard](#build-26-v15--ui-v56---2026-11-23)
@@ -43,6 +44,35 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 - [Build 3 (v1.2) - Thiết kế lại Widget doanh thu vòng tròn tiến độ](#build-3-v12---2026-11-06)
 
 ---
+
+## Build 29 (v1.5 / UI v5.7) - 2026-11-25
+
+### 🎯 Mục tiêu
+Khắc phục lỗi URL Scheme `gasmanager://` không hoạt động với iOS Shortcuts sau khi sideload qua ESign/Feather.
+Lỗi: *"Phím tắt không thể mở ứng dụng cho giao thức URL 'gasmanager' vì ứng dụng không được cài đặt trên thiết bị này."*
+
+### 🔍 Nguyên nhân gốc
+Workflow CI/CD đang chạy `xcrun vtool -set-build-version ios 15.0 26.0 -replace` để patch Liquid Glass.
+ESign/Feather cũng có toggle Liquid Glass riêng (cũng dùng vtool nội bộ), dẫn đến binary bị patch 2 lần.
+URL scheme daemon của iOS không thể đọc đúng metadata từ binary đã bị thay đổi → URL scheme `gasmanager://` bị mất đăng ký với SpringBoard.
+
+### 🛠️ Thay đổi kỹ thuật
+- **`.github/workflows/build-ipa.yml`**: Xóa toàn bộ 2 block `xcrun vtool -set-build-version ios 15.0 26.0 -replace` cho `Payload/App.app/App` và `GasWidgetExtension`. Giữ lại `plutil -replace UIDesignRequiresCompatibility -bool false` trong Info.plist — đây là cơ chế đủ để ESign/Feather nhận ra yêu cầu Liquid Glass khi user bật toggle.
+- **`resources/ios/project.pbxproj`** & **`ios/App/App.xcodeproj/project.pbxproj`**: Bump `CURRENT_PROJECT_VERSION` từ 28 → 29.
+
+### 📋 Commit SHA
+`(pending — sẽ cập nhật sau push)`
+
+### ↩️ Lệnh revert mẫu
+```
+git revert HEAD
+```
+
+---
+
+## [Build 29 (v1.5 / UI v5.7)] - 2026-11-25
+- **Commit SHA**: `(pending)`
+- **Mục tiêu**: Khắc phục lỗi URL Scheme `gasmanager://` không hoạt động với iOS Shortcuts sau khi sideload qua ESign/Feather (bỏ vtool patch, giữ UIDesignRequiresCompatibility=false).
 
 ## [Build 28 (v1.5 / UI v5.7)] - 2026-11-25
 - **Commit SHA**: `d24e048`
