@@ -1271,7 +1271,7 @@
         <div class="brand-info">
           <div class="brand-title-row">
             <h1 class="brand-title">Lịch sử Clipboard</h1>
-            <span class="version-tag">Build 27</span>
+            <span class="version-tag">Build 28</span>
           </div>
           <span class="brand-subtitle">Lưu trữ data</span>
         </div>
@@ -1747,16 +1747,18 @@
     // Kiểm tra có phải là mục Báo cáo cuối ca không (hỗ trợ cả metadata type và phân tích nội dung)
     function isReportItem(item) {
       if (!item || !item.content) return false;
+      if (item.type === 'Báo cáo & Data ca') return false;
       if (item.type === 'Báo cáo cuối ca') return true;
-      return item.content.trim().startsWith('Giao ');
+      return item.content.trim().startsWith('Giao ') && !/\n-{20,}\n/.test(item.content);
     }
 
     // Kiểm tra có phải là mục Xuất data của ca không
     function isExportItem(item) {
       if (!item || !item.content) return false;
+      if (item.type === 'Báo cáo & Data ca') return false;
       if (item.type === 'Xuất data của ca') return true;
       const c = item.content.trim();
-      return !c.startsWith('Giao ') && c.includes(' - ') && (c.includes('\n') || c.length > 10);
+      return !c.startsWith('Giao ') && !/\n-{20,}\n/.test(c) && c.includes(' - ') && (c.includes('\n') || c.length > 10);
     }
 
     // Trích xuất mã ca (DD-MM-YYYY) từ một mục clipboard

@@ -15,6 +15,7 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 
 ## 📑 Danh mục phiên bản
 
+- [Build 28 (v1.5 / UI v5.7) - Hợp nhất Tạo Báo Cáo + Xuất Data + Tự Động Nối & Sao Chép Clipboard](#build-28-v15--ui-v57---2026-11-25)
 - [Build 27 (v1.5 / UI v5.6) - Tự động kích hoạt Liquid Glass & Ghép thông minh Clipboard Build 27](#build-27-v15--ui-v56---2026-11-23)
 - [Build 26 (v1.5 / UI v5.6) - Bảo toàn lịch sử từng báo cáo khi nối Clipboard](#build-26-v15--ui-v56---2026-11-23)
 - [Build 25 (v1.5 / UI v5.6) - Tích hợp GitHub Release & Cung cấp Direct Download Link cho file IPA](#build-25-v15--ui-v56---2026-11-23)
@@ -40,6 +41,38 @@ Tài liệu này là **Single Source of Truth (Nguồn chân lý duy nhất)** g
 - [Build 5 (v1.4) - Phóng to Doanh thu Widget 2x2 & Ẩn số giao dịch](#build-5-v14---2026-11-06)
 - [Build 4 (v1.3) - Tối ưu bố cục chống tràn chữ Widget 2x2 & 4x2](#build-4-v13---2026-11-06)
 - [Build 3 (v1.2) - Thiết kế lại Widget doanh thu vòng tròn tiến độ](#build-3-v12---2026-11-06)
+
+---
+
+## [Build 28 (v1.5 / UI v5.7)] - 2026-11-25
+- **Commit SHA**: `[sẽ cập nhật sau khi commit]`
+- **Mục tiêu**:
+  1. Thiết kế lại logic nút **Báo cáo** / **Tạo báo cáo** trên trang `index.html`: khi tạo báo cáo thành công sẽ tự động thực hiện đồng thời Xuất data của đúng ca đang báo cáo, nối Báo cáo với Xuất data bằng dải phân cách chuẩn, lưu đầy đủ lịch sử và sao chép ngay bản đã nối vào clipboard hệ thống (không tạo file `.txt`).
+  2. Giữ nguyên nút **Xuất data** ở tất cả các vị trí và nút **"Tạo báo cáo"** theo đúng xác nhận của người dùng & Quy tắc 1.
+  3. Bổ sung guard loại trừ mục `Báo cáo & Data ca` khỏi `isReportItem()` / `isExportItem()` trong `clipboard.html` để tránh nhận nhầm khi dùng tính năng nối thủ công.
+  4. Tăng UI Version Tag trên header `index.html` / `www/index.html` từ `v5.6` lên `v5.7`, nâng nhãn trang `clipboard.html` lên `Build 28` và nâng `CURRENT_PROJECT_VERSION` lên `28`.
+
+### 🔄 Chi tiết thay đổi
+1. **Hợp nhất luồng xử lý trong `generateReport()` (`index.html` & `www/index.html`)**:
+   - Tạo helper dùng chung `buildExportTextContent(dataList)`, `buildMergedReportContent(reportText, exportText)`, `formatShiftKeyForClipboard(shiftStr)`, `getUniqueClipboardTimestamp(history, baseIsoTimestamp)`.
+   - Khi nhấn **"Tạo báo cáo"**: hệ thống xuất dữ liệu từ chính mảng `shiftData` của ca đang báo cáo (`selectedShift`), nối cùng `reportContent` qua dải gạch ngang 30–36 dấu `-`, không kích hoạt tải file `.txt`.
+   - Nâng cấp `saveClipboardToHistory(text, options)` để lưu đầy đủ cả 3 mục theo thứ tự: `Báo cáo cuối ca`, `Xuất data của ca`, và `Báo cáo & Data ca` (thay thế bản ghép trùng của ca đó nếu có, bảo toàn toàn bộ bản ghi riêng lẻ và đảm bảo mỗi mục có `timestamp` duy nhất).
+   - Nâng cấp `copyToClipboard(text, options)` (bổ sung `skipHistorySave` và fallback `textarea` + `execCommand('copy')` với `setSelectionRange` cho iOS WKWebView), chỉ ghi clipboard hệ thống **1 lần duy nhất** với chuỗi đã nối ở bước cuối cùng.
+   - Tái sử dụng `buildExportTextContent()` trong `exportToText()`, đồng thời giữ nguyên 100% nút Xuất data tại màn hình chính, Sidebar và Quick Action.
+2. **Bảo vệ nhận diện loại mục trên `clipboard.html` & `www/clipboard.html`**:
+   - Cập nhật `isReportItem(item)` và `isExportItem(item)` để loại trừ `item.type === 'Báo cáo & Data ca'` và nội dung chứa dải gạch ngang phân cách `/\n-{20,}\n/`.
+   - Cập nhật nhãn `Build 28` trên header trang Clipboard.
+3. **Đồng bộ Version Tag, Capacitor & iOS Build 28**:
+   - Tăng `<span class="version-tag">` từ `v5.6` lên `v5.7` trong `index.html` và `www/index.html`.
+   - Đồng bộ toàn bộ sang `www/`, chạy `npx cap sync ios`.
+   - Tăng `CURRENT_PROJECT_VERSION` từ `27` lên `28` trong cả hai file `resources/ios/project.pbxproj` và `ios/App/App.xcodeproj/project.pbxproj`.
+
+### 🔙 Lệnh hoàn tác khôi phục khẩn cấp (Emergency Revert)
+```bash
+git revert --no-edit HEAD
+npx cap sync ios
+git push origin main
+```
 
 ---
 

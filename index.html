@@ -2267,7 +2267,7 @@
         <div class="brand-info">
           <div class="brand-title-row">
             <h1 class="brand-title">Quản lý điểm gas</h1>
-            <span class="version-tag">v5.6</span>
+            <span class="version-tag">v5.7</span>
           </div>
           <span class="brand-subtitle">Theo dõi &amp; quản lý gas theo ca</span>
         </div>
@@ -3917,8 +3917,6 @@ async function generateReport() {
     return;
   }
   const totalRevenue = shiftData.reduce((sum, item) => sum + (parseInt(item.so_tien) || 0), 0);
-  const totalExpense = currentExpenses.reduce((sum, expense) => sum + (expense.amount || 0), 0);
-  const netDueAmount = totalRevenue - totalExpense;
 
   let reportContent;
   if (currentExpenses.length > 0) {
@@ -3928,14 +3926,39 @@ async function generateReport() {
   } else {
     reportContent = `Giao ${recipient} ${formatNumber(totalRevenue)}`;
   }
-  const copySuccess = await copyToClipboard(reportContent);
+
+  // Xuất data của chính ca đang báo cáo và tự động nối với nội dung Báo cáo
+  const exportContent = buildExportTextContent(shiftData);
+  const mergedContent = buildMergedReportContent(reportContent, exportContent);
+
+  // Lưu đầy đủ 3 mục (Báo cáo, Xuất data, Bản đã nối) vào lịch sử Clipboard với timestamp tách biệt
+  const clipboardShiftKey = formatShiftKeyForClipboard(selectedShift);
+  const baseTimestampMs = Date.now();
+  saveClipboardToHistory(reportContent, {
+    type: 'Báo cáo cuối ca',
+    shift: clipboardShiftKey,
+    timestamp: new Date(baseTimestampMs).toISOString()
+  });
+  saveClipboardToHistory(exportContent.trim(), {
+    type: 'Xuất data của ca',
+    shift: clipboardShiftKey,
+    timestamp: new Date(baseTimestampMs + 1).toISOString()
+  });
+  saveClipboardToHistory(mergedContent, {
+    type: 'Báo cáo & Data ca',
+    shift: clipboardShiftKey,
+    timestamp: new Date(baseTimestampMs + 2).toISOString()
+  });
+
+  // Chỉ ghi Clipboard hệ thống 1 lần ở bước cuối với nội dung đã nối
+  const copySuccess = await copyToClipboard(mergedContent, { skipHistorySave: true });
   if (copySuccess) {
-    showToast('Đã sao chép báo cáo vào clipboard!', 'success');
+    showToast('Đã tạo báo cáo, xuất data, nối & sao chép vào clipboard!', 'success');
     vibrateSuccess();
     closeModal('report-modal');
-    console.log('Nội dung báo cáo:', reportContent);
+    console.log('Nội dung báo cáo & data đã nối:', mergedContent);
   } else {
-    showToast('Không thể sao chép vào clipboard!', 'error');
+    showToast('Đã lưu báo cáo & data vào lịch sử, nhưng không thể sao chép clipboard!', 'error');
     vibrateError();
   }
 }
@@ -4264,41 +4287,113 @@ function showToast(message, type = 'success') {
   }
 }
 
-async function copyToClipboard(text) {
+function formatShiftKeyForClipboard(shiftStr) {
+  const dateKey = getShiftDateKey(shiftStr);
+  if (dateKey && /^\d{4}-\d{2}-\d{2}$/.test(dateKey)) {
+    const [year, month, day] = dateKey.split('-');
+    return `${day}-${month}-${year}`;
+  }
+  return shiftStr ? String(shiftStr).trim() : '';
+}
+
+function getUniqueClipboardTimestamp(history, baseIsoTimestamp) {
+  let ms = baseIsoTimestamp ? new Date(baseIsoTimestamp).getTime() : Date.now();
+  if (isNaN(ms)) ms = Date.now();
+  const existingTimestamps = new Set(history.map(item => item && item.timestamp).filter(Boolean));
+  while (existingTimestamps.has(new Date(ms).toISOString())) {
+    ms += 1;
+  }
+  return new Date(ms).toISOString();
+}
+
+function buildExportTextContent(dataList) {
+  let content = '';
+  dataList.forEach(item => {
+    const amountNum = parseInt(item.so_tien, 10);
+    const formattedAmount = !isNaN(amountNum) ? formatNumber(amountNum) : (item.so_tien || '0');
+    content += `${item.ten_diem} - ${formattedAmount}\n`;
+  });
+  return content;
+}
+
+function buildMergedReportContent(reportText, exportText) {
+  const reportLine = (reportText || '').trim();
+  const dividerLength = Math.max(30, Math.min(reportLine.length, 36));
+  const divider = '-'.repeat(dividerLength);
+  return `${reportLine}\n${divider}\n${(exportText || '').trim()}`;
+}
+
+async function copyToClipboard(text, options = {}) {
+  const skipHistorySave = Boolean(options && options.skipHistorySave);
   try {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
-      saveClipboardToHistory(text);
+      if (!skipHistorySave) saveClipboardToHistory(text, options);
       return true;
-    } else {
-      const textArea = document.createElement('textarea');
-      textArea.value = text;
-      textArea.style.position = 'fixed';
-      textArea.style.opacity = '0';
-      document.body.appendChild(textArea);
-      textArea.select();
-      const success = document.execCommand('copy');
-      document.body.removeChild(textArea);
-      if (success) saveClipboardToHistory(text);
-      return success;
     }
-  } catch (err) { console.error('Lỗi khi sao chép vào clipboard: ', err); return false; }
+  } catch (err) {
+    console.warn('navigator.clipboard.writeText không khả dụng, chuyển sang fallback execCommand:', err);
+  }
+
+  try {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.setAttribute('readonly', '');
+    textArea.style.position = 'fixed';
+    textArea.style.top = '0';
+    textArea.style.left = '-9999px';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    textArea.setSelectionRange(0, textArea.value.length);
+    const success = document.execCommand('copy');
+    document.body.removeChild(textArea);
+    if (success && !skipHistorySave) saveClipboardToHistory(text, options);
+    return success;
+  } catch (err) {
+    console.error('Lỗi khi sao chép vào clipboard: ', err);
+    return false;
+  }
 }
 
-function saveClipboardToHistory(text) {
+function saveClipboardToHistory(text, options = {}) {
   if (!text || !text.trim()) return;
-  let type = "Khác";
-  if (text.startsWith("Giao ")) type = "Báo cáo cuối ca";
-  else if (text.includes(" - ") && (text.includes("\n") || text.length > 10)) type = "Xuất data của ca";
+  const cleanText = text.trim();
+
+  let type = options.type || "Khác";
+  if (!options.type) {
+    if (cleanText.startsWith("Giao ") && /\n-{20,}\n/.test(cleanText)) type = "Báo cáo & Data ca";
+    else if (cleanText.startsWith("Giao ")) type = "Báo cáo cuối ca";
+    else if (cleanText.includes(" - ") && (cleanText.includes("\n") || cleanText.length > 10)) type = "Xuất data của ca";
+  }
 
   let history = [];
   try { history = JSON.parse(localStorage.getItem('clipboard_history') || '[]'); }
   catch (e) { console.error('Lỗi phân tích cú pháp lịch sử clipboard:', e); history = []; }
+  if (!Array.isArray(history)) history = [];
 
-  const cleanText = text.trim();
-  const duplicateIndex = history.findIndex(item => item.content.trim() === cleanText);
-  const newItem = { content: text, type: type, timestamp: new Date().toISOString() };
-  if (duplicateIndex !== -1) history.splice(duplicateIndex, 1);
+  if (type === 'Báo cáo & Data ca') {
+    history = history.filter(item => {
+      if (!item) return false;
+      const isSameContent = item.content && item.content.trim() === cleanText;
+      const isSameShiftMerged = item.type === 'Báo cáo & Data ca' && options.shift && item.shift === options.shift;
+      return !(isSameContent || isSameShiftMerged);
+    });
+  } else {
+    const duplicateIndex = history.findIndex(item => item && item.content && item.content.trim() === cleanText);
+    if (duplicateIndex !== -1) history.splice(duplicateIndex, 1);
+  }
+
+  const newItem = {
+    content: text,
+    type: type,
+    timestamp: getUniqueClipboardTimestamp(history, options.timestamp)
+  };
+  if (options.shift) {
+    newItem.shift = options.shift;
+  }
+
   history.unshift(newItem);
   if (history.length > 100) history = history.slice(0, 100);
   localStorage.setItem('clipboard_history', JSON.stringify(history));
@@ -4313,12 +4408,7 @@ async function exportToText() {
     vibrateError();
     return;
   }
-  let content = '';
-  dataToExport.forEach(item => {
-    const amountNum = parseInt(item.so_tien, 10);
-    const formattedAmount = !isNaN(amountNum) ? formatNumber(amountNum) : (item.so_tien || '0');
-    content += `${item.ten_diem} - ${formattedAmount}\n`;
-  });
+  const content = buildExportTextContent(dataToExport);
   const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
   const link = document.createElement('a');
   const shiftInfo = getCurrentShift();
